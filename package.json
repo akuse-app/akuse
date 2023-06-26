@@ -1,0 +1,23 @@
+{
+  "name": "akuse",
+  "version": "1.0.0",
+  "description": "Anime watcher client for PC",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleganza/akuse.git"
+  },
+  "author": "aleganza",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/aleganza/akuse/issues"
+  },
+  "homepage": "https://github.com/aleganza/akuse#readme",
+  "devDependencies": {
+    "electron": "^25.2.0"
+  }
+}
