@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -11,11 +10,16 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>Akuse</title>
-  </head>
-  <body>
-    <div class="sidebar">Akuse</div>
-    <div class="main"></div>
-  </body>
+</head>
+<body>
+    <div class="sidebar">
+        <h1>Akuse</h1>
+    </div>
+    <div class="main">
+        <a href='https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code'>Login with AniList</a>
+    </div>
+</body>
 </html>
