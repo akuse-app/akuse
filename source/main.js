@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 
 const createWindow = () => {
-  const win = new BrowserWindow({
+  const authWindow  = new BrowserWindow({
     width: 1280,
     height: 720,
     // fullscreen: true,
@@ -11,11 +11,21 @@ const createWindow = () => {
     }
   })
 
-  win.loadFile('source/index.html')
+  authWindow.loadFile('source/index.html');
   
-  /* $("#test").text("ciaooooo"); */
+  
+  function handleLogin() {
+    let authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id={}&redirect_uri=http://localhost/GitHub/akuse/source/&response_type=code"
+
+    authWindow.loadURL(authUrl).then(() => {
+      const currentURL = authWindow.webContents.getURL()
+      console.log(currentURL)
+    });
+  }
 }
 
 app.whenReady().then(() => {
   createWindow()
 })
+
+
