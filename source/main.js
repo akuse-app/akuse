@@ -43,6 +43,11 @@ const createWindow = () => {
         })
     })
 
+    /**
+     * Retrieves the access token in order to make authenticated requests to the AniList API
+     * @param {*} code 
+     * @returns {*} accessToken
+     */
     async function getToken(code) {
         const response = await axios({
           method: "post",
