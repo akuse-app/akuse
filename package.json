@@ -29,6 +29,7 @@
     "electron": "^25.2.0"
   },
   "dependencies": {
+    "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.7.0",
