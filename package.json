@@ -2,7 +2,7 @@
   "name": "akuse",
   "version": "1.0.0",
   "description": "Anime watcher client for PC",
-  "main": "source/main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
     "test": "echo \"Error: no test specified\" && exit 1",

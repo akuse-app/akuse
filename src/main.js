@@ -3,8 +3,9 @@ const path = require("path")
 const url = require('url')
 const axios = require('axios');
 
+
 const clientId = ""
-const redirectUri = "http://localhost/GitHub/akuse/source/"
+const redirectUri = "http://localhost/GitHub/akuse/src/"
 const clientSecret = ""
 
 const createWindow = () => {
@@ -18,7 +19,7 @@ const createWindow = () => {
             nodeIntegration: true
         }
     })
-    win.loadFile("source/index.html")
+    win.loadFile("src/index.html")
 
     ipcMain.on("open-login-page", (event) => {
         const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code"
@@ -29,17 +30,38 @@ const createWindow = () => {
             const win = BrowserWindow.fromWebContents(webContents)
             win.setTitle("Loggato!") */
 
-            win.loadFile("source/main.html")
+            win.loadFile("src/main.html")
             const currentUrl = new URL(win.webContents.getURL())
-            /* console.log(currentUrl) */
+            /* console.log("currentUrl: " + currentUrl) */
 
             const code = currentUrl.searchParams.get("code")
-            /* console.log(code) */
+            /* console.log("code: " + code) */
 
-            /* getAccessToken(code) */
+            const token = await getToken(code)
+            /* console.log("token: " + token) */
 
-            const token = await getToken(code);
-            console.log(token)
+            // QUERIES
+                
+            var query = `
+            query ($id: Int) {
+                Media (id: $id, type: ANIME) {
+                    id
+                    title {
+                    romaji
+                    english
+                    native
+                    }
+                }
+            }
+            `;
+
+            var variables = {
+                "id": clientId
+            };
+
+            const tmp = await graphQuery(query, variables)
+            console.log("tmp: " + tmp)
+
         })
     })
 
@@ -66,7 +88,24 @@ const createWindow = () => {
         })
 
         return response.data.access_token
-      }
+    }
+
+    async function graphQuery(query, variables) {
+        const response = await axios({
+            method: 'post',
+            url: 'https://graphql.anilist.co',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            data: {
+                query: query,
+                variables: variables
+            }
+        })
+
+        return response.data.data.Media.title.romaji
+    }
 }
 
 app.whenReady().then(() => {
