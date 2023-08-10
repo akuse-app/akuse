@@ -3,6 +3,7 @@ const path = require("path")
 const url = require('url')
 const axios = require('axios');
 const { head } = require("request");
+const { clearInterval } = require("timers");
 
 const clientData = {
 }
@@ -45,23 +46,38 @@ const createWindow = () => {
             console.log("\nviewerId: " + viewerId)
 
             getWatching(token, viewerId)
-            scrape()
-
+            const body = await scrape()
+            console.log("body: " + body)
         })
     })
 
     async function scrape() {
         const url = "https://async.scraperapi.com/jobs"
-        const data = {
+        var data = {
             'apiKey': clientData.scraperApiKey,
             'url': 'https://example.com'
         }
-        headers = {}
 
-        const respData = await axiosRequest(method, url, headers, data)
-        
-        const status = respData.data.status
-        const statusUrl = respData.data.statusUrl
+        var respData = await axiosRequest(method, url, {}, data)
+
+        var status = respData.status
+        var statusUrl = respData.statusUrl
+        console.log("statusUrl: " + statusUrl)
+
+        // waiting for the job to finish in order to get the body
+        jobInterval = setInterval(async () => {
+            respData = await axiosRequest("GET", statusUrl, {}, {})
+            status = respData.status
+
+            console.log("status: "+ status)
+
+            if (status === "finished") {
+                console.log("Job Finished!")
+                clearInterval(jobInterval)
+
+                return respData.response.body
+            }
+        }, 2000)
     }
 
     async function getAccessToken() {
@@ -154,14 +170,19 @@ const createWindow = () => {
     }
 
     async function axiosRequest(method, url, headers, options) {
-        const response = await axios({
-            method: method,
-            url: url,
-            headers: headers,
-            data: options
-        })
+        try{
+            const response = await axios({
+                method: method,
+                url: url,
+                headers: headers,
+                data: options
+            })
 
-        return response.data
+            return response.data
+
+        } catch(error) {
+            console.log(Object.keys(error), error.message);
+        }
     }
 }
 
