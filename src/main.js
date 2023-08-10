@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const url = require('url')
 const axios = require('axios');
+const { head } = require("request");
 
 const clientData = {
 }
@@ -44,9 +45,24 @@ const createWindow = () => {
             console.log("\nviewerId: " + viewerId)
 
             getWatching(token, viewerId)
+            scrape()
 
         })
     })
+
+    async function scrape() {
+        const url = "https://async.scraperapi.com/jobs"
+        const data = {
+            'apiKey': clientData.scraperApiKey,
+            'url': 'https://example.com'
+        }
+        headers = {}
+
+        const respData = await axiosRequest(method, url, headers, data)
+        
+        const status = respData.data.status
+        const statusUrl = respData.data.statusUrl
+    }
 
     async function getAccessToken() {
         const currentUrl = new URL(win.webContents.getURL())
