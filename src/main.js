@@ -38,10 +38,12 @@ const createWindow = () => {
             win.loadFile("src/main.html")
 
             const token = await getAccessToken()
-            /* console.log("\ntoken: " + token) */
+            console.log("\ntoken: " + token)
 
             const viewerId = await getViewerId(token)
-            /* console.log("\nviewerId: " + viewerId) */
+            console.log("\nviewerId: " + viewerId)
+
+            getWatching(token, viewerId)
 
         })
     })
@@ -57,7 +59,7 @@ const createWindow = () => {
             'client_secret': clientData.clientSecret,
             'redirect_uri': clientData.redirectUri,
             'code': code
-          }
+        }
 
         const respData = await axiosRequest(method, url, headers, data)
         return respData.access_token
@@ -69,26 +71,78 @@ const createWindow = () => {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
-        const data = {
-            'query': `
-                query {
-                    Viewer {
-                        id
-                    }
-                }
-            `
-        }
 
-        const respData = await axiosRequest(method, graphQLUrl, headers, data)
+        const query = `
+            query {
+                Viewer {
+                    id
+                }
+            }
+        `
+
+        const options = getOptions(query)
+
+        const respData = await axiosRequest(method, graphQLUrl, headers, options)
         return respData.data.Viewer.id
     }
 
-    async function axiosRequest(method, url, headers, data) {
+    async function getWatching(token, viewerId) {
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        const query = `
+            query($userId : Int) {
+                MediaListCollection(userId : $userId, type: ANIME, status : CURRENT, sort: UPDATED_TIME) {
+                    lists {
+                        isCustomList
+                        name
+                        entries {
+                            id
+                            mediaId
+                            progress
+                            media {
+                                status
+                                episodes
+                                title {
+                                    romaji
+                                    english
+                                }
+                                coverImage {
+                                    medium
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `
+
+        variables = {
+            userId: viewerId,
+        }
+
+        const options = getOptions(query, variables)
+        const respData = await axiosRequest(method, graphQLUrl, headers, options)
+
+        console.log("resp: " + JSON.stringify(respData.data.MediaListCollection.lists[0].entries))
+    }
+
+    function getOptions(query, variables) {
+        return JSON.stringify({
+            query: query,
+            variables: variables
+        })
+    }
+
+    async function axiosRequest(method, url, headers, options) {
         const response = await axios({
             method: method,
             url: url,
             headers: headers,
-            data: data
+            data: options
         })
 
         return response.data
