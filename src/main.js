@@ -3,16 +3,20 @@ const path = require("path")
 const url = require('url')
 const axios = require('axios');
 
+const clientData = {
+}
 
-const clientId = ""
-const redirectUri = "http://localhost/GitHub/akuse/src/"
-const clientSecret = ""
+method = 'POST'
+graphQLUrl = 'https://graphql.anilist.co'
+headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+}
 
 const createWindow = () => {
     const win  = new BrowserWindow({
         width: 1280,
         height: 720,
-        // fullscreen: true,
         autoHideMenuBar: true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
@@ -21,8 +25,9 @@ const createWindow = () => {
     })
     win.loadFile("src/index.html")
 
+    // press login button
     ipcMain.on("open-login-page", (event) => {
-        const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientId + "&redirect_uri=" + redirectUri + "&response_type=code"
+        const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
 
         win.loadURL(authUrl).then(async () => {
             // TEST
@@ -31,80 +36,62 @@ const createWindow = () => {
             win.setTitle("Loggato!") */
 
             win.loadFile("src/main.html")
-            const currentUrl = new URL(win.webContents.getURL())
-            /* console.log("currentUrl: " + currentUrl) */
 
-            const code = currentUrl.searchParams.get("code")
-            /* console.log("code: " + code) */
+            const token = await getAccessToken()
+            /* console.log("\ntoken: " + token) */
 
-            const token = await getToken(code)
-            /* console.log("token: " + token) */
-
-            // QUERIES
-                
-            var query = `
-            query ($id: Int) {
-                Media (id: $id, type: ANIME) {
-                    id
-                    title {
-                    romaji
-                    english
-                    native
-                    }
-                }
-            }
-            `;
-
-            var variables = {
-                "id": clientId
-            };
-
-            const tmp = await graphQuery(query, variables)
-            console.log("tmp: " + tmp)
+            const viewerId = await getViewerId(token)
+            /* console.log("\nviewerId: " + viewerId) */
 
         })
     })
 
-    /**
-     * Retrieves the access token in order to make authenticated requests to the AniList API
-     * @param {*} code 
-     * @returns {*} accessToken
-     */
-    async function getToken(code) {
-        const response = await axios({
-          method: "post",
-          url: `https://anilist.co/api/v2/oauth/token`,
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          data: {
+    async function getAccessToken() {
+        const currentUrl = new URL(win.webContents.getURL())
+        const code = currentUrl.searchParams.get("code")
+
+        const url = "https://anilist.co/api/v2/oauth/token"
+        const data = {
             'grant_type': 'authorization_code',
-            'client_id': clientId,
-            'client_secret': clientSecret,
-            'redirect_uri': redirectUri,
+            'client_id': clientData.clientId,
+            'client_secret': clientData.clientSecret,
+            'redirect_uri': clientData.redirectUri,
             'code': code
           }
-        })
 
-        return response.data.access_token
+        const respData = await axiosRequest(method, url, headers, data)
+        return respData.access_token
+    }
+    
+    async function getViewerId(token) {
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+        const data = {
+            'query': `
+                query {
+                    Viewer {
+                        id
+                    }
+                }
+            `
+        }
+
+        const respData = await axiosRequest(method, graphQLUrl, headers, data)
+        return respData.data.Viewer.id
     }
 
-    async function graphQuery(query, variables) {
+    async function axiosRequest(method, url, headers, data) {
         const response = await axios({
-            method: 'post',
-            url: 'https://graphql.anilist.co',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            data: {
-                query: query,
-                variables: variables
-            }
+            method: method,
+            url: url,
+            headers: headers,
+            data: data
         })
 
-        return response.data.data.Media.title.romaji
+        return response.data
     }
 }
 
