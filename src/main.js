@@ -1,16 +1,20 @@
+'use strict'
+
 const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const url = require('url')
-const axios = require('axios');
-const { head } = require("request");
-const { clearInterval } = require("timers");
+const axios = require('axios')
+const { head } = require("request")
+const { clearInterval } = require("timers")
+const jsdom = require("jsdom")
+
+const AniListAPI = require ('./scripts/anilistApi.js')
 
 const clientData = {
 }
 
-method = 'POST'
-graphQLUrl = 'https://graphql.anilist.co'
-headers = {
+const method = 'POST'
+const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
 }
@@ -19,13 +23,13 @@ const createWindow = () => {
     const win  = new BrowserWindow({
         width: 1280,
         height: 720,
-        autoHideMenuBar: true,
+        autoHideMenuBar: false,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true
         }
     })
-    win.loadFile("src/index.html")
+    win.loadFile("src/windows/index.html")
 
     // press login button
     ipcMain.on("open-login-page", (event) => {
@@ -37,21 +41,35 @@ const createWindow = () => {
             const win = BrowserWindow.fromWebContents(webContents)
             win.setTitle("Loggato!") */
 
-            win.loadFile("src/main.html")
+            win.loadFile("src/windows/main.html")
 
-            const token = await getAccessToken()
+            const anilist = new AniListAPI(clientData)
+
+            /* console.log("-> " + someFunction1()) */
+
+            const currentUrl = new URL(win.webContents.getURL())
+            const token = await anilist.getAccessToken(currentUrl)
             console.log("\ntoken: " + token)
 
-            const viewerId = await getViewerId(token)
+            const viewerId = await anilist.getViewerId(token)
             console.log("\nviewerId: " + viewerId)
 
-            getWatching(token, viewerId)
-            const body = await scrape()
-            console.log("body: " + body)
+            anilist.getWatching(token, viewerId)
+            /* const htmlPage = await scrapeTwo()
+
+            const parsedDocument = new jsdom.JSDOM(htmlPage)
+            console.log(parsedDocument.window.document.getElementById("livesearch")) */
         })
     })
 
-    async function scrape() {
+    async function scrapeTwo() {
+        const url = "https://www.animesaturn.tv/"
+        var respData = await axiosRequest("GET", url, headers, {})
+
+        return respData
+    }
+
+    /* async function scrape() {
         const url = "https://async.scraperapi.com/jobs"
         var data = {
             'apiKey': clientData.scraperApiKey,
@@ -78,112 +96,7 @@ const createWindow = () => {
                 return respData.response.body
             }
         }, 2000)
-    }
-
-    async function getAccessToken() {
-        const currentUrl = new URL(win.webContents.getURL())
-        const code = currentUrl.searchParams.get("code")
-
-        const url = "https://anilist.co/api/v2/oauth/token"
-        const data = {
-            'grant_type': 'authorization_code',
-            'client_id': clientData.clientId,
-            'client_secret': clientData.clientSecret,
-            'redirect_uri': clientData.redirectUri,
-            'code': code
-        }
-
-        const respData = await axiosRequest(method, url, headers, data)
-        return respData.access_token
-    }
-    
-    async function getViewerId(token) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
-        const query = `
-            query {
-                Viewer {
-                    id
-                }
-            }
-        `
-
-        const options = getOptions(query)
-
-        const respData = await axiosRequest(method, graphQLUrl, headers, options)
-        return respData.data.Viewer.id
-    }
-
-    async function getWatching(token, viewerId) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
-        const query = `
-            query($userId : Int) {
-                MediaListCollection(userId : $userId, type: ANIME, status : CURRENT, sort: UPDATED_TIME) {
-                    lists {
-                        isCustomList
-                        name
-                        entries {
-                            id
-                            mediaId
-                            progress
-                            media {
-                                status
-                                episodes
-                                title {
-                                    romaji
-                                    english
-                                }
-                                coverImage {
-                                    medium
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        `
-
-        variables = {
-            userId: viewerId,
-        }
-
-        const options = getOptions(query, variables)
-        const respData = await axiosRequest(method, graphQLUrl, headers, options)
-
-        console.log("resp: " + JSON.stringify(respData.data.MediaListCollection.lists[0].entries))
-    }
-
-    function getOptions(query, variables) {
-        return JSON.stringify({
-            query: query,
-            variables: variables
-        })
-    }
-
-    async function axiosRequest(method, url, headers, options) {
-        try{
-            const response = await axios({
-                method: method,
-                url: url,
-                headers: headers,
-                data: options
-            })
-
-            return response.data
-
-        } catch(error) {
-            console.log(Object.keys(error), error.message);
-        }
-    }
+    } */
 }
 
 app.whenReady().then(() => {
