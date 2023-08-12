@@ -4,14 +4,14 @@ const Requests = require ('./requests.js')
 
 module.exports = class AniListAPI extends Requests {
     constructor(clientData) {
-        super();
+        super()
         this.requests = new Requests()
         this.clientData = clientData
         this.method = 'POST'
         this.graphQLUrl = 'https://graphql.anilist.co'
         this.headers = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            'Accept': 'application/json'
         }
     }
 
@@ -27,7 +27,8 @@ module.exports = class AniListAPI extends Requests {
             'code': code
         }
 
-        const respData = await this.requests.axiosRequest(this.method, url, this.headers, data)
+        const respData = await this.requests.makeRequest(this.method, url, this.headers, data)
+
         return respData.access_token
     }
     
@@ -47,8 +48,8 @@ module.exports = class AniListAPI extends Requests {
         `
 
         const options = this.requests.getOptions(query)
+        const respData = await this.requests.makeRequest(this.method, this.graphQLUrl, headers, options)
 
-        const respData = await this.requests.axiosRequest(this.method, this.graphQLUrl, headers, options)
         return respData.data.Viewer.id
     }
 
@@ -91,7 +92,9 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.requests.getOptions(query, variables)
-        const respData = await this.requests.axiosRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.requests.makeRequest(this.method, this.graphQLUrl, headers, options)
+
+        return respData.data.MediaListCollection.lists[0].entries
 
         console.log("resp: " + JSON.stringify(respData.data.MediaListCollection.lists[0].entries))
     }
