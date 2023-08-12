@@ -2,12 +2,13 @@
 
 const jsdom = require("jsdom")
 const Requests = require ('./requests.js')
+const { parse } = require("url")
 
 module.exports = class AnimeSaturnScrapeAPI extends Requests {
     constructor() {
         super()
         this.requests = new Requests()
-        this.method = 'POST'
+        this.method = 'GET'
         this.hostUrl = 'https://www.animesaturn.tv/'
         this.headers = {
             'Accept': 'text/html, */*; q=0.01',
@@ -26,9 +27,71 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         }
     }
 
-    async getDocument() {
-        var respData = await this.requests.makeRequest("GET", this.hostUrl, {}, {})
+    async getHomePage() {
+        const respData = await this.requests.makeRequest(this.method, this.hostUrl, this.headers, {})
         const parsedDocument = new jsdom.JSDOM(respData)
+
         return parsedDocument
+    }
+
+    async getAnimePage(animeEntry) {
+        const animeId = animeEntry.mediaId
+        const firstCharOfAnimeName = Array.from(animeEntry.media.title.romaji)[0]
+        const animeName = animeEntry.media.title.romaji.toLowerCase()
+        const progress = animeEntry.progress
+        console.log(animeId + ' ' + animeName + ' ' + firstCharOfAnimeName)
+
+        const animeList = await this.getAnimeListFromAlphArchive(firstCharOfAnimeName)
+        const animeIndex = await this.getAnimePosition(animeName, animeList)
+        const infoPageUrl = await this.getAnimeEpisodeInfoPage(progress, animeList[animeIndex].href)
+        const playerPageUrl = await this.getAnimeEpisodePlayerPage(infoPageUrl)
+        const iFrameUrl = await this.getIFrame(playerPageUrl)
+    }
+
+    // build the "Archivio Anime" letter page url and fetch that page
+    async getAnimeListFromAlphArchive(firstCharOfAnimeName) {
+        const url = this.hostUrl + 'animelist?letter=' + firstCharOfAnimeName
+        const respData = await this.requests.makeRequest(this.method, url, this.headers, {})
+        const parsedDocument = new jsdom.JSDOM(respData)
+
+        return parsedDocument.window.document.getElementsByClassName("badge badge-archivio badge-light")
+    }
+
+    // get the alphabetical position of animeName inside the animeList
+    async getAnimePosition(animeName, animeList) {
+        var animeIndex = 0
+        Object.keys(animeList).forEach( key => {
+            var listKey = animeList[key].textContent.toLowerCase()
+
+            if(animeName.localeCompare(listKey) > 0) {
+                animeIndex++
+            }
+        })
+
+        return animeIndex
+    }
+
+    // get the link to the info page of an anime episode
+    async getAnimeEpisodeInfoPage(progress, animeUrl) {
+        const respData = await this.requests.makeRequest(this.method, animeUrl, this.headers, {})
+        const parsedDocument = new jsdom.JSDOM(respData)
+
+        return parsedDocument.window.document.querySelectorAll(`a[href$="${progress}"]`)[0].href
+    }
+
+    // get the link to the player page of an anime episode (2nd server since the resource is easily fetchable)
+    async getAnimeEpisodePlayerPage(infoPageUrl) {
+        const respData = await this.requests.makeRequest(this.method, infoPageUrl, this.headers, {})
+        const parsedDocument = new jsdom.JSDOM(respData)
+
+        return parsedDocument.window.document.querySelectorAll('a[href^="https://www.animesaturn.tv/watch?file="]')[0].href +'&server=1' // get 2nd server since the resource is easily fetchable 
+    }
+
+    // get the iframe link
+    async getIFrame(playerPageUrl) {
+        const respData = await this.requests.makeRequest(this.method, playerPageUrl, this.headers, {})
+        const parsedDocument = new jsdom.JSDOM(respData)
+
+        return parsedDocument.window.document.getElementsByTagName('iframe')[0].src
     }
 }

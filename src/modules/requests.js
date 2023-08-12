@@ -21,5 +21,6 @@ module.exports = class Requests {
         })
 
         return response.data
+        
     }
 }

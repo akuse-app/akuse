@@ -47,11 +47,12 @@ const createWindow = () => {
             /* console.log("\nviewerId: " + viewerId) */
             
             const entries = await anilist.getWatching(token, viewerId)
-            console.log("\nentries: " + JSON.stringify(entries))
+            /* console.log("\nentries: " + JSON.stringify(entries)) */
 
-            const document = await animesaturn.getDocument()
+            animesaturn.getAnimePage(entries[1])
 
-            console.log(document.window.document.getElementById("livesearch"))
+            /* const parsedDocument = await animesaturn.getHomePage()
+            console.log(parsedDocument.window.document.getElementById("livesearch")) */
         })
     })
 }
