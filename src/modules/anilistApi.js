@@ -5,7 +5,6 @@ const Requests = require ('./requests.js')
 module.exports = class AniListAPI extends Requests {
     constructor(clientData) {
         super()
-        this.requests = new Requests()
         this.clientData = clientData
         this.method = 'POST'
         this.graphQLUrl = 'https://graphql.anilist.co'
@@ -27,7 +26,7 @@ module.exports = class AniListAPI extends Requests {
             'code': code
         }
 
-        const respData = await this.requests.makeRequest(this.method, url, this.headers, data)
+        const respData = await this.makeRequest(this.method, url, this.headers, data)
 
         return respData.access_token
     }
@@ -47,8 +46,8 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
-        const options = this.requests.getOptions(query)
-        const respData = await this.requests.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Viewer.id
     }
@@ -91,8 +90,8 @@ module.exports = class AniListAPI extends Requests {
             userId: viewerId,
         }
 
-        const options = this.requests.getOptions(query, variables)
-        const respData = await this.requests.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.MediaListCollection.lists[0].entries
 

@@ -1,45 +1,84 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --bg-primary: #282a36;
-    --bg-secondary: rgb(93, 96, 110);
-    --font-primary: white;
-    --font-secondary: #828488;
+    --color-1: #1F2937;
+    --color-2: #353F4E;
+    --font-1: #C2CCD8;
+    --font-2: #DCE2EA;
 }
 
 * {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
-    color: var(--font-primary);
+    font-family: 'Poppins', sans-serif;
+    color: var(--font-1);
 }
 
-html {
-    background-color: var(--bg-primary);
-}
-
-html, body {
+html,
+body {
+    background-color: var(--color-1);
     width: 100%;
     height: 100%;
 }
 
-body {
+nav#nav-main {
     display: flex;
     flex-direction: row;
+    background-color: var(--color-2);
+    padding: 20px 20px;
+
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 6px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
 }
 
-button {
-    background-color: var(--bg-primary);
+nav#nav-main #nav-logo {
+    width: 30px;
+    height: 30px;
 }
 
-.sidebar {
-    width: 300px;
-    height: 100%;
-    padding: 20px;
-    border-right: 2px solid var(--bg-secondary);
+nav#nav-main ul {
+    padding-left: 0px;
+    list-style-type: none;
 }
 
-.main {
-    width: 100%;
-    height: 100%;
-    padding: 20px;
+nav#nav-main ul li {
+    display: inline;
+    padding: 8px 15px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    /* border: 1px solid red; */
+    transition: 0.1s ease-in-out;
+}
+
+nav#nav-main ul li:hover {
+    background-color: var(--color-1);
+    color: var(--font-2);
+}
+
+main {
+    margin: auto;
+    width: 1500px;
+    padding: 40px 0px;
+    height: 100%; /* da levare */
+    /* border: 1px solid red; */
+}
+
+main section {
+    height: 500px; /* da levare */
+    color: var(--font-2);
+    /* border: 1px solid green; */
+}
+
+main section h1 {
+    padding-bottom: 20px;
+    font-weight: 500;
+}
+
+main section .anime-list  {
+    display: flex;
+    gap: 40px;
+}
+
+main section .anime-list .anime-entry img.anime-cover {
+    width: 180px;
+    border-radius: 10px;
 }

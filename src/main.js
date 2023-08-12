@@ -4,17 +4,10 @@ const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require("path")
 const url = require('url')
 
-
 const AniListAPI = require ('./modules/anilistApi.js')
-const AnimeSaturnScrapeAPI = require ('./modules/animesaturnScrapeApi.js')
+const AnimeScrapeAPI = require ('./modules/animeScrapeApi.js')
 
 const clientData = {
-}
-
-const method = 'POST'
-const headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
 }
 
 const createWindow = () => {
@@ -37,7 +30,7 @@ const createWindow = () => {
             win.loadFile("src/windows/main.html")
 
             const anilist = new AniListAPI(clientData)
-            const animesaturn = new AnimeSaturnScrapeAPI()
+            const anime = new AnimeScrapeAPI()
 
             const currentUrl = new URL(win.webContents.getURL())
             const token = await anilist.getAccessToken(currentUrl)
@@ -49,10 +42,8 @@ const createWindow = () => {
             const entries = await anilist.getWatching(token, viewerId)
             /* console.log("\nentries: " + JSON.stringify(entries)) */
 
-            animesaturn.getAnimePage(entries[1])
-
-            /* const parsedDocument = await animesaturn.getHomePage()
-            console.log(parsedDocument.window.document.getElementById("livesearch")) */
+            const link = await anime.getEntryLink(entries[1])
+            console.log(link)
         })
     })
 }
