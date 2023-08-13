@@ -52,7 +52,7 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Viewer.id
     }
 
-    async getWatching(token, viewerId) {
+    async getViewerList(token, viewerId, status) {
         const headers = {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ module.exports = class AniListAPI extends Requests {
 
         const query = `
             query($userId : Int) {
-                MediaListCollection(userId : $userId, type: ANIME, status : CURRENT, sort: UPDATED_TIME) {
+                MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME) {
                     lists {
                         isCustomList
                         name
@@ -75,9 +75,11 @@ module.exports = class AniListAPI extends Requests {
                                 title {
                                     romaji
                                     english
+                                    native
+                                    userPreferred
                                 }
                                 coverImage {
-                                    medium
+                                    extraLarge
                                 }
                             }
                         }

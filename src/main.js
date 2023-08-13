@@ -39,11 +39,15 @@ const createWindow = () => {
             const viewerId = await anilist.getViewerId(token)
             /* console.log("\nviewerId: " + viewerId) */
             
-            const entries = await anilist.getWatching(token, viewerId)
-            /* console.log("\nentries: " + JSON.stringify(entries)) */
+            const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
+            win.webContents.send('giveEntries', entriesCurrent, 'CURRENT');
 
-            const link = await anime.getEntryLink(entries[1])
+            const entrierRepeating = await anilist.getViewerList(token, viewerId, 'COMPLETED')
+            win.webContents.send('giveEntries', entrierRepeating, 'COMPLETED');
+
+            const link = await anime.getEntryLink(entriesCurrent[1])
             console.log(link)
+
         })
     })
 }

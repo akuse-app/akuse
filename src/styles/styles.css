@@ -4,9 +4,10 @@
     --color-1: #1F2937;
     --color-2: #353F4E;
     --color-3: #19212c;
-    --font-1: #C2CCD8;
+    --font-1: #F8CDC9;
     --font-2: #DCE2EA;
     --font-3: #636569;
+    --font-4: #969ba1;
 }
 
 * {
@@ -16,7 +17,8 @@
 
 html,
 body {
-    background-color: var(--color-1);
+    background-image: linear-gradient(var(--color-2), var(--color-1));
+    background-attachment: fixed;
     width: 100%;
     height: 100%;
 }
@@ -43,6 +45,7 @@ nav#nav-main {
     top: 0;
     left: 0;
     background-color: var(--color-3);
+    backdrop-filter: blur(10px);
     padding: 0px 40px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 6px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
     transition: 0.3s ease-out;
@@ -100,20 +103,54 @@ main {
     /* border: 1px solid red; */
 }
 
+main section {
+    margin-bottom: 40px;
+}
+
 main section h1 {
-    padding-bottom: 20px;
+    font-weight: 500;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
 }
 
 main section .anime-list  {
     display: flex;
-    gap: 40px;
+    gap: 12px;
 }
 
 main section .anime-list .anime-entry {
-    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    width: 160px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.1s ease-out;
+}
+
+main section .anime-list .anime-entry:hover {
+    background-color: var(--color-1);
+    
+    backdrop-filter: blur(10px);
 }
 
 main section .anime-list .anime-entry img.anime-cover {
-    width: 180px;
+    height: 224px;
     border-radius: 10px;
+}
+
+main section .anime-list .anime-entry .anime-title {
+    color: var(--font-1);
+    font-weight: 500;
+    padding-top: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 1rem;
+}
+
+main section .anime-list .anime-entry .anime-progress {
+    color: var(--font-4);
+    font-size: 1rem;
 }
