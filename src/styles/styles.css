@@ -3,14 +3,15 @@
 :root {
     --color-1: #1F2937;
     --color-2: #353F4E;
+    --color-3: #19212c;
     --font-1: #C2CCD8;
     --font-2: #DCE2EA;
+    --font-3: #636569;
 }
 
 * {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    color: var(--font-1);
 }
 
 html,
@@ -20,13 +21,47 @@ body {
     height: 100%;
 }
 
-nav#nav-main {
+.body-container {
     display: flex;
     flex-direction: row;
-    background-color: var(--color-2);
-    padding: 20px 20px;
+}
 
+.up-spacing {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 80px;
+}
+
+nav#nav-main {
+    width: 280px;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    letter-spacing: 1px;
+    top: 0;
+    left: 0;
+    background-color: var(--color-3);
+    padding: 0px 40px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 6px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
+    transition: 0.3s ease-out;
+}
+
+nav#nav-main .logo-wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav#nav-main .logo-wrapper img {
+    width: 150px;
+}
+
+nav#nav-main h1 {
+    color: var(--font-2);
+    font-weight: 400;
 }
 
 nav#nav-main #nav-logo {
@@ -40,42 +75,42 @@ nav#nav-main ul {
 }
 
 nav#nav-main ul li {
-    display: inline;
-    padding: 8px 15px;
-    font-weight: 500;
-    border-radius: 5px;
+    color: var(--font-3);
+    padding: 8px 0px;
     cursor: pointer;
     /* border: 1px solid red; */
-    transition: 0.1s ease-in-out;
+    transition: 0.2s ease-in-out;
+}
+
+nav#nav-main ul li i {
+    margin-right: 25px;
 }
 
 nav#nav-main ul li:hover {
-    background-color: var(--color-1);
+    /* background-color: var(--color-2); */
     color: var(--font-2);
+    transform: translateX(10px);
 }
 
 main {
-    margin: auto;
-    width: 1500px;
-    padding: 40px 0px;
-    height: 100%; /* da levare */
-    /* border: 1px solid red; */
-}
-
-main section {
-    height: 500px; /* da levare */
     color: var(--font-2);
-    /* border: 1px solid green; */
+    height: 100%; /* da levare */
+    margin-left: 360px;
+    padding: 0px 35px;
+    /* border: 1px solid red; */
 }
 
 main section h1 {
     padding-bottom: 20px;
-    font-weight: 500;
 }
 
 main section .anime-list  {
     display: flex;
     gap: 40px;
+}
+
+main section .anime-list .anime-entry {
+    width: 180px;
 }
 
 main section .anime-list .anime-entry img.anime-cover {
