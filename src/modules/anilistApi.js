@@ -96,7 +96,65 @@ module.exports = class AniListAPI extends Requests {
         const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.MediaListCollection.lists[0].entries
+    }
 
-        console.log("resp: " + JSON.stringify(respData.data.MediaListCollection.lists[0].entries))
+    // NOT WORKING
+    async getFollowingUsers(token, viewerId) {
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        const query = `
+            query($userId : Int) {
+                User(id: $userId, sort: ID) {
+                    id
+                    name
+                    avatar {
+                        large
+                    }
+                }
+            }
+        `
+
+        const variables = {
+            userId: viewerId,
+        }
+
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+
+        console.log(typeof respData.data)
+        console.log(" -> " + JSON.stringify(respData))
+    }
+
+    async getUserInfo(token, viewerId) {
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        const query = `
+            query($userId : Int) {
+                User(id: $userId, sort: ID) {
+                    id
+                    name
+                    avatar {
+                        large
+                    }
+                }
+            }
+        `
+
+        const variables = {
+            userId: viewerId,
+        }
+
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+
+        return respData.data
     }
 }

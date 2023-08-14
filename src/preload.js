@@ -1,25 +1,31 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    openLoginPage: () => ipcRenderer.send('open-login-page')
-
-    
+    openLoginPage: () => ipcRenderer.send('open-login-page')  
 })
 
 ipcRenderer.on('giveEntries', (event, entries, status) => {
     Object.keys(entries).forEach( key => {
-        insertAnimeEntry(entries[key], status)
+        insertAnimeEntry(entries[key], status, key)
     })
-});
+})
 
-function insertAnimeEntry(animeEntry, status) {
+ipcRenderer.on('giveUserInfo', (event, userInfo) => {
+    insertUserIcon(userInfo)
+})
+
+function insertAnimeEntry(animeEntry, status, key) {
     let anime_list_div = document.getElementById(status.toLowerCase())
     let anime_entry_div = createAnimeEntry(animeEntry)
     
-    anime_list_div.appendChild(anime_entry_div)
+    anime_list_div.appendChild(anime_entry_div, key)
 }
 
-function createAnimeEntry(animeEntry) {
+function insertUserIcon(userInfo) {
+    document.getElementById('user-icon').src = userInfo.User.avatar.large
+}
+
+function createAnimeEntry(animeEntry, key) {
     const animeName = animeEntry.media.title.romaji
     const progress = animeEntry.progress
     const cover = animeEntry.media.coverImage.extraLarge
@@ -29,6 +35,7 @@ function createAnimeEntry(animeEntry) {
 
     let anime_entry_div = document.createElement('div')
     anime_entry_div.classList.add('anime-entry')
+    anime_entry_div.id = ('anime-entry-' + (key+1))
 
     let anime_cover_div = document.createElement('img')
     anime_cover_div.classList.add('anime-cover')
@@ -49,3 +56,21 @@ function createAnimeEntry(animeEntry) {
 
     return anime_entry_div
 }
+
+// dynamic anime search bar
+addEventListener("input", (event) => {
+    var txtValue;
+    var input = document.getElementById('search-bar');
+    var filter = input.value.toLowerCase().replace(/\s/g, '');
+    var items = document.getElementsByClassName('anime-title');
+    var itemsCard = document.getElementsByClassName('anime-entry')
+
+    Object.keys(items).forEach( key => {
+        txtValue = items[key].textContent || a.innerText;
+        if (txtValue.toLowerCase().replace(/\s/g, '').indexOf(filter) > -1) {
+            itemsCard[key].style.display = "";
+        } else {
+            itemsCard[key].style.display = "none";
+        }
+    });
+});

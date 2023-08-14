@@ -2,12 +2,11 @@
 
 :root {
     --color-1: #1F2937;
-    --color-2: #353F4E;
-    --color-3: #19212c;
+    --color-2: #19212c;
+    --color-3: #0e131a;
     --font-1: #F8CDC9;
     --font-2: #DCE2EA;
-    --font-3: #636569;
-    --font-4: #969ba1;
+    --font-3: #505b6b;
 }
 
 * {
@@ -17,7 +16,8 @@
 
 html,
 body {
-    background-image: linear-gradient(var(--color-2), var(--color-1));
+    background-image: linear-gradient(var(--color-2), var(--color-3));
+    /* background-color: var(--color-2); */
     background-attachment: fixed;
     width: 100%;
     height: 100%;
@@ -32,6 +32,7 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     height: 80px;
+    width: 100%;
 }
 
 nav#nav-main {
@@ -41,30 +42,34 @@ nav#nav-main {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    letter-spacing: 1px;
     top: 0;
     left: 0;
-    background-color: var(--color-3);
+    /* background-color: var(--color-1); */
+    background-image: linear-gradient(var(--color-1), var(--color-2));
     backdrop-filter: blur(10px);
     padding: 0px 40px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 6px, rgba(0, 0, 0, 0.23) 0px 1px 6px;
     transition: 0.3s ease-out;
 }
 
-nav#nav-main .logo-wrapper {
-    height: 100%;
+nav#nav-main .up-spacing {
     display: flex;
-    justify-content: center;
+    align-items: center;
+}
+
+nav#nav-main .logo-wrapper {
+    height: 40px;
+    display: flex;
     align-items: center;
 }
 
 nav#nav-main .logo-wrapper img {
-    width: 150px;
+    height: 40px;
 }
 
 nav#nav-main h1 {
-    color: var(--font-2);
-    font-weight: 400;
+    font-size: 1rem;
+    color: var(--font-3);
+    font-weight: 600;
 }
 
 nav#nav-main #nav-logo {
@@ -73,66 +78,119 @@ nav#nav-main #nav-logo {
 }
 
 nav#nav-main ul {
+    background-color: var(--color-);
     padding-left: 0px;
     list-style-type: none;
+    margin-bottom: 60px;
 }
 
 nav#nav-main ul li {
+    font-size: 1.1rem;
     color: var(--font-3);
+    font-weight: 500;
     padding: 8px 0px;
     cursor: pointer;
     /* border: 1px solid red; */
     transition: 0.2s ease-in-out;
 }
 
+nav#nav-main ul.navbar li.active {
+    color: var(--font-2);
+}
+
 nav#nav-main ul li i {
+    font-size: 1.4rem;
     margin-right: 25px;
 }
 
 nav#nav-main ul li:hover {
-    /* background-color: var(--color-2); */
     color: var(--font-2);
-    transform: translateX(10px);
 }
 
 main {
     color: var(--font-2);
+    width: 100%;
     height: 100%; /* da levare */
     margin-left: 360px;
     padding: 0px 35px;
     /* border: 1px solid red; */
 }
 
+main .up-spacing {
+    display: flex;
+    align-items: center;
+}
+
+main .up-spacing .search-bar-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-1);
+    color: var(--font-3);
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 10px;
+    width: 500px;
+    height: 40px;
+    padding-left: 15px;
+}
+
+main .up-spacing .search-bar-wrapper input.search-bar {
+    font-size: 1.2rem;
+    color: var(--font-2);
+    font-weight: 500;
+    width: 100%;
+    height: 100%;
+    padding-left: 15px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+main .up-spacing .search-bar-wrapper input.search-bar::placeholder {
+    color: var(--font-3);
+}
+
+main .up-spacing .user-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    height: 100%;
+}
+
+main .up-spacing .user-icon img {
+    width: 40px;
+}
+
 main section {
     margin-bottom: 40px;
+
 }
 
 main section h1 {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1.3rem;
     margin-bottom: 15px;
 }
 
 main section .anime-list  {
     display: flex;
-    gap: 12px;
+    gap: 20px;
+    width: 100vw;
 }
 
 main section .anime-list .anime-entry {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 10px;
     width: 160px;
     border-radius: 10px;
     cursor: pointer;
-    transition: 0.1s ease-out;
+    transition: 0.2s ease-out;
 }
 
 main section .anime-list .anime-entry:hover {
-    background-color: var(--color-1);
-    
-    backdrop-filter: blur(10px);
+    transform: scale(1.1);
 }
 
 main section .anime-list .anime-entry img.anime-cover {
@@ -151,6 +209,7 @@ main section .anime-list .anime-entry .anime-title {
 }
 
 main section .anime-list .anime-entry .anime-progress {
-    color: var(--font-4);
+    color: var(--font-3);
     font-size: 1rem;
+    font-weight: 500;
 }

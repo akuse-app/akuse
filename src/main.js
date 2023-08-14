@@ -45,6 +45,10 @@ const createWindow = () => {
             const entrierRepeating = await anilist.getViewerList(token, viewerId, 'COMPLETED')
             win.webContents.send('giveEntries', entrierRepeating, 'COMPLETED');
 
+            /* await anilist.getFollowingUsers(token, viewerId) */
+            const userInfo = await anilist.getUserInfo(token, viewerId)
+            win.webContents.send('giveUserInfo', userInfo)
+
             const link = await anime.getEntryLink(entriesCurrent[1])
             console.log(link)
 
