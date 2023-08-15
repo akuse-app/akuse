@@ -16,7 +16,7 @@ ipcRenderer.on('giveUserInfo', (event, userInfo) => {
 
 function insertAnimeEntry(animeEntry, status, key) {
     let anime_list_div = document.getElementById(status.toLowerCase())
-    let anime_entry_div = createAnimeEntry(animeEntry)
+    let anime_entry_div = createAnimeEntry(animeEntry, key)
     
     anime_list_div.appendChild(anime_entry_div, key)
 }
@@ -35,7 +35,9 @@ function createAnimeEntry(animeEntry, key) {
 
     let anime_entry_div = document.createElement('div')
     anime_entry_div.classList.add('anime-entry')
-    anime_entry_div.id = ('anime-entry-' + (key+1))
+    
+    /* let index = parseInt(key) + 1 */
+    anime_entry_div.id = ('anime-entry-' + key)
 
     let anime_cover_div = document.createElement('img')
     anime_cover_div.classList.add('anime-cover')

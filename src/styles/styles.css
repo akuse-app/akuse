@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
     --color-1: #1F2937;
@@ -7,11 +8,30 @@
     --font-1: #F8CDC9;
     --font-2: #DCE2EA;
     --font-3: #505b6b;
+    
+    --font-weight: 600;
 }
 
 * {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
+    font-family: 'Quicksand', sans-serif;
+
+    /* everything unselectable */
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+img {
+    user-drag: none; 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 html,
@@ -69,7 +89,7 @@ nav#nav-main .logo-wrapper img {
 nav#nav-main h1 {
     font-size: 1rem;
     color: var(--font-3);
-    font-weight: 600;
+    font-weight: var(--font-weight);
 }
 
 nav#nav-main #nav-logo {
@@ -87,7 +107,7 @@ nav#nav-main ul {
 nav#nav-main ul li {
     font-size: 1.1rem;
     color: var(--font-3);
-    font-weight: 500;
+    font-weight: var(--font-weight);
     padding: 8px 0px;
     cursor: pointer;
     /* border: 1px solid red; */
@@ -111,7 +131,6 @@ main {
     color: var(--font-2);
     width: 100%;
     height: 100%; /* da levare */
-    margin-left: 360px;
     padding: 0px 35px;
     /* border: 1px solid red; */
 }
@@ -127,7 +146,7 @@ main .up-spacing .search-bar-wrapper {
     background-color: var(--color-1);
     color: var(--font-3);
     font-size: 1.2rem;
-    font-weight: 500;
+    font-weight: var(--font-weight);
     border-radius: 10px;
     width: 500px;
     height: 40px;
@@ -137,7 +156,7 @@ main .up-spacing .search-bar-wrapper {
 main .up-spacing .search-bar-wrapper input.search-bar {
     font-size: 1.2rem;
     color: var(--font-2);
-    font-weight: 500;
+    font-weight: var(--font-weight);
     width: 100%;
     height: 100%;
     padding-left: 15px;
@@ -160,37 +179,53 @@ main .up-spacing .user-icon {
 
 main .up-spacing .user-icon img {
     width: 40px;
+    border-radius: 10px;
 }
 
 main section {
     margin-bottom: 40px;
+}
 
+main section .anime-page-wrapper {
+    display: none; /* flex */
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+main section .anime-page-wrapper .anime-page {
+    width: 1500px;
+    height: 850px;
+    margin: 300px;
+    border-radius: 10px;
+    background-image: linear-gradient(var(--color-2), var(--color-3));
 }
 
 main section h1 {
-    font-weight: 600;
+    font-weight: var(--font-weight);
     font-size: 1.3rem;
     margin-bottom: 15px;
 }
 
 main section .anime-list  {
-    display: flex;
     gap: 20px;
-    width: 100vw;
 }
 
 main section .anime-list .anime-entry {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 160px;
+    width: 158px;
+    display: inline-block;
     border-radius: 10px;
+    z-index: 2;
     cursor: pointer;
     transition: 0.2s ease-out;
 }
-
-main section .anime-list .anime-entry:hover {
-    transform: scale(1.1);
+  
+main section .anime-list .anime-entry:not(:last-child) {
+    margin-right: 20px;
 }
 
 main section .anime-list .anime-entry img.anime-cover {
@@ -199,8 +234,8 @@ main section .anime-list .anime-entry img.anime-cover {
 }
 
 main section .anime-list .anime-entry .anime-title {
-    color: var(--font-1);
-    font-weight: 500;
+    color: var(--font-2);
+    font-weight: var(--font-weight);
     padding-top: 5px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -211,5 +246,5 @@ main section .anime-list .anime-entry .anime-title {
 main section .anime-list .anime-entry .anime-progress {
     color: var(--font-3);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: var(--font-weight);
 }
