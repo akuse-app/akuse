@@ -6,55 +6,41 @@ const url = require('url')
 
 const AniListAPI = require ('./modules/anilistApi.js')
 const AnimeScrapeAPI = require ('./modules/animeScrapeApi.js')
+const clientData = require ('./modules/clientData.js')
 
-const clientData = {
-}
+let win
 
 const createWindow = () => {
-    const win  = new BrowserWindow({
+    win  = new BrowserWindow({
         width: 1280,
         height: 720,
         autoHideMenuBar: false,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
-            nodeIntegration: true
+            nodeIntegration: true, // is default value after Electron v5
+            contextIsolation: false, // protect against prototype pollution
+            /* enableRemoteModule: false, */ // turn off remote
+            preload: path.join(__dirname, "preload.js")
         }
     })
     win.loadFile("src/windows/index.html")
 
-    // press login button
-    ipcMain.on("open-login-page", (event) => {
-        const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
+}
+
+// press login button
+ipcMain.handle('open-login-page', (event) => {
+    const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
 
         win.loadURL(authUrl).then(async () => {
-            win.loadFile("src/windows/main.html")
+            win.loadFile("src/windows/index.html")
 
             const anilist = new AniListAPI(clientData)
-            const anime = new AnimeScrapeAPI()
 
             const currentUrl = new URL(win.webContents.getURL())
             const token = await anilist.getAccessToken(currentUrl)
-            /* console.log("\ntoken: " + token) */
 
-            const viewerId = await anilist.getViewerId(token)
-            /* console.log("\nviewerId: " + viewerId) */
-            
-            const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
-            win.webContents.send('giveEntries', entriesCurrent, 'CURRENT');
-
-            const entrierRepeating = await anilist.getViewerList(token, viewerId, 'COMPLETED')
-            win.webContents.send('giveEntries', entrierRepeating, 'COMPLETED');
-
-            /* await anilist.getFollowingUsers(token, viewerId) */
-            const userInfo = await anilist.getUserInfo(token, viewerId)
-            win.webContents.send('giveUserInfo', userInfo)
-
-            const link = await anime.getEntryLink(entriesCurrent[1])
-            console.log(link)
-
+            win.webContents.send('load-page-elements', token)
         })
-    })
-}
+})
 
 app.whenReady().then(() => {
     createWindow()
