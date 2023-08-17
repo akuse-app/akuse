@@ -31,7 +31,7 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     })
 
     // display featured
-    const entryFeatured = await anilist.getAnimeInfo(420)
+    const entryFeatured = await anilist.getAnimeInfo(1)
     insertFeaturedAnime(entryFeatured)
 
     // display user icon avatar
@@ -138,7 +138,10 @@ function insertFeaturedAnime(animeEntry) {
     anime_genres_div
 
     Object.keys(genres).forEach( (key) => {
-        anime_genres_div.innerHTML += genres[key] + " • "
+        anime_genres_div.innerHTML += genres[key]
+        if(parseInt(key) < Object.keys(genres).length - 1) {
+            anime_genres_div.innerHTML += " • "
+        }
     })
 
     document.getElementById('featured-img').src = banner
