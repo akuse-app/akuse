@@ -155,3 +155,10 @@ async function createAnimePage(animeEntryId) {
     const animeEntry = await anilist.getAnimeInfo(animeId)
     console.log(JSON.stringify(animeEntry))
 }
+
+// anime page closer
+const exit_button = document.getElementById('exit')
+
+exit.addEventListener('click', (event) => {
+    document.getElementsByClassName('anime-page-wrapper')[0].style.display = 'none'
+})

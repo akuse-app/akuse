@@ -12,10 +12,10 @@ let win
 
 const createWindow = () => {
     win  = new BrowserWindow({
-        width: 1280,
-        height: 720,
-        minWidth: 1024,
-        minHeight: 576,
+        width: 1920,
+        height: 1080,
+        minWidth: 1280,
+        minHeight: 720,
         autoHideMenuBar: false,
         webPreferences: {
             nodeIntegration: true, // is default value after Electron v5

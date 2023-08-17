@@ -3,10 +3,9 @@
 :root {
     --color-1: #141414;
     --color-1-rgba: #141414dc;
-    --color-2: rgb(39, 51, 68);
-    --font-1: #F8CDC9;
-    --font-2: #DCE2EA;
-    --font-3: #505b6b;
+    --color-2: #242424;
+    --font-1: #DCE2EA;
+    --font-2: #aeb2b8;
     
     --font-weight: 600;
     --border-radius: 10px;
@@ -64,7 +63,7 @@ body {
     #login-page button#login-button {
         font-size: 1.6rem;
         font-weight: var(--font-weight);
-        color: var(--font-2);
+        color: var(--font-1);
         width: 200px;
         height: 60px;
         background-color: var(--color-2);
@@ -104,7 +103,7 @@ nav#nav-main ul {
 nav#nav-main ul li {
     font-size: 1.3rem;
     display: inline;
-    color: var(--font-2);
+    color: var(--font-1);
     font-weight: var(--font-weight);
     padding: 10px 20px;
     cursor: pointer;
@@ -119,7 +118,7 @@ nav .search-bar-wrapper-wrapper .search-bar-wrapper {
     display: flex;
     align-items: center;
     background-color: var(--color-1);
-    color: var(--font-3);
+    color: var(--font-2);
     font-size: 1.2rem;
     font-weight: var(--font-weight);
     border-radius: var(--border-radius);
@@ -130,7 +129,7 @@ nav .search-bar-wrapper-wrapper .search-bar-wrapper {
 
 nav .search-bar-wrapper-wrapper .search-bar-wrapper input.search-bar {
     font-size: 1.2rem;
-    color: var(--font-2);
+    color: var(--font-1);
     font-weight: var(--font-weight);
     width: 100%;
     height: 100%;
@@ -141,7 +140,7 @@ nav .search-bar-wrapper-wrapper .search-bar-wrapper input.search-bar {
 }
 
 nav .search-bar-wrapper-wrapper .search-bar-wrapper input.search-bar::placeholder {
-    color: var(--font-3);
+    color: var(--font-2);
 }
 
 nav .user-icon {
@@ -160,7 +159,7 @@ nav .user-icon img {
 /* MAIN SECTION */
 
 main {
-    color: var(--font-2);
+    color: var(--font-1);
     width: 100%;
     height: 100%; /* da levare */
 }
@@ -192,20 +191,38 @@ main .featured .featured-container .featured-left{
         gap: 15px;
         height: 100%;
         padding-left: 100px;
+        font-weight: var(--font-weight);
     }
     
     main .featured .anime-title {
         text-overflow: ellipsis;
         overflow: hidden;
         font-size: 3rem;
-        font-weight: var(--font-weight);
-        line-height: 45px;
+        line-height: 55px;
     }
 
     main .featured .anime-info {
         display: flex;
         gap: 20px;
-        margin-bottom: 10px;
+    }
+
+    main .featured .anime-info,
+    main .featured .anime-genres {
+        color: var(--font-2);
+    }
+
+    main .featured button {
+        font-size: 1.1rem;
+        font-weight: var(--font-weight);
+        color: var(--font-1);
+        width: 180px;
+        height: 50px;
+        background-color: var(--color-1);
+        border-radius: var(--border-radius);
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: 0.1s ease-out;
     }
 
 main .featured .featured-container .featured-shadow {
@@ -239,27 +256,74 @@ main section {
     margin-top: 40px;
 }
 
-main section .anime-page-wrapper {
-    display: none; /* flex */
+main .anime-page-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex; /* flex */
     align-items: center;
     justify-content: center;
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
 }
 
-main section .anime-page-wrapper .anime-page {
-    width: 1500px;
-    height: 850px;
-    margin: 300px;
+main .anime-page {
+    width: 90%;
+    height: 90%;
     border-radius: var(--border-radius);
+    background-color: var(--color-2);
 }
+
+    main .anime-page .menu {
+        display: flex;
+        margin: auto;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+    }
+    
+    main .anime-page .menu ul {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        list-style-type: none;
+        gap: 30px;
+        padding-left: 0;
+    }
+    
+    main .anime-page .menu ul li {
+        color: var(--font-2);
+        font-size: 1.6rem;
+        font-weight: var(--font-weight);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    main .anime-page .menu ul li.active {
+        color: var(--font-1);
+    }
+
+    main .anime-page button#exit {
+        position: absolute;
+        margin: 10px;
+        color: var(--font-2);
+        font-size: 1.8rem;
+        font-weight: var(--font-weight);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        transition: var(--transition);
+    }
+
+    main .anime-page .menu ul li:hover,
+    main .anime-page button#exit:hover {
+        color: var(--font-1);
+    }
 
 main section h1 {
     font-weight: var(--font-weight);
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin-bottom: 15px;
 }
 
@@ -286,7 +350,7 @@ main section .anime-list .anime-entry img.anime-cover {
 }
 
 main section .anime-list .anime-entry .anime-title {
-    color: var(--font-2);
+    color: var(--font-1);
     font-weight: var(--font-weight);
     padding-top: 5px;
     text-overflow: ellipsis;
@@ -296,7 +360,7 @@ main section .anime-list .anime-entry .anime-title {
 }
 
 main section .anime-list .anime-entry .anime-progress {
-    color: var(--font-3);
+    color: var(--font-2);
     font-size: 1rem;
     font-weight: var(--font-weight);
 }
