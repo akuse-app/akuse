@@ -129,6 +129,55 @@ module.exports = class AniListAPI extends Requests {
         console.log(" -> " + JSON.stringify(respData))
     }
 
+    async getAnimeInfo(animeId) {
+        var query = `
+            query ($id: Int) {
+                Media (id: $id, type: ANIME) {
+                    id
+                    status
+                    description
+                    startDate {
+                        year
+                        month
+                        day
+                    }
+                    endDate {
+                        year
+                        month
+                        day
+                    }
+                    episodes
+                    trailer {
+                        thumbnail
+                    }
+                    coverImage {
+                        extraLarge
+                    }
+                    bannerImage
+                    genres
+                    meanScore
+                    popularity
+                    isAdult
+                    title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                    }
+                }
+            }
+        `
+
+        var variables = {
+            id: animeId
+        }
+
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Media
+    }
+
     async getUserInfo(token, viewerId) {
         const headers = {
             'Authorization': 'Bearer ' + token,

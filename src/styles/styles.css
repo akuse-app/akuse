@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-1: #1F2937;
-    --color-2: #19212c;
-    --color-3: #0e131a;
+    --color-1: #141414;
+    --color-1-rgba: #141414dc;
+    --color-2: rgb(39, 51, 68);
     --font-1: #F8CDC9;
     --font-2: #DCE2EA;
     --font-3: #505b6b;
     
     --font-weight: 600;
+    --border-radius: 10px;
 }
 
 * {
@@ -35,136 +36,81 @@ img {
 
 html,
 body {
-    background-image: linear-gradient(var(--color-2), var(--color-3));
-    /* background-color: var(--color-2); */
-    background-attachment: fixed;
+    background-color: var(--color-1);
     width: 100%;
     height: 100%;
 }
 
 #login-page {
+    z-index: 10;
     position: absolute;
     top: 0;
     left: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 30px;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(var(--color-1), var(--color-2));
+    background-color: var(--color-1);
 }
 
-.body-container {
-    display: flex;
-    flex-direction: row;
-}
+    #login-page img {
+        width: 500px;
+    }
 
-.up-spacing {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: 80px;
-    width: 100%;
-}
+    #login-page button#login-button {
+        border: none;
+        outline: none;
+        background-color: var(--color-2);
+    }
 
 nav#nav-main {
-    width: 280px;
-    height: 100%;
-    position: fixed;
+    margin: auto;
+    z-index: 1;
+    width: 1000px;
+    height: 75px;
     display: flex;
-    flex-direction: column;
-    gap: 5px;
-    top: 0;
-    left: 0;
-    /* background-color: var(--color-1); */
-    background-image: linear-gradient(var(--color-1), var(--color-2));
-    backdrop-filter: blur(10px);
-    padding: 0px 40px;
-    transition: 0.3s ease-out;
-}
-
-nav#nav-main .up-spacing {
-    display: flex;
-    align-items: center;
-}
-
-nav#nav-main .logo-wrapper {
-    height: 40px;
-    display: flex;
-    align-items: center;
-}
-
-nav#nav-main .logo-wrapper img {
-    height: 40px;
-}
-
-nav#nav-main h1 {
-    font-size: 1rem;
-    color: var(--font-3);
-    font-weight: var(--font-weight);
-}
-
-nav#nav-main #nav-logo {
-    width: 30px;
-    height: 30px;
+    padding: 0 30px;
+    background-color: var(transparent);
 }
 
 nav#nav-main ul {
-    background-color: var(--color-);
-    padding-left: 0px;
+    display: flex;
+    align-items: center;
+    width: 100%;
     list-style-type: none;
-    margin-bottom: 60px;
 }
 
 nav#nav-main ul li {
-    font-size: 1.1rem;
-    color: var(--font-3);
+    font-size: 1.3rem;
+    display: inline;
+    color: var(--font-2);
     font-weight: var(--font-weight);
-    padding: 8px 0px;
+    padding: 10px 20px;
     cursor: pointer;
-    /* border: 1px solid red; */
-    transition: 0.2s ease-in-out;
 }
 
-nav#nav-main ul.navbar li.active {
-    color: var(--font-2);
-}
-
-nav#nav-main ul li i {
-    font-size: 1.4rem;
-    margin-right: 25px;
-}
-
-nav#nav-main ul li:hover {
-    color: var(--font-2);
-}
-
-main {
-    color: var(--font-2);
-    width: 100%;
-    height: 100%; /* da levare */
-    padding: 0px 35px;
-    /* border: 1px solid red; */
-}
-
-main .up-spacing {
+nav .search-bar-wrapper-wrapper {
     display: flex;
     align-items: center;
 }
 
-main .up-spacing .search-bar-wrapper {
+nav .search-bar-wrapper-wrapper .search-bar-wrapper {
     display: flex;
     align-items: center;
     background-color: var(--color-1);
     color: var(--font-3);
     font-size: 1.2rem;
     font-weight: var(--font-weight);
-    border-radius: 10px;
-    width: 500px;
+    border-radius: var(--border-radius);
+    width: 300px;
     height: 40px;
     padding-left: 15px;
 }
 
-main .up-spacing .search-bar-wrapper input.search-bar {
+nav .search-bar-wrapper-wrapper .search-bar-wrapper input.search-bar {
     font-size: 1.2rem;
     color: var(--font-2);
     font-weight: var(--font-weight);
@@ -176,11 +122,11 @@ main .up-spacing .search-bar-wrapper input.search-bar {
     outline: none;
 }
 
-main .up-spacing .search-bar-wrapper input.search-bar::placeholder {
+nav .search-bar-wrapper-wrapper .search-bar-wrapper input.search-bar::placeholder {
     color: var(--font-3);
 }
 
-main .up-spacing .user-icon {
+nav .user-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,13 +134,91 @@ main .up-spacing .user-icon {
     height: 100%;
 }
 
-main .up-spacing .user-icon img {
+nav .user-icon img {
     width: 40px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
+}
+
+/* MAIN SECTION */
+
+main {
+    color: var(--font-2);
+    width: 100%;
+    height: 100%; /* da levare */
+}
+
+main .featured {
+    position: relative;
+}
+
+main .featured .featured-container {
+    display: flex;
+    z-index: 0;
+    width: 100%; 
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+main .featured .featured-container .featured-left{
+    width: 30%;
+    z-index: 3;
+    background-color: var(--color-1-rgba);
+}
+
+    main .featured .featured-container .featured-left .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 15px;
+        height: 100%;
+        padding-left: 100px;
+    }
+    
+    main .featured .anime-title {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 3rem;
+        font-weight: var(--font-weight);
+        line-height: 45px;
+    }
+
+    main .featured .anime-info {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 10px;
+    }
+
+main .featured .featured-container .featured-shadow {
+    width: 10%;
+    z-index: 4;
+    background: linear-gradient(0.25turn, var(--color-1-rgba), transparent);
+}
+
+main .featured .featured-container .featured-right{
+    width: 60%;
+    z-index: 3;
+    background-color: transparent;
+}
+
+main .featured .featured-img {
+    padding: 0 50px;
+}
+
+main .featured .featured-img img {
+    width: 100%;
+    object-fit: cover;
+    object-position: 0% 50%; /* try 20px 10px */ 
+    border-radius: var(--border-radius);
+}
+
+main .section-container {
+    padding: 0px 50px;
 }
 
 main section {
-    margin-bottom: 40px;
+    margin-top: 40px;
 }
 
 main section .anime-page-wrapper {
@@ -212,8 +236,7 @@ main section .anime-page-wrapper .anime-page {
     width: 1500px;
     height: 850px;
     margin: 300px;
-    border-radius: 10px;
-    background-image: linear-gradient(var(--color-2), var(--color-3));
+    border-radius: var(--border-radius);
 }
 
 main section h1 {
@@ -229,7 +252,7 @@ main section .anime-list  {
 main section .anime-list .anime-entry {
     width: 158px;
     display: inline-block;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     z-index: 2;
     cursor: pointer;
     transition: 0.2s ease-out;
@@ -241,7 +264,7 @@ main section .anime-list .anime-entry:not(:last-child) {
 
 main section .anime-list .anime-entry img.anime-cover {
     height: 224px;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
 }
 
 main section .anime-list .anime-entry .anime-title {

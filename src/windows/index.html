@@ -11,55 +11,63 @@
 <body>
     <div class="body-container">
         <div id="login-page">
+            <img src="https://github.com/aleganza/akuse/blob/main/assets/img/akuse-logo.png?raw=true" alt="akuse-logo">
             <button id="login-button">Login</button>
         </div>
-        <!-- <nav id="nav-main">
-            <div class="up-spacing">
-                <div class="logo-wrapper">
-                    <img src="/assets/img/akuse-logo-pink.png" alt="akuse-logo">
-                </div>
-            </div>
-            <h1>Menu</h1>
-            <ul class="navbar">
+        <nav id="nav-main">
+            <ul>
                 <li class="active">Home</li>
-                <li>Anime</li>
-                <li>Roba</li>
+                <li>Browse Animes</li>
+                <li>My List</li>
             </ul>
-            <h1>Following</h1>
-            <ul class="following">
-                <li>Utente</li>
-                <li>Utente</li>
-                <li>Utente</li>
-            </ul>
-        </nav> -->
-        <main>
-            <div class="up-spacing">
+            <div class="search-bar-wrapper-wrapper">
                 <div class="search-bar-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input id="search-bar" class="search-bar" placeholder="Search titles">
                     
                     </input>
                 </div>
-                <div class="user-icon">
-                    <img id="user-icon" src="" alt="user-icon">
+            </div>
+            <div class="user-icon">
+                <img id="user-icon" src="" alt="user-icon">
+            </div>
+        </nav>
+        <main>
+            <div class="featured">
+                <div class="featured-container">
+                    <div class="featured-left">
+                        <div class="content">
+                            <div id="featured-anime-title" class="anime-title">Nome molto lungooooo oooooooo oooooooo ooooooooo</div>
+                            <div class="anime-info">
+                                <div id="featured-anime-year" class="anime-year">
+                                    2020
+                                </div>
+                                <div id="featured-anime-episodes" class="anime-episodes">
+                                    24 Episodes
+                                </div>
+                            </div>
+                            <div id="featured-anime-genres" class="anime-genres"></div>
+                        </div>
+                    </div>
+                    <div class="featured-shadow"></div>
+                    <div class="featured-right"></div>
+                </div>
+                <div class="featured-img">
+                    <img id="featured-img" src="/assets/img/banner.jpg" alt="">
                 </div>
             </div>
-            <section>
-                <div class="anime-page-wrapper">
-                    <div class="anime-page">
+            <div class="section-container">
+                <section>
+                    <div class="anime-page-wrapper">
+                        <div class="anime-page">
+                        </div>
                     </div>
-                </div>
-                <h1>Continue Watching</h1>
-                <div id="current" class="anime-list">
-
-                </div>
-            </section>
-            <section>
-                <h1>Continue Re-Watching</h1>
-                <div id="completed" class="anime-list">
-                    
-                </div>
-            </section>
+                    <h1>Continue watching</h1>
+                    <div id="current" class="anime-list">
+    
+                    </div>
+                </section>
+            </div>
         </main>
     </div>
 </body>

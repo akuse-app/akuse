@@ -24,33 +24,39 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     const viewerId = await anilist.getViewerId(token)
     
+    // display current watching animes
     const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
     Object.keys(entriesCurrent).forEach( key => {
         insertAnimeEntry(entriesCurrent[key], 'CURRENT', key)
     })
 
+    // display featured
+    const entryFeatured = await anilist.getAnimeInfo(420)
+    insertFeaturedAnime(entryFeatured)
+
+    // display user icon avatar
     const userInfo = await anilist.getUserInfo(token, viewerId)
     insertUserIcon(userInfo)
-
+    
+    // test
     const link = await anime.getEntryLink(entriesCurrent[1])
     console.log(link)
-})
 
-// anime-page
-/* document.getElementById('current').addEventListener("click", (event) => {
-    console.log(event.target.innerText)
-}) */
+    // trigger anime-entry childs and retrieve id
+    var list = document.getElementById('current')
 
-// no need
-ipcRenderer.on('giveEntries', (event, entries, status) => {
-    Object.keys(entries).forEach( key => {
-        insertAnimeEntry(entries[key], status, key)
+    list.addEventListener('click', function(event) {
+        if(!(event.target.classList.contains('anime-entry'))) {
+            const entry = event.target.closest('.anime-entry')
+            if(entry) {
+                /* ipcRenderer.invoke('get-token') */
+                createAnimePage(entry.id)
+            }
+        } else {
+            /* ipcRenderer.invoke('get-token') */
+            createAnimePage(event.target.id)
+        }
     })
-})
-
-// no
-ipcRenderer.on('giveUserInfo', (event, userInfo) => {
-    insertUserIcon(userInfo)
 })
 
 function insertAnimeEntry(animeEntry, status, key) {
@@ -65,6 +71,7 @@ function insertUserIcon(userInfo) {
 }
 
 function createAnimeEntry(animeEntry, key) {
+    const animeId = animeEntry.mediaId
     const animeName = animeEntry.media.title.romaji
     const progress = animeEntry.progress
     const cover = animeEntry.media.coverImage.extraLarge
@@ -76,7 +83,7 @@ function createAnimeEntry(animeEntry, key) {
     anime_entry_div.classList.add('anime-entry')
     
     /* let index = parseInt(key) + 1 */
-    anime_entry_div.id = ('anime-entry-' + key)
+    anime_entry_div.id = ('anime-entry-' + animeId)
 
     let anime_cover_div = document.createElement('img')
     anime_cover_div.classList.add('anime-cover')
@@ -115,3 +122,33 @@ addEventListener("input", (event) => {
         }
     })
 })
+
+function insertFeaturedAnime(animeEntry) {
+    const title = animeEntry.title.romaji
+    const episodes = animeEntry.episodes
+    const startYear = animeEntry.startDate.year
+    const banner = animeEntry.bannerImage
+    const genres = animeEntry.genres
+
+    document.getElementById('featured-anime-title').innerHTML = title
+    document.getElementById('featured-anime-year').innerHTML = startYear
+    document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
+    
+    var anime_genres_div = document.getElementById('featured-anime-genres')
+    anime_genres_div
+
+    Object.keys(genres).forEach( (key) => {
+        anime_genres_div.innerHTML += genres[key] + " • "
+    })
+
+    document.getElementById('featured-img').src = banner
+}
+
+// creation of the anime page
+async function createAnimePage(animeEntryId) {
+    const animeId = animeEntryId.slice(12) // the div id is 'anime-entry-number', so it will cut the string and keep only 'number'
+    const anilist = new AniListAPI(clientData)
+
+    const animeEntry = await anilist.getAnimeInfo(animeId)
+    console.log(JSON.stringify(animeEntry))
+}

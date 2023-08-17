@@ -14,6 +14,8 @@ const createWindow = () => {
     win  = new BrowserWindow({
         width: 1280,
         height: 720,
+        minWidth: 1024,
+        minHeight: 576,
         autoHideMenuBar: false,
         webPreferences: {
             nodeIntegration: true, // is default value after Electron v5
@@ -40,6 +42,11 @@ ipcMain.handle('open-login-page', (event) => {
 
             win.webContents.send('load-page-elements', token)
         })
+})
+
+ipcMain.handle('get-token', (event) => {
+    const currentUrl = new URL(win.webContents.getURL())
+    console.log(fullUrl)
 })
 
 app.whenReady().then(() => {
