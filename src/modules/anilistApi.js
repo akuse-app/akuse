@@ -147,9 +147,6 @@ module.exports = class AniListAPI extends Requests {
                         day
                     }
                     episodes
-                    trailer {
-                        thumbnail
-                    }
                     coverImage {
                         extraLarge
                     }

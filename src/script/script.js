@@ -7,9 +7,23 @@ const AniListAPI = require ('../modules/anilistApi')
 const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js')
 const clientData = require ('../modules/clientData.js')
 
-const loginButton = document.getElementById("login-button")
+const months = {
+    '1': 'Jan',
+    '2': 'Feb',
+    '3': 'Mar',
+    '4': 'Apr',
+    '5': 'May',
+    '1': 'Jun',
+    '7': 'Jul',
+    '8': 'Aug',
+    '9': 'Sep',
+    '10': 'Oct',
+    '11': 'Nov',
+    '12': 'Dec'
+}
 
 // press login button
+const loginButton = document.getElementById("login-button")
 loginButton.addEventListener("click", () => {
     ipcRenderer.invoke('open-login-page')
 })
@@ -49,11 +63,9 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
         if(!(event.target.classList.contains('anime-entry'))) {
             const entry = event.target.closest('.anime-entry')
             if(entry) {
-                /* ipcRenderer.invoke('get-token') */
                 createAnimePage(entry.id)
             }
         } else {
-            /* ipcRenderer.invoke('get-token') */
             createAnimePage(event.target.id)
         }
     })
@@ -135,7 +147,6 @@ function insertFeaturedAnime(animeEntry) {
     document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
     
     var anime_genres_div = document.getElementById('featured-anime-genres')
-    anime_genres_div
 
     Object.keys(genres).forEach( (key) => {
         anime_genres_div.innerHTML += genres[key]
@@ -152,13 +163,89 @@ async function createAnimePage(animeEntryId) {
     const animeId = animeEntryId.slice(12) // the div id is 'anime-entry-number', so it will cut the string and keep only 'number'
     const anilist = new AniListAPI(clientData)
 
+    document.getElementById('anime-page').style.display = 'flex'
+
     const animeEntry = await anilist.getAnimeInfo(animeId)
     console.log(JSON.stringify(animeEntry))
+
+    insertPageAnime(animeEntry)
+}
+
+function insertPageAnime(animeEntry) {
+    // retrieve infos
+    const title = animeEntry.title.romaji
+    const id = animeEntry.id
+    const description = animeEntry.description
+    const status = animeEntry.status
+    const startDate = months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
+
+    var endDate
+    animeEntry.endDate.year == null ? endDate = '?' : endDate = months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
+
+    const cover = animeEntry.coverImage.extraLarge
+    const genres = animeEntry.genres
+    
+    // put infos in page
+    let page_anime_title_div = document.getElementById('page-anime-title')
+    page_anime_title_div.innerHTML = title
+    
+    let span_id = document.createElement('span')
+    span_id.innerHTML = " #" + id
+    
+    page_anime_title_div.appendChild(span_id)
+    
+    document.getElementById('page-anime-description').innerHTML = description
+    document.getElementById('page-anime-status').innerHTML = status
+    document.getElementById('page-anime-startDate').innerHTML = startDate
+    document.getElementById('page-anime-endDate').innerHTML = endDate
+    document.getElementById('page-anime-cover').src = cover
+    
+    var anime_genres_div = document.getElementById('page-anime-genres')
+    Object.keys(genres).forEach( (key) => {
+        anime_genres_div.innerHTML += genres[key]
+        if(parseInt(key) < Object.keys(genres).length - 1) {
+            anime_genres_div.innerHTML += " • "
+        }
+    })
 }
 
 // anime page closer
 const exit_button = document.getElementById('exit')
+exit_button.addEventListener('click', (event) => {
+    document.getElementById('page-anime-title').innerHTML = ""
+    /* document.getElementById('page-anime-id').innerHTML = "" */
+    document.getElementById('page-anime-description').innerHTML = ""
+    document.getElementById('page-anime-status').innerHTML = ""
+    document.getElementById('page-anime-startDate').innerHTML = ""
+    document.getElementById('page-anime-endDate').innerHTML = ""
+    document.getElementById('page-anime-cover').src = ""
 
-exit.addEventListener('click', (event) => {
-    document.getElementsByClassName('anime-page-wrapper')[0].style.display = 'none'
+    document.getElementById('anime-page').style.display = 'none'
 })
+
+// drag n scroll (NOT WORKING)
+const slider = document.getElementsByClassName('anime-list-wrapper')[0];
+let mouseDown = false;
+let startX, scrollLeft;
+
+let startDragging = function (event) {
+  mouseDown = true;
+  startX = event.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+};
+let stopDragging = function (event) {
+  mouseDown = false;
+};
+
+slider.addEventListener('mousemove', (event) => {
+    event.preventDefault();
+  if(!mouseDown) { return; }
+  const x = event.pageX - slider.offsetLeft;
+  const scroll = x - startX;
+  slider.scrollLeft = scrollLeft - scroll;
+});
+
+// Add the event listeners
+slider.addEventListener('mousedown', startDragging, false);
+slider.addEventListener('mouseup', stopDragging, false);
+slider.addEventListener('mouseleave', stopDragging, false);
