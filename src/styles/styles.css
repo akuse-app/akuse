@@ -441,8 +441,8 @@ main section .anime-list .anime-entry:not(:last-child) {
 }
 
 main section .anime-list .anime-entry img.anime-cover {
-    /* height: 224px; */
-    height: 400px;
+    height: 224px;
+    /* height: 300px; better */
     border-radius: var(--border-radius);
 }
 
