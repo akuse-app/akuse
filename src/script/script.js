@@ -5,6 +5,7 @@ const url = require('url')
 
 const AniListAPI = require ('../modules/anilistApi')
 const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js')
+const HTMLManipulation = require ('../modules/htmlManipulation')
 const clientData = require ('../modules/clientData.js')
 
 const months = {
@@ -35,89 +36,26 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     const anilist = new AniListAPI(clientData)
     const anime = new AnimeScrapeAPI()
+    const htmlMan = new HTMLManipulation()
 
     const viewerId = await anilist.getViewerId(token)
     
-    // display current watching animes
+    // display current
     const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
-    Object.keys(entriesCurrent).forEach( key => {
-        insertAnimeEntry(entriesCurrent[key], 'CURRENT', key)
-    })
+    htmlMan.displayAnimeSection(entriesCurrent)
 
-    // display featured
     const entryFeatured = await anilist.getAnimeInfo(1)
-    insertFeaturedAnime(entryFeatured)
+    htmlMan.displayFeaturedAnime(entryFeatured)
 
-    // display user icon avatar
     const userInfo = await anilist.getUserInfo(token, viewerId)
-    insertUserIcon(userInfo)
+    htmlMan.displayUserAvatar(userInfo)
     
     // test
     const link = await anime.getEntryLink(entriesCurrent[1])
     console.log(link)
-
-    // trigger anime-entry childs and retrieve id
-    var list = document.getElementById('current')
-
-    list.addEventListener('click', function(event) {
-        if(!(event.target.classList.contains('anime-entry'))) {
-            const entry = event.target.closest('.anime-entry')
-            if(entry) {
-                createAnimePage(entry.id)
-            }
-        } else {
-            createAnimePage(event.target.id)
-        }
-    })
 })
 
-function insertAnimeEntry(animeEntry, status, key) {
-    let anime_list_div = document.getElementById(status.toLowerCase())
-    let anime_entry_div = createAnimeEntry(animeEntry, key)
-    
-    anime_list_div.appendChild(anime_entry_div, key)
-}
-
-function insertUserIcon(userInfo) {
-    document.getElementById('user-icon').src = userInfo.User.avatar.large
-}
-
-function createAnimeEntry(animeEntry, key) {
-    const animeId = animeEntry.mediaId
-    const animeName = animeEntry.media.title.romaji
-    const progress = animeEntry.progress
-    const cover = animeEntry.media.coverImage.extraLarge
-    
-    var episodes
-    animeEntry.media.episodes == null ? episodes = '?' : episodes = animeEntry.media.episodes
-
-    let anime_entry_div = document.createElement('div')
-    anime_entry_div.classList.add('anime-entry')
-    
-    /* let index = parseInt(key) + 1 */
-    anime_entry_div.id = ('anime-entry-' + animeId)
-
-    let anime_cover_div = document.createElement('img')
-    anime_cover_div.classList.add('anime-cover')
-    anime_cover_div.src = cover
-    anime_cover_div.alt = 'cover'
-
-    let anime_title_div = document.createElement('div')
-    anime_title_div.classList.add('anime-title')
-    anime_title_div.innerHTML = animeName
-
-    let anime_progress_div = document.createElement('div')
-    anime_progress_div.classList.add('anime-progress')
-    anime_progress_div.innerHTML = `${progress} / ${episodes}`
-
-    anime_entry_div.appendChild(anime_cover_div)
-    anime_entry_div.appendChild(anime_title_div)
-    anime_entry_div.appendChild(anime_progress_div)
-
-    return anime_entry_div
-}
-
-// dynamic anime search bar
+// dynamic anime search bar (NOT WORKING)
 addEventListener("input", (event) => {
     var txtValue;
     var input = document.getElementById('search-bar');
@@ -135,28 +73,18 @@ addEventListener("input", (event) => {
     })
 })
 
-function insertFeaturedAnime(animeEntry) {
-    const title = animeEntry.title.romaji
-    const episodes = animeEntry.episodes
-    const startYear = animeEntry.startDate.year
-    const banner = animeEntry.bannerImage
-    const genres = animeEntry.genres
-
-    document.getElementById('featured-anime-title').innerHTML = title
-    document.getElementById('featured-anime-year').innerHTML = startYear
-    document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
-    
-    var anime_genres_div = document.getElementById('featured-anime-genres')
-
-    Object.keys(genres).forEach( (key) => {
-        anime_genres_div.innerHTML += genres[key]
-        if(parseInt(key) < Object.keys(genres).length - 1) {
-            anime_genres_div.innerHTML += " • "
+// trigger anime-entry childs and retrieve id (MUST WORK FOR ALL SECTIONS)
+var list = document.getElementById('current')
+list.addEventListener('click', function(event) {
+    if(!(event.target.classList.contains('anime-entry'))) {
+        const entry = event.target.closest('.anime-entry')
+        if(entry) {
+            createAnimePage(entry.id)
         }
-    })
-
-    document.getElementById('featured-img').src = banner
-}
+    } else {
+        createAnimePage(event.target.id)
+    }
+})
 
 // creation of the anime page
 async function createAnimePage(animeEntryId) {
@@ -168,10 +96,10 @@ async function createAnimePage(animeEntryId) {
     const animeEntry = await anilist.getAnimeInfo(animeId)
     console.log(JSON.stringify(animeEntry))
 
-    insertPageAnime(animeEntry)
+    displayAnimePage(animeEntry)
 }
 
-function insertPageAnime(animeEntry) {
+function displayAnimePage(animeEntry) {
     // retrieve infos
     const title = animeEntry.title.romaji
     const id = animeEntry.id
@@ -219,11 +147,12 @@ exit_button.addEventListener('click', (event) => {
     document.getElementById('page-anime-startDate').innerHTML = ""
     document.getElementById('page-anime-endDate').innerHTML = ""
     document.getElementById('page-anime-cover').src = ""
+    document.getElementById('page-anime-genres').innerHTML = ""
 
     document.getElementById('anime-page').style.display = 'none'
 })
 
-// drag n scroll (NOT WORKING)
+// drag n scroll
 const slider = document.getElementsByClassName('anime-list-wrapper')[0];
 let mouseDown = false;
 let startX, scrollLeft;
@@ -245,7 +174,35 @@ slider.addEventListener('mousemove', (event) => {
   slider.scrollLeft = scrollLeft - scroll;
 });
 
-// Add the event listeners
 slider.addEventListener('mousedown', startDragging, false);
 slider.addEventListener('mouseup', stopDragging, false);
 slider.addEventListener('mouseleave', stopDragging, false);
+
+// fade-in animation when some items are in the document viewport
+const element = document.getElementsByClassName("fade-in")
+Object.keys(element).forEach( (key) => {
+    if (isInViewport(element[key])) {
+        element[key].classList.add('show');
+    }
+})
+
+document.addEventListener("scroll", () => {
+    Object.keys(element).forEach( (key) => {
+        if (isInViewport(element[key])) {
+            element[key].classList.add('show');
+        }
+    })
+})
+
+function isInViewport(element) {
+    var bounding = element.getBoundingClientRect()
+
+    if (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth) &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight)   
+    ) return true
+    
+    return false
+}

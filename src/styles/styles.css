@@ -63,6 +63,28 @@ body {
     height: 100%;
 }
 
+/* fade-in animation when elements are on view */
+.fade-in {
+    opacity: 0;
+}
+
+.show {
+    animation: fadeInAnimation 1s ease-in-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 #login-page {
     z-index: 10;
     position: absolute;
@@ -284,9 +306,12 @@ main #anime-page {
     display: none; /* flex */
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
+    z-index: 20;
     top: 0;
     left: 0;
+    background-color: var(--color-1-rgba);
+    backdrop-filter: blur(10px);
 }
 
 main .anime-page {
