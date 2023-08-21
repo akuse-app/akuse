@@ -87,7 +87,7 @@ body {
 
 #login-page {
     z-index: 10;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
@@ -436,7 +436,7 @@ main section h1 {
 
 main section .anime-list-wrapper {
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 main section .anime-list {

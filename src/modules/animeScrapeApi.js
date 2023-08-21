@@ -23,15 +23,21 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
     }
 
     async getEntryLink(animeEntry) {
-        const animeInfoPageUrl = await this.getAnimeInfoPageUrl(animeEntry)
-        const progress = animeEntry.progress
+        var animeInfoPageUrl = await this.getAnimeInfoPageUrl(animeEntry)
+        if (animeInfoPageUrl == -1) {
+            return -1
+        }
+
+        var progress
+        animeEntry.progress == null ? progress = 0 : progress = animeEntry.progress
+
         console.log(animeEntry.media.title.romaji)
         console.log('url:' + animeInfoPageUrl)
         console.log('---+-----------------------+---')
         
-        /* const playerPageUrl = await this.getAnimeEpisodePlayerPage(animeInfoPageUrl)
+        const playerPageUrl = await this.getAnimeEpisodePlayerPage(animeInfoPageUrl)
         console.log(JSON.stringify(playerPageUrl))
-        return await this.getIFrameLink(playerPageUrl) */
+        return await this.getIFrameLink(playerPageUrl)
     }
     
     async getAnimeInfoPageUrl(animeEntry) {
@@ -83,7 +89,7 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         for(let key=0; key<Object.keys(animeList).length; key++) {
             var listKey = animeList[key].textContent.toLowerCase().replace(/\s/g, '')
 
-            /* console.log(animeName + " " + listKey + " " + animeIndex + " " + animeName.localeCompare(listKey)) */
+            console.log(animeName + " " + listKey + " " + animeIndex + " " + animeName.localeCompare(listKey))
 
             // check alphabetical order && id matching
             if(animeName.localeCompare(listKey) <= 0 &&
@@ -101,11 +107,17 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         const respData = await this.makeRequest(this.method, animeUrl, this.headers, {})
         const parsedDocument = new jsdom.JSDOM(respData)
 
-        const anilistId = parsedDocument.window.document.querySelectorAll(`a[href^="https://anilist.co/anime/"]`)[0].href.slice(25, -1)
+        // scrape anilistId in the page (not always possible)
+        const anilistIdDiv = parsedDocument.window.document.querySelectorAll(`a[href^="https://anilist.co/anime/"]`)[0]
+        if(anilistIdDiv) {
+            var anilistId = anilistIdDiv.href.slice(25, -1)
+        } else {
+            return false
+        }
 
-        /* console.log(anilistId + " " + animeId) */
+        console.log(anilistId + " " + animeId)
 
-        if (anilistId == animeId) {
+        if(anilistId == animeId) {
             return true
         } 
         
@@ -130,7 +142,13 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
 
     // get the iframe link
     async getIFrameLink(playerPageUrl) {
-        const respData = await this.makeRequest(this.method, playerPageUrl, this.headers, {})
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Origin': 'http://localhost:80'
+        }
+
+        const respData = await this.makeRequest(this.method, playerPageUrl, headers, {})
         const parsedDocument = new jsdom.JSDOM(respData)
 
         return parsedDocument.window.document.getElementsByTagName('iframe')[0].src

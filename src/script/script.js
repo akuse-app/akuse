@@ -37,17 +37,21 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const userInfo = await anilist.getUserInfo(token, viewerId)
     htmlMan.displayUserAvatar(userInfo)
     
-    // test
-    /* await anime.getEntryLink(entriesCurrent[3]) */
+    // link test
     
-    for(let key=5; Object.keys(entriesCurrent).length; key++) {
+    /* for(let key=5; Object.keys(entriesCurrent).length; key++) {
         await anime.getEntryLink(entriesCurrent[key])
-    }
+    } */
 
     console.log('finished')
 
-    /* const link = await anime.getEntryLink(entriesCurrent[1])
-    console.log(link) */
+    var link = await anime.getEntryLink(entriesCurrent[10])
+    if (link == -1) {
+        console.log('could not scrape the link')
+    } else {
+        console.log(link)
+        htmlMan.displayIFrame(link)
+    }
 })
 
 // dynamic anime search bar (NOT WORKING)

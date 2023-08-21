@@ -65,7 +65,8 @@ module.exports = class htmlManipulation {
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_title_div)
         anime_entry_div.appendChild(anime_progress_div)
-    
+        anime_entry_div.classList.add('fade-in')
+        
         return anime_entry_div
     }
 
@@ -162,6 +163,10 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-genres').innerHTML = ""
 
         document.getElementById('anime-page').style.display = 'none'
+    }
+
+    displayIFrame(link) {
+        
     }
 
     searchWithBar() {
