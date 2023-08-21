@@ -38,7 +38,14 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     htmlMan.displayUserAvatar(userInfo)
     
     // test
-    await anime.getEntryLink(entriesCurrent[20])
+    /* await anime.getEntryLink(entriesCurrent[3]) */
+    
+    for(let key=5; Object.keys(entriesCurrent).length; key++) {
+        await anime.getEntryLink(entriesCurrent[key])
+    }
+
+    console.log('finished')
+
     /* const link = await anime.getEntryLink(entriesCurrent[1])
     console.log(link) */
 })

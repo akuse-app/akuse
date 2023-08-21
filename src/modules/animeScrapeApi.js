@@ -25,7 +25,9 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
     async getEntryLink(animeEntry) {
         const animeInfoPageUrl = await this.getAnimeInfoPageUrl(animeEntry)
         const progress = animeEntry.progress
+        console.log(animeEntry.media.title.romaji)
         console.log('url:' + animeInfoPageUrl)
+        console.log('---+-----------------------+---')
         
         /* const playerPageUrl = await this.getAnimeEpisodePlayerPage(animeInfoPageUrl)
         console.log(JSON.stringify(playerPageUrl))
@@ -37,7 +39,9 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         const progress = animeEntry.progress
         // array composed by anime original name and its anilist synonyms
         const animeNames = [animeEntry.media.title.romaji.toLowerCase().replace(/\s/g, '')]
-                         .concat(Object.values(animeEntry.media.synonyms))
+                           .concat(Object.values(animeEntry.media.synonyms))
+
+        console.log(animeNames)
         
         // retrieving page and checking if the anime is correct
 
@@ -45,23 +49,27 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         for(let key=0; key<Object.keys(animeNames).length; key++) {
             let firstCharOfAnimeName = Array.from(animeNames[key])[0]
             let animeList = await this.getAnimeListFromAlphArchive(firstCharOfAnimeName)
+
             let animeIndex = await this.getAnimePosition(animeNames[key], animeList, animeId)
-            
-            if(await this.isAnimeCorrect(animeList[animeIndex], animeId)) {
+            if(animeIndex == -1) {
+                console.log('anime index not found')
+                
+            } else if(await this.isAnimeCorrect(animeList[animeIndex], animeId)) {
                 console.log("Anime page url successfully scraped with method 1")
                 const animeInfoPageUrl = await this.getAnimeEpisodeInfoPage(progress, animeList[animeIndex].href)
                 return animeInfoPageUrl
             }
-
+            
             // method 2: see if animeName is inside the title
         }
+        console.log("Anime page url NOT scraped :(")
 
         return -1
     }
 
     // build the "Archivio Anime" letter page url and fetch that page
     async getAnimeListFromAlphArchive(firstCharOfAnimeName) {
-        const url = this.hostUrl + 'animelist?letter=' + firstCharOfAnimeName
+        const url = this.hostUrl + 'animelist?letter=' + firstCharOfAnimeName.toUpperCase()
         const respData = await this.makeRequest(this.method, url, this.headers, {})
         const parsedDocument = new jsdom.JSDOM(respData)
 
@@ -74,6 +82,8 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
 
         for(let key=0; key<Object.keys(animeList).length; key++) {
             var listKey = animeList[key].textContent.toLowerCase().replace(/\s/g, '')
+
+            /* console.log(animeName + " " + listKey + " " + animeIndex + " " + animeName.localeCompare(listKey)) */
 
             // check alphabetical order && id matching
             if(animeName.localeCompare(listKey) <= 0 &&
@@ -93,7 +103,7 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
 
         const anilistId = parsedDocument.window.document.querySelectorAll(`a[href^="https://anilist.co/anime/"]`)[0].href.slice(25, -1)
 
-        console.log(anilistId + " " + animeId)
+        /* console.log(anilistId + " " + animeId) */
 
         if (anilistId == animeId) {
             return true
