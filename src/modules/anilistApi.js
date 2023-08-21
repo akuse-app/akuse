@@ -81,6 +81,7 @@ module.exports = class AniListAPI extends Requests {
                                 coverImage {
                                     extraLarge
                                 }
+                                synonyms
                             }
                         }
                     }
@@ -152,6 +153,7 @@ module.exports = class AniListAPI extends Requests {
                     }
                     bannerImage
                     genres
+                    synonyms
                     meanScore
                     popularity
                     isAdult
