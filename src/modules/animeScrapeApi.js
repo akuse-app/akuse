@@ -41,21 +41,19 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         
         // retrieving page and checking if the anime is correct
 
-        // method 1: search by alphabetical order
+        // method 1: get alphabetical index in animesaturn archive
         for(let key=0; key<Object.keys(animeNames).length; key++) {
             let firstCharOfAnimeName = Array.from(animeNames[key])[0]
             let animeList = await this.getAnimeListFromAlphArchive(firstCharOfAnimeName)
             let animeIndex = await this.getAnimePosition(animeNames[key], animeList, animeId)
             
-            if(!await this.isAnimeCorrect(animeList[animeIndex], animeId)) {
-
-                // next method
-
-            } else {
+            if(await this.isAnimeCorrect(animeList[animeIndex], animeId)) {
                 console.log("Anime page url successfully scraped with method 1")
                 const animeInfoPageUrl = await this.getAnimeEpisodeInfoPage(progress, animeList[animeIndex].href)
                 return animeInfoPageUrl
             }
+
+            // method 2: see if animeName is inside the title
         }
 
         return -1
