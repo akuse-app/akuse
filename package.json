@@ -34,6 +34,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.7.0",
     "jsdom": "^22.1.0",
+    "proxy-chain": "^2.3.0",
     "request": "^2.88.2",
     "url": "^0.11.1"
   }

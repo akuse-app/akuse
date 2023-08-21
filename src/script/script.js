@@ -7,6 +7,7 @@ const url = require('url')
 const AniListAPI = require ('../modules/anilistApi')
 const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js')
 const HTMLManipulation = require ('../modules/htmlManipulation')
+const ProxyChain = require('proxy-chain');
 const clientData = require ('../modules/clientData.js')
 
 // CONSTANTS
@@ -45,13 +46,13 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     console.log('finished')
 
-    var link = await anime.getEntryLink(entriesCurrent[10])
+    /* var link = await anime.getEntryLink(entriesCurrent[10])
     if (link == -1) {
         console.log('could not scrape the link')
     } else {
         console.log(link)
         htmlMan.displayIFrame(link)
-    }
+    } */
 })
 
 // dynamic anime search bar (NOT WORKING)

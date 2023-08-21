@@ -36,8 +36,12 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         console.log('---+-----------------------+---')
         
         const playerPageUrl = await this.getAnimeEpisodePlayerPage(animeInfoPageUrl)
-        console.log(JSON.stringify(playerPageUrl))
-        return await this.getIFrameLink(playerPageUrl)
+        const streamUrl = await this.getStreamUrl(playerPageUrl)
+        console.log('stream: ' + streamUrl.replace('streamtape', 'antiadtape'))
+
+        const iFrameUrl = await this.getIFrameUrl(streamUrl.replace('streamtape', 'antiadtape'))
+        console.log('IFRAME: ' + JSON.stringify(iFrameUrl))
+
     }
     
     async getAnimeInfoPageUrl(animeEntry) {
@@ -140,8 +144,8 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         return parsedDocument.window.document.querySelectorAll('a[href^="https://www.animesaturn.tv/watch?file="]')[0].href +'&server=1' // get 2nd server since the video link is easily fetchable 
     }
 
-    // get the iframe link
-    async getIFrameLink(playerPageUrl) {
+    // get the stream site episode url
+    async getStreamUrl(playerPageUrl) {
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -152,5 +156,16 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         const parsedDocument = new jsdom.JSDOM(respData)
 
         return parsedDocument.window.document.getElementsByTagName('iframe')[0].src
+    }
+
+    // get the iframe url
+    async getIFrameUrl(streamUrl) {
+        const respData = await this.makeRequest(this.method, streamUrl, this.headers, {})
+        console.log('resp: ' + respData)
+        const parsedDocument = new jsdom.JSDOM(respData)
+
+        const cutu = parsedDocument.window.document
+
+        return cutu.getElementsByTagName('video')[0]
     }
 }
