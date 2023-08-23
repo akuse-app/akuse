@@ -7,6 +7,7 @@ const url = require('url')
 const AniListAPI = require ('./modules/anilistApi.js')
 const AnimeScrapeAPI = require ('./modules/animeScrapeApi.js')
 const clientData = require ('./modules/clientData.js')
+const server = require("./server.js")
 
 let win
 
@@ -25,7 +26,6 @@ const createWindow = () => {
         }
     })
     win.loadFile("src/windows/index.html")
-
 }
 
 // press login button

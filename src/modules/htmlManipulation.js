@@ -32,6 +32,7 @@ module.exports = class htmlManipulation {
         let anime_entry_div = this.createAnimeEntry(animeEntry, key)
         
         anime_list_div.appendChild(anime_entry_div)
+        anime_entry_div.classList.add('show')
     }
 
     createAnimeEntry(animeEntry) {
@@ -150,6 +151,8 @@ module.exports = class htmlManipulation {
                 anime_genres_div.innerHTML += " • "
             }
         })
+
+        document.getElementById('anime-page').classList.add('show-page')
     }
 
     closeAnimePage() {
@@ -162,6 +165,7 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-cover').src = ""
         document.getElementById('page-anime-genres').innerHTML = ""
 
+        /* document.getElementById('anime-page').classList.add('close-page') */
         document.getElementById('anime-page').style.display = 'none'
     }
 

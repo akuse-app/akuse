@@ -85,6 +85,40 @@ body {
     }
 }
 
+.show-page {
+    animation: fadeInPageAnimation 0.4s ease-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInPageAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(-1000px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-page {
+    animation: closePageAnimation 0.4s ease-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: backwards;
+}
+
+@keyframes closePageAnimation {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-1000px);
+    }
+}
+
 #login-page {
     z-index: 10;
     position: fixed;

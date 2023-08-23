@@ -42,6 +42,8 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         const iFrameUrl = await this.getIFrameUrl(streamUrl.replace('streamtape', 'antiadtape'))
         console.log('IFRAME: ' + JSON.stringify(iFrameUrl))
 
+        document.getElementById('episode-url').src = iFrameUrl
+
     }
     
     async getAnimeInfoPageUrl(animeEntry) {
@@ -160,12 +162,14 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
 
     // get the iframe url
     async getIFrameUrl(streamUrl) {
-        const respData = await this.makeRequest(this.method, streamUrl, this.headers, {})
+        const headers = {
+            'Access-Control-Allow-Origin': '*'
+        }
+        
+        const respData = await this.makeRequest(this.method, streamUrl, headers, {})
         console.log('resp: ' + respData)
         const parsedDocument = new jsdom.JSDOM(respData)
 
-        const cutu = parsedDocument.window.document
-
-        return cutu.getElementsByTagName('video')[0]
+        return parsedDocument.window.document.getElementById('mainvideo').src
     }
 }

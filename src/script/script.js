@@ -98,8 +98,8 @@ slider.addEventListener('mousedown', startDragging, false);
 slider.addEventListener('mouseup', stopDragging, false);
 slider.addEventListener('mouseleave', stopDragging, false);
 
-// fade-in animation when some items are in the document viewport
-const element = document.getElementsByClassName("fade-in")
+// fade-in animation when some items are in the document viewport (TO REMOVE)
+/* const element = document.getElementsByClassName("fade-in")
 Object.keys(element).forEach( (key) => {
     if (htmlMan.isInViewport(element[key])) {
         element[key].classList.add('show')
@@ -112,4 +112,4 @@ document.addEventListener("scroll", () => {
             element[key].classList.add('show')
         }
     })
-})
+}) */
