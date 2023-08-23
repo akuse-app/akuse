@@ -2,21 +2,19 @@
 
 // MODULES
 const { ipcRenderer } = require('electron')
-const url = require('url')
 const Hls = require('hls.js')
+const Consumet = require ('@consumet/extensions')
 
-const AniListAPI = require ('../modules/anilistApi')
-const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js')
+const AniListAPI = require('../modules/anilistApi')
+/* const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js') */
+const AnimeSaturn = require('../modules/providers/animesaturn')
 const HTMLManipulation = require ('../modules/htmlManipulation')
 const clientData = require ('../modules/clientData.js')
 
-// consumet
-/* import { BOOKS } from "@consumet/extensions" */
-const Consumet = require ('@consumet/extensions')
-
 // CONSTANTS
 const anilist = new AniListAPI(clientData)
-const anime = new AnimeScrapeAPI()
+/* const anime = new AnimeScrapeAPI() */
+const anime = new AnimeSaturn()
 const htmlMan = new HTMLManipulation()
 
 // press login button
@@ -33,7 +31,7 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const viewerId = await anilist.getViewerId(token)
     
     // display current
-    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'COMPLETED')
+    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
     htmlMan.displayAnimeSection(entriesCurrent)
 
     const entryFeatured = await anilist.getAnimeInfo(1)
@@ -42,34 +40,10 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const userInfo = await anilist.getUserInfo(token, viewerId)
     htmlMan.displayUserAvatar(userInfo)
     
-    // link test
-    
-    /* await anime.getEntryLink(entriesCurrent[0])
-    console.log('finished') */
+    const title = entriesCurrent[1].media.title.romaji
+    const progress = entriesCurrent[1].progress
 
-    const animesaturn = new Consumet.ANIME.AnimeSaturn
-
-    const results = animesaturn.search("One Piece").then(data => {
-    // print results
-        console.log(data)
-        let animeId = data.results[0].id
-        
-        const animeInfo = animesaturn.fetchAnimeInfo(animeId).then(data => {
-            console.log(data)
-        })
-
-        const roba = animesaturn.fetchEpisodeSources("One-Piece-ep-1").then(data => {
-            console.log(data)
-        })
-    })
-
-    /* var link = await anime.getEntryLink(entriesCurrent[10])
-    if (link == -1) {
-        console.log('could not scrape the link')
-    } else {
-        console.log(link)
-        htmlMan.displayIFrame(link)
-    } */
+    anime.getEpisodeUrl(title, progress)
 })
 
 // dynamic anime search bar (NOT WORKING)
@@ -130,16 +104,21 @@ document.addEventListener("scroll", () => {
         }
     })
 }) */
-var video = document.getElementById('video');
-  if(Hls.isSupported()) {
-    var hls = new Hls();
-    hls.loadSource('https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8');
-    hls.attachMedia(video);
-    video.play();
-  }
-  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = 'https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8';
+
+// play m3u8 files
+
+var video = document.getElementById('video')
+
+const videoSrc = 'https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8'
+
+if(Hls.isSupported()) {
+    var hls = new Hls()
+    hls.loadSource(videoSrc)
+    hls.attachMedia(video)
+    video.play()
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = videoSrc
     video.addEventListener('loadedmetadata',function() {
-      video.play();
-    });
-  }
+        video.play()
+    })
+}
