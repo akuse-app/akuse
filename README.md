@@ -9,4 +9,4 @@
 
 ## Disclaimer
 
-This software has been developed only for educational purposes by the ![Author](https://github.com/aleganza). By no means this encourage content piracy. Please support original content creators!
+This software has been developed only for educational purposes by the [Author](https://github.com/aleganza). By no means this encourage content piracy. Please support original content creators!
