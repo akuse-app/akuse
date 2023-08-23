@@ -3,12 +3,16 @@
 // MODULES
 const { ipcRenderer } = require('electron')
 const url = require('url')
+const Hls = require('hls.js')
 
 const AniListAPI = require ('../modules/anilistApi')
 const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js')
 const HTMLManipulation = require ('../modules/htmlManipulation')
-const ProxyChain = require('proxy-chain');
 const clientData = require ('../modules/clientData.js')
+
+// consumet
+/* import { BOOKS } from "@consumet/extensions" */
+const Consumet = require ('@consumet/extensions')
 
 // CONSTANTS
 const anilist = new AniListAPI(clientData)
@@ -40,11 +44,24 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     
     // link test
     
-    /* for(let key=5; Object.keys(entriesCurrent).length; key++) {
-        await anime.getEntryLink(entriesCurrent[key])
-    } */
+    /* await anime.getEntryLink(entriesCurrent[0])
+    console.log('finished') */
 
-    console.log('finished')
+    const animesaturn = new Consumet.ANIME.AnimeSaturn
+
+    const results = animesaturn.search("One Piece").then(data => {
+    // print results
+        console.log(data)
+        let animeId = data.results[0].id
+        
+        const animeInfo = animesaturn.fetchAnimeInfo(animeId).then(data => {
+            console.log(data)
+        })
+
+        const roba = animesaturn.fetchEpisodeSources("One-Piece-ep-1").then(data => {
+            console.log(data)
+        })
+    })
 
     /* var link = await anime.getEntryLink(entriesCurrent[10])
     if (link == -1) {
@@ -113,3 +130,16 @@ document.addEventListener("scroll", () => {
         }
     })
 }) */
+var video = document.getElementById('video');
+  if(Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource('https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8');
+    hls.attachMedia(video);
+    video.play();
+  }
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = 'https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8';
+    video.addEventListener('loadedmetadata',function() {
+      video.play();
+    });
+  }

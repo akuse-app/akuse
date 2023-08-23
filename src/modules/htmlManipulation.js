@@ -91,6 +91,8 @@ module.exports = class htmlManipulation {
         })
     
         document.getElementById('featured-img').src = banner
+        document.getElementById('featured-content').classList.add('show')
+        
     }
 
     displayUserAvatar(userInfo) {
