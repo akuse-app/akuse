@@ -170,6 +170,6 @@ module.exports = class AnimeSaturnScrapeAPI extends Requests {
         console.log('resp: ' + respData)
         const parsedDocument = new jsdom.JSDOM(respData)
 
-        return parsedDocument.window.document.getElementById('mainvideo').src
+        /* return parsedDocument.window.document.getElementById('mainvideo').src */
     }
 }
