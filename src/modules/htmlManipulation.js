@@ -1,17 +1,20 @@
 'use-strict'
 
+const Hls = require('hls.js')
 const AniListAPI = require ('../modules/anilistApi')
+const AnimeSaturn = require('../modules/providers/animesaturn')
 const clientData = require ('../modules/clientData.js')
 
 module.exports = class htmlManipulation {
     constructor() {
+        this.cons = new AnimeSaturn()
         this.months = {
             '1': 'Jan',
             '2': 'Feb',
             '3': 'Mar',
             '4': 'Apr',
             '5': 'May',
-            '1': 'Jun',
+            '6': 'Jun',
             '7': 'Jul',
             '8': 'Aug',
             '9': 'Sep',
@@ -153,6 +156,11 @@ module.exports = class htmlManipulation {
                 anime_genres_div.innerHTML += " • "
             }
         })
+        const videoSrc = await this.cons.getEpisodeUrl(title, 1)
+       
+        console.log(videoSrc)
+        
+        this.playVideoFiles(videoSrc)
 
         document.getElementById('anime-page').classList.add('show-page')
     }
@@ -203,5 +211,22 @@ module.exports = class htmlManipulation {
         ) return true
         
         return false
+    }
+
+    // play m3u8 files
+    playVideoFiles(videoSrc) {
+        var video = document.getElementById('video')
+
+        if(Hls.isSupported()) {
+            var hls = new Hls()
+            hls.loadSource(videoSrc)
+            hls.attachMedia(video)
+            video.play()
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc
+            video.addEventListener('loadedmetadata',function() {
+                video.play()
+            })
+        }
     }
 }

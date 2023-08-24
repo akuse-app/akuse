@@ -10,12 +10,9 @@ module.exports = class AnimeSaturn {
     async getEpisodeUrl(animeSearch, episode) {
             const animeId = await this.getAnimeId(animeSearch)
             const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
-
-            console.log(animeEpisodeId)
-    
-            this.consumet.fetchEpisodeSources(animeEpisodeId).then(data => {
-                console.log(data)
-            })
+            
+            const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
+            return data.sources[0].url
     }
 
     // better add more security stuff

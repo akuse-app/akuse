@@ -2,19 +2,16 @@
 
 // MODULES
 const { ipcRenderer } = require('electron')
-const Hls = require('hls.js')
 const Consumet = require ('@consumet/extensions')
 
 const AniListAPI = require('../modules/anilistApi')
 /* const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js') */
-const AnimeSaturn = require('../modules/providers/animesaturn')
 const HTMLManipulation = require ('../modules/htmlManipulation')
 const clientData = require ('../modules/clientData.js')
 
 // CONSTANTS
 const anilist = new AniListAPI(clientData)
 /* const anime = new AnimeScrapeAPI() */
-const anime = new AnimeSaturn()
 const htmlMan = new HTMLManipulation()
 
 // press login button
@@ -39,11 +36,6 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     const userInfo = await anilist.getUserInfo(token, viewerId)
     htmlMan.displayUserAvatar(userInfo)
-    
-    const title = entriesCurrent[1].media.title.romaji
-    const progress = entriesCurrent[1].progress
-
-    anime.getEpisodeUrl(title, progress)
 })
 
 // dynamic anime search bar (NOT WORKING)
@@ -104,21 +96,3 @@ document.addEventListener("scroll", () => {
         }
     })
 }) */
-
-// play m3u8 files
-
-var video = document.getElementById('video')
-
-const videoSrc = 'https://www.saturnspeed54.org/DDL/ANIME/OnePiece/0001/playlist.m3u8'
-
-if(Hls.isSupported()) {
-    var hls = new Hls()
-    hls.loadSource(videoSrc)
-    hls.attachMedia(video)
-    video.play()
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = videoSrc
-    video.addEventListener('loadedmetadata',function() {
-        video.play()
-    })
-}
