@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-1: #121212;
-    --color-1-rgba: #121212dc;
-    --color-2: #171717;
-    --color-3: #242424;
+    --color-1: #1A222E;
+    --color-1-rgba: #1A222Edc;
+    --color-2: #223147;
+    --color-3: #334b6e;
     --color-4: black;
     --font-1: white;
-    --font-2: #9C9C9C;
+    --font-2: #CECECE; /* #E3E3E3 */
     
     --font-weight: 600;
     --border-radius: 10px;
@@ -16,11 +16,11 @@
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: var(--color-3);
+    background-color: var(--color-2);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -61,6 +61,10 @@ body {
     background-color: var(--color-1);
     width: 100%;
     height: 100%;
+}
+
+body {
+    overflow: auto;
 }
 
 /* fade-in animation when elements are on view */
@@ -335,22 +339,23 @@ main section {
 }
 
 main #anime-page {
-    width: 100%;
-    height: 100%;
     display: none; /* flex */
-    align-items: center;
-    justify-content: center;
     position: fixed;
     z-index: 20;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
     background-color: var(--color-1-rgba);
     backdrop-filter: blur(10px);
 }
 
 main .anime-page {
-    width: 90%;
-    height: 90%;
+    position: relative;
+    width: 1800px;
+    height: 800px;
     border-radius: var(--border-radius);
     background-color: var(--color-2);
     display: flex;
@@ -391,10 +396,16 @@ main .anime-page {
     }
     
     main .anime-page .content .page-anime-right {
+        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding: 30px;
+        padding: 0 30px;
+    }
+    main .anime-page .content .page-anime-right #page-anime-info-section,
+    main .anime-page .content .page-anime-right #page-anime-watch-section {
+        width: 100%;
+        height: 100%;
     }
 
     main .anime-page .content .page-anime-right .anime-title {
@@ -415,7 +426,42 @@ main .anime-page {
         font-size: 1.2rem;
     }
 
-    main .anime-page .menu {
+    .provaaaa {
+        padding-right: 30px;
+        height: 750px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    main .anime-page .content .page-anime-right .episodes-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(12.5%, 25%));
+        height: max-content;
+    }
+    
+    main .anime-page .content .page-anime-right .episodes-list .episode {
+        /* background-color: var(--color-3); */
+        background-image: url(/assets/img/banner.jpg);
+        border-radius: var(--border-radius);
+        background-size: cover;
+        border-radius: var(--border-radius);
+        height: 100px;
+        margin: 20px 10px;
+        cursor: pointer;
+    }
+
+    main .anime-page .content .page-anime-right .episodes-list .episode .content {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: var(--border-radius);
+        background-color: var(--color-1-rgba);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* main .anime-page .menu {
         display: flex;
         margin: auto;
         align-items: center;
@@ -442,11 +488,13 @@ main .anime-page {
 
     main .anime-page .menu ul li.active {
         color: var(--font-1);
-    }
+    } */
 
     main .anime-page button#exit {
         position: absolute;
-        margin: 5px 10px;
+        top: 0px;
+        right: 0px;
+        margin: 10px;
         color: var(--font-2);
         font-size: 2rem;
         font-weight: var(--font-weight);

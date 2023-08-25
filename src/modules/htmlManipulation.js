@@ -131,7 +131,11 @@ module.exports = class htmlManipulation {
         var endDate
         animeEntry.endDate.year == null ? endDate = '?' : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
 
+        var episodes
+        animeEntry.episodes == null ? episodes = '?' : episodes = animeEntry.episodes
+
         const cover = animeEntry.coverImage.extraLarge
+        const banner = animeEntry.bannerImage
         const genres = animeEntry.genres
         
         // put infos in page
@@ -156,16 +160,57 @@ module.exports = class htmlManipulation {
                 anime_genres_div.innerHTML += " • "
             }
         })
-        const videoSrc = await this.cons.getEpisodeUrl(title, 1)
-       
-        console.log(videoSrc)
+
+        // episodes
+        const episodes_list_div = document.getElementById('page-anime-episodes-list')
         
-        this.playVideoFiles(videoSrc)
+        for(let i=0; i<episodes; i++) {
+            let episode_div = this.createEpisodeDiv(i, banner)
+            episodes_list_div.appendChild(episode_div)
+        }
+        
+        /* const videoSrc = await this.cons.getEpisodeUrl(title, 1)
+        this.playVideoFiles(videoSrc) */
 
         document.getElementById('anime-page').classList.add('show-page')
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    }
+
+    createEpisodeDiv(i, banner) {
+        let episode_div = document.createElement('div')
+        episode_div.classList.add('episode')
+        episode_div.id = 'episode-' + (i+1)
+        episode_div.style.backgroundImage = `url(${banner})`
+
+        let episode_content_div = document.createElement('div')
+        episode_content_div.classList.add('content')
+        
+        let h3 = document.createElement('h3')
+        h3.innerHTML = 'Episode ' + (i+1)
+
+        episode_content_div.appendChild(h3)
+        episode_div.appendChild(episode_content_div)
+
+        return episode_div
+    }
+
+    triggerEpisode(event) {
+        if(!(event.target.classList.contains('episode'))) {
+            const entry = event.target.closest('.episode')
+            if(entry) {
+                this.displayVideo(entry.id)
+            }
+        } else {
+            this.displayVideo(event.target.id)
+        }
+    }
+
+    displayVideo(episodeId) {
+        console.log(episodeId)
     }
 
     closeAnimePage() {
+        console.log('pressed')
         document.getElementById('page-anime-title').innerHTML = ""
         /* document.getElementById('page-anime-id').innerHTML = "" */
         document.getElementById('page-anime-description').innerHTML = ""
@@ -177,10 +222,8 @@ module.exports = class htmlManipulation {
 
         /* document.getElementById('anime-page').classList.add('close-page') */
         document.getElementById('anime-page').style.display = 'none'
-    }
 
-    displayIFrame(link) {
-        
+        document.getElementsByTagName('body')[0].style.overflow = 'auto'
     }
 
     searchWithBar() {
@@ -221,11 +264,11 @@ module.exports = class htmlManipulation {
             var hls = new Hls()
             hls.loadSource(videoSrc)
             hls.attachMedia(video)
-            video.play()
+            /* video.play() */
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = videoSrc
             video.addEventListener('loadedmetadata',function() {
-                video.play()
+            /* video.play() */
             })
         }
     }

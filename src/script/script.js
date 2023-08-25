@@ -44,10 +44,38 @@ addEventListener("input", (event) => {
 })
 
 // trigger anime-entry childs and retrieve id (DOES NOT WORK FOR ALL SECTIONS)
-var list = document.getElementById('current')
-list.addEventListener('click', function(event) {
+var entry_list = document.getElementById('current')
+entry_list.addEventListener('click', (event) => {
     htmlMan.triggerAnimeEntry(event)
 })
+
+// trigger when episode is pressed, so generate video link
+var episode_list = document.getElementById('page-anime-episodes-list')
+episode_list.addEventListener('click', (event) => {
+    htmlMan.triggerEpisode(event)
+})
+
+// anime page trigger watch/info
+/* var info_button = document.getElementById('page-anime-info-button')
+var watch_button = document.getElementById('page-anime-watch-button')
+
+var info_div = document.getElementById('page-anime-info-section')
+var watch_div = document.getElementById('page-anime-watch-section')
+
+watch_button.addEventListener('click', (event) => {
+    info_div.style.display = 'none'
+    watch_div.style.display = 'block'
+
+    info_button.classList.remove('active')
+    watch_button.classList.add('active')
+})
+info_button.addEventListener('click', (event) => {
+    watch_div.style.display = 'none'
+    info_div.style.display = 'block'
+
+    watch_button.classList.remove('active')
+    info_button.classList.add('active')
+}) */
 
 // anime page closer
 const exit_button = document.getElementById('exit')
