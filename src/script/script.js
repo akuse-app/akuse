@@ -41,6 +41,23 @@ addEventListener("input", (event) => {
     frontend.searchWithBar()
 })
 
+// navbar translating
+var lastScroll = 0
+var nav = document.getElementById('nav-main')
+document.addEventListener("scroll", (event) => {
+    var scroll = window.scrollY
+
+        if(scroll > lastScroll && lastScroll === 0) {
+            console.log("attiva")
+            nav.style.marginTop = '15px'
+        } else if(scroll === 0 && lastScroll !== 0){
+            nav.style.marginTop = '0px'
+            console.log("disattiva")
+        }
+    
+    lastScroll = scroll
+});
+
 // trigger anime-entry childs and retrieve id (DOES NOT WORK FOR ALL SECTIONS)
 var entry_list = document.getElementById('current')
 entry_list.addEventListener('click', (event) => {
@@ -51,6 +68,13 @@ entry_list.addEventListener('click', (event) => {
 var episode_list = document.getElementById('page-anime-episodes-list')
 episode_list.addEventListener('click', (event) => {
     frontend.triggerEpisode(event)
+})
+
+// show anime page when featured anime button is pressed
+var featured_button = document.querySelectorAll('button[id^="featured-anime-button-"]')[0]
+featured_button.addEventListener('click', (event) => {
+    console.log(featured_button.id.slice(22))
+    frontend.displayAnimePage(featured_button.id.slice(22))
 })
 
 // anime page trigger watch/info

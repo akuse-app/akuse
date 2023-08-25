@@ -157,6 +157,11 @@ module.exports = class AniListAPI extends Requests {
                     meanScore
                     popularity
                     isAdult
+                    nextAiringEpisode {
+                        id
+                        airingAt
+                        episode
+                    }
                     title {
                         romaji
                         english

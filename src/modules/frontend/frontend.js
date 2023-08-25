@@ -75,13 +75,15 @@ module.exports = class htmlManipulation {
     }
 
     displayFeaturedAnime(animeEntry) {
+        const id = animeEntry.id
         const title = animeEntry.title.romaji
         const episodes = animeEntry.episodes
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
         const genres = animeEntry.genres
         var anime_genres_div = document.getElementById('featured-anime-genres')
-    
+        
+        document.querySelectorAll('button[id^="featured-anime-button-"]')[0].id += id
         document.getElementById('featured-anime-title').innerHTML = title
         document.getElementById('featured-anime-year').innerHTML = startYear
         document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
@@ -106,16 +108,15 @@ module.exports = class htmlManipulation {
         if(!(event.target.classList.contains('anime-entry'))) {
             const entry = event.target.closest('.anime-entry')
             if(entry) {
-                this.displayAnimePage(entry.id)
+                this.displayAnimePage(entry.id.slice(12))
             }
         } else {
-            this.displayAnimePage(event.target.id)
+            this.displayAnimePage(event.target.id.slice(12))
         }
     }
 
     // anime page creation
-    async displayAnimePage(animeEntryId) {
-        const animeId = animeEntryId.slice(12) // the div id is 'anime-entry-number', so it will cut the string and keep only 'number'
+    async displayAnimePage(animeId) {
         const anilist = new AniListAPI(clientData)
 
         document.getElementById('anime-page').style.display = 'flex'
@@ -132,7 +133,9 @@ module.exports = class htmlManipulation {
         animeEntry.endDate.year == null ? endDate = '?' : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
 
         var episodes
-        animeEntry.episodes == null ? episodes = '?' : episodes = animeEntry.episodes
+        animeEntry.episodes == null ? 
+        episodes = animeEntry.nextAiringEpisode.episode - 1 : 
+        episodes = animeEntry.episodes
 
         const cover = animeEntry.coverImage.extraLarge
         const banner = animeEntry.bannerImage
@@ -219,6 +222,7 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-endDate').innerHTML = ""
         document.getElementById('page-anime-cover').src = ""
         document.getElementById('page-anime-genres').innerHTML = ""
+        document.getElementById('page-anime-episodes-list').innerHTML = ""
 
         /* document.getElementById('anime-page').classList.add('close-page') */
         document.getElementById('anime-page').style.display = 'none'
