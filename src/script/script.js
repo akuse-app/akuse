@@ -2,17 +2,15 @@
 
 // MODULES
 const { ipcRenderer } = require('electron')
-const Consumet = require ('@consumet/extensions')
+const Consumet = require('@consumet/extensions')
 
 const AniListAPI = require('../modules/anilistApi')
-/* const AnimeScrapeAPI = require ('../modules/animeScrapeApi.js') */
-const HTMLManipulation = require ('../modules/htmlManipulation')
-const clientData = require ('../modules/clientData.js')
+const Frontend = require('../modules/frontend/frontend')
+const clientData = require('../modules/clientData.js')
 
 // CONSTANTS
 const anilist = new AniListAPI(clientData)
-/* const anime = new AnimeScrapeAPI() */
-const htmlMan = new HTMLManipulation()
+const frontend = new Frontend()
 
 // press login button
 const loginButton = document.getElementById("login-button")
@@ -27,32 +25,32 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     const viewerId = await anilist.getViewerId(token)
     
-    // display current
+    // display current watching animes
     const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
-    htmlMan.displayAnimeSection(entriesCurrent)
+    frontend.displayAnimeSection(entriesCurrent)
 
     const entryFeatured = await anilist.getAnimeInfo(1)
-    htmlMan.displayFeaturedAnime(entryFeatured)
+    frontend.displayFeaturedAnime(entryFeatured)
 
     const userInfo = await anilist.getUserInfo(token, viewerId)
-    htmlMan.displayUserAvatar(userInfo)
+    frontend.displayUserAvatar(userInfo)
 })
 
 // dynamic anime search bar (NOT WORKING)
 addEventListener("input", (event) => {
-    htmlMan.searchWithBar()
+    frontend.searchWithBar()
 })
 
 // trigger anime-entry childs and retrieve id (DOES NOT WORK FOR ALL SECTIONS)
 var entry_list = document.getElementById('current')
 entry_list.addEventListener('click', (event) => {
-    htmlMan.triggerAnimeEntry(event)
+    frontend.triggerAnimeEntry(event)
 })
 
 // trigger when episode is pressed, so generate video link
 var episode_list = document.getElementById('page-anime-episodes-list')
 episode_list.addEventListener('click', (event) => {
-    htmlMan.triggerEpisode(event)
+    frontend.triggerEpisode(event)
 })
 
 // anime page trigger watch/info
@@ -80,7 +78,7 @@ info_button.addEventListener('click', (event) => {
 // anime page closer
 const exit_button = document.getElementById('exit')
 exit_button.addEventListener('click', (event) => {
-    htmlMan.closeAnimePage()
+    frontend.closeAnimePage()
 })
 
 // drag n scroll
@@ -112,14 +110,14 @@ slider.addEventListener('mouseleave', stopDragging, false);
 // fade-in animation when some items are in the document viewport (TO REMOVE)
 /* const element = document.getElementsByClassName("fade-in")
 Object.keys(element).forEach( (key) => {
-    if (htmlMan.isInViewport(element[key])) {
+    if (frontend.isInViewport(element[key])) {
         element[key].classList.add('show')
     }
 })
 
 document.addEventListener("scroll", () => {
     Object.keys(element).forEach( (key) => {
-        if (htmlMan.isInViewport(element[key])) {
+        if (frontend.isInViewport(element[key])) {
             element[key].classList.add('show')
         }
     })

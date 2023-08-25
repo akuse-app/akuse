@@ -1,9 +1,9 @@
 'use-strict'
 
 const Hls = require('hls.js')
-const AniListAPI = require ('../modules/anilistApi')
-const AnimeSaturn = require('../modules/providers/animesaturn')
-const clientData = require ('../modules/clientData.js')
+const AniListAPI = require ('../anilistApi')
+const AnimeSaturn = require('../providers/animesaturn')
+const clientData = require ('../clientData.js')
 
 module.exports = class htmlManipulation {
     constructor() {
