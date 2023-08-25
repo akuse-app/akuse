@@ -132,9 +132,16 @@ module.exports = class AniListAPI extends Requests {
 
     async getAnimeInfo(animeId) {
         var query = `
-            query ($id: Int) {
-                Media (id: $id, type: ANIME) {
+        query ($id: Int) {
+            Media (id: $id, type: ANIME) {
                     id
+                    title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                    }
+                    format
                     status
                     description
                     startDate {
@@ -147,7 +154,10 @@ module.exports = class AniListAPI extends Requests {
                         month
                         day
                     }
+                    season
+                    seasonYear
                     episodes
+                    duration
                     coverImage {
                         extraLarge
                     }
@@ -156,18 +166,14 @@ module.exports = class AniListAPI extends Requests {
                     synonyms
                     meanScore
                     popularity
+                    favourites
                     isAdult
                     nextAiringEpisode {
                         id
                         airingAt
                         episode
                     }
-                    title {
-                        romaji
-                        english
-                        native
-                        userPreferred
-                    }
+                    siteUrl
                 }
             }
         `

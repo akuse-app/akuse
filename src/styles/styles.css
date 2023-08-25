@@ -12,6 +12,7 @@
     --font-weight: 600;
     --border-radius: 10px;
     --transition: 0.1s ease-out;
+    --shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 /* Scrollbar */
@@ -402,19 +403,27 @@ main .anime-page {
     main .anime-page .content .page-anime-left img#page-anime-cover {
         height: 450px;
         border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
     }
     
     main .anime-page .content .page-anime-right {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 50px;
         padding: 0 30px;
     }
+
     main .anime-page .content .page-anime-right #page-anime-info-section,
     main .anime-page .content .page-anime-right #page-anime-watch-section {
         width: 100%;
         height: 100%;
+    }
+
+    main .anime-page .content .page-anime-right #page-anime-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
     main .anime-page .content .page-anime-right .anime-title {
@@ -435,7 +444,31 @@ main .anime-page {
         font-size: 1.2rem;
     }
 
-    .provaaaa {
+    main .anime-page .content .page-anime-right .anime-infos {
+        color: var(--font-2);
+        font-size: 1.2rem;
+        display: flex;
+        gap: 20px;
+    }
+
+    main .anime-page .content .page-anime-right ul.anime-genres {
+        margin: 10px 0;
+        padding-left: 0;
+    }
+
+    main .anime-page .content .page-anime-right ul.anime-genres li {
+        display: inline;
+        background-color: var(--font-2);
+        color: var(--color-2);
+        font-size: 1.2rem;
+        font-weight: var(--font-weight);
+        border-radius: var(--border-radius);
+        padding: 8px 15px;
+        margin-right: 8px;
+        box-shadow: var(--shadow);
+    }
+
+    .page-anime-right-scroller {
         padding-right: 30px;
         height: 750px;
         overflow-y: auto;

@@ -121,7 +121,7 @@ module.exports = class htmlManipulation {
 
         document.getElementById('anime-page').style.display = 'flex'
         const animeEntry = await anilist.getAnimeInfo(animeId)
-
+        console.log(animeEntry)
         // retrieve infos
         const title = animeEntry.title.romaji
         const id = animeEntry.id
@@ -140,6 +140,10 @@ module.exports = class htmlManipulation {
         const cover = animeEntry.coverImage.extraLarge
         const banner = animeEntry.bannerImage
         const genres = animeEntry.genres
+        const seasonYear = animeEntry.seasonYear
+        const format = animeEntry.format
+        const duration = animeEntry.duration
+        const meanScore = animeEntry.meanScore
         
         // put infos in page
         let page_anime_title_div = document.getElementById('page-anime-title')
@@ -150,18 +154,23 @@ module.exports = class htmlManipulation {
         
         page_anime_title_div.appendChild(span_id)
         
+        document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
+        document.getElementById('page-anime-format').innerHTML = format
+        document.getElementById('page-anime-duration').innerHTML = (duration + ' Ep/Min')
+        document.getElementById('page-anime-meanScore').innerHTML =  meanScore
+        
         document.getElementById('page-anime-description').innerHTML = description
+        document.getElementById('page-anime-episodes').innerHTML = episodes
         document.getElementById('page-anime-status').innerHTML = status
         document.getElementById('page-anime-startDate').innerHTML = startDate
         document.getElementById('page-anime-endDate').innerHTML = endDate
         document.getElementById('page-anime-cover').src = cover
         
-        var anime_genres_div = document.getElementById('page-anime-genres')
+        var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
-            anime_genres_div.innerHTML += genres[key]
-            if(parseInt(key) < Object.keys(genres).length - 1) {
-                anime_genres_div.innerHTML += " • "
-            }
+            var anime_genres_li = document.createElement('li')
+            anime_genres_li.innerHTML += genres[key]
+            anime_genres_ul.appendChild(anime_genres_li)
         })
 
         // episodes
