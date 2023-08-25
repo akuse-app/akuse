@@ -7,6 +7,7 @@ const clientData = require ('../clientData.js')
 
 module.exports = class htmlManipulation {
     constructor() {
+        this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
         this.months = {
             '1': 'Jan',
@@ -121,7 +122,7 @@ module.exports = class htmlManipulation {
 
         document.getElementById('anime-page').style.display = 'flex'
         const animeEntry = await anilist.getAnimeInfo(animeId)
-        console.log(animeEntry)
+        
         // retrieve infos
         const title = animeEntry.title.romaji
         const id = animeEntry.id
@@ -149,14 +150,14 @@ module.exports = class htmlManipulation {
         let page_anime_title_div = document.getElementById('page-anime-title')
         page_anime_title_div.innerHTML = title
         
-        let span_id = document.createElement('span')
+        /* let span_id = document.createElement('span')
         span_id.innerHTML = " #" + id
         
-        page_anime_title_div.appendChild(span_id)
+        page_anime_title_div.appendChild(span_id) */
         
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
-        document.getElementById('page-anime-duration').innerHTML = (duration + ' Ep/Min')
+        document.getElementById('page-anime-duration').innerHTML = (duration + '    Ep/Min')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         
         document.getElementById('page-anime-description').innerHTML = description
@@ -180,9 +181,6 @@ module.exports = class htmlManipulation {
             let episode_div = this.createEpisodeDiv(i, banner)
             episodes_list_div.appendChild(episode_div)
         }
-        
-        /* const videoSrc = await this.cons.getEpisodeUrl(title, 1)
-        this.playVideoFiles(videoSrc) */
 
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
@@ -210,15 +208,24 @@ module.exports = class htmlManipulation {
         if(!(event.target.classList.contains('episode'))) {
             const entry = event.target.closest('.episode')
             if(entry) {
-                this.displayVideo(entry.id)
+                this.displayVideo(entry.id.slice(8))
             }
         } else {
-            this.displayVideo(event.target.id)
+            this.displayVideo(event.target.id.slice(8))
         }
     }
 
-    displayVideo(episodeId) {
-        console.log(episodeId)
+    async displayVideo(episode) {
+        console.log(episode)
+        const title = document.getElementById('page-anime-title').innerHTML
+
+        const videoSrc = await this.cons.getEpisodeUrl(title, episode)
+        console.log(videoSrc)
+        /* const animeNames = [animeEntry.title.romaji.toLowerCase().replace(/\s/g, '')]
+                           .concat(Object.values(animeEntry.synonyms)) */
+
+        this.playVideo(videoSrc)
+
     }
 
     closeAnimePage() {
@@ -267,22 +274,40 @@ module.exports = class htmlManipulation {
         ) return true
         
         return false
-    }
+    } 
 
     // play m3u8 files
-    playVideoFiles(videoSrc) {
+    playVideo(videoSrc) {
         var video = document.getElementById('video')
 
         if(Hls.isSupported()) {
             var hls = new Hls()
             hls.loadSource(videoSrc)
             hls.attachMedia(video)
-            /* video.play() */
+            this.fullscreenAndPlay(video)
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = videoSrc
             video.addEventListener('loadedmetadata',function() {
-            /* video.play() */
+                this.fullscreenAndPlay(video)
             })
         }
+    }
+
+    fullscreenAndPlay(video) {
+        const container = document.querySelector(".container")
+        const fullScreenBtn = container.querySelector(".fullscreen i")
+
+        // toggle video fullscreen
+        container.classList.toggle("fullscreen");
+        if(document.fullscreenElement) {
+            fullScreenBtn.classList.replace("fa-compress", "fa-expand");
+            return document.exitFullscreen();
+        }
+        fullScreenBtn.classList.replace("fa-expand", "fa-compress");
+        container.requestFullscreen();
+
+        // show and play video
+        container.style.display = 'block'
+        video.play()
     }
 }

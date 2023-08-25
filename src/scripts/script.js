@@ -26,7 +26,7 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const viewerId = await anilist.getViewerId(token)
     
     // display current watching animes
-    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
+    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'COMPLETED')
     frontend.displayAnimeSection(entriesCurrent)
 
     const entryFeatured = await anilist.getAnimeInfo(1)
