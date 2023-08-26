@@ -5,12 +5,10 @@ const path = require("path")
 const url = require('url')
 
 const AniListAPI = require ('./modules/anilistApi.js')
-const AnimeScrapeAPI = require ('./modules/animeScrapeApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require("./server.js")
 
 let win
-
 const createWindow = () => {
     win  = new BrowserWindow({
         width: 1920,
@@ -19,9 +17,8 @@ const createWindow = () => {
         minHeight: 720,
         autoHideMenuBar: false,
         webPreferences: {
-            nodeIntegration: true, // is default value after Electron v5
-            contextIsolation: false, // protect against prototype pollution
-            /* enableRemoteModule: false, */ // turn off remote
+            nodeIntegration: true,
+            contextIsolation: false,
             preload: path.join(__dirname, "preload.js")
         }
     })

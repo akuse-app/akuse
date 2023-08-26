@@ -33,9 +33,20 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     frontend.displayUserAvatar(userInfo)
 })
 
-// dynamic anime search bar (NOT WORKING)
+// dynamic animes search bar (NOT WORKING)
 addEventListener("input", (event) => {
     frontend.searchWithBar()
+})
+
+// dynamic episodes search bar
+document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
+    var input = document.getElementById('page-anime-search-input')
+
+    if(input.style.display === 'none') {
+        input.style.display = 'block'
+    } else if(input.style.display === 'block') {
+        input.style.display = 'none'
+    }
 })
 
 // navbar translating

@@ -21,14 +21,6 @@
                     <li>Browse Animes</li>
                     <li>My List</li>
                 </ul>
-                <div class="search-bar-wrapper-wrapper">
-                    <div class="search-bar-wrapper">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input id="search-bar" class="search-bar" placeholder="Search titles">
-                        
-                        </input>
-                    </div>
-                </div>
                 <div class="user-icon">
                     <img id="user-icon" src="" alt="user-icon">
                 </div>
@@ -60,7 +52,7 @@
                 </div>
             </div>
             <div class="section-container">
-                <div id="anime-page" class="anime-page-wrapper">
+                <div id="anime-page" class="anime-page-wrapper fade-in">
                     <div class="anime-page">
                         <button id="exit"><i class="fa-regular fa-circle-xmark"></i></button>
                         <div class="div">
@@ -121,20 +113,19 @@
                                                         </div>
                                                         <ul class="video-controls">
                                                             <li class="options left">
+                                                                <button class="play-pause"><i class="fas fa-play"></i></button>
                                                                 <button class="volume"><i class="fa-solid fa-volume-high"></i></button>
                                                                 <input type="range" min="0" max="1" step="any">
+                                                            </li>
+                                                            <div class="info">
+                                                                <span id="video-title" class="title">One piece</span> <span id="video-episode" class="episode">Episode boh</span>
+                                                            </div>
+                                                            <li class="options right">
                                                                 <div class="video-timer">
                                                                     <p class="current-time">00:00</p>
                                                                     <p class="separator"> / </p>
                                                                     <p class="video-duration">00:00</p>
                                                                 </div>
-                                                            </li>
-                                                            <li class="options center">
-                                                                <button class="skip-backward"><i class="fas fa-backward"></i></button>
-                                                                <button class="play-pause"><i class="fas fa-play"></i></button>
-                                                                <button class="skip-forward"><i class="fas fa-forward"></i></button>
-                                                            </li>
-                                                            <li class="options right">
                                                                 <div class="playback-content">
                                                                     <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
                                                                     <ul class="speed-options">
@@ -158,7 +149,13 @@
                                                 </div>
                                             </div>
                                             <div id="page-anime-watch-section">
-                                                <h1>Episodes</h1>
+                                                <div class="episodes-list-header">
+                                                    <h1>Episodes</h1>
+                                                    <div class="search-bar-wrapper">
+                                                        <button id="page-anime-search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                                        <input id="page-anime-search-input" placeholder="Search"></input>
+                                                    </div>
+                                                </div>
                                                 <div class="episodes-list-wrapper">
                                                     <div id="page-anime-episodes-list" class="episodes-list">
                                                         <div class="episode">

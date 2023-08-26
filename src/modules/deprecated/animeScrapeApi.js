@@ -1,7 +1,7 @@
 'use strict'
 
 const jsdom = require("jsdom")
-const Requests = require ('./requests.js')
+const Requests = require ('../requests.js')
 const { parse } = require("url")
 
 module.exports = class AnimeSaturnScrapeAPI extends Requests {

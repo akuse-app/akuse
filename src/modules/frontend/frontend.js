@@ -118,19 +118,27 @@ module.exports = class htmlManipulation {
         }
     }
 
-    // anime page creation
+    // display the anime modal page
     async displayAnimePage(animeId) {
         const anilist = new AniListAPI(clientData)
 
         document.getElementById('anime-page').style.display = 'flex'
-        const animeEntry = await anilist.getAnimeInfo(animeId)
         
-        // retrieve infos
+        // get infos
+        const animeEntry = await anilist.getAnimeInfo(animeId)
+
         const title = animeEntry.title.romaji
         const id = animeEntry.id
         const description = animeEntry.description
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
+        const cover = animeEntry.coverImage.extraLarge
+        const banner = animeEntry.bannerImage
+        const genres = animeEntry.genres
+        const seasonYear = animeEntry.seasonYear
+        const format = animeEntry.format
+        const duration = animeEntry.duration
+        const meanScore = animeEntry.meanScore
 
         var endDate
         animeEntry.endDate.year == null ? endDate = '?' : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
@@ -140,28 +148,13 @@ module.exports = class htmlManipulation {
         episodes = animeEntry.nextAiringEpisode.episode - 1 : 
         episodes = animeEntry.episodes
 
-        const cover = animeEntry.coverImage.extraLarge
-        const banner = animeEntry.bannerImage
-        const genres = animeEntry.genres
-        const seasonYear = animeEntry.seasonYear
-        const format = animeEntry.format
-        const duration = animeEntry.duration
-        const meanScore = animeEntry.meanScore
         
-        // put infos in page
-        let page_anime_title_div = document.getElementById('page-anime-title')
-        page_anime_title_div.innerHTML = title
-        
-        /* let span_id = document.createElement('span')
-        span_id.innerHTML = " #" + id
-        
-        page_anime_title_div.appendChild(span_id) */
-        
+        // display infos
+        document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
         document.getElementById('page-anime-duration').innerHTML = (duration + '    Ep/Min')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
-        
         document.getElementById('page-anime-description').innerHTML = description
         document.getElementById('page-anime-episodes').innerHTML = episodes
         document.getElementById('page-anime-status').innerHTML = status
@@ -180,16 +173,16 @@ module.exports = class htmlManipulation {
         const episodes_list_div = document.getElementById('page-anime-episodes-list')
         
         for(let i=0; i<episodes; i++) {
-            let episode_div = this.createEpisodeDiv(i, banner)
+            let episode_div = this.createEpisode(i, banner)
             episodes_list_div.appendChild(episode_div)
         }
-
 
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
     }
 
-    createEpisodeDiv(i, banner) {
+    // create the episode div, provided with unique id
+    createEpisode(i, banner) {
         let episode_div = document.createElement('div')
         episode_div.classList.add('episode')
         episode_div.id = 'episode-' + (i+1)
@@ -226,10 +219,11 @@ module.exports = class htmlManipulation {
         /* const animeNames = [animeEntry.title.romaji.toLowerCase().replace(/\s/g, '')]
                            .concat(Object.values(animeEntry.synonyms)) */
 
+        document.getElementById('video-title').innerHTML = title
         this.playVideo(videoSrc)
-
     }
 
+    // close the anime modal page
     closeAnimePage() {
         document.getElementById('page-anime-title').innerHTML = ""
         /* document.getElementById('page-anime-id').innerHTML = "" */
@@ -248,6 +242,7 @@ module.exports = class htmlManipulation {
         document.getElementsByTagName('body')[0].style.overflow = 'auto'
     }
 
+    // search bar (NOT WORKING)
     searchWithBar() {
         var txtValue;
         var input = document.getElementById('search-bar');
@@ -265,6 +260,7 @@ module.exports = class htmlManipulation {
         })
     }
 
+    // checks if an element is in viewport
     isInViewport(element) {
         var bounding = element.getBoundingClientRect()
     
