@@ -220,6 +220,7 @@ module.exports = class htmlManipulation {
                            .concat(Object.values(animeEntry.synonyms)) */
 
         document.getElementById('video-title').innerHTML = title
+        document.getElementById('video-episode').innerHTML = ('Episode ' + episode)
         this.playVideo(videoSrc)
     }
 
