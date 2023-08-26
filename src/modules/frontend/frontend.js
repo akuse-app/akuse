@@ -27,16 +27,19 @@ module.exports = class htmlManipulation {
 
     displayAnimeSection(entriesCurrent) {
         Object.keys(entriesCurrent).forEach( key => {
-            this.appendAnimeEntry(entriesCurrent[key], 'CURRENT', key)
+            const status = 'CURRENT'
+
+            let anime_list_div = document.getElementById(status.toLowerCase())
+            let anime_entry_div = this.appendAnimeEntry(entriesCurrent[key], status, key)
+            anime_list_div.appendChild(anime_entry_div)
         })
     }
 
     appendAnimeEntry(animeEntry, status, key) {
-        let anime_list_div = document.getElementById(status.toLowerCase())
         let anime_entry_div = this.createAnimeEntry(animeEntry, key)
         
-        anime_list_div.appendChild(anime_entry_div)
         anime_entry_div.classList.add('show')
+        return anime_entry_div
     }
 
     createAnimeEntry(animeEntry) {
@@ -98,7 +101,6 @@ module.exports = class htmlManipulation {
     
         document.getElementById('featured-img').src = banner
         document.getElementById('featured-content').classList.add('show')
-        
     }
 
     displayUserAvatar(userInfo) {
@@ -182,6 +184,7 @@ module.exports = class htmlManipulation {
             episodes_list_div.appendChild(episode_div)
         }
 
+
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
     }
@@ -201,6 +204,8 @@ module.exports = class htmlManipulation {
         episode_content_div.appendChild(h3)
         episode_div.appendChild(episode_content_div)
 
+        episode_div.classList.add('show-episode')
+
         return episode_div
     }
 
@@ -216,11 +221,8 @@ module.exports = class htmlManipulation {
     }
 
     async displayVideo(episode) {
-        console.log(episode)
         const title = document.getElementById('page-anime-title').innerHTML
-
         const videoSrc = await this.cons.getEpisodeUrl(title, episode)
-        console.log(videoSrc)
         /* const animeNames = [animeEntry.title.romaji.toLowerCase().replace(/\s/g, '')]
                            .concat(Object.values(animeEntry.synonyms)) */
 
@@ -229,7 +231,6 @@ module.exports = class htmlManipulation {
     }
 
     closeAnimePage() {
-        console.log('pressed')
         document.getElementById('page-anime-title').innerHTML = ""
         /* document.getElementById('page-anime-id').innerHTML = "" */
         document.getElementById('page-anime-description').innerHTML = ""
@@ -241,8 +242,9 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-episodes-list').innerHTML = ""
 
         /* document.getElementById('anime-page').classList.add('close-page') */
+        
+        document.getElementById('anime-page').classList.add('close-page')
         document.getElementById('anime-page').style.display = 'none'
-
         document.getElementsByTagName('body')[0].style.overflow = 'auto'
     }
 

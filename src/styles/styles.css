@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-1: #16202D;
-    --color-1-rgba: #1a222eb4;
-    --color-1-rgba2: #1A222Edc;
-    --color-2: #1c2838;
-    --color-3: #1f2c3d;
-    --color-4: black;
-    --font-1: white;
-    --font-2: #CECECE; /* #E3E3E3 */
+    --color-1: #141214;
+    --color-1-rgba: #141214b4;
+    --color-1-rgba2: #141214dc;
+    --color-2: #2A282A;
+    --color-3: #353335;
+    
+    --font-1: #fffdff;
+    --font-2: #D0CED0;
     --color-special: #d7c7e5;
     
     --font-weight: 600;
@@ -34,7 +34,7 @@
 }
 
 ::-webkit-scrollbar-thumb:active {
-    background-color: var(--color-4);
+    background-color: var(--color-1);
 }
 
 * {
@@ -81,6 +81,12 @@ body {
     animation-fill-mode: forwards;
 }
 
+.show-episode {
+    animation: fadeInAnimation 1s ease-in-out;
+    animation-iteration-count: 1;
+    /* animation-fill-mode: forwards; */
+}
+
 @keyframes fadeInAnimation {
     0% {
         opacity: 0;
@@ -101,28 +107,11 @@ body {
 @keyframes fadeInPageAnimation {
     0% {
         opacity: 0;
-        transform: translateY(-1000px);
+        transform: translateY(1000px);
     }
     100% {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-.close-page {
-    animation: closePageAnimation 0.4s ease-out;
-    animation-iteration-count: 1;
-    animation-fill-mode: backwards;
-}
-
-@keyframes closePageAnimation {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-1000px);
     }
 }
 
@@ -148,7 +137,7 @@ body {
     #login-page button#login-button {
         font-size: 1.6rem;
         font-weight: var(--font-weight);
-        color: var(--color-4);
+        color: var(--color-1);
         background-color: var(--font-1);
         width: 200px;
         height: 60px;
@@ -159,13 +148,8 @@ body {
         transition: 0.1s ease-out;
     }
 
-    #login-page button#login-button:hover {
-        transform: scale(1.1);
-    }
-
     #login-page button#login-button:active {
-        transform: scale(1.05);
-        filter: brightness(0.7);
+        filter: brightness(80%)
     }
 
 .nav-wrapper {
@@ -308,7 +292,7 @@ main .featured .featured-container .featured-left{
     main .featured button {
         font-size: 1.1rem;
         font-weight: var(--font-weight);
-        color: var(--color-4);
+        color: var(--color-1);
         background-color: var(--font-1);
         width: 180px;
         height: 50px;
@@ -360,8 +344,7 @@ main #anime-page {
     height: 100%;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-1-rgba);
-    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 main .anime-page {
@@ -369,7 +352,10 @@ main .anime-page {
     width: 1800px;
     height: 800px;
     border-radius: var(--border-radius);
-    background-color: var(--color-2);
+    /* background-color: var(--color-1); */
+    background: linear-gradient(var(--color-2), var(--color-1));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
     flex-direction: column;
 }
@@ -460,7 +446,7 @@ main .anime-page {
 
     main .anime-page .content .page-anime-right ul.anime-genres li {
         display: inline;
-        background-color: var(--font-2);
+        background-color: var(--font-1);
         color: var(--color-2);
         font-size: 1.2rem;
         font-weight: var(--font-weight);
@@ -469,30 +455,39 @@ main .anime-page {
         margin-right: 8px;
         box-shadow: var(--shadow);
     }
-
+    
     .page-anime-right-scroller {
         padding-right: 30px;
         height: 750px;
         overflow-y: auto;
+        direction: ltr;
         overflow-x: hidden;
     }
 
     main .anime-page .content .page-anime-right .episodes-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(12.5%, 25%));
+        grid-template-columns: repeat(auto-fill, 25%);
         height: max-content;
     }
     
     main .anime-page .content .page-anime-right .episodes-list .episode {
-        /* background-color: var(--color-3); */
         background-image: url(/assets/img/banner.jpg);
         background-position: center center;
-        border-radius: var(--border-radius);
         background-size: cover;
         border-radius: var(--border-radius);
         height: 100px;
-        margin: 20px 10px;
+        margin: 10px;
         cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow);
+    }
+
+    main .anime-page .content .page-anime-right .episodes-list .episode:hover {
+        transform: scale(1.05);
+    }
+    
+    main .anime-page .content .page-anime-right .episodes-list .episode:active {
+        transform: scale(1);
     }
 
     main .anime-page .content .page-anime-right .episodes-list .episode .content {
@@ -500,40 +495,11 @@ main .anime-page {
         height: 100%;
         margin: 0;
         border-radius: var(--border-radius);
-        background-color: var(--color-1-rgba2);
+        background-color: var(--color-1-rgba);
         display: flex;
         align-items: center;
         justify-content: center;
     }
-
-    /* main .anime-page .menu {
-        display: flex;
-        margin: auto;
-        align-items: center;
-        justify-content: center;
-        width: 200px;
-    }
-    
-    main .anime-page .menu ul {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        list-style-type: none;
-        gap: 30px;
-        padding-left: 0;
-    }
-    
-    main .anime-page .menu ul li {
-        color: var(--font-2);
-        font-size: 1.6rem;
-        font-weight: var(--font-weight);
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    main .anime-page .menu ul li.active {
-        color: var(--font-1);
-    } */
 
     main .anime-page button#exit {
         position: absolute;
