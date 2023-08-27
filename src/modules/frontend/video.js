@@ -18,7 +18,7 @@ module.exports = class Video {
         const title = document.getElementById('page-anime-title').innerHTML
 
         var animeTitles = []
-        var anime_titles_div = document.querySelectorAll('#anime-titles h2')
+        var anime_titles_div = document.querySelectorAll('#page-anime-titles h2')
         Object.keys(anime_titles_div).forEach( (key) => {
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
             anime_titles_div[key]
