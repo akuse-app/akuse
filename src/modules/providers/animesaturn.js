@@ -1,6 +1,6 @@
 'use-strict'
 
-const Consumet = require ('@consumet/extensions')
+const Consumet = require('@consumet/extensions')
 
 module.exports = class AnimeSaturn {
     constructor() {
@@ -9,6 +9,9 @@ module.exports = class AnimeSaturn {
 
     async getEpisodeUrl(animeSearch, episode) {
             const animeId = await this.getAnimeId(animeSearch)
+            if (animeId == -1) {
+                return -1
+            }
             const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
             
             const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
@@ -18,7 +21,11 @@ module.exports = class AnimeSaturn {
     // better add more security stuff
     async getAnimeId(animeSearch) {
         const data = await this.consumet.search(animeSearch)
-        return data.results[0].id
+        if (data.results.length !== 0) {
+            return data.results[0].id
+        } else {
+            return -1
+        }
     }
 
     async getAnimeEpisodeId(animeId, episode) {

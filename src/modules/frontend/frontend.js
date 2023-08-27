@@ -129,7 +129,6 @@ module.exports = class htmlManipulation {
         const animeEntry = await anilist.getAnimeInfo(animeId)
 
         const title = animeEntry.title.romaji
-        const id = animeEntry.id
         const description = animeEntry.description
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
@@ -140,6 +139,7 @@ module.exports = class htmlManipulation {
         const format = animeEntry.format
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
+        const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
 
         var endDate
         animeEntry.endDate.year == null ? endDate = '?' : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
@@ -154,7 +154,7 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
-        document.getElementById('page-anime-duration').innerHTML = (duration + '    Ep/Min')
+        document.getElementById('page-anime-duration').innerHTML = (duration + ' Ep/Min')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
         document.getElementById('page-anime-episodes').innerHTML = episodes
@@ -168,6 +168,13 @@ module.exports = class htmlManipulation {
             var anime_genres_li = document.createElement('li')
             anime_genres_li.innerHTML += genres[key]
             anime_genres_ul.appendChild(anime_genres_li)
+        })
+
+        var anime_titles_div = document.getElementById('page-anime-titles')
+        Object.keys(animeTitles).forEach( (key) => {
+            let h2 = document.createElement('h2')
+            h2.innerHTML = animeTitles[key]
+            anime_titles_div.appendChild(h2)
         })
 
         // episodes
@@ -226,6 +233,7 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-cover').src = ""
         document.getElementById('page-anime-genres').innerHTML = ""
         document.getElementById('page-anime-episodes-list').innerHTML = ""
+        document.getElementById('page-anime-titles').innerHTML = ""
 
         /* document.getElementById('anime-page').classList.add('close-page') */
         

@@ -7,6 +7,7 @@ module.exports = class Video {
     constructor() {
         this.cons = new AnimeSaturn()
 
+        this.container = document.querySelector(".container")
         this.videoElement = document.getElementById('video')
         this.videoSource = this.videoElement.src
         this.videoTitle = document.getElementById('video-title')
@@ -15,19 +16,33 @@ module.exports = class Video {
 
     async displayVideo(episode) {
         const title = document.getElementById('page-anime-title').innerHTML
-        var videoSource = await this.getVideoSource(title, episode)
-        videoSource = this.toHD(videoSource)
 
-        /* const animeNames = [animeEntry.title.romaji.toLowerCase().replace(/\s/g, '')]
-                           .concat(Object.values(animeEntry.synonyms)) */
+        var animeTitles = []
+        var anime_titles_div = document.querySelectorAll('#anime-titles h2')
+        Object.keys(anime_titles_div).forEach( (key) => {
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
+            anime_titles_div[key]
+        })
+
+        console.log(animeTitles)
+
+        var i = 0
+        do {
+            var videoSource = await this.cons.getEpisodeUrl(animeTitles[i], episode)
+            console.log(animeTitles[i] + ' -> ' + videoSource)
+            i++
+        } while(videoSource === -1)
+        
+        /* videoSource = this.toHD(videoSource) */
 
         this.videoTitle.innerHTML = title
         this.videoEpisode.innerHTML = ('Episode ' + episode)
 
         this.putSource(videoSource)
-        this.fullscreenAndPlay(this.videoElement)
+        this.videoElement.play()
     }
 
+    // TO DO: remove this function
     async getVideoSource(title, episode) {
         return await this.cons.getEpisodeUrl(title, episode)
     }
@@ -40,7 +55,7 @@ module.exports = class Video {
 
         var videoSource = await this.getVideoSource(this.videoTitle.innerHTML,
                                                     this.getEpisodeIdFromTitle())
-        videoSource = this.toHD(videoSource)
+        /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource)
         this.videoElement.play()
@@ -54,7 +69,7 @@ module.exports = class Video {
 
         var videoSource = await this.getVideoSource(this.videoTitle.innerHTML,
                                                     this.getEpisodeIdFromTitle())
-        videoSource = this.toHD(videoSource)
+        /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource)
         this.videoElement.play()
@@ -89,13 +104,15 @@ module.exports = class Video {
 
     // given the m3u8 file source, play the video and put fullscreen
     putSource(videoSource) {
+        var hls = new Hls()
+        
         if(Hls.isSupported()) {
-            var hls = new Hls()
-
             hls.loadSource(videoSource)
             hls.attachMedia(this.videoElement)
+            this.container.style.display = 'block'
         } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
             this.videoElement.src = videoSource
+            this.container.style.display = 'block'
             /* this.videoElement.addEventListener('loadedmetadata',function() {
                 this.fullscreenAndPlay(this.videoElement)
             }) */
@@ -104,20 +121,17 @@ module.exports = class Video {
 
     // put fullscreen and change the icon
     fullscreenAndPlay(video) {
-        const container = document.querySelector(".container")
         const fullScreenBtn = container.querySelector(".fullscreen i")
 
         // toggle video fullscreen
-        container.classList.toggle("fullscreen");
+        this.container.classList.toggle("fullscreen");
         if(document.fullscreenElement) {
             fullScreenBtn.classList.replace("fa-compress", "fa-expand");
             return document.exitFullscreen();
         }
         fullScreenBtn.classList.replace("fa-expand", "fa-compress");
-        container.requestFullscreen();
+        this.container.requestFullscreen();
 
-        // show and play video
-        container.style.display = 'block'
         video.play()
     }
 }
