@@ -1,14 +1,15 @@
 'use-strict'
 
-const Hls = require('hls.js')
 const AniListAPI = require ('../anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
+const Video = require('./video')
 const clientData = require ('../clientData.js')
 
 module.exports = class htmlManipulation {
     constructor() {
         this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
+        this.video = new Video()
         this.months = {
             '1': 'Jan',
             '2': 'Feb',
@@ -206,23 +207,13 @@ module.exports = class htmlManipulation {
         if(!(event.target.classList.contains('episode'))) {
             const entry = event.target.closest('.episode')
             if(entry) {
-                this.displayVideo(entry.id.slice(8))
+                this.video.displayVideo(entry.id.slice(8))
             }
         } else {
-            this.displayVideo(event.target.id.slice(8))
+            this.video.displayVideo(event.target.id.slice(8))
         }
     }
 
-    async displayVideo(episode) {
-        const title = document.getElementById('page-anime-title').innerHTML
-        const videoSrc = await this.cons.getEpisodeUrl(title, episode)
-        /* const animeNames = [animeEntry.title.romaji.toLowerCase().replace(/\s/g, '')]
-                           .concat(Object.values(animeEntry.synonyms)) */
-
-        document.getElementById('video-title').innerHTML = title
-        document.getElementById('video-episode').innerHTML = ('Episode ' + episode)
-        this.playVideo(videoSrc)
-    }
 
     // close the anime modal page
     closeAnimePage() {
@@ -274,39 +265,4 @@ module.exports = class htmlManipulation {
         
         return false
     } 
-
-    // play m3u8 files
-    playVideo(videoSrc) {
-        var video = document.getElementById('video')
-
-        if(Hls.isSupported()) {
-            var hls = new Hls()
-            hls.loadSource(videoSrc)
-            hls.attachMedia(video)
-            this.fullscreenAndPlay(video)
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = videoSrc
-            video.addEventListener('loadedmetadata',function() {
-                this.fullscreenAndPlay(video)
-            })
-        }
-    }
-
-    fullscreenAndPlay(video) {
-        const container = document.querySelector(".container")
-        const fullScreenBtn = container.querySelector(".fullscreen i")
-
-        // toggle video fullscreen
-        container.classList.toggle("fullscreen");
-        if(document.fullscreenElement) {
-            fullScreenBtn.classList.replace("fa-compress", "fa-expand");
-            return document.exitFullscreen();
-        }
-        fullScreenBtn.classList.replace("fa-expand", "fa-compress");
-        container.requestFullscreen();
-
-        // show and play video
-        container.style.display = 'block'
-        video.play()
-    }
 }

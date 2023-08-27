@@ -38,7 +38,7 @@ addEventListener("input", (event) => {
     frontend.searchWithBar()
 })
 
-// dynamic episodes search bar
+// dynamic episodes search bar (NOT WORKING)
 document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
     var input = document.getElementById('page-anime-search-input')
 
@@ -82,6 +82,14 @@ var episode_list = document.getElementById('page-anime-episodes-list')
 episode_list.addEventListener('click', (event) => {
     frontend.triggerEpisode(event)
 })
+
+// if pressed Esc while video is fullscreen, close the video
+window.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && fullscreen){
+        e.preventDefault();
+        
+   }
+});
 
 // show anime page when featured anime button is pressed
 var featured_button = document.querySelectorAll('button[id^="featured-anime-button-"]')[0]

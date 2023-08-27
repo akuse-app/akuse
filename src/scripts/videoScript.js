@@ -1,5 +1,8 @@
 'use-strict'
 
+const Video = require('../modules/frontend/video')
+const video = new Video()
+
 const container = document.querySelector(".container"),
 mainVideo = document.getElementById("video"),
 videoTimeline = container.querySelector(".video-timeline"),
@@ -11,10 +14,13 @@ videoDuration = container.querySelector(".video-duration"),
 skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
 playPauseBtn = container.querySelector(".play-pause i"),
+previousEpisodeBtn = container.querySelector(".previous i")
+nextEpisodeBtn = container.querySelector(".next i")
 speedBtn = container.querySelector(".playback-speed i"),
 speedOptions = container.querySelector(".speed-options"),
 fullScreenBtn = container.querySelector(".fullscreen i");
 let timer;
+
 const hideControls = () => {
     if(mainVideo.paused) return;
     timer = setTimeout(() => {
@@ -123,12 +129,14 @@ fullScreenBtn.addEventListener("click", () => {
     container.requestFullscreen();
 });
 
-speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show"));
-skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5);
-skipForward.addEventListener("click", () => mainVideo.currentTime += 5);
-mainVideo.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause());
+playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause());
 mainVideo.addEventListener("play", () => playPauseBtn.classList.replace("fa-play", "fa-pause"));
 mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pause", "fa-play"));
-playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause());
+mainVideo.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause());
+skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5);
+skipForward.addEventListener("click", () => mainVideo.currentTime += 5);
+nextEpisodeBtn.addEventListener("click", async () => await video.nextEpisode());
+previousEpisodeBtn.addEventListener("click", async () => await video.previousEpisode());
+speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-section"));
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar));
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar));

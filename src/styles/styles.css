@@ -473,7 +473,6 @@ main .anime-page {
         padding-right: 30px;
         height: 750px;
         overflow-y: auto;
-        direction: ltr;
         overflow-x: hidden;
     }
 
@@ -605,7 +604,7 @@ main section .anime-list .anime-entry .anime-progress {
   justify-content: center;
 }
 .container{
-  display: none; /* none */
+  display: none; /* block */
   width: 98%;
   user-select: none;
   overflow: hidden;
@@ -649,7 +648,8 @@ main section .anime-list .anime-entry .anime-progress {
 }
 .video-timeline{
   height: 7px;
-  width: 100%;
+  width: calc(100% - 40px);
+  margin: 0 20px;
   cursor: pointer;
 }
 .video-timeline .progress-area{
@@ -760,7 +760,7 @@ main section .anime-list .anime-entry .anime-progress {
 }
 .options .video-timer{
   color: #efefef;
-  margin-right: 15px;
+  margin: 015px;
   font-size: 14px;
 }
 .video-timer .separator{
@@ -786,7 +786,7 @@ main section .anime-list .anime-entry .anime-progress {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: opacity 0.13s ease;
 }
-.playback-content .speed-options.show{
+.playback-content .speed-options.show-section{
   opacity: 1;
   pointer-events: auto;
 }

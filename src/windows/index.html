@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="section-container">
-                <div id="anime-page" class="anime-page-wrapper fade-in">
+                <div id="anime-page" class="anime-page-wrapper fade-in"> <!-- fade-in -->
                     <div class="anime-page">
                         <button id="exit"><i class="fa-regular fa-circle-xmark"></i></button>
                         <div class="div">
@@ -114,6 +114,8 @@
                                                         <ul class="video-controls">
                                                             <li class="options left">
                                                                 <button class="play-pause"><i class="fas fa-play"></i></button>
+                                                                <button class="skip-backward"><i class="fa-solid fa-rotate-left"></i></button>
+                                                                <button class="skip-forward"><i class="fa-solid fa-rotate-right"></i></button>
                                                                 <button class="volume"><i class="fa-solid fa-volume-high"></i></button>
                                                                 <input type="range" min="0" max="1" step="any">
                                                             </li>
@@ -126,6 +128,9 @@
                                                                     <p class="separator"> / </p>
                                                                     <p class="video-duration">00:00</p>
                                                                 </div>
+                                                                <button class="previous"><i class="fa-solid fa-backward"></i></button>
+                                                                <button class="next"><i class="fa-solid fa-forward"></i></button>
+                                                                <button class="list"><i class="fa-solid fa-list"></i></button>
                                                                 <div class="playback-content">
                                                                     <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
                                                                     <ul class="speed-options">
@@ -238,7 +243,7 @@
     </div>
 </body>
 <script>
-    require('../scripts/script.js')
-    require('../scripts/video-player.js')
+    require('../scripts/mainScript.js')
+    require('../scripts/videoScript.js')
 </script>
 </html>
