@@ -24,14 +24,16 @@ module.exports = class Video {
             anime_titles_div[key]
         })
 
-        console.log(animeTitles)
 
+        console.log('titles: ' + animeTitles)
+
+        console.log('playground: ')
         var i = 0
         do {
             var videoSource = await this.cons.getEpisodeUrl(animeTitles[i], episode)
             console.log(animeTitles[i] + ' -> ' + videoSource)
             i++
-        } while(videoSource === -1)
+        } while(videoSource === -1 && i < animeTitles.length)
         
         /* videoSource = this.toHD(videoSource) */
 

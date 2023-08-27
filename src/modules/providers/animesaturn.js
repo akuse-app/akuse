@@ -21,7 +21,9 @@ module.exports = class AnimeSaturn {
     // better add more security stuff
     async getAnimeId(animeSearch) {
         const data = await this.consumet.search(animeSearch)
+        
         if (data.results.length !== 0) {
+            console.log('---' + animeSearch + ' ' + data.results[0].title + '---')
             return data.results[0].id
         } else {
             return -1
