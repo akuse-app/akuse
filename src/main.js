@@ -41,11 +41,6 @@ ipcMain.handle('open-login-page', (event) => {
         })
 })
 
-ipcMain.handle('get-token', (event) => {
-    const currentUrl = new URL(win.webContents.getURL())
-    console.log(fullUrl)
-})
-
 app.whenReady().then(() => {
     createWindow()
 
