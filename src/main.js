@@ -8,13 +8,27 @@ const AniListAPI = require ('./modules/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require("./server.js")
 
-let win
+let authWin
+let mainWin
 const createWindow = () => {
-    win  = new BrowserWindow({
+    authWin  = new BrowserWindow({
+        width: 400,
+        height: 600,
+        minWidth: 400,
+        minHeight: 600,
+        autoHideMenuBar: true,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            preload: path.join(__dirname, "preload.js")
+        }
+    })
+    mainWin  = new BrowserWindow({
         width: 1920,
         height: 1080,
         minWidth: 1280,
         minHeight: 720,
+        show: false,
         autoHideMenuBar: false,
         webPreferences: {
             nodeIntegration: true,
@@ -22,24 +36,38 @@ const createWindow = () => {
             preload: path.join(__dirname, "preload.js")
         }
     })
-    win.loadFile("src/windows/index.html")
+    const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
+    authWin.loadURL(authUrl)
+    authWin.webContents.on('did-navigate', async (event) => {
+        console.log('Navigated to Main Window')
+        authWin.close()
+
+        const anilist = new AniListAPI(clientData)
+
+        const currentUrl = new URL(authWin.webContents.getURL())
+        const token = await anilist.getAccessToken(currentUrl)
+
+        /* mainWin.loadFile(__dirname + "/windows/index.html") */
+        mainWin.loadFile("src/windows/index.html")
+        mainWin.show()
+        
+        mainWin.webContents.on('did-finish-load', () => {
+            mainWin.webContents.send('load-page-elements', token)
+        })
+        /* mainWin.webContents.send('load-page-elements', token) */
+    })
+
+    /* mainWin.webContents.on('did-finish-load', () => {
+        mainWin.webContents.send('load-page-elements', token)
+    }) */
 }
 
-// press login button
-ipcMain.handle('open-login-page', (event) => {
-    const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
 
-        win.loadURL(authUrl).then(async () => {
-            win.loadFile("src/windows/index.html")
 
-            const anilist = new AniListAPI(clientData)
+    /* win.loadFile("src/windows/index.html")
 
-            const currentUrl = new URL(win.webContents.getURL())
-            const token = await anilist.getAccessToken(currentUrl)
+    win.webContents.send('load-page-elements', token) */
 
-            win.webContents.send('load-page-elements', token)
-        })
-})
 
 app.whenReady().then(() => {
     createWindow()

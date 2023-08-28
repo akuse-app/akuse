@@ -10,20 +10,21 @@ const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
 // press login button
-const loginButton = document.getElementById("login-button")
+/* const loginButton = document.getElementById("login-button")
 loginButton.addEventListener("click", () => {
     ipcRenderer.invoke('open-login-page')
-})
+}) */
 
 // OAuth is completed, so load the page with all the elements
 ipcRenderer.on('load-page-elements', async (event, token) => {
-    document.getElementById('login-button').style.display = 'none'
-    document.getElementById('login-page').style.display = 'none'
+    console.log('ciao' + JSON.stringify(token))
+    /* document.getElementById('login-button').style.display = 'none'
+    document.getElementById('login-page').style.display = 'none' */
 
     const viewerId = await anilist.getViewerId(token)
     
     // display current watching animes
-    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'COMPLETED')
+    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
     frontend.displayAnimeSection(entriesCurrent)
 
     const entryFeatured = await anilist.getAnimeInfo(1)
