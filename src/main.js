@@ -1,12 +1,12 @@
 'use strict'
 
-const { app, BrowserWindow, ipcMain } = require("electron")
-const path = require("path")
+const { app, BrowserWindow, ipcMain } = require('electron')
+const path = require('path')
 const url = require('url')
 
 const AniListAPI = require ('./modules/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
-const server = require("./server.js")
+const server = require('./server.js')
 
 let authWin
 let mainWin
@@ -16,12 +16,7 @@ const createWindow = () => {
         height: 600,
         minWidth: 400,
         minHeight: 600,
-        autoHideMenuBar: true,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            preload: path.join(__dirname, "preload.js")
-        }
+        autoHideMenuBar: true
     })
     mainWin  = new BrowserWindow({
         width: 1920,
@@ -29,54 +24,44 @@ const createWindow = () => {
         minWidth: 1280,
         minHeight: 720,
         show: false,
-        autoHideMenuBar: false,
+        autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, 'preload.js')
         }
     })
-    const authUrl = "https://anilist.co/api/v2/oauth/authorize?client_id=" + clientData.clientId + "&redirect_uri=" + clientData.redirectUri + "&response_type=code"
+    const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
     authWin.loadURL(authUrl)
+
     authWin.webContents.on('did-navigate', async (event) => {
         console.log('Navigated to Main Window')
-        authWin.close()
-
+        
         const anilist = new AniListAPI(clientData)
-
+        
         const currentUrl = new URL(authWin.webContents.getURL())
         const token = await anilist.getAccessToken(currentUrl)
-
-        /* mainWin.loadFile(__dirname + "/windows/index.html") */
-        mainWin.loadFile("src/windows/index.html")
+        
+        /* mainWin.loadFile(__dirname + '/windows/index.html') */
+        mainWin.loadFile('src/windows/index.html')
         mainWin.show()
+        mainWin.maximize()
         
         mainWin.webContents.on('did-finish-load', () => {
+            authWin.close()
             mainWin.webContents.send('load-page-elements', token)
         })
-        /* mainWin.webContents.send('load-page-elements', token) */
     })
-
-    /* mainWin.webContents.on('did-finish-load', () => {
-        mainWin.webContents.send('load-page-elements', token)
-    }) */
-}
-
-
-
-    /* win.loadFile("src/windows/index.html")
-
-    win.webContents.send('load-page-elements', token) */
 
 
 app.whenReady().then(() => {
     createWindow()
 
-    app.on("activate", () => {
+    app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 })
 
-app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") app.quit()
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') app.quit()
 })
