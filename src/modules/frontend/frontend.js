@@ -50,7 +50,9 @@ module.exports = class htmlManipulation {
         const cover = animeEntry.media.coverImage.extraLarge
         
         var episodes
-        animeEntry.media.episodes == null ? episodes = '?' : episodes = animeEntry.media.episodes
+        animeEntry.media.episodes == null
+        ? episodes = '?'
+        : episodes = animeEntry.media.episodes
     
         let anime_entry_div = document.createElement('div')
         anime_entry_div.classList.add('anime-entry')
@@ -71,10 +73,14 @@ module.exports = class htmlManipulation {
         anime_progress_div.classList.add('anime-progress')
         anime_progress_div.innerHTML = `${progress} / ${episodes}`
     
+        let anime_entry_content = document.createElement('div')
+        anime_entry_content.classList.add('content')
+        anime_entry_content.appendChild(anime_title_div)
+        anime_entry_content.appendChild(anime_progress_div)
+        
         anime_entry_div.appendChild(anime_cover_div)
-        anime_entry_div.appendChild(anime_title_div)
-        anime_entry_div.appendChild(anime_progress_div)
-        anime_entry_div.classList.add('fade-in')
+        anime_entry_div.appendChild(anime_entry_content)
+        /* anime_entry_div.classList.add('fade-in') */
         
         return anime_entry_div
     }
@@ -121,11 +127,12 @@ module.exports = class htmlManipulation {
 
     // display the anime modal page
     async displayAnimePage(animeId) {
-        const anilist = new AniListAPI(clientData)
-
+        // show modal page
         document.getElementById('anime-page').style.display = 'flex'
+        document.getElementById('anime-page-shadow-background').style.display = 'flex'
         
         // get infos
+        const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
 
         const title = animeEntry.title.romaji
@@ -142,14 +149,15 @@ module.exports = class htmlManipulation {
         const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
 
         var endDate
-        animeEntry.endDate.year == null ? endDate = '?' : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
+        animeEntry.endDate.year == null
+        ? endDate = '?'
+        : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
 
         var episodes
-        animeEntry.episodes == null ? 
-        episodes = animeEntry.nextAiringEpisode.episode - 1 : 
-        episodes = animeEntry.episodes
+        animeEntry.episodes == null
+        ? episodes = animeEntry.nextAiringEpisode.episode - 1
+        : episodes = animeEntry.episodes
 
-        
         // display infos
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
@@ -186,6 +194,7 @@ module.exports = class htmlManipulation {
         }
 
         document.getElementById('anime-page').classList.add('show-page')
+        document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
     }
 
@@ -224,8 +233,13 @@ module.exports = class htmlManipulation {
 
     // close the anime modal page
     closeAnimePage() {
+        // hide modal page
+        document.getElementById('anime-page').style.display = 'none'
+        document.getElementById('anime-page-shadow-background').style.display = 'none'
+        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+
+        // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
-        /* document.getElementById('page-anime-id').innerHTML = "" */
         document.getElementById('page-anime-description').innerHTML = ""
         document.getElementById('page-anime-status').innerHTML = ""
         document.getElementById('page-anime-startDate').innerHTML = ""
@@ -233,13 +247,12 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-cover').src = ""
         document.getElementById('page-anime-genres').innerHTML = ""
         document.getElementById('page-anime-episodes-list').innerHTML = ""
+        document.getElementById('page-anime-episodes').innerHTML = ""
         document.getElementById('page-anime-titles').innerHTML = ""
-
-        /* document.getElementById('anime-page').classList.add('close-page') */
-        
-        document.getElementById('anime-page').classList.add('close-page')
-        document.getElementById('anime-page').style.display = 'none'
-        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+        document.getElementById('page-anime-seasonYear').innerHTML = ""
+        document.getElementById('page-anime-format').innerHTML = ""
+        document.getElementById('page-anime-duration').innerHTML = ""
+        document.getElementById('page-anime-meanScore').innerHTML = ""
     }
 
     // search bar (NOT WORKING)

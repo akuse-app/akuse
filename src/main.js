@@ -24,7 +24,7 @@ const createWindow = () => {
         minWidth: 1280,
         minHeight: 720,
         show: false,
-        autoHideMenuBar: true,
+        autoHideMenuBar: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -32,9 +32,11 @@ const createWindow = () => {
         }
     })
     const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
+    console.log('Loaded Authorization Url on Auth Window')
     authWin.loadURL(authUrl)
 
     authWin.webContents.on('did-navigate', async (event) => {
+        console.log("Log-in completed!")
         console.log('Navigated to Main Window')
         
         const anilist = new AniListAPI(clientData)
@@ -52,7 +54,7 @@ const createWindow = () => {
             mainWin.webContents.send('load-page-elements', token)
         })
     })
-
+}
 
 app.whenReady().then(() => {
     createWindow()

@@ -17,10 +17,6 @@ loginButton.addEventListener("click", () => {
 
 // OAuth is completed, so load the page with all the elements
 ipcRenderer.on('load-page-elements', async (event, token) => {
-    console.log('ciao' + JSON.stringify(token))
-    /* document.getElementById('login-button').style.display = 'none'
-    document.getElementById('login-page').style.display = 'none' */
-
     const viewerId = await anilist.getViewerId(token)
     
     // display current watching animes
