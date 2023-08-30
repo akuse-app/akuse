@@ -9,18 +9,12 @@ const clientData = require('../modules/clientData.js')
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
-// press login button
-/* const loginButton = document.getElementById("login-button")
-loginButton.addEventListener("click", () => {
-    ipcRenderer.invoke('open-login-page')
-}) */
-
 // OAuth is completed, so load the page with all the elements
 ipcRenderer.on('load-page-elements', async (event, token) => {
     const viewerId = await anilist.getViewerId(token)
     
     // display current watching animes
-    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
+    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'COMPLETED')
     frontend.displayAnimeSection(entriesCurrent)
 
     const entryFeatured = await anilist.getAnimeInfo(1)
@@ -28,6 +22,8 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
 
     const userInfo = await anilist.getUserInfo(token, viewerId)
     frontend.displayUserAvatar(userInfo)
+
+    console.log(await anilist.getTrendingAnimeInfo())
 })
 
 // dynamic animes search bar (NOT WORKING)

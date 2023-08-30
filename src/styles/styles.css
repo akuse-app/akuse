@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-1: rgb(32, 38, 57);
+    --color-1: #12111A;
     --color-1-rgba: rgba(0, 0, 0, 0.61);
-    --color-1-rgba2: #202639dc;
-    --color-2: rgb(44, 50, 68);
-    --color-3: rgb(45, 51, 70);
+    --color-2: #262437;
+    --color-3: #3C3855;
     --color-darker: rgba(0, 0, 0, 0.8);
     
     --font-1: #fffdff;
@@ -62,8 +61,7 @@ img {
 
 html,
 body {
-    /* background: linear-gradient(var(--color-1), var(--color-2)); */
-    background: linear-gradient(180.6deg, var(--color-2) 11.2%, var(--color-1) 51.2%, rgb(0, 0, 0) 98.6%);
+    background-color: var(--color-1);
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;
@@ -181,11 +179,10 @@ nav#nav-main {
     margin: auto;
     z-index: 19;
     width: 1000px;
-    height: 75px;
+    height: 60px;
     display: flex;
     padding: 0 30px;
-    background-color: var(--color-1-rgba2);
-    backdrop-filter: blur(15px);
+    background-color: var(--color-1);
     border-radius: var(--border-radius);
     transition: 0.2s ease-out;
 }
@@ -203,7 +200,7 @@ nav#nav-main ul li {
     display: inline;
     color: var(--font-1);
     font-weight: var(--font-weight);
-    padding: 10px 20px;
+    padding: 10px 20px 10px 0;
     cursor: pointer;
 }
 
@@ -226,7 +223,7 @@ main {
     color: var(--font-1);
     width: 100%;
     height: 100%; /* da levare */
-    padding-top: 75px;
+    padding-top: 60px;
 }
 
 main .featured {
@@ -315,6 +312,7 @@ main .featured .featured-img img {
     object-fit: cover;
     object-position: 0% 50%; /* try 20px 10px */ 
     border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
 }
 
 main .section-container {
@@ -428,7 +426,7 @@ main .anime-page {
                     align-items: center;
                     margin-left: auto;
                     border: 2px solid var(--color-2);
-                    background-color: var(--color-1-rgba2);
+                    background-color: var(--color-1-rgba);
                     border-radius: var(--border-radius);
                     padding: 6px;
                 }
@@ -568,7 +566,7 @@ main .anime-page {
     }
 
 main section h1 {
-    font-weight: var(--font-weight);
+    font-weight: 800;
     font-size: 1.6rem;
     margin-bottom: 15px;
 }
@@ -586,22 +584,20 @@ main section .anime-list-wrapper {
     }
 
         main section .anime-list .anime-entry {
-            /* width: 212px; */
-            width: max-content;
+            width: 212px;
+            top: 0;
             height: min-content;
             display: inline-block;
             position: relative;
             border: 2px solid transparent;
             border-radius: var(--border-radius);
-            padding: 10px;
             z-index: 2;
             cursor: pointer;
             transition: var(--transition);
         }
         
         main section .anime-list .anime-entry:hover {
-            border: 2px solid var(--color-2);
-            background-color: var(--color-1-rgba2);
+            
         }
         
         main section .anime-list .anime-entry:not(:last-child) {
@@ -628,10 +624,12 @@ main section .anime-list-wrapper {
         main section .anime-list .anime-entry .anime-title {
             color: var(--font-1);
             font-weight: var(--font-weight);
-            padding-top: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             text-overflow: ellipsis;
-            white-space: nowrap;
             overflow: hidden;
+            /* white-space: nowrap; */
             font-size: 1rem;
         }
 

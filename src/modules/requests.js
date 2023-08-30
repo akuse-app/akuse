@@ -3,7 +3,7 @@
 const axios = require('axios')
 
 module.exports = class Requests {
-    getOptions(query, variables) {
+    getOptions(query = {}, variables = {}) {
         return JSON.stringify({
             query: query,
             variables: variables
