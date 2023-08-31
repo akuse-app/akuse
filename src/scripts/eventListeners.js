@@ -1,23 +1,50 @@
 'use-strict'
 
+const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
+const clientData = require('../modules/clientData.js')
 
+const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
 // dynamic animes search bar (NOT WORKING)
-addEventListener("input", (event) => {
+/* addEventListener("input", (event) => {
     frontend.searchWithBar()
-})
+}) */
 
 // dynamic episodes search bar (NOT WORKING)
 document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
     var input = document.getElementById('page-anime-search-input')
 
-    if(input.style.display === 'none') {
+    if(input.style.display == 'none') {
         input.style.display = 'block'
     } else if(input.style.display === 'block') {
         input.style.display = 'none'
     }
+})
+
+// main search bar listeners
+var searchMainDiv = document.getElementById('main-search-list-container')
+var searchMainButton = document.getElementById('search-main-button')
+var searchMainInput = document.getElementById('search-main-input')
+
+searchMainButton.addEventListener('click', (event) => {
+    /* searchMainDiv.style.display == 'none'
+    ? searchMainDiv.style.display = 'flex'
+    : searchMainDiv.style.display = 'none' */
+
+    if (searchMainDiv.style.display == 'none') {
+        searchMainDiv.style.display = 'flex'
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    } else {
+        searchMainDiv.style.display = 'none'
+        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+    }
+})
+
+searchMainInput.addEventListener('input', async (event) => {
+    const searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
+    frontend.displaySearchedAnimes(searchEntries)
 })
 
 // navbar translating
@@ -44,6 +71,11 @@ document.addEventListener("scroll", (event) => {
 });
 
 // trigger anime-entry childs and retrieve id to open modal page
+var entry_list = document.getElementById('main-search-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerMainSearchAnime(event)
+})
+
 var entry_list = document.getElementById('current')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)

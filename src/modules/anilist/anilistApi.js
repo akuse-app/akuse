@@ -95,6 +95,35 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Viewer.id
     }
 
+    async getUserInfo(token, viewerId) {
+        const headers = {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        var query = `
+            query($userId : Int) {
+                User(id: $userId, sort: ID) {
+                    id
+                    name
+                    avatar {
+                        large
+                    }
+                }
+            }
+        `
+
+        var variables = {
+            userId: viewerId,
+        }
+
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+
+        return respData.data
+    }
+
     async getViewerList(token, viewerId, status) {
         const headers = {
             'Authorization': 'Bearer ' + token,
@@ -247,32 +276,32 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Page
     }
 
-    async getUserInfo(token, viewerId) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
+    async getSearchedAnimes(input) {
         var query = `
-            query($userId : Int) {
-                User(id: $userId, sort: ID) {
-                    id
-                    name
-                    avatar {
-                        large
-                    }
+        {
+            Page (page: 1, perPage: 10) {
+                pageInfo {
+                    total
+                    currentPage
+                    lastPage
+                    hasNextPage
+                    perPage
+                }
+                media(search: "${input}", type: ANIME, sort: SEARCH_MATCH) {
+                    ${this.mediaData}
                 }
             }
+        }
         `
 
         var variables = {
-            userId: viewerId,
+            page: 1,
+            perPage: 10 
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
 
-        return respData.data
+        return respData.data.Page.media
     }
 }

@@ -13,11 +13,8 @@ const frontend = new Frontend()
 ipcRenderer.on('load-page-elements', async (event, token) => {
     const viewerId = await anilist.getViewerId(token)
     
-    // featured section
+    const userInfo = await anilist.getUserInfo(token, viewerId)
     const entryFeatured = await anilist.getTrendingAnimes()
-    frontend.displayFeaturedAnime(entryFeatured.media[0])
-    
-    // anime sections
     const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
     const entriesMostPopular = await anilist.getMostPopularAnimes()
@@ -26,7 +23,9 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const entriesFantasy = await anilist.getAnimesByGenre("Fantasy")
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
-
+    
+    frontend.displayUserAvatar(userInfo)
+    frontend.displayFeaturedAnime(entryFeatured.media[0])
     frontend.displayUserAnimeSection(entriesCurrent, 'current')
     frontend.displayGenreAnimeSection(entriesTrending, 'trending')
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular')
@@ -35,7 +34,4 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy')
     frontend.displayGenreAnimeSection(entriesHorror, 'horror')
     frontend.displayGenreAnimeSection(entriesMusic, 'music')
-    
-    const userInfo = await anilist.getUserInfo(token, viewerId)
-    frontend.displayUserAvatar(userInfo)
 })

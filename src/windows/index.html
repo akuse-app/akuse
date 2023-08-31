@@ -14,7 +14,9 @@
             <img src="https://github.com/aleganza/akuse/blob/main/assets/img/akuse-logo.png?raw=true" alt="akuse-logo">
             <button id="login-button">Login</button>
         </div> -->
+
         <!-- VIDEO -->
+        
         <div class="container show-controls">
             <div class="wrapper">
                 <div class="video-timeline">
@@ -43,7 +45,7 @@
                         </div>
                         <button class="previous"><i class="fa-solid fa-backward"></i></button>
                         <button class="next"><i class="fa-solid fa-forward"></i></button>
-                        <button class="list"><i class="fa-solid fa-list"></i></button>
+                        <button class="list"><i class="fa-solid fa-list-ul"></i></button>
                         <div class="playback-content">
                             <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
                             <ul class="speed-options">
@@ -60,19 +62,76 @@
             </div>
             <video id="video"></video>
         </div>
-        <!-- VIDEO -->
+
+        <!-- NAVBAR + MAIN SEARCH BAR -->
+
         <div class="nav-wrapper">
             <nav id="nav-main">
                 <ul>
                     <li class="active">Home</li>
                     <li>Browse Animes</li>
                     <li>My List</li>
+                    <div class="right">
+                        <li>
+                            <i id="search-main-button" class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-gear"></i>
+                        </li>
+                        <div class="user-icon">
+                            <img id="user-icon" src="" alt="user-icon">
+                        </div>
+                    </div>
                 </ul>
-                <div class="user-icon">
-                    <img id="user-icon" src="" alt="user-icon">
-                </div>
             </nav>
+            <div id="main-search-list-container" class="search-main-container">
+                <div id="search-main">
+                    <div class="input-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="search-main-input" type="text" placeholder="Search">
+                    </div>
+                </div>
+                <div class="scroller">
+                    <div id="main-search-list" class="search-list">
+                        <!-- <div class="search-entry">
+                            <img src="/assets/img/cover.png" alt="">
+                            <div class="content">
+                                <h1 class="title">Anime titolo</h1>
+                                <div class="infos">
+                                    <h2>
+                                        <i class="fa-regular fa-calendar-plus"></i>
+                                        <span id="page-anime-seasonYear">2020</span>
+                                    </h2>
+                                    <h2>
+                                        <i class="fa-solid fa-list-ul"></i>
+                                        <span id="page-anime-episodes">24</span>
+                                    </h2>
+                                    <h2>
+                                        <i class="fa-solid fa-tv"></i>
+                                        <span id="page-anime-format">2020</span>
+                                    </h2>
+                                    <h2>
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span  id="page-anime-duration">2020</span>
+                                    </h2>
+                                    <h2>
+                                        <i class="fa-regular fa-star"></i>
+                                        <span  id="page-anime-meanScore">2020</span>
+                                    </h2>
+                                </div>
+                                <div class="description">
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                    ."
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- MAIN -->
+
         <main>
             <div class="featured">
                 <div class="featured-container">
@@ -179,13 +238,13 @@
                     <h1>Continue watching</h1>
                     <div class="anime-list-wrapper">
                         <div id="current" class="anime-list">
-                            <div class="anime-entry">
+                            <!-- <div class="anime-entry">
                                 <img class="anime-cover" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg" alt="">
                                 <div class="content">
                                     <div class="anime-title">Pisellone ABA cinc i iu iowahn io owai a wao owia djsapo poje dajpoi ie o aoi own fp3 o3 oi3 oin iojm iof ano fe poe oafnoa nwao</div>
                                     <div class="anime-progress">23 / 24</div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </section>

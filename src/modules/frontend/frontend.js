@@ -26,23 +26,147 @@ module.exports = class htmlManipulation {
         }
     }
 
-    displayUserAnimeSection(entries, section) {
+    displaySearchedAnimes(entries) {
+        this.clearSearchedAnimes()
+
+        var anime_list_div = document.getElementById('main-search-list')
+        var anime_entry_div
+
+        var scroller = document.createElement('div')
+        scroller.classList.add('scroller')
+
         Object.keys(entries).forEach(key => {
-            let anime_list_div = document.getElementById(section)
-            let anime_entry_div = this.appendAnimeEntry(entries[key].media, key)
+            anime_entry_div = this.appendSearchAnimeEntry(entries[key])
+            anime_entry_div.classList.add('show')
+            
+            anime_list_div.appendChild(anime_entry_div)
+        })
+
+        scroller.appendChild(anime_entry_div)
+    }
+
+    clearSearchedAnimes() {
+        document.getElementById('main-search-list').innerHTML = ''
+    }
+
+    appendSearchAnimeEntry(animeEntry) {
+        const animeId = animeEntry.id
+        const cover = animeEntry.coverImage.extraLarge
+        const seasonYear = animeEntry.seasonYear
+        const format = animeEntry.format
+        const duration = animeEntry.duration
+        const meanScore = animeEntry.meanScore
+        const description = animeEntry.description
+
+        var title
+        animeEntry.title.english == null
+        ? title = animeEntry.title.romaji
+        : title = animeEntry.title.english
+
+        var episodes
+        animeEntry.episodes == null
+        ? (animeEntry.nextAiringEpisode == null
+           ? episodes = '?'
+           : episodes = animeEntry.nextAiringEpisode.episode - 1)
+        : episodes = animeEntry.episodes
+
+        var cover_div = document.createElement('img')
+        cover_div.src = cover
+
+        var content_div = document.createElement('div')
+        content_div.classList.add('content')
+
+        var title_h1 = document.createElement('h1')
+        title_h1.classList.add('title')
+        title_h1.innerHTML = title
+
+        var infos_div = document.createElement('div')
+        infos_div.classList.add('infos')
+
+        var h2 = document.createElement('h2')
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
+        var span = document.createElement('span')
+        span.innerHTML = seasonYear
+        h2.appendChild(span)
+        infos_div.appendChild(h2)
+            
+        var h2 = document.createElement('h2')
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-list-ul"></i>'
+        var span = document.createElement('span')
+        span.innerHTML = episodes
+        h2.appendChild(span)
+        infos_div.appendChild(h2)
+
+        var h2 = document.createElement('h2')
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-tv"></i>'
+        var span = document.createElement('span')
+        span.innerHTML = format
+        h2.appendChild(span)
+        infos_div.appendChild(h2)
+
+        var h2 = document.createElement('h2')
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-clock"></i>'
+        var span = document.createElement('span')
+        span.innerHTML = duration
+        h2.appendChild(span)
+        infos_div.appendChild(h2)
+
+        var h2 = document.createElement('h2')
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-star"></i>'
+        var span = document.createElement('span')
+        span.innerHTML = meanScore
+        h2.appendChild(span)
+        infos_div.appendChild(h2)
+
+        var description_div = document.createElement('div')
+        description_div.classList.add('description')
+        description_div.innerHTML = description
+
+        // append to content
+        content_div.appendChild(title_h1)
+        content_div.appendChild(infos_div)
+        content_div.appendChild(description_div)
+
+        var entry_div = document.createElement('div')
+        entry_div.classList.add('search-entry')
+        entry_div.classList.add('fade-in')
+        entry_div.id = ('search-anime-entry-' + animeId)
+        
+        // append to entry
+        entry_div.appendChild(cover_div)
+        entry_div.appendChild(content_div)
+
+        return entry_div
+    }
+
+    triggerMainSearchAnime(event) {
+        if(!(event.target.classList.contains('search-entry'))) {
+            const entry = event.target.closest('.search-entry')
+            if(entry) {
+                this.displayAnimePage(entry.id.slice(19))
+            }
+        } else {
+            this.displayAnimePage(event.target.id.slice(19))
+        }
+    }
+
+    displayUserAnimeSection(entries, section) {
+        var anime_list_div = document.getElementById(section)
+        Object.keys(entries).forEach(key => {
+            var anime_entry_div = this.appendSectionAnimeEntry(entries[key].media, key)
             anime_list_div.appendChild(anime_entry_div)
         })
     }
 
     displayGenreAnimeSection(entries, section) {
+        var anime_list_div = document.getElementById(section)
         Object.keys(entries.media).forEach(key => {
-            let anime_list_div = document.getElementById(section)
-            let anime_entry_div = this.appendAnimeEntry(Object.values(entries.media)[key], key)
+            var anime_entry_div = this.appendSectionAnimeEntry(Object.values(entries.media)[key], key)
             anime_list_div.appendChild(anime_entry_div)
         })
     }
 
-    appendAnimeEntry(animeEntry, key) {
+    appendSectionAnimeEntry(animeEntry, key) {
         let anime_entry_div = this.createAnimeEntry(animeEntry, key)
         
         anime_entry_div.classList.add('show')
@@ -57,7 +181,9 @@ module.exports = class htmlManipulation {
         
         var episodes
         animeEntry.episodes == null
-        ? episodes = '?'
+        ? (animeEntry.nextAiringEpisode == null
+           ? episodes = '?'
+           : episodes = animeEntry.nextAiringEpisode.episode - 1)
         : episodes = animeEntry.episodes
     
         let anime_entry_div = document.createElement('div')
@@ -261,7 +387,7 @@ module.exports = class htmlManipulation {
     }
 
     // search bar (NOT WORKING)
-    searchWithBar() {
+    /* searchWithBar() {
         var txtValue;
         var input = document.getElementById('search-bar');
         var filter = input.value.toLowerCase().replace(/\s/g, '');
@@ -276,7 +402,7 @@ module.exports = class htmlManipulation {
                 itemsCard[key].style.display = "none";
             }
         })
-    }
+    } */
 
     // checks if an element is in viewport
     isInViewport(element) {
