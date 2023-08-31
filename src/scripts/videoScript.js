@@ -130,6 +130,7 @@ fullScreenBtn.addEventListener("click", () => {
 exitBtn.addEventListener("click", () => {
     mainVideo.pause()
     container.style.display = 'none'
+    document.exitFullscreen()
 })
 
 playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())

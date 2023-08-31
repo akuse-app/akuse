@@ -1,7 +1,7 @@
 {
   "name": "akuse",
   "version": "1.0.0",
-  "description": "Anime watcher client for PC",
+  "description": "Anime streaming client for PC",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -10,24 +10,22 @@
     "make": "electron-forge make",
     "build": "electron-builder"
   },
-
   "build": {
-    "appId": "akuse",
+    "appId": "Akuse",
     "win": {
-        "target": [
-            "nsis"
-        ],
-        "icon": "assets/img/icon/icon-1024.ico"
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/img/icon/icon-1024.ico"
     },
     "nsis": {
-        "oneClick": false,
-        "perMachine": true,
-        "allowElevation": true,
-        "allowToChangeInstallationDirectory": true,
-        "license": "LICENSE"
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE"
     }
-},
-
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aleganza/akuse.git"

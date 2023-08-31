@@ -3,8 +3,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
-
-const AniListAPI = require ('./modules/anilistApi.js')
+const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
 
@@ -17,8 +16,10 @@ const createWindow = () => {
         minWidth: 400,
         minHeight: 600,
         autoHideMenuBar: true,
+        frame: false, // undraggable
         icon: 'assets/img/icon/icon-1024.png'
     })
+
     mainWin  = new BrowserWindow({
         width: 1920,
         height: 1080,
@@ -33,8 +34,9 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     })
+
     const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
-    console.log('Loaded Authorization Url on Auth Window')
+    console.log('Loaded OAuth url on Auth Window')
     authWin.loadURL(authUrl)
 
     authWin.webContents.on('did-navigate', async (event) => {

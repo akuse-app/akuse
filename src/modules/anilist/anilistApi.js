@@ -1,6 +1,6 @@
 'use strict'
 
-const Requests = require ('./requests.js')
+const Requests = require ('../requests.js')
 
 module.exports = class AniListAPI extends Requests {
     constructor(clientData) {
@@ -12,6 +12,49 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
+        this.mediaData =
+        `
+            id
+            title {
+                romaji
+                english
+                native
+                userPreferred
+            }
+            format
+            status
+            description
+            startDate {
+                year
+                month
+                day
+            }
+            endDate {
+                year
+                month
+                day
+            }
+            season
+            seasonYear
+            episodes
+            duration
+            coverImage {
+                extraLarge
+            }
+            bannerImage
+            genres
+            synonyms
+            meanScore
+            popularity
+            favourites
+            isAdult
+            nextAiringEpisode {
+                id
+                airingAt
+                episode
+            }
+            siteUrl
+        `
     }
 
     async getAccessToken(currentUrl) {
@@ -38,7 +81,7 @@ module.exports = class AniListAPI extends Requests {
             'Accept': 'application/json',
         }
 
-        const query = `
+        var query = `
             query {
                 Viewer {
                     id
@@ -59,7 +102,7 @@ module.exports = class AniListAPI extends Requests {
             'Accept': 'application/json',
         }
 
-        const query = `
+        var query = `
             query($userId : Int) {
                 MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME) {
                     lists {
@@ -70,18 +113,7 @@ module.exports = class AniListAPI extends Requests {
                             mediaId
                             progress
                             media {
-                                status
-                                episodes
-                                title {
-                                    romaji
-                                    english
-                                    native
-                                    userPreferred
-                                }
-                                coverImage {
-                                    extraLarge
-                                }
-                                synonyms
+                                ${this.mediaData}
                             }
                         }
                     }
@@ -89,7 +121,7 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
-        const variables = {
+        var variables = {
             userId: viewerId,
         }
 
@@ -107,7 +139,7 @@ module.exports = class AniListAPI extends Requests {
             'Accept': 'application/json',
         }
 
-        const query = `
+        var query = `
             query($userId : Int) {
                 User(id: $userId, sort: ID) {
                     id
@@ -119,7 +151,7 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
-        const variables = {
+        var variables = {
             userId: viewerId,
         }
 
@@ -134,46 +166,7 @@ module.exports = class AniListAPI extends Requests {
         var query = `
             query ($id: Int) {
                 Media (id: $id, type: ANIME) {
-                    id
-                    title {
-                        romaji
-                        english
-                        native
-                        userPreferred
-                    }
-                    format
-                    status
-                    description
-                    startDate {
-                        year
-                        month
-                        day
-                    }
-                    endDate {
-                        year
-                        month
-                        day
-                    }
-                    season
-                    seasonYear
-                    episodes
-                    duration
-                    coverImage {
-                        extraLarge
-                    }
-                    bannerImage
-                    genres
-                    synonyms
-                    meanScore
-                    popularity
-                    favourites
-                    isAdult
-                    nextAiringEpisode {
-                        id
-                        airingAt
-                        episode
-                    }
-                    siteUrl
+                    ${this.mediaData}
                 }
             }
         `
@@ -188,37 +181,70 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Media
     }
 
-    async getTrendingAnimeInfo() {
+    async getTrendingAnimes() {
         var query = `
-            query ($id: Int, $page: Int, $perPage: Int, $search: String) {
-                Page (page: $page, perPage: $perPage) {
-                    pageInfo {
-                        total
-                        currentPage
-                        lastPage
-                        hasNextPage
-                        perPage
-                    }
-                    media (id: $id, search: $search) {
-                        id
-                        title {
-                            romaji
-                        }
-                    }
+        {
+            Page(page: 1, perPage: 30) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
                 }
-            }
+                media(sort: TRENDING_DESC, type: ANIME) {
+                    ${this.mediaData}
+                }
+            } 
+        }
         `
 
-        var variables = {
-            search: "Fate/Zero",
-            page: 1,
-            perPage: 3
-        };
-
-        const options = this.getOptions(query, variables)
+        const options = this.getOptions(query)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
 
-        return respData.data
+        return respData.data.Page
+    }
+
+    async getMostPopularAnimes() {
+        var query = `
+        {
+            Page(page: 1, perPage: 30) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
+                }
+                media(sort: POPULARITY_DESC, type: ANIME) {
+                    ${this.mediaData}
+                }
+            } 
+        }
+        `
+
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Page
+    }
+
+    async getAnimesByGenre(genre) {
+        var query = `
+        {
+            Page(page: 1, perPage: 30) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
+                }
+                media(genre: "${genre}", sort: TRENDING_DESC, type: ANIME) {
+                    ${this.mediaData}
+                }
+            } 
+        }
+        `
+
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Page
     }
 
     async getUserInfo(token, viewerId) {
@@ -228,7 +254,7 @@ module.exports = class AniListAPI extends Requests {
             'Accept': 'application/json',
         }
 
-        const query = `
+        var query = `
             query($userId : Int) {
                 User(id: $userId, sort: ID) {
                     id
@@ -240,7 +266,7 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
-        const variables = {
+        var variables = {
             userId: viewerId,
         }
 

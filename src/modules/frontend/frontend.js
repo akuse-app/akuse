@@ -1,6 +1,6 @@
 'use-strict'
 
-const AniListAPI = require ('../anilistApi')
+const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
@@ -26,17 +26,23 @@ module.exports = class htmlManipulation {
         }
     }
 
-    displayAnimeSection(entriesCurrent) {
-        Object.keys(entriesCurrent).forEach( key => {
-            const status = 'CURRENT'
-
-            let anime_list_div = document.getElementById(status.toLowerCase())
-            let anime_entry_div = this.appendAnimeEntry(entriesCurrent[key], status, key)
+    displayUserAnimeSection(entries, section) {
+        Object.keys(entries).forEach(key => {
+            let anime_list_div = document.getElementById(section)
+            let anime_entry_div = this.appendAnimeEntry(entries[key].media, key)
             anime_list_div.appendChild(anime_entry_div)
         })
     }
 
-    appendAnimeEntry(animeEntry, status, key) {
+    displayGenreAnimeSection(entries, section) {
+        Object.keys(entries.media).forEach(key => {
+            let anime_list_div = document.getElementById(section)
+            let anime_entry_div = this.appendAnimeEntry(Object.values(entries.media)[key], key)
+            anime_list_div.appendChild(anime_entry_div)
+        })
+    }
+
+    appendAnimeEntry(animeEntry, key) {
         let anime_entry_div = this.createAnimeEntry(animeEntry, key)
         
         anime_entry_div.classList.add('show')
@@ -44,20 +50,19 @@ module.exports = class htmlManipulation {
     }
 
     createAnimeEntry(animeEntry) {
-        const animeId = animeEntry.mediaId
-        const animeName = animeEntry.media.title.romaji
-        const progress = animeEntry.progress
-        const cover = animeEntry.media.coverImage.extraLarge
+        const animeId = animeEntry.id
+        const animeName = animeEntry.title.english
+        /* const progress = animeEntry.progress */
+        const cover = animeEntry.coverImage.extraLarge
         
         var episodes
-        animeEntry.media.episodes == null
+        animeEntry.episodes == null
         ? episodes = '?'
-        : episodes = animeEntry.media.episodes
+        : episodes = animeEntry.episodes
     
         let anime_entry_div = document.createElement('div')
         anime_entry_div.classList.add('anime-entry')
         
-        /* let index = parseInt(key) + 1 */
         anime_entry_div.id = ('anime-entry-' + animeId)
     
         let anime_cover_div = document.createElement('img')
@@ -69,14 +74,14 @@ module.exports = class htmlManipulation {
         anime_title_div.classList.add('anime-title')
         anime_title_div.innerHTML = animeName
     
-        let anime_progress_div = document.createElement('div')
+        /* let anime_progress_div = document.createElement('div')
         anime_progress_div.classList.add('anime-progress')
-        anime_progress_div.innerHTML = `${progress} / ${episodes}`
+        anime_progress_div.innerHTML = `${progress} / ${episodes}` */
     
         let anime_entry_content = document.createElement('div')
         anime_entry_content.classList.add('content')
         anime_entry_content.appendChild(anime_title_div)
-        anime_entry_content.appendChild(anime_progress_div)
+        /* anime_entry_content.appendChild(anime_progress_div) */
         
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
@@ -87,7 +92,7 @@ module.exports = class htmlManipulation {
 
     displayFeaturedAnime(animeEntry) {
         const id = animeEntry.id
-        const title = animeEntry.title.romaji
+        const title = animeEntry.title.english
         const episodes = animeEntry.episodes
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
@@ -135,7 +140,7 @@ module.exports = class htmlManipulation {
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
 
-        const title = animeEntry.title.romaji
+        const title = animeEntry.title.english
         const description = animeEntry.description
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year

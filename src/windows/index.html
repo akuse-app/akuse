@@ -33,7 +33,7 @@
                         <input type="range" min="0" max="1" step="any">
                     </li>
                     <div class="info">
-                        <span id="video-title" class="title">One piece</span> <span id="video-episode" class="episode">Episode boh</span>
+                        <span id="video-title" class="title">One piece</span> <span id="video-episode" class="episode"></span>
                     </div>
                     <li class="options right">
                         <div class="video-timer">
@@ -165,13 +165,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="episodes-list-wrapper">
-                                                    <div id="page-anime-episodes-list" class="episodes-list">
-                                                        <div class="episode">
-                                                            <div class="content">
-                                                                <h3>Episode</h3>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <div id="page-anime-episodes-list" class="episodes-list"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,41 +186,62 @@
                                     <div class="anime-progress">23 / 24</div>
                                 </div>
                             </div>
-                            <div class="anime-entry">
-                                <img class="anime-cover" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg" alt="">
-                                <div class="content">
-                                    <div class="anime-title">Pisellone </div>
-                                    <div class="anime-progress">23 / 24</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </section>
                 <section>
-                    <h1>Continue watching</h1>
+                    <h1>Trending Now</h1>
                     <div class="anime-list-wrapper">
-                        <div id="current" class="anime-list">
-                            <div class="anime-entry">
-                                <img class="anime-cover" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg" alt="">
-                                <div class="content">
-                                    <div class="anime-title">Pisellone ladsdadasdunghissimo</div>
-                                    <div class="anime-progress">23 / 24</div>
-                                </div>
-                            </div>
+                        <div id="trending" class="anime-list">
+                            
                         </div>
                     </div>
                 </section>
                 <section>
-                    <h1>Continue watching</h1>
+                    <h1>Most Popular</h1>
                     <div class="anime-list-wrapper">
-                        <div id="current" class="anime-list">
-                            <div class="anime-entry">
-                                <img class="anime-cover" src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg" alt="">
-                                <div class="content">
-                                    <div class="anime-title">Pisellone ladsdadasdunghissimo</div>
-                                    <div class="anime-progress">23 / 24</div>
-                                </div>
-                            </div>
+                        <div id="most-popular" class="anime-list">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Adventure</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="adventure" class="anime-list">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Comedy</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="comedy" class="anime-list">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Fantasy</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="fantasy" class="anime-list">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Horror</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="horror" class="anime-list">
+                            
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Music</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="music" class="anime-list">
+                            
                         </div>
                     </div>
                 </section>
@@ -236,6 +251,7 @@
 </body>
 <script>
     require('../scripts/mainScript.js')
+    require('../scripts/eventListeners.js')
     require('../scripts/videoScript.js')
 </script>
 </html>
