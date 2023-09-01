@@ -144,3 +144,26 @@ previousEpisodeBtn.addEventListener("click", async () => await video.previousEpi
 speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-section"))
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
+
+
+document.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229) {
+        return
+    }
+    
+    if(container.style.display == 'block') {
+        if(event.keyCode === 32) {
+            mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+        } else if(event.keyCode === 37) {
+            mainVideo.currentTime -= 5
+        } else if(event.keyCode === 38) {
+            mainVideo.volume += 0.1
+            volumeSlider.value = mainVideo.volume
+        } else if(event.keyCode === 39) {
+            mainVideo.currentTime += 5
+        } else if(event.keyCode === 40) {
+            mainVideo.volume -= 0.1
+            volumeSlider.value = mainVideo.volume
+        }
+    }
+})
