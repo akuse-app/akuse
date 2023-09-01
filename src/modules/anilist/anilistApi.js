@@ -2,6 +2,11 @@
 
 const Requests = require ('../requests.js')
 
+/**
+ * Authentication and queries with AniList API
+ * 
+ * @class
+ */
 module.exports = class AniListAPI extends Requests {
 
     /**

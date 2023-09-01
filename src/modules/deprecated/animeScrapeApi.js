@@ -4,6 +4,11 @@ const jsdom = require("jsdom")
 const Requests = require ('../requests.js')
 const { parse } = require("url")
 
+/**
+ * Old scraping library
+ * 
+ * @deprecated
+ */
 module.exports = class AnimeSaturnScrapeAPI extends Requests {
     constructor() {
         super()

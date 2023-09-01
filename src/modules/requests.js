@@ -2,6 +2,12 @@
 
 const axios = require('axios')
 
+
+/**
+ * Methods to make requests
+ * 
+ * @class
+ */
 module.exports = class Requests {
 
     /**

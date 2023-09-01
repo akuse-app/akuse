@@ -5,6 +5,12 @@ const AnimeSaturn = require('../providers/animesaturn')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
 
+
+/**
+ * Methods to manipulate the DOM with the data fetched
+ * 
+ * @class
+ */
 module.exports = class htmlManipulation {
 
     /**

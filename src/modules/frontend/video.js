@@ -3,6 +3,12 @@
 const Hls = require('hls.js')
 const AnimeSaturn = require('../providers/animesaturn')
 
+
+/**
+ * Methods for video playing and functionalities
+ * 
+ * @class
+ */
 module.exports = class Video {
 
     /**
