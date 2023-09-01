@@ -2,7 +2,6 @@
 
 const axios = require('axios')
 
-
 /**
  * Methods to make requests
  * 
