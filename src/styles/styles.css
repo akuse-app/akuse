@@ -200,12 +200,25 @@ nav#nav-main {
         nav#nav-main ul li {
             font-size: 1.3rem;
             display: inline;
-            color: var(--font-1);
+            color: var(--font-2);
             font-weight: var(--font-weight);
             padding: 10px 20px 10px 0;
             cursor: pointer;
+            transition: var(--transition);
         }
 
+        nav#nav-main ul li.active {
+            color: var(--font-1);
+        }
+
+        nav#nav-main ul li:hover {
+            color: var(--font-1);
+        }
+        
+        nav#nav-main ul li:active {
+            transform: scale(0.95);
+        }
+        
     nav#nav-main .right {
         display: flex;
         align-items: center;
@@ -228,7 +241,6 @@ nav#nav-main {
 .search-main-container {
     z-index: 19;
     width: 1000px;
-    display: none; /* flex */
     flex-direction: column;
     padding: 0 20px 15px 20px;
     background-color: var(--color-2);

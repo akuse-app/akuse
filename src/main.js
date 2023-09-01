@@ -26,7 +26,7 @@ const createWindow = () => {
         minWidth: 1280,
         minHeight: 720,
         show: false,
-        autoHideMenuBar: true,
+        autoHideMenuBar: false,
         icon: 'assets/img/icon/icon-1024.png',
         webPreferences: {
             nodeIntegration: true,
@@ -48,8 +48,8 @@ const createWindow = () => {
         const currentUrl = new URL(authWin.webContents.getURL())
         const token = await anilist.getAccessToken(currentUrl)
         
-        /* mainWin.loadFile(__dirname + '/windows/index.html') */
-        mainWin.loadFile('src/windows/index.html')
+        /* mainWin.loadFile('src/windows/index.html') */
+        mainWin.loadFile(__dirname + '/windows/index.html')
         mainWin.show()
         mainWin.maximize()
         

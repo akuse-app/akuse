@@ -58,17 +58,8 @@ module.exports = class htmlManipulation {
         const meanScore = animeEntry.meanScore
         const description = animeEntry.description
 
-        var title
-        animeEntry.title.english == null
-        ? title = animeEntry.title.romaji
-        : title = animeEntry.title.english
-
-        var episodes
-        animeEntry.episodes == null
-        ? (animeEntry.nextAiringEpisode == null
-           ? episodes = '?'
-           : episodes = animeEntry.nextAiringEpisode.episode - 1)
-        : episodes = animeEntry.episodes
+        var title = this.getTitle(animeEntry)
+        var episodes = this.getEpisodes(animeEntry)
 
         var cover_div = document.createElement('img')
         cover_div.src = cover
@@ -107,7 +98,7 @@ module.exports = class htmlManipulation {
         var h2 = document.createElement('h2')
         h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-clock"></i>'
         var span = document.createElement('span')
-        span.innerHTML = duration
+        span.innerHTML = (duration + ' Min/Ep')
         h2.appendChild(span)
         infos_div.appendChild(h2)
 
@@ -179,12 +170,7 @@ module.exports = class htmlManipulation {
         /* const progress = animeEntry.progress */
         const cover = animeEntry.coverImage.extraLarge
         
-        var episodes
-        animeEntry.episodes == null
-        ? (animeEntry.nextAiringEpisode == null
-           ? episodes = '?'
-           : episodes = animeEntry.nextAiringEpisode.episode - 1)
-        : episodes = animeEntry.episodes
+        var episodes = this.getEpisodes(animeEntry)
     
         let anime_entry_div = document.createElement('div')
         anime_entry_div.classList.add('anime-entry')
@@ -218,7 +204,7 @@ module.exports = class htmlManipulation {
 
     displayFeaturedAnime(animeEntry) {
         const id = animeEntry.id
-        const title = animeEntry.title.english
+        var title = this.getTitle(animeEntry)
         const episodes = animeEntry.episodes
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
@@ -266,7 +252,6 @@ module.exports = class htmlManipulation {
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
 
-        const title = animeEntry.title.english
         const description = animeEntry.description
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
@@ -277,23 +262,22 @@ module.exports = class htmlManipulation {
         const format = animeEntry.format
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
-        const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
-
+        const progress = 302
+        
         var endDate
         animeEntry.endDate.year == null
         ? endDate = '?'
         : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
-
-        var episodes
-        animeEntry.episodes == null
-        ? episodes = animeEntry.nextAiringEpisode.episode - 1
-        : episodes = animeEntry.episodes
+        
+        var title = this.getTitle(animeEntry)
+        const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
+        var episodes = this.getEpisodes(animeEntry)
 
         // display infos
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
-        document.getElementById('page-anime-duration').innerHTML = (duration + ' Ep/Min')
+        document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
         document.getElementById('page-anime-episodes').innerHTML = episodes
@@ -316,7 +300,13 @@ module.exports = class htmlManipulation {
             anime_titles_div.appendChild(h2)
         })
 
-        // episodes
+        // continue watching episode
+        /* const continue_div = document.getElementById('page-anime-continue')
+        var continue_episode_div = this.createEpisode(progress, banner)
+        continue_episode_div.classList.add('episode-continue')
+        continue_div.appendChild(continue_episode_div) */
+
+        // episodes list
         const episodes_list_div = document.getElementById('page-anime-episodes-list')
         
         for(let i=0; i<episodes; i++) {
@@ -367,7 +357,11 @@ module.exports = class htmlManipulation {
         // hide modal page
         document.getElementById('anime-page').style.display = 'none'
         document.getElementById('anime-page-shadow-background').style.display = 'none'
-        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+        
+        // enable body scrolling only if main search container isn't enabled
+        if(document.getElementById('main-search-list-container').style.display == 'none') {
+            document.getElementsByTagName('body')[0].style.overflow = 'auto' 
+        }
 
         // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
@@ -416,5 +410,25 @@ module.exports = class htmlManipulation {
         ) return true
         
         return false
-    } 
+    }
+
+    getTitle(animeEntry) {
+        var title
+        animeEntry.title.english == null
+        ? title = animeEntry.title.romaji
+        : title = animeEntry.title.english
+
+        return title
+    }
+
+    getEpisodes(animeEntry) {
+        var episodes
+        animeEntry.episodes == null
+        ? (animeEntry.nextAiringEpisode == null
+           ? episodes = '?'
+           : episodes = animeEntry.nextAiringEpisode.episode - 1)
+        : episodes = animeEntry.episodes
+
+        return episodes
+    }
 }

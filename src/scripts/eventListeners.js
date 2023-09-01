@@ -26,19 +26,24 @@ document.getElementById('page-anime-search-button').addEventListener('click', (e
 // main search bar listeners
 var searchMainDiv = document.getElementById('main-search-list-container')
 var searchMainButton = document.getElementById('search-main-button')
+var searchMainButtonIcon = document.querySelector('#search-main-button i')
 var searchMainInput = document.getElementById('search-main-input')
+var body = document.getElementsByTagName('body')[0]
 
 searchMainButton.addEventListener('click', (event) => {
-    /* searchMainDiv.style.display == 'none'
-    ? searchMainDiv.style.display = 'flex'
-    : searchMainDiv.style.display = 'none' */
-
     if (searchMainDiv.style.display == 'none') {
         searchMainDiv.style.display = 'flex'
-        document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+        searchMainButton.classList.add('active')
+
+        body.style.overflow = 'hidden'
+        searchMainInput.focus()
     } else {
         searchMainDiv.style.display = 'none'
-        document.getElementsByTagName('body')[0].style.overflow = 'auto'
+        searchMainButton.classList.remove('active')
+        
+        body.style.overflow = 'auto'
+        searchMainInput.value = ''
+        frontend.clearSearchedAnimes()
     }
 })
 
