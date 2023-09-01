@@ -708,7 +708,7 @@ main section .anime-list-wrapper {
     main section .anime-list {
         float: left;
         width: max-content;
-        gap: 20px;
+        /* gap: 10px; */
         display: flex;
         flex-direction: row;
     }
@@ -717,6 +717,7 @@ main section .anime-list-wrapper {
             width: 212px;
             height: min-content;
             position: relative;
+            padding: 10px;
             border: 2px solid transparent;
             border-radius: var(--border-radius);
             z-index: 2;
@@ -725,7 +726,8 @@ main section .anime-list-wrapper {
         }
         
         main section .anime-list .anime-entry:hover {
-            
+            background-color: var(--color-2);
+            border: 2px solid var(--color-3);
         }
         
         main section .anime-list .anime-entry .content {
