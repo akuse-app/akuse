@@ -9,11 +9,14 @@ const clientData = require('../modules/clientData.js')
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
-// OAuth is completed, so load the page with all the elements
+/**
+ * OAuth is completed, so load the page with all the elements
+ * 
+ */
 ipcRenderer.on('load-page-elements', async (event, token) => {
     const viewerId = await anilist.getViewerId(token)
     
-    const userInfo = await anilist.getUserInfo(token, viewerId)
+    const viewerInfo = await anilist.getViewerInfo(token, viewerId)
     const entryFeatured = await anilist.getTrendingAnimes()
     const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
@@ -24,7 +27,7 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     
-    frontend.displayUserAvatar(userInfo)
+    frontend.displayViewerAvatar(viewerInfo)
     frontend.displayFeaturedAnime(entryFeatured.media[0])
     frontend.displayUserAnimeSection(entriesCurrent, 'current')
     frontend.displayGenreAnimeSection(entriesTrending, 'trending')

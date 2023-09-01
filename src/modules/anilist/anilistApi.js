@@ -3,6 +3,11 @@
 const Requests = require ('../requests.js')
 
 module.exports = class AniListAPI extends Requests {
+
+    /**
+     * @constructor
+     * @param {*} clientData 
+     */
     constructor(clientData) {
         super()
         this.clientData = clientData
@@ -57,6 +62,12 @@ module.exports = class AniListAPI extends Requests {
         `
     }
 
+    /**
+     * Retrieves the access token for the api
+     * 
+     * @param {*} currentUrl 
+     * @returns access token
+     */
     async getAccessToken(currentUrl) {
         const code = currentUrl.searchParams.get("code")
 
@@ -74,6 +85,12 @@ module.exports = class AniListAPI extends Requests {
         return respData.access_token
     }
     
+    /**
+     * Gets the anilist viewer (user) id
+     * 
+     * @param {*} token 
+     * @returns viewer id
+     */
     async getViewerId(token) {
         const headers = {
             'Authorization': 'Bearer ' + token,
@@ -95,7 +112,14 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Viewer.id
     }
 
-    async getUserInfo(token, viewerId) {
+    /**
+     * Gets the viewer (user) info
+     * 
+     * @param {*} token 
+     * @param {*} viewerId 
+     * @returns object with viewer info
+     */
+    async getViewerInfo(token, viewerId) {
         const headers = {
             'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json',
@@ -124,6 +148,14 @@ module.exports = class AniListAPI extends Requests {
         return respData.data
     }
 
+    /**
+     * Gets a viewer list (current, completed...)
+     * 
+     * @param {*} token 
+     * @param {*} viewerId 
+     * @param {*} status 
+     * @returns object with anime entries
+     */
     async getViewerList(token, viewerId, status) {
         const headers = {
             'Authorization': 'Bearer ' + token,
@@ -191,6 +223,12 @@ module.exports = class AniListAPI extends Requests {
         console.log(" -> " + JSON.stringify(respData))
     }
 
+    /**
+     * Gets the info from an anime
+     * 
+     * @param {*} animeId 
+     * @returns object with anime info
+     */
     async getAnimeInfo(animeId) {
         var query = `
             query ($id: Int) {
@@ -210,6 +248,11 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Media
     }
 
+    /**
+     * Gets the current trending animes on anilist
+     * 
+     * @returns object with trending animes
+     */
     async getTrendingAnimes() {
         var query = `
         {
@@ -232,6 +275,11 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Page
     }
 
+    /**
+     * Gets the current most popular animes on anilist
+     * 
+     * @returns object with most popular animes
+     */
     async getMostPopularAnimes() {
         var query = `
         {
@@ -254,6 +302,12 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Page
     }
 
+    /**
+     * Gets the current trending animes filtered by a genre
+     * 
+     * @param {*} genre 
+     * @returns object with animes entries filtered by genre
+     */
     async getAnimesByGenre(genre) {
         var query = `
         {
@@ -276,6 +330,12 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Page
     }
 
+    /**
+     * Gets anime entries from a search query
+     * 
+     * @param {*} input 
+     * @returns object with searched animes
+     */
     async getSearchedAnimes(input) {
         var query = `
         {

@@ -6,6 +6,10 @@ const Video = require('./video')
 const clientData = require ('../clientData.js')
 
 module.exports = class htmlManipulation {
+
+    /**
+     * @constructor
+     */
     constructor() {
         this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
@@ -26,7 +30,12 @@ module.exports = class htmlManipulation {
         }
     }
 
-    displaySearchedAnimes(entries) {
+    /**
+     * Displays a div with the searched animes
+     * 
+     * @param {*} animeEntries 
+     */
+    displaySearchedAnimes(animeEntries) {
         this.clearSearchedAnimes()
 
         var anime_list_div = document.getElementById('main-search-list')
@@ -35,8 +44,8 @@ module.exports = class htmlManipulation {
         var scroller = document.createElement('div')
         scroller.classList.add('scroller')
 
-        Object.keys(entries).forEach(key => {
-            anime_entry_div = this.appendSearchAnimeEntry(entries[key])
+        Object.keys(animeEntries).forEach(key => {
+            anime_entry_div = this.createSearchAnimeEntry(animeEntries[key])
             anime_entry_div.classList.add('show')
             
             anime_list_div.appendChild(anime_entry_div)
@@ -45,11 +54,20 @@ module.exports = class htmlManipulation {
         scroller.appendChild(anime_entry_div)
     }
 
+    /**
+     * Clears the div with the searched animes
+     */
     clearSearchedAnimes() {
         document.getElementById('main-search-list').innerHTML = ''
     }
 
-    appendSearchAnimeEntry(animeEntry) {
+    /**
+     * Creates the div for the anime entry
+     * 
+     * @param {*} animeEntry 
+     * @returns anime entry DOM element
+     */
+    createSearchAnimeEntry(animeEntry) {
         const animeId = animeEntry.id
         const cover = animeEntry.coverImage.extraLarge
         const seasonYear = animeEntry.seasonYear
@@ -129,7 +147,12 @@ module.exports = class htmlManipulation {
 
         return entry_div
     }
-
+    
+    /**
+     * Trigger for displaying the anime modal page opened from the main search section
+     * 
+     * @param {*} event 
+     */
     triggerMainSearchAnime(event) {
         if(!(event.target.classList.contains('search-entry'))) {
             const entry = event.target.closest('.search-entry')
@@ -141,35 +164,46 @@ module.exports = class htmlManipulation {
         }
     }
 
-    displayUserAnimeSection(entries, section) {
-        var anime_list_div = document.getElementById(section)
+    /**
+     * Displays an anime section (with anime entries from viewer lists)
+     * 
+     * @param {*} entries 
+     * @param {*} list the viewer list (current, completed...)
+     */
+    displayUserAnimeSection(entries, list) {
+        var anime_list_div = document.getElementById(list)
         Object.keys(entries).forEach(key => {
-            var anime_entry_div = this.appendSectionAnimeEntry(entries[key].media, key)
+            var anime_entry_div = this.createAnimeSectionEntry(entries[key].media, key)
             anime_list_div.appendChild(anime_entry_div)
         })
     }
 
-    displayGenreAnimeSection(entries, section) {
-        var anime_list_div = document.getElementById(section)
+    /**
+     * Displays an anime section (with anime entries from genres)
+     * 
+     * @param {*} entries
+     * @param {*} genre
+     */
+    displayGenreAnimeSection(entries, genre) {
+        var anime_list_div = document.getElementById(genre)
         Object.keys(entries.media).forEach(key => {
-            var anime_entry_div = this.appendSectionAnimeEntry(Object.values(entries.media)[key], key)
+            var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
             anime_list_div.appendChild(anime_entry_div)
         })
     }
 
-    appendSectionAnimeEntry(animeEntry, key) {
-        let anime_entry_div = this.createAnimeEntry(animeEntry, key)
-        
-        anime_entry_div.classList.add('show')
-        return anime_entry_div
-    }
-
-    createAnimeEntry(animeEntry) {
+    /**
+     * Creates the anime section entry div
+     * 
+     * @param {*} animeEntry 
+     * @returns anime entry DOM element
+     */
+    createAnimeSectionEntry(animeEntry) {
         const animeId = animeEntry.id
         const animeName = animeEntry.title.english
         /* const progress = animeEntry.progress */
         const cover = animeEntry.coverImage.extraLarge
-        
+
         var episodes = this.getEpisodes(animeEntry)
     
         let anime_entry_div = document.createElement('div')
@@ -199,9 +233,16 @@ module.exports = class htmlManipulation {
         anime_entry_div.appendChild(anime_entry_content)
         /* anime_entry_div.classList.add('fade-in') */
         
+        anime_entry_div.classList.add('show')
+
         return anime_entry_div
     }
 
+    /**
+     * Displays the featured anime
+     * 
+     * @param {*} animeEntry
+     */
     displayFeaturedAnime(animeEntry) {
         const id = animeEntry.id
         var title = this.getTitle(animeEntry)
@@ -227,10 +268,20 @@ module.exports = class htmlManipulation {
         document.getElementById('featured-content').classList.add('show')
     }
 
-    displayUserAvatar(userInfo) {
+    /**
+     * Displays the viewer avatar
+     * 
+     * @param {*} userInfo 
+     */
+    displayViewerAvatar(userInfo) {
         document.getElementById('user-icon').src = userInfo.User.avatar.large
     }
 
+    /**
+     * Trigger for displaying the anime modal page opened from an anime section
+     * 
+     * @param {*} event 
+     */
     triggerAnimeEntry(event) {
         if(!(event.target.classList.contains('anime-entry'))) {
             const entry = event.target.closest('.anime-entry')
@@ -242,7 +293,11 @@ module.exports = class htmlManipulation {
         }
     }
 
-    // display the anime modal page
+    /**
+     * Displays the anime modal page
+     * 
+     * @param {*} animeId 
+     */
     async displayAnimePage(animeId) {
         // show modal page
         document.getElementById('anime-page').style.display = 'flex'
@@ -300,11 +355,8 @@ module.exports = class htmlManipulation {
             anime_titles_div.appendChild(h2)
         })
 
-        // continue watching episode
-        /* const continue_div = document.getElementById('page-anime-continue')
-        var continue_episode_div = this.createEpisode(progress, banner)
-        continue_episode_div.classList.add('episode-continue')
-        continue_div.appendChild(continue_episode_div) */
+        // resume
+        anilist.getViewerList()
 
         // episodes list
         const episodes_list_div = document.getElementById('page-anime-episodes-list')
@@ -319,40 +371,9 @@ module.exports = class htmlManipulation {
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
     }
 
-    // create the episode div, provided with unique id
-    createEpisode(i, banner) {
-        let episode_div = document.createElement('div')
-        episode_div.classList.add('episode')
-        episode_div.id = 'episode-' + (i+1)
-        episode_div.style.backgroundImage = `url(${banner})`
-
-        let episode_content_div = document.createElement('div')
-        episode_content_div.classList.add('content')
-        
-        let h3 = document.createElement('h3')
-        h3.innerHTML = 'Episode ' + (i+1)
-
-        episode_content_div.appendChild(h3)
-        episode_div.appendChild(episode_content_div)
-
-        episode_div.classList.add('show-episode')
-
-        return episode_div
-    }
-
-    triggerEpisode(event) {
-        if(!(event.target.classList.contains('episode'))) {
-            const entry = event.target.closest('.episode')
-            if(entry) {
-                this.video.displayVideo(entry.id.slice(8))
-            }
-        } else {
-            this.video.displayVideo(event.target.id.slice(8))
-        }
-    }
-
-
-    // close the anime modal page
+    /**
+     * Closes and clears the anime modal page
+     */
     closeAnimePage() {
         // hide modal page
         document.getElementById('anime-page').style.display = 'none'
@@ -380,25 +401,54 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-meanScore').innerHTML = ""
     }
 
-    // search bar (NOT WORKING)
-    /* searchWithBar() {
-        var txtValue;
-        var input = document.getElementById('search-bar');
-        var filter = input.value.toLowerCase().replace(/\s/g, '');
-        var items = document.getElementsByClassName('anime-title');
-        var itemsCard = document.getElementsByClassName('anime-entry')
+    /**
+     * Creates the episode div, provided with unique id
+     * 
+     * @param {*} episodeNumber
+     * @param {*} banner
+     * @returns episode div DOM element
+     */
+    createEpisode(episodeNumber, banner) {
+        let episode_div = document.createElement('div')
+        episode_div.classList.add('episode')
+        episode_div.id = 'episode-' + (episodeNumber+1)
+        episode_div.style.backgroundImage = `url(${banner})`
 
-        Object.keys(items).forEach( key => {
-            txtValue = items[key].textContent || a.innerText;
-            if (txtValue.toLowerCase().replace(/\s/g, '').indexOf(filter) > -1) {
-                itemsCard[key].style.display = "";
-            } else {
-                itemsCard[key].style.display = "none";
+        let episode_content_div = document.createElement('div')
+        episode_content_div.classList.add('content')
+        
+        let h3 = document.createElement('h3')
+        h3.innerHTML = 'Episode ' + (episodeNumber+1)
+
+        episode_content_div.appendChild(h3)
+        episode_div.appendChild(episode_content_div)
+        episode_div.classList.add('show-episode')
+
+        return episode_div
+    }
+
+    /**
+     * Trigger for the video played from the episode div list
+     * 
+     * @param {*} event 
+     */
+    triggerEpisode(event) {
+        if(!(event.target.classList.contains('episode'))) {
+            const entry = event.target.closest('.episode')
+            if(entry) {
+                this.video.displayVideo(entry.id.slice(8))
             }
-        })
-    } */
+        } else {
+            this.video.displayVideo(event.target.id.slice(8))
+        }
+    }
 
-    // checks if an element is in viewport
+    /**
+     * Checks if an DOM element is in viewport
+     * 
+     * @param {*} element 
+     * @returns 
+     */
     isInViewport(element) {
         var bounding = element.getBoundingClientRect()
     
@@ -412,6 +462,12 @@ module.exports = class htmlManipulation {
         return false
     }
 
+    /**
+     * Gets the anime title (english or romaji)
+     * 
+     * @param {*} animeEntry 
+     * @returns title
+     */
     getTitle(animeEntry) {
         var title
         animeEntry.title.english == null
@@ -421,6 +477,12 @@ module.exports = class htmlManipulation {
         return title
     }
 
+    /**
+     * Gets the anime episodes number from 'episodes' or 'nextAiringEpisode'
+     * 
+     * @param {*} animeEntry 
+     * @returns episodes number
+     */
     getEpisodes(animeEntry) {
         var episodes
         animeEntry.episodes == null

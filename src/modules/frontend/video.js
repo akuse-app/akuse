@@ -4,6 +4,10 @@ const Hls = require('hls.js')
 const AnimeSaturn = require('../providers/animesaturn')
 
 module.exports = class Video {
+
+    /**
+     * @constructor
+     */
     constructor() {
         this.cons = new AnimeSaturn()
 
@@ -13,7 +17,12 @@ module.exports = class Video {
         this.videoTitle = document.getElementById('video-title')
         this.videoEpisode = document.getElementById('video-episode')
     }
-
+    
+    /**
+     * Displays and plays the episode video
+     * 
+     * @param {*} episode 
+     */
     async displayVideo(episode) {
         const title = document.getElementById('page-anime-title').innerHTML
 
@@ -24,10 +33,9 @@ module.exports = class Video {
             anime_titles_div[key]
         })
 
+        /* console.log('titles: ' + animeTitles)
+        console.log('playground: ') */
 
-        console.log('titles: ' + animeTitles)
-
-        console.log('playground: ')
         var i = 0
         do {
             var videoSource = await this.cons.getEpisodeUrl(animeTitles[i], episode)
@@ -44,45 +52,60 @@ module.exports = class Video {
         this.videoElement.play()
     }
 
-    // TO DO: remove this function
-    async getVideoSource(title, episode) {
-        return await this.cons.getEpisodeUrl(title, episode)
-    }
-
+    /**
+     * While watching, plays the next episode
+     * 
+     * @returns if you are watching the last episode
+     */
     async nextEpisode() {
-        if(this.episodeElementAdd() == -1) {
+        if(this.episodeElementIncrease() == -1) {
             console.warn('This is the last episode, You can\'t go any further!')
             return
         }
 
-        var videoSource = await this.getVideoSource(this.videoTitle.innerHTML,
-                                                    this.getEpisodeIdFromTitle())
+        var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
+                                                        this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource)
         this.videoElement.play()
     }
 
+    /**
+     * While watching, plays the previous episode
+     * 
+     * @returns if you are watching the first episode
+     */
     async previousEpisode() {
-        if(this.episodeElementSubstract() == -1) {
+        if(this.episodeElementDecrease() == -1) {
             console.warn('This is the first episode, You can\'t go back any further!')
             return
         }
 
-        var videoSource = await this.getVideoSource(this.videoTitle.innerHTML,
-                                                    this.getEpisodeIdFromTitle())
+        var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
+                                                        this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource)
         this.videoElement.play()
     }
 
-    // temporary HD m3u8 file porter until Consumet API isn't upddated
+    /**
+     * Temporary HD m3u8 file porter
+     * @deprecated
+     * @param {*} videoSource 
+     * @returns video source in HD
+     */
     toHD(videoSource) {
         return videoSource.slice(0, -13) + '720p/playlist_720p.m3u8'
     }
 
-    episodeElementAdd() {
+    /**
+     * Increases the episode in the video controls title
+     * 
+     * @returns -1 if you are watching the last episode
+     */
+    episodeElementIncrease() {
         const episodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
         
         if(this.getEpisodeIdFromTitle() !== episodes) {
@@ -92,7 +115,12 @@ module.exports = class Video {
         }
     }
     
-    episodeElementSubstract() {
+    /**
+     * Decreases the episode in the video controls title
+     * 
+     * @returns -1 if you are watching the first episode
+     */
+    episodeElementDecrease() {
         if (this.getEpisodeIdFromTitle() !== 1) {
             this.videoEpisode.innerHTML = this.videoEpisode.innerHTML.slice(0, 8) + parseInt(this.getEpisodeIdFromTitle() - 1)
         } else {
@@ -100,11 +128,20 @@ module.exports = class Video {
         }
     }
 
+    /**
+     * Gets the episode id from the video controls title
+     * 
+     * @returns episode id
+     */
     getEpisodeIdFromTitle() {
         return parseInt(this.videoEpisode.innerHTML.slice(8))
     }
 
-    // given the m3u8 file source, play the video and put fullscreen
+    /**
+     * Given the m3u8 video source, puts the source in the video
+     * 
+     * @param {*} videoSource 
+     */
     putSource(videoSource) {
         var hls = new Hls()
         
@@ -115,13 +152,13 @@ module.exports = class Video {
         } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
             this.videoElement.src = videoSource
             this.container.style.display = 'block'
-            /* this.videoElement.addEventListener('loadedmetadata',function() {
-                this.fullscreenAndPlay(this.videoElement)
-            }) */
         }
     }
 
-    // put fullscreen and change the icon
+    /**
+     * Puts fullscreen and plays the video
+     * @deprecated
+     */
     fullscreenAndPlay(video) {
         const fullScreenBtn = container.querySelector(".fullscreen i")
 
