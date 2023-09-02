@@ -8,6 +8,13 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/aleganza/akuse)
 ![Static Badge](https://img.shields.io/badge/status-developing-828DFD)
 
+<p align="center">
+    <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
+    <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
+    <img alt="top-language" src="https://img.shields.io/github/languages/top/aleganza/akuse"> 
+    <img alt="status-developing" src="https://img.shields.io/badge/status-developing-828DFD">
+</p>
+
 <img title="img" alt="img" src="https://i.imgur.com/lb8Foob.png">
 
 ## Running locally for development
@@ -18,7 +25,7 @@ Start cloning Akuse:
 git clone https://github.com/aleganza/akuse.git
 ```
 
-Next, go to [This link](https://anilist.co/settings/developer) and create a new AniList API Client.
+Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
 As Redirect URL, you can insert http://localhost:9009/logged and it should work.
 Now go inside the src/modules folder and create a cliendData.js file with a structure like this:
 
