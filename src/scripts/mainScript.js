@@ -27,7 +27,7 @@ ipcRenderer.on('load-page-elements', async (event, token) => {
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     
-    /* frontend.removeLoadingPage() */
+    frontend.removeLoadingPage()
 
     frontend.displayViewerAvatar(viewerInfo)
     frontend.displayFeaturedAnime(entryFeatured.media[0])

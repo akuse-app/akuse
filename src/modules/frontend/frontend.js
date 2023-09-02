@@ -310,10 +310,6 @@ module.exports = class htmlManipulation {
      * @param {*} animeId 
      */
     async displayAnimePage(animeId) {
-        // show modal page
-        document.getElementById('anime-page').style.display = 'flex'
-        document.getElementById('anime-page-shadow-background').style.display = 'flex'
-        
         // get infos
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
@@ -376,6 +372,10 @@ module.exports = class htmlManipulation {
             let episode_div = this.createEpisode(i, banner)
             episodes_list_div.appendChild(episode_div)
         }
+
+        // show modal page
+        document.getElementById('anime-page').style.display = 'flex'
+        document.getElementById('anime-page-shadow-background').style.display = 'flex'
 
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
