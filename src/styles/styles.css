@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --color-1: #15141f;
-    --color-2: #262437;
-    --color-3: #3C3855;
+    --color-1: #12141E;
+    --color-2: #292E3E;
+    --color-3: #393f55;
+    --color-nav: #07060B;
     --color-darker: rgba(0, 0, 0, 0.8);
     
     --font-1: #fffdff;
@@ -12,7 +13,7 @@
     --font-weight: 600;
     --border-radius: 5px;
     --transition: 0.1s ease-out;
-    --shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
 
 /* Scrollbar */
@@ -59,7 +60,9 @@ img {
 
 html,
 body {
-    background-color: var(--color-1);
+    /* background-color: var(--color-1); */
+    background: var(--color-2);
+    background: radial-gradient(circle, var(--color-2) 12%, var(--color-1) 100%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;
@@ -167,6 +170,18 @@ body {
         filter: brightness(80%)
     } */
 
+#loading-page {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: var(--color-2);
+    background: radial-gradient(circle, var(--color-2) 12%, var(--color-1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: 9999;
+    transition: var(--transition);
+}
+
 .nav-wrapper {
     position: fixed;
     display: flex;
@@ -175,18 +190,17 @@ body {
     justify-content: center;
     width: 100%;
     z-index: 19;
+    background-color: transparent;
+    transition: 0.2s ease-out;
 }
 
 nav#nav-main {
+    width: calc(100% - 100px);
     z-index: 19;
-    width: 1000px;
-    height: 56px;
+    margin: 0 50px;
+    height: 70px;
     display: flex;
-    padding: 0 20px;
-    background-color: var(--color-1);
-    border: 2px solid var(--color-1);
     border-radius: var(--border-radius);
-    transition: 0.2s ease-out;
 }
 
     nav#nav-main ul {
@@ -200,7 +214,7 @@ nav#nav-main {
         nav#nav-main ul li {
             font-size: 1.3rem;
             display: inline;
-            color: var(--font-2);
+            color: var(--font-1);
             font-weight: var(--font-weight);
             padding: 10px 20px 10px 0;
             cursor: pointer;
@@ -208,11 +222,9 @@ nav#nav-main {
         }
 
         nav#nav-main ul li.active {
-            color: var(--font-1);
         }
 
         nav#nav-main ul li:hover {
-            color: var(--font-1);
         }
         
         nav#nav-main ul li:active {
@@ -235,7 +247,7 @@ nav#nav-main {
 
             nav .right .user-icon img {
                 width: 40px;
-                border-radius: var(--border-radius);
+                border-radius: 1000px;
             }
 
 .search-main-container {
@@ -361,7 +373,7 @@ main {
     color: var(--font-1);
     width: 100%;
     height: 100%; /* da levare */
-    padding-top: 60px;
+    padding-top: 80px;
 }
 
 main .featured {
@@ -391,7 +403,7 @@ main .featured .featured-container .featured-left{
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 15px;
+        gap: 10px;
         height: 100%;
         padding-left: 100px;
         font-weight: var(--font-weight);
@@ -430,7 +442,15 @@ main .featured .featured-container .featured-left{
         cursor: pointer;
         transition: var(--transition);
     }
+    
+    main .featured button:hover {
+        transform: scale(1.05);
+    }
 
+    main .featured button:active {
+        transform: scale(1);
+    }
+    
 main .featured .featured-container .featured-shadow {
     width: 10%;
     z-index: 4;
@@ -734,12 +754,15 @@ main section .anime-list-wrapper {
             border-radius: var(--border-radius);
             z-index: 2;
             cursor: pointer;
-            transition: var(--transition);
+            transition: 0.2s ease-out;
         }
         
         main section .anime-list .anime-entry:hover {
-            background-color: var(--color-2);
-            border: 2px solid var(--color-3);
+            transform: scale(1.05);
+        }
+
+        main section .anime-list .anime-entry:active {
+            transform: scale(1);
         }
         
         main section .anime-list .anime-entry .content {
@@ -804,7 +827,7 @@ main section .anime-list-wrapper {
   top: 0;
   left: 0;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
+  z-index: 900;
   transition: var(--transition);
 }
 .container.fullscreen{

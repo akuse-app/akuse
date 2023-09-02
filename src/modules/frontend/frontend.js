@@ -36,6 +36,11 @@ module.exports = class htmlManipulation {
         }
     }
 
+    removeLoadingPage() {
+        document.getElementById('loading-page').style.opacity = 0;
+        document.getElementById('loading-page').style.display = 'none';
+    }
+
     /**
      * Displays a div with the searched animes
      * 
@@ -239,7 +244,7 @@ module.exports = class htmlManipulation {
         anime_entry_div.appendChild(anime_entry_content)
         /* anime_entry_div.classList.add('fade-in') */
         
-        anime_entry_div.classList.add('show')
+        /* anime_entry_div.classList.add('show') */
 
         return anime_entry_div
     }

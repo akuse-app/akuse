@@ -53,7 +53,7 @@ searchMainInput.addEventListener('input', async (event) => {
 })
 
 // navbar translating
-var lastScroll = 0
+/* var lastScroll = 0
 var nav = document.getElementById('nav-main')
 var shadow = getComputedStyle(document.documentElement).getPropertyValue('--shadow');
 
@@ -61,15 +61,34 @@ document.addEventListener("scroll", (event) => {
     var scroll = window.scrollY
 
         if(scroll > lastScroll && lastScroll === 0) {
-            /* console.log("attiva") */
             setTimeout(() => {
                 nav.style.marginTop = '15px'
                 nav.style.boxShadow = shadow
             }, 100)
         } else if(scroll === 0 && lastScroll !== 0){
-            /* console.log("disattiva") */
             nav.style.marginTop = '0px'
             nav.style.boxShadow = 'none'
+        }
+    
+    lastScroll = scroll
+}); */
+
+// navbar background changing
+var lastScroll = 0
+var nav = document.getElementById('nav-wrapper')
+var color = getComputedStyle(document.documentElement).getPropertyValue('--color-nav');
+
+document.addEventListener("scroll", (event) => {
+    var scroll = window.scrollY
+
+        if(scroll > lastScroll && lastScroll === 0) {
+            /* console.log("attiva") */
+            setTimeout(() => {
+                nav.style.backgroundColor = color
+            }, 100)
+        } else if(scroll === 0 && lastScroll !== 0){
+            /* console.log("disattiva") */
+            nav.style.backgroundColor = 'transparent'
         }
     
     lastScroll = scroll
