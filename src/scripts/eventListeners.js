@@ -29,6 +29,8 @@ var searchMainButton = document.getElementById('search-main-button')
 var searchMainButtonIcon = document.querySelector('#search-main-button i')
 var searchMainInput = document.getElementById('search-main-input')
 var body = document.getElementsByTagName('body')[0]
+var main = document.getElementsByClassName('body-container')[0]
+var nav = document.getElementById('nav-main')
 
 searchMainButton.addEventListener('click', (event) => {
     if (searchMainDiv.style.display == 'none') {
@@ -36,20 +38,28 @@ searchMainButton.addEventListener('click', (event) => {
         searchMainButton.classList.add('active')
 
         body.style.overflow = 'hidden'
+        main.style.paddingRight = '10px' // TO DO TODO fare modulo nuovo
         searchMainInput.focus()
     } else {
         searchMainDiv.style.display = 'none'
         searchMainButton.classList.remove('active')
         
         body.style.overflow = 'auto'
+        main.style.paddingRight = '0'
         searchMainInput.value = ''
         frontend.clearSearchedAnimes()
     }
 })
 
+var typingTimer
+var doneTypingInterval = 250
+
 searchMainInput.addEventListener('input', async (event) => {
-    const searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
-    frontend.displaySearchedAnimes(searchEntries)
+    clearTimeout(typingTimer)
+    typingTimer = setTimeout(async () => {
+        let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
+        frontend.displaySearchedAnimes(searchEntries)
+    }, doneTypingInterval)
 })
 
 // navbar translating

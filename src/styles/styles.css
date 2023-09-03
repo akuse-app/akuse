@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900;9..40,1000&display=swap');
 
 :root {
     --color-1: #12141E;
@@ -38,8 +38,7 @@
 
 * {
     margin: 0;
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'DM Sans', sans-serif;
 
     /* everything unselectable */
     -moz-user-select: -moz-none;
@@ -218,19 +217,17 @@ nav#nav-main {
             display: inline;
             color: var(--font-1);
             font-weight: var(--font-weight);
-            padding: 10px 20px 10px 0;
+            padding: 10px 40px 10px 0;
             cursor: pointer;
             transition: var(--transition);
         }
 
-        nav#nav-main ul li.active {
-        }
-
         nav#nav-main ul li:hover {
+            transform: scale(1.05);
         }
         
         nav#nav-main ul li:active {
-            transform: scale(0.95);
+            transform: scale(1);
         }
         
     nav#nav-main .right {
@@ -259,7 +256,7 @@ nav#nav-main {
     padding: 0 20px 15px 20px;
     background-color: var(--color-2);
     border: 2px solid var(--color-3);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: var(--border-radius);
     transition: var(--transition);
 }
 
@@ -363,7 +360,7 @@ nav#nav-main {
                 font-size: 1rem;
                 color: var(--font-2);
                 display: -webkit-box;
-                -webkit-line-clamp: 6;
+                -webkit-line-clamp: 5;
                 -webkit-box-orient: vertical;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -395,7 +392,7 @@ main .featured .featured-container {
 main .featured .featured-container .featured-left{
     height: 100%;
     margin-left: 50px;
-    width: 30%;
+    width: 40%;
     z-index: 3;
     background-color: var(--color-darker);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
@@ -405,9 +402,9 @@ main .featured .featured-container .featured-left{
         display: flex;
         flex-direction: column;
         justify-content: center;
-        gap: 10px;
+        gap: 20px;
         height: 100%;
-        padding-left: 100px;
+        padding-left: 50px;
         font-weight: var(--font-weight);
     }
     
@@ -429,6 +426,15 @@ main .featured .featured-container .featured-left{
     main .featured .anime-info,
     main .featured .anime-genres {
         color: var(--font-2);
+    }
+    
+    main .featured .anime-description {
+        color: var(--font-1);
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     main .featured button {
@@ -460,7 +466,7 @@ main .featured .featured-container .featured-shadow {
 }
 
 main .featured .featured-container .featured-right{
-    width: 60%;
+    width: 50%;
     z-index: 3;
     background-color: transparent;
 }
@@ -872,6 +878,7 @@ main section .anime-list-wrapper {
   margin: 0 20px;
   cursor: pointer;
 }
+
 .video-timeline .progress-area{
   height: 3px;
   position: relative;

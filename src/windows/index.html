@@ -10,11 +10,6 @@
 </head>
 <body>
     <div class="body-container">
-        <!-- <div id="login-page">
-            <img src="https://github.com/aleganza/akuse/blob/main/assets/img/akuse-logo.png?raw=true" alt="akuse-logo">
-            <button id="login-button">Login</button>
-        </div> -->
-
         <div id="loading-page" style="opacity: 1; display: flex">
             <div class="loadingio-spinner-ellipsis-b7o0rh0sc5k"><div class="ldio-uzltpu0y1z">
             <div></div><div></div><div></div><div></div><div></div></div></div>
@@ -73,16 +68,19 @@
         <div id="nav-wrapper" class="nav-wrapper">
             <nav id="nav-main">
                 <ul>
-                    <li class="active">Home</li>
-                    <li>Browse Animes</li>
-                    <li>My List</li>
+                    <li>
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </li>
+                    <li  id="search-main-button">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Search
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-list-ul"></i>
+                        My List
+                    </li>
                     <div class="right">
-                        <li id="search-main-button">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-gear"></i>
-                        </li>
                         <div class="user-icon">
                             <img id="user-icon" src="" alt="user-icon">
                         </div>
@@ -119,7 +117,8 @@
                                     
                                 </div>
                             </div>
-                            <div id="featured-anime-genres" class="anime-genres"></div>
+                            <!-- <div id="featured-anime-genres" class="anime-genres"></div> -->
+                            <div id="featured-anime-description" class="anime-description"></div>
                             <button id="featured-anime-button-">Go to the page</button>
                         </div>
                     </div>

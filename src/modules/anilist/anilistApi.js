@@ -11,7 +11,7 @@ module.exports = class AniListAPI extends Requests {
 
     /**
      * @constructor
-     * @param {*} clientData 
+     * @param {*} clientData
      */
     constructor(clientData) {
         super()
@@ -22,8 +22,10 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
-        this.mediaData =
+        this.mediaDataSmall = `
+
         `
+        this.mediaData = `
             id
             title {
                 romaji
@@ -179,7 +181,14 @@ module.exports = class AniListAPI extends Requests {
                             mediaId
                             progress
                             media {
-                                ${this.mediaData}
+                                id
+                                title {
+                                    romaji
+                                    english
+                                }
+                                coverImage {
+                                    extraLarge
+                                }
                             }
                         }
                     }
@@ -323,7 +332,14 @@ module.exports = class AniListAPI extends Requests {
                     hasNextPage
                 }
                 media(genre: "${genre}", sort: TRENDING_DESC, type: ANIME) {
-                    ${this.mediaData}
+                    id
+                    title {
+                        romaji
+                        english
+                    }
+                    coverImage {
+                        extraLarge
+                    }
                 }
             } 
         }

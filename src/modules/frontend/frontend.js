@@ -211,11 +211,8 @@ module.exports = class htmlManipulation {
      */
     createAnimeSectionEntry(animeEntry) {
         const animeId = animeEntry.id
-        const animeName = animeEntry.title.english
-        /* const progress = animeEntry.progress */
+        const animeName = this.getTitle(animeEntry)
         const cover = animeEntry.coverImage.extraLarge
-
-        var episodes = this.getEpisodes(animeEntry)
     
         let anime_entry_div = document.createElement('div')
         anime_entry_div.classList.add('anime-entry')
@@ -260,23 +257,26 @@ module.exports = class htmlManipulation {
         const episodes = animeEntry.episodes
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
-        const genres = animeEntry.genres
-        var anime_genres_div = document.getElementById('featured-anime-genres')
+        /* const genres = animeEntry.genres */
+        var description = (animeEntry.description).split(/\r?\n/).filter(line => line.trim() !== '').join('\n') // remove epmpy lines
         
         document.querySelectorAll('button[id^="featured-anime-button-"]')[0].id += id
         document.getElementById('featured-anime-title').innerHTML = title
-        document.getElementById('featured-anime-year').innerHTML = startYear
+        document.getElementById('featured-anime-year').innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
+        document.getElementById('featured-anime-year').innerHTML += startYear
         document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
-    
+        document.getElementById('featured-anime-description').innerHTML = description
+        document.getElementById('featured-img').src = banner
+        
+        document.getElementById('featured-content').classList.add('show')
+        
+        /* var anime_genres_div = document.getElementById('featured-anime-genres')
         Object.keys(genres).forEach( (key) => {
             anime_genres_div.innerHTML += genres[key]
             if(parseInt(key) < Object.keys(genres).length - 1) {
                 anime_genres_div.innerHTML += " • "
             }
-        })
-    
-        document.getElementById('featured-img').src = banner
-        document.getElementById('featured-content').classList.add('show')
+        }) */
     }
 
     /**

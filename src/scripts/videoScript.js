@@ -116,15 +116,7 @@ document.addEventListener("click", e => {
 })
 
 fullScreenBtn.addEventListener("click", () => {
-    container.classList.toggle("fullscreen")
-    if(document.fullscreenElement) {
-        fullScreenBtn.classList.replace("fa-compress", "fa-expand")
-
-        return document.exitFullscreen()
-    }
-    
-    fullScreenBtn.classList.replace("fa-expand", "fa-compress")
-    container.requestFullscreen()
+    toggleFullScreen()
 })
 
 exitBtn.addEventListener("click", () => {
@@ -145,13 +137,31 @@ speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-sec
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
 
+function videoIsDisplayed() {
+    if(container.style.display == 'block')
+        return true
+
+    return false
+}
+
+function toggleFullScreen() {
+    if(document.fullscreenElement) {
+        fullScreenBtn.classList.replace("fa-compress", "fa-expand")
+        
+        return document.exitFullscreen()
+    }
+    
+    container.classList.toggle("fullscreen")
+    fullScreenBtn.classList.replace("fa-expand", "fa-compress")
+    container.requestFullscreen()
+}
 
 document.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) {
         return
     }
     
-    if(container.style.display == 'block') {
+    if(videoIsDisplayed()) {
         if(event.keyCode === 32) {
             mainVideo.paused ? mainVideo.play() : mainVideo.pause()
         } else if(event.keyCode === 37) {
@@ -165,5 +175,33 @@ document.addEventListener("keydown", (event) => {
             mainVideo.volume -= 0.1
             volumeSlider.value = mainVideo.volume
         }
+
+        switch(event.keyCode) {
+            case 32: {
+                mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+            }
+            case 37: {
+                mainVideo.currentTime -= 5
+            }
+            case 38: {
+                mainVideo.volume += 0.1
+                volumeSlider.value = mainVideo.volume
+            }
+            case 39: {
+                mainVideo.currentTime += 5
+            }
+            case 40: {
+                mainVideo.volume -= 0.1
+                volumeSlider.value = mainVideo.volume
+            }
+            case 122: {
+                toggleFullScreen()
+            }
+        }
     }
+})
+
+// fullscreen when double click
+mainVideo.addEventListener('dblclick', (event) => {
+    toggleFullScreen()
 })
