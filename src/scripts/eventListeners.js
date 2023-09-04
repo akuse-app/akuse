@@ -7,11 +7,6 @@ const clientData = require('../modules/clientData.js')
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
-// dynamic animes search bar (NOT WORKING)
-/* addEventListener("input", (event) => {
-    frontend.searchWithBar()
-}) */
-
 // dynamic episodes search bar (NOT WORKING)
 document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
     var input = document.getElementById('page-anime-search-input')

@@ -13,12 +13,12 @@ const frontend = new Frontend()
  * OAuth is completed, so load the page with all the elements
  * 
  */
-ipcRenderer.on('load-page-elements', async (event, token) => {
-    const viewerId = await anilist.getViewerId(token)
+ipcRenderer.on('load-page-elements', async (event) => {
+    const viewerId = await anilist.getViewerId()
     
-    const viewerInfo = await anilist.getViewerInfo(token, viewerId)
+    const viewerInfo = await anilist.getViewerInfo(viewerId)
     const entryFeatured = await anilist.getTrendingAnimes()
-    const entriesCurrent = await anilist.getViewerList(token, viewerId, 'CURRENT')
+    const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
     const entriesMostPopular = await anilist.getMostPopularAnimes()
     const entriesAdventure = await anilist.getAnimesByGenre("Adventure")

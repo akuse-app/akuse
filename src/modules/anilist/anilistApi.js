@@ -1,6 +1,9 @@
 'use strict'
 
+const Store = require('electron-store')
 const Requests = require ('../requests.js')
+
+const store = new Store()
 
 /**
  * Authentication and queries with AniList API
@@ -22,9 +25,11 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
-        this.mediaDataSmall = `
-
-        `
+        this.authHeaders = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
         this.mediaData = `
             id
             title {
@@ -77,7 +82,6 @@ module.exports = class AniListAPI extends Requests {
      */
     async getAccessToken(currentUrl) {
         const code = currentUrl.searchParams.get("code")
-
         const url = "https://anilist.co/api/v2/oauth/token"
         const data = {
             'grant_type': 'authorization_code',
@@ -98,13 +102,7 @@ module.exports = class AniListAPI extends Requests {
      * @param {*} token 
      * @returns viewer id
      */
-    async getViewerId(token) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
+    async getViewerId() {
         var query = `
             query {
                 Viewer {
@@ -114,7 +112,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
 
         return respData.data.Viewer.id
     }
@@ -126,13 +124,7 @@ module.exports = class AniListAPI extends Requests {
      * @param {*} viewerId 
      * @returns object with viewer info
      */
-    async getViewerInfo(token, viewerId) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
+    async getViewerInfo(viewerId) {
         var query = `
             query($userId : Int) {
                 User(id: $userId, sort: ID) {
@@ -150,7 +142,7 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
 
         return respData.data
     }
@@ -163,13 +155,7 @@ module.exports = class AniListAPI extends Requests {
      * @param {*} status 
      * @returns object with anime entries
      */
-    async getViewerList(token, viewerId, status) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
+    async getViewerList(viewerId, status) {
         var query = `
             query($userId : Int) {
                 MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME) {
@@ -201,19 +187,13 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
 
         return respData.data.MediaListCollection.lists[0].entries
     }
 
     // NOT WORKING
-    async getFollowingUsers(token, viewerId) {
-        const headers = {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
+    async getFollowingUsers(viewerId) {
         var query = `
             query($userId : Int) {
                 User(id: $userId, sort: ID) {
@@ -231,7 +211,7 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
 
         console.log(typeof respData.data)
         console.log(" -> " + JSON.stringify(respData))

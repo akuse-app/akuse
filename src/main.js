@@ -3,9 +3,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
+const Store = require('electron-store');
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
+
+const store = new Store();
 
 let authWin
 let mainWin
@@ -55,7 +58,8 @@ const createWindow = () => {
         
         mainWin.webContents.on('did-finish-load', () => {
             authWin.close()
-            mainWin.webContents.send('load-page-elements', token)
+            store.set('access_token', token)
+            mainWin.webContents.send('load-page-elements')
         })
     })
 }
