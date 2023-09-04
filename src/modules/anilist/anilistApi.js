@@ -175,6 +175,12 @@ module.exports = class AniListAPI extends Requests {
                                 coverImage {
                                     extraLarge
                                 }
+                                episodes
+                                nextAiringEpisode {
+                                    id
+                                    airingAt
+                                    episode
+                                }
                             }
                         }
                     }

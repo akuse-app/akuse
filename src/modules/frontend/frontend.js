@@ -181,14 +181,23 @@ module.exports = class htmlManipulation {
      * @param {*} entries 
      * @param {*} list the viewer list (current, completed...)
      */
-    displayUserAnimeSection(entries, list) {
+    displayUserAnimeSection(entries, list, needProgressBar) {
         var anime_list_div = document.getElementById(list)
         Object.keys(entries).forEach(key => {
-            var anime_entry_div = this.createAnimeSectionEntry(entries[key].media, key)
+            var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
+
+            if(needProgressBar) {
+                this.appendProgressBar(
+                    anime_entry_div.getElementsByClassName('anime-cover')[0],
+                    parseInt(this.getEpisodes(entries[key].media)),
+                    parseInt(entries[key].progress)
+                )
+            }
+
             anime_list_div.appendChild(anime_entry_div)
         })
     }
-
+    
     /**
      * Displays an anime section (with anime entries from genres)
      * 
@@ -202,7 +211,29 @@ module.exports = class htmlManipulation {
             anime_list_div.appendChild(anime_entry_div)
         })
     }
+    
+    /**
+     * Appends a bar above the anime cover showing the user progress (in anime sections)
+     * 
+     * @param {*} div 
+     * @param {*} episodes 
+     * @param {*} progress 
+     */
+    appendProgressBar(div, episodes, progress) {
+        var progressWidth = 100 * progress / episodes
+        
+        let bar_div = document.createElement('div')
+        bar_div.classList.add('bar')
 
+        let progress_bar_div = document.createElement('div')
+        progress_bar_div.classList.add('progress-bar')
+        progress_bar_div.style.width = (progressWidth + '%')
+        console.log(progress_bar_div.style.width)
+
+        div.appendChild(bar_div)
+        div.appendChild(progress_bar_div)
+    }
+    
     /**
      * Creates the anime section entry div
      * 
@@ -218,29 +249,27 @@ module.exports = class htmlManipulation {
         anime_entry_div.classList.add('anime-entry')
         
         anime_entry_div.id = ('anime-entry-' + animeId)
-    
-        let anime_cover_div = document.createElement('img')
+
+        let anime_cover_div = document.createElement('div')
         anime_cover_div.classList.add('anime-cover')
-        anime_cover_div.src = cover
-        anime_cover_div.alt = 'cover'
+
+        let anime_cover_img = document.createElement('img')
+        anime_cover_img.src = cover
+        anime_cover_img.alt = 'cover'
+        anime_cover_div.appendChild(anime_cover_img)
     
         let anime_title_div = document.createElement('div')
         anime_title_div.classList.add('anime-title')
         anime_title_div.innerHTML = animeName
-    
-        /* let anime_progress_div = document.createElement('div')
-        anime_progress_div.classList.add('anime-progress')
-        anime_progress_div.innerHTML = `${progress} / ${episodes}` */
-    
+        
         let anime_entry_content = document.createElement('div')
         anime_entry_content.classList.add('content')
         anime_entry_content.appendChild(anime_title_div)
-        /* anime_entry_content.appendChild(anime_progress_div) */
         
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
+
         /* anime_entry_div.classList.add('fade-in') */
-        
         /* anime_entry_div.classList.add('show') */
 
         return anime_entry_div
@@ -324,7 +353,6 @@ module.exports = class htmlManipulation {
         const format = animeEntry.format
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
-        const progress = 302
         
         var endDate
         animeEntry.endDate.year == null

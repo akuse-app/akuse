@@ -4,6 +4,7 @@
     --color-1: #12141E;
     --color-2: #292E3E;
     --color-3: #393f55;
+    --color-important: #F5B6E3;
     --color-nav: #07060B;
     --color-darker: rgba(0, 0, 0, 0.8);
     
@@ -785,8 +786,33 @@ main section .anime-list-wrapper {
             border-radius: 0 0 var(--border-radius) var(--border-radius);
             z-index: 3;
         }
+
+        main section .anime-list .anime-entry .anime-cover {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        main section .anime-list .anime-entry .anime-cover .bar,
+        main section .anime-list .anime-entry .anime-cover .progress-bar {
+            height: 10px;
+            position: absolute;
+            bottom: 0;
+            margin-bottom: 4px;
+        }
+
+        main section .anime-list .anime-entry .anime-cover .bar {
+            width: 100%;
+            background-color: var(--color-3);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        main section .anime-list .anime-entry .anime-cover .progress-bar {
+            background-color: var(--color-important);
+            border-radius: 0 0 0 var(--border-radius);
+        }
         
-        main section .anime-list .anime-entry img.anime-cover {
+        main section .anime-list .anime-entry .anime-cover img {
             width: 212px;
             height: 300px;
             object-fit: cover;
@@ -1147,16 +1173,3 @@ main section .anime-list-wrapper {
     display: none;
   }
 }
-
-/* @media only screen and (max-width:1850px), 
-       only screen and (max-height:850px) {
-
-    main .anime-page {
-        width: 1200px;
-        height: 700px;
-    }
-    
-    main .anime-page .content .page-anime-left img#page-anime-cover {
-        height: 300px;
-    }
-} */

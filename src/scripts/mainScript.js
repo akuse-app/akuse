@@ -31,7 +31,7 @@ ipcRenderer.on('load-page-elements', async (event) => {
 
     frontend.displayViewerAvatar(viewerInfo)
     frontend.displayFeaturedAnime(entryFeatured.media[0])
-    frontend.displayUserAnimeSection(entriesCurrent, 'current')
+    frontend.displayUserAnimeSection(entriesCurrent, 'current', true)
     frontend.displayGenreAnimeSection(entriesTrending, 'trending')
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular')
     frontend.displayGenreAnimeSection(entriesAdventure, 'adventure')
