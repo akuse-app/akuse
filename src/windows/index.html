@@ -65,29 +65,31 @@
 
         <!-- NAVBAR + MAIN SEARCH BAR -->
 
-        <div id="nav-wrapper" class="nav-wrapper">
-            <nav id="nav-main">
-                <ul>
-                    <li>
-                        <i class="fa-solid fa-house"></i>
-                        Home
-                    </li>
-                    <li  id="search-main-button">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        Search
-                    </li>
-                    <li>
-                        <i class="fa-solid fa-list-ul"></i>
-                        My List
-                    </li>
-                    <div class="right">
-                        <div class="user">
-                            <div id="user-name">Welcome back, </div>
-                            <img id="user-icon" src="" alt="user-icon">
+        <div class="nav-container">
+            <div id="nav-wrapper" class="nav-wrapper">
+                <nav id="nav-main">
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-house"></i>
+                            Home
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-ul"></i>
+                            My List
+                        </li>
+                        <li  id="search-main-button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Search
+                        </li>
+                        <div class="right">
+                            <div class="user">
+                                <div id="user-name">Welcome back, </div>
+                                <img id="user-icon" src="" alt="user-icon">
+                            </div>
                         </div>
-                    </div>
-                </ul>
-            </nav>
+                    </ul>
+                </nav>
+            </div>
             <div id="main-search-list-container" class="search-main-container" style="display: none">
                 <div id="search-main">
                     <div class="input-container">
@@ -142,11 +144,19 @@
                                     <div class="page-anime-left">
                                         <img id="page-anime-cover" src="/assets/img/cover.png" alt="">
                                         <div class="anime-episodes">
-                                            <h4>Episodes</h4>
+                                            <h4>Your progress</h4>
                                             <h3 id="page-anime-episodes"></h3>
                                         </div>
+                                        <div class="anime-user-score">
+                                            <h4>Your score</h4>
+                                            <h3 id="page-anime-user-score"></h3>
+                                        </div>
+                                        <div class="anime-user-status">
+                                            <h4>Your list</h4>
+                                            <h3 id="page-anime-user-status"></h3>
+                                        </div>
                                         <div class="anime-status">
-                                            <h4>Status</h4>
+                                            <h4>Anime status</h4>
                                             <h3 id="page-anime-status"></h3>
                                         </div>
                                         <div class="anime-startDate">
@@ -183,8 +193,20 @@
                                                         <i class="fa-regular fa-star"></i> <span id="page-anime-meanScore"></span>
                                                     </div>
                                                 </div>
-                                                <ul id="page-anime-genres" class="anime-genres">
-                                                </ul>
+                                                <!-- <ul id="page-anime-genres" class="anime-genres">
+                                                </ul> -->
+                                                <div id="page-anime-user-stats" class="user-stats">
+                                                    <div class="list-changer">
+                                                        <div id="add">
+                                                            <i class="fa-solid fa-plus"></i>
+                                                            Add to your list
+                                                        </div>
+                                                        <!-- <div id="already">
+                                                            <i class="fa-solid fa-check"></i>
+                                                            In list
+                                                        </div> -->
+                                                    </div>
+                                                </div>
                                                 <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
                                                     Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.
                                                 </div>

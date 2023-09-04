@@ -131,8 +131,12 @@ mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pau
 mainVideo.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())
 skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
 skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
-nextEpisodeBtn.addEventListener("click", async () => await video.nextEpisode())
-previousEpisodeBtn.addEventListener("click", async () => await video.previousEpisode())
+nextEpisodeBtn.addEventListener("click", async () => {
+    await video.nextEpisode()
+})
+previousEpisodeBtn.addEventListener("click", async () => {
+    await video.previousEpisode()
+})
 speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-section"))
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))

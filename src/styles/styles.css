@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900;9..40,1000&display=swap');
 
 :root {
-    --color-1: #12141E;
-    --color-2: #292E3E;
-    --color-3: #393f55;
-    --color-important: #F5B6E3;
-    --color-nav: #07060B;
+    --color-1: #222222;
+    --color-2: #3d3d3d;
+    --color-3: #535353;
+    --color-important: #26A4FF;
+    --color-nav: #0f0f0f;
     --color-darker: rgba(0, 0, 0, 0.8);
     
     --font-1: #fffdff;
-    --font-2: rgb(156, 162, 182);
+    --font-2: rgb(179, 179, 179);
     
     --font-weight: 600;
     --border-radius: 5px;
@@ -62,7 +62,7 @@ html,
 body {
     /* background-color: var(--color-1); */
     background: var(--color-2);
-    background: radial-gradient(circle, var(--color-2) 12%, var(--color-1) 100%);
+    background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;
@@ -71,6 +71,7 @@ body {
 
 body {
     overflow: auto;
+    /* display: flex; */
 }
 
 /* fade-in animation when elements are on view */
@@ -102,9 +103,8 @@ body {
 }
 
 .show-page {
-    animation: fadeInPageAnimation 0.4s ease-out;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @keyframes fadeInPageAnimation {
@@ -177,11 +177,15 @@ body {
     align-items: center;
     position: fixed;
     background: var(--color-2);
-    background: radial-gradient(circle, var(--color-2) 12%, var(--color-1) 100%);
+    background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     z-index: 9999;
     transition: var(--transition);
+}
+
+.nav-container {
+    width: 100%;
 }
 
 .nav-wrapper {
@@ -259,7 +263,10 @@ nav#nav-main {
 .search-main-container {
     z-index: 19;
     width: 1000px;
+    position: fixed;
     flex-direction: column;
+    margin: auto;
+    margin-top: 60px;
     padding: 0 20px 15px 20px;
     background-color: var(--color-2);
     border: 2px solid var(--color-3);
@@ -528,7 +535,7 @@ main .anime-page {
     height: 800px;
     border-radius: var(--border-radius);
     background: var(--color-2);
-    background: radial-gradient(circle, var(--color-2) 12%, var(--color-1) 100%);
+    background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -552,7 +559,7 @@ main .anime-page {
     main .anime-page .content .page-anime-left {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
     }
 
     main .anime-page .content .page-anime-left h4 {
@@ -678,7 +685,32 @@ main .anime-page {
             margin-right: 8px;
             box-shadow: var(--shadow);
         }
-    
+
+        main .anime-page .content .page-anime-right .user-stats {
+            
+        }
+
+        main .anime-page .content .page-anime-right .user-stats .list-changer {
+            width: max-content;
+            font-size: 1.2rem;
+            font-weight: var(--font-weight);
+            color: var(--color-important);
+            text-transform: uppercase;
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px solid var(--color-important);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        main .anime-page .content .page-anime-right .user-stats .list-changer:hover {
+            filter: brightness(1.2);
+        }
+        
+        main .anime-page .content .page-anime-right .user-stats .list-changer:active {
+            filter: brightness(1);
+        }
+
     .page-anime-right-scroller {
         margin-right: 30px;
         height: 750px;
@@ -768,7 +800,6 @@ main section .anime-list-wrapper {
             height: min-content;
             position: relative;
             padding: 10px;
-            border: 2px solid transparent;
             border-radius: var(--border-radius);
             z-index: 2;
             cursor: pointer;
@@ -804,18 +835,19 @@ main section .anime-list-wrapper {
             height: 10px;
             position: absolute;
             bottom: 0;
-            margin-bottom: 4px;
+            margin: 10px;
+            /* margin-bottom: 4px; */
+            border-radius: var(--border-radius);
         }
 
         main section .anime-list .anime-entry .anime-cover .bar {
-            width: 100%;
-            background-color: var(--color-3);
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            width: calc(100% - 20px);
+            background-color: var(--color-darker);
+            box-shadow: var(--shadow);
         }
 
         main section .anime-list .anime-entry .anime-cover .progress-bar {
             background-color: var(--color-important);
-            border-radius: 0 0 0 var(--border-radius);
         }
         
         main section .anime-list .anime-entry .anime-cover img {

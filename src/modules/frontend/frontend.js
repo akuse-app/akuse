@@ -72,6 +72,23 @@ module.exports = class htmlManipulation {
         document.getElementById('main-search-list').innerHTML = ''
     }
 
+    openMainSearchBar() {
+        var searchMainDiv = document.getElementById('main-search-list-container')
+        var searchMainInput = document.getElementById('search-main-input')
+
+        searchMainDiv.style.display = 'flex'
+        searchMainInput.focus()
+    }
+
+    closeMainSearchBar() {
+        var searchMainDiv = document.getElementById('main-search-list-container')
+        var searchMainInput = document.getElementById('search-main-input')
+
+        searchMainDiv.style.display = 'none'
+        searchMainInput.value = ''
+        this.clearSearchedAnimes()
+    }
+
     /**
      * Creates the div for the anime entry
      * 
@@ -227,8 +244,7 @@ module.exports = class htmlManipulation {
 
         let progress_bar_div = document.createElement('div')
         progress_bar_div.classList.add('progress-bar')
-        progress_bar_div.style.width = (progressWidth + '%')
-        console.log(progress_bar_div.style.width)
+        progress_bar_div.style.width = `calc(${progressWidth}% - 20px)`
 
         div.appendChild(bar_div)
         div.appendChild(progress_bar_div)
@@ -364,6 +380,10 @@ module.exports = class htmlManipulation {
         const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
         var episodes = this.getEpisodes(animeEntry)
 
+        var userStatus = this.getUserStatus(animeEntry)
+        var score = this.getScore(animeEntry)
+        var progress = this.getProgress(animeEntry)
+
         // display infos
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
@@ -371,18 +391,20 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
-        document.getElementById('page-anime-episodes').innerHTML = episodes
+        document.getElementById('page-anime-episodes').innerHTML = (progress + ' / ' + episodes)
+        document.getElementById('page-anime-user-score').innerHTML = (score + ' / 10')
+        document.getElementById('page-anime-user-status').innerHTML = userStatus
         document.getElementById('page-anime-status').innerHTML = status
         document.getElementById('page-anime-startDate').innerHTML = startDate
         document.getElementById('page-anime-endDate').innerHTML = endDate
         document.getElementById('page-anime-cover').src = cover
         
-        var anime_genres_ul = document.getElementById('page-anime-genres')
+        /* var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
             var anime_genres_li = document.createElement('li')
             anime_genres_li.innerHTML += genres[key]
             anime_genres_ul.appendChild(anime_genres_li)
-        })
+        }) */
 
         var anime_titles_div = document.getElementById('page-anime-titles')
         Object.keys(animeTitles).forEach( (key) => {
@@ -390,9 +412,6 @@ module.exports = class htmlManipulation {
             h2.innerHTML = animeTitles[key]
             anime_titles_div.appendChild(h2)
         })
-
-        // resume
-        anilist.getViewerList()
 
         // episodes list
         const episodes_list_div = document.getElementById('page-anime-episodes-list')
@@ -421,19 +440,21 @@ module.exports = class htmlManipulation {
         
         // enable body scrolling only if main search container isn't enabled
         if(document.getElementById('main-search-list-container').style.display == 'none') {
-            document.getElementsByTagName('body')[0].style.overflow = 'auto' 
+            document.getElementsByTagName('body')[0].style.overflow = 'auto'
         }
 
         // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
         document.getElementById('page-anime-description').innerHTML = ""
+        document.getElementById('page-anime-cover').src = ""
+        /* document.getElementById('page-anime-genres').innerHTML = "" */
+        document.getElementById('page-anime-episodes-list').innerHTML = ""
+        document.getElementById('page-anime-episodes').innerHTML = ""
+        document.getElementById('page-anime-user-score').innerHTML = ""
+        document.getElementById('page-anime-user-status').innerHTML = ""
         document.getElementById('page-anime-status').innerHTML = ""
         document.getElementById('page-anime-startDate').innerHTML = ""
         document.getElementById('page-anime-endDate').innerHTML = ""
-        document.getElementById('page-anime-cover').src = ""
-        document.getElementById('page-anime-genres').innerHTML = ""
-        document.getElementById('page-anime-episodes-list').innerHTML = ""
-        document.getElementById('page-anime-episodes').innerHTML = ""
         document.getElementById('page-anime-titles').innerHTML = ""
         document.getElementById('page-anime-seasonYear').innerHTML = ""
         document.getElementById('page-anime-format').innerHTML = ""
@@ -532,5 +553,50 @@ module.exports = class htmlManipulation {
         : episodes = animeEntry.episodes
 
         return episodes
+    }
+
+    /**
+     * Gets the anime user status
+     * 
+     * @param {*} animeEntry 
+     * @returns user status
+     */
+    getUserStatus(animeEntry) {
+        var userStatus 
+        animeEntry.mediaListEntry == null
+        ? userStatus = 'Not in list'
+        : userStatus = animeEntry.mediaListEntry.status
+
+        return userStatus
+    }
+
+    /**
+     * Gets the user anime score
+     * 
+     * @param {*} animeEntry 
+     * @returns anime score
+     */
+    getScore(animeEntry) {
+        var score
+        animeEntry.mediaListEntry == null
+        ? score = 0
+        : score = animeEntry.mediaListEntry.score
+
+        return score
+    }
+
+    /**
+     * Gets the user anime progress
+     * 
+     * @param {*} animeEntry 
+     * @returns anime progress
+     */
+    getProgress(animeEntry) {
+        var progress
+        animeEntry.mediaListEntry == null
+        ? progress = 0
+        : progress = animeEntry.mediaListEntry.progress
+
+        return progress
     }
 }

@@ -25,24 +25,20 @@ var searchMainButtonIcon = document.querySelector('#search-main-button i')
 var searchMainInput = document.getElementById('search-main-input')
 var body = document.getElementsByTagName('body')[0]
 var main = document.getElementsByClassName('body-container')[0]
+var navContainer = document.getElementsByClassName('nav-container')[0]
 var nav = document.getElementById('nav-main')
 
 searchMainButton.addEventListener('click', (event) => {
     if (searchMainDiv.style.display == 'none') {
-        searchMainDiv.style.display = 'flex'
-        searchMainButton.classList.add('active')
-
-        body.style.overflow = 'hidden'
-        main.style.paddingRight = '10px' // TO DO TODO fare modulo nuovo
-        searchMainInput.focus()
+        frontend.openMainSearchBar()
     } else {
-        searchMainDiv.style.display = 'none'
-        searchMainButton.classList.remove('active')
-        
-        body.style.overflow = 'auto'
-        main.style.paddingRight = '0'
-        searchMainInput.value = ''
-        frontend.clearSearchedAnimes()
+        frontend.closeMainSearchBar()
+    }
+})
+
+document.addEventListener("scroll", (event) => {
+    if(searchMainDiv.style.display == 'flex') {
+        frontend.closeMainSearchBar()
     }
 })
 
@@ -56,27 +52,6 @@ searchMainInput.addEventListener('input', async (event) => {
         frontend.displaySearchedAnimes(searchEntries)
     }, doneTypingInterval)
 })
-
-// navbar translating
-/* var lastScroll = 0
-var nav = document.getElementById('nav-main')
-var shadow = getComputedStyle(document.documentElement).getPropertyValue('--shadow');
-
-document.addEventListener("scroll", (event) => {
-    var scroll = window.scrollY
-
-        if(scroll > lastScroll && lastScroll === 0) {
-            setTimeout(() => {
-                nav.style.marginTop = '15px'
-                nav.style.boxShadow = shadow
-            }, 100)
-        } else if(scroll === 0 && lastScroll !== 0){
-            nav.style.marginTop = '0px'
-            nav.style.boxShadow = 'none'
-        }
-    
-    lastScroll = scroll
-}); */
 
 // navbar background changing
 var lastScroll = 0

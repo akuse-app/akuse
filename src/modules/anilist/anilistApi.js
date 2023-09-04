@@ -70,6 +70,11 @@ module.exports = class AniListAPI extends Requests {
                 airingAt
                 episode
             }
+            mediaListEntry {
+                status
+                score(format:POINT_10)
+                progress
+            }
             siteUrl
         `
     }
@@ -243,8 +248,8 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
-
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        console.log(respData.data.Media)
         return respData.data.Media
     }
 
@@ -371,4 +376,8 @@ module.exports = class AniListAPI extends Requests {
 
         return respData.data.Page.media
     }
+
+    /* MUTATIONS */
+
+    
 }
