@@ -224,11 +224,11 @@ nav#nav-main {
         }
 
         nav#nav-main ul li:hover {
-            transform: scale(1.05);
+            color: var(--color-important)
         }
         
         nav#nav-main ul li:active {
-            transform: scale(1);
+            transform: scale(0.95);
         }
         
     nav#nav-main .right {
@@ -238,14 +238,20 @@ nav#nav-main {
         margin-left: auto;
     }
 
-        nav#nav-main .right .user-icon {
-            /* display: flex;
-            align-items: center;
-            justify-content: center; */
+        nav#nav-main .right .user {
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px
         }
 
-            nav .right .user-icon img {
+            nav .right .user #user-name {
+                color: var(--font-2);
+                font-size: 1.1rem;
+            }
+
+            nav .right .user img {
                 width: 40px;
                 border-radius: 1000px;
             }
@@ -1082,11 +1088,11 @@ main section .anime-list-wrapper {
   100% { transform: translate(148px,80px) scale(0); }
  }
  @keyframes ldio-uzltpu0y1z-c {
-    0% { background: var(--color-2) }
-   25% { background: var(--color-2) }
-   50% { background: var(--color-2) }
-   75% { background: var(--color-2) }
-  100% { background: var(--color-2) }
+    0% { background: var(--color-important) }
+   25% { background: var(--color-important) }
+   50% { background: var(--color-important) }
+   75% { background: var(--color-important) }
+  100% { background: var(--color-important) }
  }
  .ldio-uzltpu0y1z div {
    position: absolute;
@@ -1098,21 +1104,21 @@ main section .anime-list-wrapper {
    animation: ldio-uzltpu0y1z 1.282051282051282s infinite cubic-bezier(0,0.5,0.5,1);
  }
  .ldio-uzltpu0y1z div:nth-child(1) {
-   background: var(--color-1);
+   background: var(--color-important);
    transform: translate(148px,80px) scale(1);
    animation: ldio-uzltpu0y1z-r 0.3205128205128205s infinite cubic-bezier(0,0.5,0.5,1), ldio-uzltpu0y1z-c 1.282051282051282s infinite step-start;
  }.ldio-uzltpu0y1z div:nth-child(2) {
    animation-delay: -0.3205128205128205s;
-   background: var(--color-1);
+   background: var(--color-important);
  }.ldio-uzltpu0y1z div:nth-child(3) {
    animation-delay: -0.641025641025641s;
-   background: var(--color-1);
+   background: var(--color-important);
  }.ldio-uzltpu0y1z div:nth-child(4) {
    animation-delay: -0.9615384615384615s;
-   background: var(--color-1);
+   background: var(--color-important);
  }.ldio-uzltpu0y1z div:nth-child(5) {
    animation-delay: -1.282051282051282s;
-   background: var(--color-1);
+   background: var(--color-important);
  }
  .loadingio-spinner-ellipsis-b7o0rh0sc5k {
    width: 200px;
