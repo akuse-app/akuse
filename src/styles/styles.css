@@ -10,6 +10,7 @@
     
     --font-1: #fffdff;
     --font-2: rgb(179, 179, 179);
+    --font-2-transparent: rgba(179, 179, 179, 0.507);
     
     --font-weight: 600;
     --border-radius: 5px;
@@ -882,332 +883,126 @@ main section .anime-list-wrapper {
     height: 100%;
 }
 
-.container, .video-controls, .video-timer, .options{
+.container, .video-controls, .video-timer, .options {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.container{
-    display: none; /* turning block */
+.container {
+    display: block; /* turning block */
     width: 100%;
     height: 100%;
     max-width: 100%;
-  max-height: 100%;
-  user-select: none;
-  overflow: hidden;
-  border-radius: 5px;
-  background: #000;
-  aspect-ratio: 16 / 9;
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  z-index: 900;
-  transition: var(--transition);
+    max-height: 100%;
+    user-select: none;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #000;
+    aspect-ratio: 16 / 9;   
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    transition: var(--transition);
 }
-.container.fullscreen{
-  max-width: 100%;
-  width: 100%;
-  height: 100vh;
-  border-radius: 0px;
-}
-
-.wrapper{
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  opacity: 0;
-  bottom: -15px;
-  transition: all 0.08s ease;
-}
-.container.show-controls .wrapper{
-  opacity: 1;
-  bottom: 0;
-  transition: all 0.13s ease;
-}
-.wrapper::before{
-  content: "";
-  bottom: 0;
-  width: 100%;
-  z-index: -1;
-  position: absolute;
-  height: calc(100% + 35px);
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-}
-.video-timeline{
-  height: 7px;
-  width: calc(100% - 40px);
-  margin: 0 20px;
-  cursor: pointer;
-}
-
-.video-timeline .progress-area{
-  height: 3px;
-  position: relative;
-  background: rgba(255, 255, 255, 0.6);
-}
-.progress-area span{
-  position: absolute;
-  left: 50%;
-  top: -25px;
-  font-size: 13px;
-  color: #fff;
-  pointer-events: none;
-  transform: translateX(-50%);
-}
-.progress-area .progress-bar{
-  width: 0%;
-  height: 100%;
-  position: relative;
-  background: var(--font-1);
-}
-.progress-bar::before{
-  content: "";
-  right: 0;
-  top: 50%;
-  height: 13px;
-  width: 13px;
-  position: absolute;
-  border-radius: 50%;
-  background: var(--font-1);
-  transform: translateY(-50%);
-}
-.progress-bar::before, .progress-area span{
-  display: none;
-}
-.video-timeline:hover .progress-bar::before,
-.video-timeline:hover .progress-area span{
-  display: block;
-}
-
-.video-controls .info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: center;
-    text-align: center;
+.container.fullscreen {
+    max-width: 100%;
     width: 100%;
-    color: var(--font-1);
+    height: 100vh;
+    border-radius: 0px;
+}
+
+.wrapper button {
+    color: var(--font-2-transparent);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.wrapper button:hover {
+    color: var(--font-2);
+}
+
+.wrapper {
+    width: calc(100% - 80px);
+    height: calc(100% - 80px);
+    display: flex;
+    position: relative;
+    margin: 40px;
+    border: 1px solid red;
+    box-shadow: inset ;
+}
+
+.wrapper .up-controls .center {
+    margin: auto;
+}
+
+.wrapper .up-controls .right {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.wrapper .up-controls {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    top: 0;
+    color: white;
+    border: 1px solid green;
+}
+
+.wrapper .up-controls .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-weight: var(--font-weight);
 }
 
-.video-controls .info .title {
-    color: var(--font-1);
-    font-size: 1rem;
+.wrapper .up-controls .info .title {
+    font-size: 3rem;
 }
 
-.video-controls .info .episode {
+.wrapper .up-controls .info .episode {
     color: var(--font-2);
-    font-size: 0.8rem;
+    font-size: 2rem;
 }
 
-.wrapper .video-controls{
-  padding: 15px;
-}
-.video-controls .options{
-  width: 100%;
-}
-.video-controls .options:first-child{
-  justify-content: flex-start;
-}
-.video-controls .options:last-child{
-  justify-content: flex-end;
-}
-.options button{
-  height: 40px;
-  width: 40px;
-  font-size: 19px;
-  border: none;
-  cursor: pointer;
-  background: none;
-  color: #efefef;
-  border-radius: 3px;
-  transition: all 0.3s ease;
-}
-.options button :where(i, span) {
-    height: 100%;
+.wrapper .mid-controls {
     width: 100%;
-    line-height: 40px;
-    transition: var(--transition)
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+    color: white;
+    border: 1px solid green;
 }
 
-.options button:hover :where(i, span){
-    transform: scale(1.3);
+.wrapper .mid-controls button {
+    font-size: 6rem;
 }
 
-.options button:active :where(i, span){
-  transform: scale(1);
-}
-.options button span{
-  font-size: 23px;
-}
-.options input{
-  height: 4px;
-  margin-left: 3px;
-  max-width: 75px;
-  accent-color: var(--font-1);
-}
-.options input:active {
-    accent-color: var(--font-2);
-}
-.options .video-timer{
-  color: #efefef;
-  margin: 015px;
-  font-size: 14px;
-}
-.video-timer .separator{
-  margin: 0 5px;
-  font-size: 16px;
-  font-family: "Open sans";
-}
-.playback-content{
-  display: flex;
-  position: relative;
-}
-.playback-content .speed-options{
-  position: absolute;
-  list-style: none;
-  left: -40px;
-  bottom: 40px;
-  width: 95px;
-  overflow: hidden;
-  opacity: 0;
-  border-radius: 4px;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.13s ease;
-}
-.playback-content .speed-options.show-section{
-  opacity: 1;
-  pointer-events: auto;
-}
-.speed-options li{
-  cursor: pointer;
-  color: #000;
-  font-size: 14px;
-  margin: 2px 0;
-  padding: 5px 0 5px 15px;
-  transition: all 0.1s ease;
-}
-.speed-options li:where(:first-child, :last-child){
-  margin: 0px;
-}
-.speed-options li:hover{
-  background: #dfdfdf;
-}
-.speed-options li.active{
-  color: #fff;
-  background: #3e97fd;
-}
-.container video{
-  width: 100%;
+/* .wrapper .mid-controls button:hover {
+    color: var(--font-2);
+} */
+
+.wrapper .bottom-controls {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    color: white;
+    border: 1px solid green;
 }
 
-/* LOADING GIF */
-
-@keyframes ldio-uzltpu0y1z {
-    0% { transform: translate(12px,80px) scale(0); }
-   25% { transform: translate(12px,80px) scale(0); }
-   50% { transform: translate(12px,80px) scale(1); }
-   75% { transform: translate(80px,80px) scale(1); }
-  100% { transform: translate(148px,80px) scale(1); }
- }
- @keyframes ldio-uzltpu0y1z-r {
-    0% { transform: translate(148px,80px) scale(1) }
-  100% { transform: translate(148px,80px) scale(0); }
- }
- @keyframes ldio-uzltpu0y1z-c {
-    0% { background: var(--color-important) }
-   25% { background: var(--color-important) }
-   50% { background: var(--color-important) }
-   75% { background: var(--color-important) }
-  100% { background: var(--color-important) }
- }
- .ldio-uzltpu0y1z div {
-   position: absolute;
-   width: 30px;
-   height: 30px;
-   border-radius: 50%;
-   transform: translate(80px,80px) scale(1);
-   background: #6a6a6a;
-   animation: ldio-uzltpu0y1z 1.282051282051282s infinite cubic-bezier(0,0.5,0.5,1);
- }
- .ldio-uzltpu0y1z div:nth-child(1) {
-   background: var(--color-important);
-   transform: translate(148px,80px) scale(1);
-   animation: ldio-uzltpu0y1z-r 0.3205128205128205s infinite cubic-bezier(0,0.5,0.5,1), ldio-uzltpu0y1z-c 1.282051282051282s infinite step-start;
- }.ldio-uzltpu0y1z div:nth-child(2) {
-   animation-delay: -0.3205128205128205s;
-   background: var(--color-important);
- }.ldio-uzltpu0y1z div:nth-child(3) {
-   animation-delay: -0.641025641025641s;
-   background: var(--color-important);
- }.ldio-uzltpu0y1z div:nth-child(4) {
-   animation-delay: -0.9615384615384615s;
-   background: var(--color-important);
- }.ldio-uzltpu0y1z div:nth-child(5) {
-   animation-delay: -1.282051282051282s;
-   background: var(--color-important);
- }
- .loadingio-spinner-ellipsis-b7o0rh0sc5k {
-   width: 200px;
-   height: 200px;
-   display: inline-block;
-   overflow: hidden;
-   background: transparent;
- }
- .ldio-uzltpu0y1z {
-   width: 100%;
-   height: 100%;
-   position: relative;
-   transform: translateZ(0) scale(1);
-   backface-visibility: hidden;
-   transform-origin: 0 0; /* see note above */
- }
- .ldio-uzltpu0y1z div { box-sizing: content-box; }
- /* generated by https://loading.io/ */
-
-@media screen and (max-width: 540px) {
-  .wrapper .video-controls{
-    padding: 3px 10px 7px;
-  }
-  .options input, .progress-area span{
-    display: none!important;
-  }
-  .options button{
-    height: 30px;
-    width: 30px;
-    font-size: 17px;
-  }
-  .options .video-timer{
-    margin-left: 5px;
-  }
-  .video-timer .separator{
-    font-size: 14px;
-    margin: 0 2px;
-  }
-  .options button :where(i, span) {
-    line-height: 30px;
-  }
-  .options button span{
-    font-size: 21px;
-  }
-  .options .video-timer, .progress-area span, .speed-options li{
-    font-size: 12px;
-  }
-  .playback-content .speed-options{
-    width: 75px;
-    left: -30px;
-    bottom: 30px;
-  }
-  .speed-options li{
-    margin: 1px 0;
-    padding: 3px 0 3px 10px;
-  }
-  .right .pic-in-pic{
-    display: none;
-  }
+.container.show-controls .wrapper {
+    opacity: 1;
+    bottom: 0;
+    transition: all 0.13s ease;
 }
