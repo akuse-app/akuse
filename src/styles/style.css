@@ -13,7 +13,7 @@
     --font-2-transparent: rgba(179, 179, 179, 0.507);
     
     --font-weight: 600;
-    --border-radius: 5px;
+    --border-radius: 8px;
     --transition: 0.1s ease-out;
     --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
@@ -691,7 +691,9 @@ main .anime-page {
             
         }
 
-        main .anime-page .content .page-anime-right .user-stats .list-changer {
+        main .anime-page .content .page-anime-right .user-stats button.list-updater {
+            outline: none;
+            background-color: transparent;
             width: max-content;
             font-size: 1.2rem;
             font-weight: var(--font-weight);
@@ -704,11 +706,11 @@ main .anime-page {
             cursor: pointer;
         }
 
-        main .anime-page .content .page-anime-right .user-stats .list-changer:hover {
+        main .anime-page .content .page-anime-right .user-stats .list-updater:hover {
             filter: brightness(1.2);
         }
         
-        main .anime-page .content .page-anime-right .user-stats .list-changer:active {
+        main .anime-page .content .page-anime-right .user-stats .list-updater:active {
             filter: brightness(1);
         }
 

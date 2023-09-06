@@ -183,7 +183,7 @@ module.exports = class htmlManipulation {
      */
     triggerMainSearchAnime(event) {
         if(!(event.target.classList.contains('search-entry'))) {
-            const entry = event.target.closest('.search-entry')
+            var entry = event.target.closest('.search-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(19))
             }
@@ -341,7 +341,7 @@ module.exports = class htmlManipulation {
      */
     triggerAnimeEntry(event) {
         if(!(event.target.classList.contains('anime-entry'))) {
-            const entry = event.target.closest('.anime-entry')
+            var entry = event.target.closest('.anime-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(12))
             }
@@ -376,28 +376,40 @@ module.exports = class htmlManipulation {
         ? endDate = '?'
         : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
         
-        var title = this.getTitle(animeEntry)
+        const title = this.getTitle(animeEntry)
         const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
-        var episodes = this.getEpisodes(animeEntry)
+        const episodes = this.getEpisodes(animeEntry)
 
-        var userStatus = this.getUserStatus(animeEntry)
-        var score = this.getScore(animeEntry)
-        var progress = this.getProgress(animeEntry)
+        const userStatus = this.getUserStatus(animeEntry)
+        const score = this.getScore(animeEntry)
+        const progress = this.getProgress(animeEntry)
 
         // display infos
+        var list_updater_button = document.getElementById('page-anime-list-updater')
+        if(animeEntry.mediaListEntry == null) {
+            list_updater_button.innerHTML = '<i style="margin-right: 10px" class="fa-regular fa-bookmark"></i>'
+            list_updater_button.innerHTML += 'Add to your list'
+        } else {
+            list_updater_button.innerHTML = '<i style="margin-right: 10px" class="fa-solid fa-bookmark"></i>'
+            list_updater_button.innerHTML += 'In list'
+        }
+
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
-        document.getElementById('page-anime-episodes').innerHTML = (progress + ' / ' + episodes)
+        document.getElementById('page-anime-progress-episodes').innerHTML = (progress + ' / ' + episodes)
         document.getElementById('page-anime-user-score').innerHTML = (score + ' / 10')
         document.getElementById('page-anime-user-status').innerHTML = userStatus
         document.getElementById('page-anime-status').innerHTML = status
         document.getElementById('page-anime-startDate').innerHTML = startDate
         document.getElementById('page-anime-endDate').innerHTML = endDate
         document.getElementById('page-anime-cover').src = cover
+        document.getElementById('page-anime-id').innerHTML = animeId
+        document.getElementById('page-anime-progress').innerHTML = progress
+        document.getElementById('page-anime-episodes').innerHTML = episodes
         
         /* var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
@@ -414,7 +426,7 @@ module.exports = class htmlManipulation {
         })
 
         // episodes list
-        const episodes_list_div = document.getElementById('page-anime-episodes-list')
+        var episodes_list_div = document.getElementById('page-anime-episodes-list')
         
         for(let i=0; i<episodes; i++) {
             let episode_div = this.createEpisode(i, banner)
@@ -428,6 +440,10 @@ module.exports = class htmlManipulation {
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
         document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+    }
+    
+    triggerListUpdater() {
+        var list_updater_button = document.getElementById('page-anime-list-updater')
     }
 
     /**
@@ -449,13 +465,16 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-cover').src = ""
         /* document.getElementById('page-anime-genres').innerHTML = "" */
         document.getElementById('page-anime-episodes-list').innerHTML = ""
-        document.getElementById('page-anime-episodes').innerHTML = ""
+        document.getElementById('page-anime-progress-episodes').innerHTML = ""
         document.getElementById('page-anime-user-score').innerHTML = ""
         document.getElementById('page-anime-user-status').innerHTML = ""
         document.getElementById('page-anime-status').innerHTML = ""
         document.getElementById('page-anime-startDate').innerHTML = ""
         document.getElementById('page-anime-endDate').innerHTML = ""
         document.getElementById('page-anime-titles').innerHTML = ""
+        document.getElementById('page-anime-id').innerHTML = ""
+        document.getElementById('page-anime-progress').innerHTML = ""
+        document.getElementById('page-anime-episodes').innerHTML = ""
         document.getElementById('page-anime-seasonYear').innerHTML = ""
         document.getElementById('page-anime-format').innerHTML = ""
         document.getElementById('page-anime-duration').innerHTML = ""
@@ -470,15 +489,15 @@ module.exports = class htmlManipulation {
      * @returns episode div DOM element
      */
     createEpisode(episodeNumber, banner) {
-        let episode_div = document.createElement('div')
+        var episode_div = document.createElement('div')
         episode_div.classList.add('episode')
         episode_div.id = 'episode-' + (episodeNumber+1)
         episode_div.style.backgroundImage = `url(${banner})`
 
-        let episode_content_div = document.createElement('div')
+        var episode_content_div = document.createElement('div')
         episode_content_div.classList.add('content')
         
-        let h3 = document.createElement('h3')
+        var h3 = document.createElement('h3')
         h3.innerHTML = 'Episode ' + (episodeNumber+1)
 
         episode_content_div.appendChild(h3)
@@ -495,7 +514,7 @@ module.exports = class htmlManipulation {
      */
     triggerEpisode(event) {
         if(!(event.target.classList.contains('episode'))) {
-            const entry = event.target.closest('.episode')
+            var entry = event.target.closest('.episode')
             if(entry) {
                 this.video.displayVideo(entry.id.slice(8))
             }

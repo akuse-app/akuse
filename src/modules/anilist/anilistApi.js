@@ -236,8 +236,8 @@ module.exports = class AniListAPI extends Requests {
      */
     async getAnimeInfo(animeId) {
         var query = `
-            query ($id: Int) {
-                Media (id: $id, type: ANIME) {
+            query($id: Int) {
+                Media(id: $id, type: ANIME) {
                     ${this.mediaData}
                 }
             }
@@ -351,7 +351,7 @@ module.exports = class AniListAPI extends Requests {
     async getSearchedAnimes(input) {
         var query = `
         {
-            Page (page: 1, perPage: 10) {
+            Page(page: 1, perPage: 10) {
                 pageInfo {
                     total
                     currentPage
@@ -379,5 +379,23 @@ module.exports = class AniListAPI extends Requests {
 
     /* MUTATIONS */
 
-    
+    async updateAnimeProgress(animeId, progress) {
+        console.log(animeId + ' '+ progress)
+        var query = `
+        mutation($mediaId: Int, $progress: Int) {
+            SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
+                id
+                progress
+            }
+        }
+        `
+
+        var variables = {
+            "mediaId": animeId,
+            "progress": progress
+        }
+
+        const options = this.getOptions(query, variables)
+        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+    }
 }

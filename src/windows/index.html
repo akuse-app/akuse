@@ -153,7 +153,7 @@
                                         <img id="page-anime-cover" src="/assets/img/cover.png" alt="">
                                         <div class="anime-episodes">
                                             <h4>Your progress</h4>
-                                            <h3 id="page-anime-episodes"></h3>
+                                            <h3 id="page-anime-progress-episodes"></h3>
                                         </div>
                                         <div class="anime-user-score">
                                             <h4>Your score</h4>
@@ -175,9 +175,11 @@
                                             <h4>End Date</h4>
                                             <h3 id="page-anime-endDate"></h3>
                                         </div>
-                                        <div style="display: none;" id="page-anime-titles">
-                                            
-                                        </div>
+                                        <!-- store useful data -->
+                                        <div style="display: none;" id="page-anime-titles"></div>
+                                        <div style="display: none;" id="page-anime-id"></div>
+                                        <div style="display: none;" id="page-anime-progress"></div>
+                                        <div style="display: none;" id="page-anime-episodes"></div>
                                     </div>
                                     <div class="page-anime-right-scroller">
                                         <div class="page-anime-right">
@@ -204,16 +206,9 @@
                                                 <!-- <ul id="page-anime-genres" class="anime-genres">
                                                 </ul> -->
                                                 <div id="page-anime-user-stats" class="user-stats">
-                                                    <div class="list-changer">
-                                                        <div id="add">
-                                                            <i class="fa-solid fa-plus"></i>
-                                                            Add to your list
-                                                        </div>
-                                                        <!-- <div id="already">
-                                                            <i class="fa-solid fa-check"></i>
-                                                            In list
-                                                        </div> -->
-                                                    </div>
+                                                    <button id="page-anime-list-updater" class="list-updater">
+
+                                                    </button>
                                                 </div>
                                                 <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
                                                     Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.

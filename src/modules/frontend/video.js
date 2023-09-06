@@ -2,7 +2,7 @@
 
 const Hls = require('hls.js')
 const AnimeSaturn = require('../providers/animesaturn')
-
+const AniListAPI = require('../anilist/anilistApi')
 
 /**
  * Methods for video playing and functionalities
@@ -16,6 +16,7 @@ module.exports = class Video {
      */
     constructor() {
         this.cons = new AnimeSaturn()
+        this.anilist = new AniListAPI()
 
         this.container = document.querySelector(".container")
         this.videoElement = document.getElementById('video')
@@ -67,6 +68,10 @@ module.exports = class Video {
             return
         }
 
+        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        const progress = parseInt(document.getElementById('page-anime-progress').innerHTML)
+        this.anilist.updateAnimeProgress(animeId, progress+1)
+        
         var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */

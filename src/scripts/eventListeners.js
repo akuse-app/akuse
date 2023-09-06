@@ -133,6 +133,12 @@ featured_button.addEventListener('click', (event) => {
     frontend.displayAnimePage(featured_button.id.slice(22))
 })
 
+// anime page 'add to list/already on list' trigger
+var list_updater_button = document.getElementById('page-anime-list-updater')
+list_updater_button.addEventListener('click', (event) => {
+    frontend.triggerListUpdater()
+}) 
+
 // anime page closer
 const exit_button = document.getElementById('exit')
 exit_button.addEventListener('click', (event) => {
