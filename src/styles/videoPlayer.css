@@ -1,0 +1,233 @@
+:root {
+    --color-text-1: #F2F4F6;
+    --color-text-2: #C1C3C5;
+    --color-text-3: #fbfdff65;
+    --color-icon: #CECECE;
+    --color-icon-hover: #F2F4F6;
+}
+
+#video {
+    height: 100%;
+    width: 100%;
+    z-index: 890;
+}
+
+.container, .video-controls, .video-timer, .options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container {
+    display: none; /* turning block */
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #000;
+    aspect-ratio: 16 / 9;   
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    transition: 0.3s;
+}
+
+.container.fullscreen {
+    max-width: 100%;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0px;
+}
+
+.container button {
+    color: var(--color-icon);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 2rem;
+    transition: 0.1s ease-out;
+}
+
+.container button:hover {
+    color: var(--color-icon-hover);
+}
+
+.video-timeline {
+    height: 20px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.video-timer .separator{
+    margin: 0 5px;
+}
+
+.video-timeline .progress-area{
+    height: 5px;
+    position: relative;
+    background: var(--color-text-3);
+}
+
+.progress-area span{
+    position: absolute;
+    left: 50%;
+    top: -25px;
+    font-size: 13px;
+    color: #fff;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.progress-area .progress-bar{
+    width: 0%;
+    height: 100%;
+    position: relative;
+    background: var(--color-text-2);
+}
+
+.progress-bar::before{
+    content: "";
+    right: 0;
+    top: 50%;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    border-radius: 50%;
+    background: var(--color-text-2);
+    transform: translateY(-50%);
+}
+
+.progress-bar::before, .progress-area span{
+    display: none;
+}
+
+.video-timeline:hover .progress-bar::before,
+.video-timeline:hover .progress-area span{
+    display: block;
+}
+
+.shadow-controls {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.301);
+    box-shadow: inset 0px 300px 400px -100px #000000;
+    transition: 0.3s;
+}
+
+.container.show-controls .up-controls,
+.container.show-controls .mid-controls,
+.container.show-controls .bottom-controls,
+.container.show-controls .shadow-controls {
+    z-index: 895;
+    opacity: 1;
+    transition: 0.3s;
+}
+
+.up-controls,
+.mid-controls,
+.bottom-controls {
+    width: calc(100% - 80px);
+    /* height: calc(100% - 80px); */
+    opacity: 0;
+    display: flex;
+    position: absolute;
+    margin: 40px;
+    color: white;
+}
+
+.up-controls {
+    top: 0;
+    justify-content: center;
+}
+
+.mid-controls {
+    top: 40%;
+    justify-content: center;
+    align-items: center;
+    gap: 150px;
+}
+
+.bottom-controls {
+    flex-direction: column;
+    bottom: 0;
+}
+
+.up-controls .center {
+    margin: auto;
+}
+
+.up-controls .right {
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.up-controls .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.up-controls .info .title {
+    color: var(--color-text);
+    font-weight: 500;
+    font-size: 3rem;
+}
+
+.up-controls .info .episode {
+    font-weight: 400;
+    color: var(--color-text);
+    font-size: 2rem;
+}
+
+.mid-controls .play-pause-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 72px;
+}
+
+.mid-controls button {
+    color: var(--color-text-3);
+    font-size: 6rem;
+}
+
+.mid-controls button:hover {
+    color: var(--color-text-1);
+}
+
+.bottom-controls .bottom {
+    display: flex;
+}
+
+.bottom-controls .bottom .next {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--color-icon)
+}
+
+.bottom-controls .bottom .next:hover {
+    color: var(--color-icon-hover);
+}
+
+.bottom-controls .bottom button {
+    margin-left: auto;
+}
+
+.bottom-controls .bottom .video-timer {
+    color: var(--color-text-3);
+    font-size: 1.8rem;
+}
+
+.bottom-controls .bottom .video-timer .current-time {
+    color: var(--color-text-2);
+}

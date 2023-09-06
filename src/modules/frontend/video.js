@@ -48,8 +48,6 @@ module.exports = class Video {
             console.log(animeTitles[i] + ' -> ' + videoSource)
             i++
         } while(videoSource === -1 && i < animeTitles.length)
-        
-        /* videoSource = this.toHD(videoSource) */
 
         this.videoTitle.innerHTML = title
         this.videoEpisode.innerHTML = ('Episode ' + episode)

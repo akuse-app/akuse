@@ -9,21 +9,21 @@ videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".progress-bar"),
 exitBtn = document.querySelector('.exit-video i')
 volumeBtn = container.querySelector(".volume i"),
-volumeSlider = container.querySelector(".left input"),
+volumeSlider = container.querySelector(".right input"),
 currentVidTime = container.querySelector(".current-time"),
 videoDuration = container.querySelector(".video-duration"),
 skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
 playPauseBtn = container.querySelector(".play-pause i"),
-previousEpisodeBtn = container.querySelector(".previous i")
-nextEpisodeBtn = container.querySelector(".next i")
+/* previousEpisodeBtn = container.querySelector(".previous i") */
+nextEpisodeBtn = container.querySelector(".next")
 speedBtn = container.querySelector(".playback-speed i"),
 speedOptions = container.querySelector(".speed-options"),
 fullScreenBtn = container.querySelector(".fullscreen i")
 let timer
 
 const hideControls = () => {
-    if(mainVideo.paused) return
+    /* if(mainVideo.paused) return */
     timer = setTimeout(() => {
         container.classList.remove("show-controls")
     }, 1500)
@@ -122,21 +122,23 @@ fullScreenBtn.addEventListener("click", () => {
 exitBtn.addEventListener("click", () => {
     mainVideo.pause()
     container.style.display = 'none'
-    document.exitFullscreen()
+    if(document.fullscreenEnabled) {
+        document.exitFullscreen()
+    }
 })
 
 playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())
+/* document.getElementsByClassName('shadow-controls')[0].addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause()) */
 mainVideo.addEventListener("play", () => playPauseBtn.classList.replace("fa-play", "fa-pause"))
 mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pause", "fa-play"))
-mainVideo.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())
 skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
 skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
 nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
 })
-previousEpisodeBtn.addEventListener("click", async () => {
+/* previousEpisodeBtn.addEventListener("click", async () => {
     await video.previousEpisode()
-})
+}) */
 speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-section"))
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
@@ -206,6 +208,6 @@ document.addEventListener("keydown", (event) => {
 })
 
 // fullscreen when double click
-mainVideo.addEventListener('dblclick', (event) => {
+document.getElementsByClassName('shadow-controls')[0].addEventListener('dblclick', (event) => {
     toggleFullScreen()
 })
