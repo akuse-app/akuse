@@ -379,6 +379,12 @@ module.exports = class AniListAPI extends Requests {
 
     /* MUTATIONS */
 
+    /**
+     * Updates the progress of an anime on list
+     * 
+     * @param {*} animeId 
+     * @param {*} progress 
+     */
     async updateAnimeProgress(animeId, progress) {
         console.log(animeId + ' '+ progress)
         var query = `

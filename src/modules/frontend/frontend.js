@@ -298,8 +298,8 @@ module.exports = class htmlManipulation {
      */
     displayFeaturedAnime(animeEntry) {
         const id = animeEntry.id
-        var title = this.getTitle(animeEntry)
-        const episodes = animeEntry.episodes
+        const title = this.getTitle(animeEntry)
+        const episodes = this.getEpisodes(animeEntry)
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
         /* const genres = animeEntry.genres */

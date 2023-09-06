@@ -80,6 +80,10 @@ body {
     opacity: 0;
 }
 
+/* .fade-in.show {
+    opacity: 1;
+} */
+
 .show {
     animation: fadeInAnimation 1s ease-in-out;
     animation-iteration-count: 1;
