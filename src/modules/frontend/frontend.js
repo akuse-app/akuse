@@ -296,32 +296,83 @@ module.exports = class htmlManipulation {
      * 
      * @param {*} animeEntry
      */
-    displayFeaturedAnime(animeEntry) {
+    displayFeaturedAnime(entries) {
+        var featured_scroller_wrapper_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
+        var width = 0
+
+        entries.media.forEach(key => {
+            var featured_div = this.createAnimeFeaturedEntry(key)
+            featured_scroller_wrapper_div.appendChild(featured_div)
+            width += 100
+        })
+
+        featured_scroller_wrapper_div.style.width = (width + '%')
+    }
+
+    createAnimeFeaturedEntry(animeEntry) {
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
-        /* const genres = animeEntry.genres */
-        var description = (animeEntry.description).split(/\r?\n/).filter(line => line.trim() !== '').join('\n') // remove epmpy lines
+        const description = animeEntry.description
+
+        var featured_div = document.createElement('div')
+        var featured_container_div = document.createElement('div')
+        var featured_img_div = document.createElement('div')
+        var featured_img = document.createElement('img')
+        var featured_left_div = document.createElement('div')
+        var featured_shadow_div = document.createElement('div')
+        var featured_right_div = document.createElement('div')
+        var content_div = document.createElement('div')
+        var anime_title_div = document.createElement('div')
+        var anime_info_div = document.createElement('div')
+        var anime_description_div = document.createElement('div')
+        var featured_anime_button = document.createElement('button')
+        var anime_year_div = document.createElement('div')
+        var anime_episodes_div = document.createElement('div')
         
-        document.querySelectorAll('button[id^="featured-anime-button-"]')[0].id += id
-        document.getElementById('featured-anime-title').innerHTML = title
-        document.getElementById('featured-anime-year').innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
-        document.getElementById('featured-anime-year').innerHTML += startYear
-        document.getElementById('featured-anime-episodes').innerHTML = episodes + " Episodes"
-        document.getElementById('featured-anime-description').innerHTML = description
-        document.getElementById('featured-img').src = banner
+        featured_div.classList.add('featured')
+        featured_container_div.classList.add('featured-container')
+        featured_img_div.classList.add('featured-img')
+        featured_left_div.classList.add('featured-left')
+        featured_shadow_div.classList.add('featured-shadow')
+        featured_right_div.classList.add('featured-right')
+        content_div.classList.add('content')
+        anime_title_div.classList.add('anime-title')
+        anime_info_div.classList.add('anime-info')
+        anime_description_div.classList.add('anime-description')
+        anime_year_div.classList.add('anime-year')
+        anime_episodes_div.classList.add('anime-episodes')
         
-        document.getElementById('featured-content').classList.add('show')
+        featured_anime_button.id = 'featured-anime-button-'
+        featured_anime_button.id += id
+        featured_anime_button.innerHTML = 'Go to the page'
+        anime_title_div.innerHTML = title
+        anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
+        anime_year_div.innerHTML += startYear
+        anime_episodes_div.innerHTML = episodes + " Episodes"
+        anime_description_div.innerHTML = description
+        featured_img.src = banner
         
-        /* var anime_genres_div = document.getElementById('featured-anime-genres')
-        Object.keys(genres).forEach( (key) => {
-            anime_genres_div.innerHTML += genres[key]
-            if(parseInt(key) < Object.keys(genres).length - 1) {
-                anime_genres_div.innerHTML += " • "
-            }
-        }) */
+        anime_info_div.appendChild(anime_year_div)
+        anime_info_div.appendChild(anime_episodes_div)
+        content_div.appendChild(anime_title_div)
+        content_div.appendChild(anime_info_div)
+        content_div.appendChild(anime_description_div)
+        content_div.appendChild(featured_anime_button)
+        featured_left_div.appendChild(content_div)
+        featured_container_div.appendChild(featured_left_div)
+        featured_container_div.appendChild(featured_shadow_div)
+        featured_container_div.appendChild(featured_right_div)
+        featured_div.appendChild(featured_container_div)
+        featured_img_div.appendChild(featured_img)
+        featured_div.appendChild(featured_img_div)
+        
+        content_div.classList.add('fade-in')
+        content_div.classList.add('show')
+
+        return featured_div
     }
 
     /**

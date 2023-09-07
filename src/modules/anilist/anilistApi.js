@@ -261,7 +261,7 @@ module.exports = class AniListAPI extends Requests {
     async getTrendingAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 30) {
+            Page(page: 1, perPage: 10) {
                 pageInfo {
                     total
                     currentPage
@@ -386,7 +386,6 @@ module.exports = class AniListAPI extends Requests {
      * @param {*} progress 
      */
     async updateAnimeProgress(animeId, progress) {
-        console.log(animeId + ' '+ progress)
         var query = `
         mutation($mediaId: Int, $progress: Int) {
             SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
@@ -395,13 +394,15 @@ module.exports = class AniListAPI extends Requests {
             }
         }
         `
-
+        
         var variables = {
             "mediaId": animeId,
             "progress": progress
         }
-
+        
         const options = this.getOptions(query, variables)
         await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        
+        console.log(`Progress updated (${progress})`)
     }
 }

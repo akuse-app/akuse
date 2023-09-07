@@ -18,6 +18,7 @@ playPauseBtn = container.querySelector(".play-pause i"),
 /* previousEpisodeBtn = container.querySelector(".previous i") */
 nextEpisodeBtn = container.querySelector(".next")
 speedBtn = container.querySelector(".playback-speed i"),
+volumeOptions = container.querySelector(".volume-options"),
 speedOptions = container.querySelector(".speed-options"),
 fullScreenBtn = container.querySelector(".fullscreen i")
 let timer
@@ -82,17 +83,6 @@ const draggableProgressBar = e => {
     currentVidTime.innerText = formatTime(mainVideo.currentTime)
 }
 
-volumeBtn.addEventListener("click", () => {
-    if(!volumeBtn.classList.contains("fa-volume-high")) {
-        mainVideo.volume = 0.5
-        volumeBtn.classList.replace("fa-volume-xmark", "fa-volume-high")
-    } else {
-        mainVideo.volume = 0.0
-        volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
-    }
-    volumeSlider.value = mainVideo.volume
-})
-
 volumeSlider.addEventListener("input", e => {
     mainVideo.volume = e.target.value
     if(e.target.value == 0) {
@@ -127,8 +117,32 @@ exitBtn.addEventListener("click", () => {
     }
 })
 
+mainVideo.addEventListener("click", (event) => {
+    if (event.target !== this)
+        return
+    mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+})
+
+document.getElementsByClassName('shadow-controls')[0].addEventListener("click", (event) => {
+    if (event.target !== this)
+        return
+    mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+})
+
+// fullscreen when double click
+mainVideo.addEventListener('dblclick', (event) => {
+    if (event.target !== this)
+        return
+    toggleFullScreen()
+})
+
+document.getElementsByClassName('shadow-controls')[0].addEventListener('dblclick', (event) => {
+    if (event.target !== this)
+        return
+    toggleFullScreen()
+})
+
 playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())
-/* document.getElementsByClassName('shadow-controls')[0].addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause()) */
 mainVideo.addEventListener("play", () => playPauseBtn.classList.replace("fa-play", "fa-pause"))
 mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pause", "fa-play"))
 skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
@@ -139,7 +153,19 @@ nextEpisodeBtn.addEventListener("click", async () => {
 /* previousEpisodeBtn.addEventListener("click", async () => {
     await video.previousEpisode()
 }) */
-speedBtn.addEventListener("click", () => speedOptions.classList.toggle("show-section"))
+volumeBtn.addEventListener("click", () => {
+    if(speedOptions.classList.contains('show-options')) 
+        speedOptions.classList.toggle("show-options")
+    
+    volumeOptions.classList.toggle("show-options")
+})
+speedBtn.addEventListener("click", () => {
+    if(volumeOptions.classList.contains('show-options')) 
+        volumeOptions.classList.toggle("show-options")
+
+    speedOptions.classList.toggle("show-options")
+})
+
 videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
 document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
 
@@ -168,46 +194,33 @@ document.addEventListener("keydown", (event) => {
     }
     
     if(videoIsDisplayed()) {
-        if(event.keyCode === 32) {
-            mainVideo.paused ? mainVideo.play() : mainVideo.pause()
-        } else if(event.keyCode === 37) {
-            mainVideo.currentTime -= 5
-        } else if(event.keyCode === 38) {
-            mainVideo.volume += 0.1
-            volumeSlider.value = mainVideo.volume
-        } else if(event.keyCode === 39) {
-            mainVideo.currentTime += 5
-        } else if(event.keyCode === 40) {
-            mainVideo.volume -= 0.1
-            volumeSlider.value = mainVideo.volume
-        }
-
         switch(event.keyCode) {
             case 32: {
                 mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+                break
             }
             case 37: {
                 mainVideo.currentTime -= 5
+                break
             }
             case 38: {
                 mainVideo.volume += 0.1
                 volumeSlider.value = mainVideo.volume
+                break
             }
             case 39: {
                 mainVideo.currentTime += 5
+                break
             }
             case 40: {
                 mainVideo.volume -= 0.1
                 volumeSlider.value = mainVideo.volume
+                break
             }
             case 122: {
                 toggleFullScreen()
+                break
             }
         }
     }
-})
-
-// fullscreen when double click
-document.getElementsByClassName('shadow-controls')[0].addEventListener('dblclick', (event) => {
-    toggleFullScreen()
 })

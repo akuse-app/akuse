@@ -11,10 +11,7 @@
 </head>
 <body>
     <div class="body-container">
-        <div id="loading-page" style="opacity: 1; display: flex">
-            <div class="loadingio-spinner-ellipsis-b7o0rh0sc5k"><div class="ldio-uzltpu0y1z">
-            <div></div><div></div><div></div><div></div><div></div></div></div>
-        </div>
+        <div id="loading-page" style="opacity: 1; display: flex"></div>
         <!-- VIDEO -->
         <div class="container show-controls">
                 <div class="shadow-controls">
@@ -25,17 +22,21 @@
                             </div>
                         </div>
                         <div class="right">
-                            <button class="volume"><i class="fa-solid fa-volume-high"></i></button>
-                            <input type="range" min="0" max="1" step="any">
+                            <div class="volume-content">
+                                <button class="volume"><i class="fa-solid fa-volume-high"></i></button>
+                                <div class="volume-options">
+                                    <input type="range" min="0" max="1" step="any">
+                                </div>
+                            </div>
                             <div class="playback-content">
-                            <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
-                            <ul class="speed-options">
-                                <li data-speed="2">2x</li>
-                                <li data-speed="1.5">1.5x</li>
-                                <li data-speed="1" class="active">Normal</li>
-                                <li data-speed="0.75">0.75x</li>
-                                <li data-speed="0.5">0.5x</li>
-                            </ul>
+                                <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
+                                <ul class="speed-options">
+                                    <li data-speed="2">2x</li>
+                                    <li data-speed="1.5">1.5x</li>
+                                    <li data-speed="1" class="active">Normal</li>
+                                    <li data-speed="0.75">0.75x</li>
+                                    <li data-speed="0.5">0.5x</li>
+                                </ul>
                             </div>
                             <button class="fullscreen"><i class="fa-solid fa-expand"></i></button>
                             <button class="exit-video"><i class="fa-solid fa-xmark"></i></button>
@@ -109,29 +110,35 @@
         <!-- MAIN -->
         <main>
             <!-- FEATURED CONTENT -->
-            <div class="featured">
-                <div class="featured-container">
-                    <div class="featured-left">
-                        <div id="featured-content" class="content fade-in">
-                            <div id="featured-anime-title" class="anime-title"></div>
-                            <div class="anime-info">
-                                <div id="featured-anime-year" class="anime-year">
-                                    
-                                </div>
-                                <div id="featured-anime-episodes" class="anime-episodes">
-                                    
+            <div class="featured-scroller">
+                <button id="featured-scroll-left"><i class="fa-solid fa-chevron-left"></i></button>
+                <button id="featured-scroll-right"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="featured-scroller-wrapper">
+<!--                     <div class="featured">
+                        <div class="featured-container">
+                            <div class="featured-left">
+                                <div id="featured-content" class="content fade-in">
+                                    <div id="featured-anime-title" class="anime-title"></div>
+                                    <div class="anime-info">
+                                        <div id="featured-anime-year" class="anime-year">
+                                            
+                                        </div>
+                                        <div id="featured-anime-episodes" class="anime-episodes">
+                                            
+                                        </div>
+                                    </div>
+                                    <div id="featured-anime-genres" class="anime-genres"></div>
+                                    <div id="featured-anime-description" class="anime-description"></div>
+                                    <button id="featured-anime-button-">Go to the page</button>
                                 </div>
                             </div>
-                            <!-- <div id="featured-anime-genres" class="anime-genres"></div> -->
-                            <div id="featured-anime-description" class="anime-description"></div>
-                            <button id="featured-anime-button-">Go to the page</button>
+                            <div class="featured-shadow"></div>
+                            <div class="featured-right"></div>
                         </div>
-                    </div>
-                    <div class="featured-shadow"></div>
-                    <div class="featured-right"></div>
-                </div>
-                <div class="featured-img">
-                    <img id="featured-img" src="/assets/img/banner.jpg" alt="">
+                        <div class="featured-img">
+                            <img id="featured-img" src="/assets/img/banner.jpg" alt="">
+                        </div>
+                    </div> -->
                 </div>
             </div>
             <div class="section-container">

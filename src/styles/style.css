@@ -72,7 +72,6 @@ body {
 
 body {
     overflow: auto;
-    /* display: flex; */
 }
 
 /* fade-in animation when elements are on view */
@@ -390,12 +389,54 @@ nav#nav-main {
 main {
     color: var(--font-1);
     width: 100%;
-    height: 100%; /* da levare */
     padding-top: 80px;
+}
+
+main .featured-scroller {
+    display: block;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+}
+
+main .featured-scroller button#featured-scroll-left,
+main .featured-scroller button#featured-scroll-right {
+    color: var(--font-2);
+    font-size: 2.6rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: absolute;
+    top: 245px;
+    z-index: 7;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+}
+
+main .featured-scroller button#featured-scroll-left {
+    left: 10px;
+}
+
+main .featured-scroller button#featured-scroll-right {
+    right: 10px;
+}
+
+main .featured-scroller button#featured-scroll-left:hover,
+main .featured-scroller button#featured-scroll-right:hover {
+    transform: scale(1.40);
+}
+
+main .featured-scroller .featured-scroller-wrapper {
+    display: flex;
+    align-content: flex-start;
+    height: 100%;
 }
 
 main .featured {
     position: relative;
+    width: 100%;
+    scroll-snap-align: center;
 }
 
 main .featured .featured-container {

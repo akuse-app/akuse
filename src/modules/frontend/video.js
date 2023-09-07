@@ -63,14 +63,15 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
+        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
+        
         if(this.episodeElementIncrease() == -1) {
             console.warn('This is the last episode, You can\'t go any further!')
             return
         }
 
-        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
-        const progress = parseInt(document.getElementById('page-anime-progress').innerHTML)
-        this.anilist.updateAnimeProgress(animeId, progress+1)
+        this.anilist.updateAnimeProgress(animeId, progress)
         
         var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())

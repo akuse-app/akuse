@@ -127,10 +127,23 @@ episode_list.addEventListener('click', (event) => {
 })
 
 // show anime page when featured anime button is pressed
-var featured_button = document.querySelectorAll('button[id^="featured-anime-button-"]')[0]
+/* var featured_button = document.querySelectorAll('button[id^="featured-anime-button-"]')[0]
 featured_button.addEventListener('click', (event) => {
     console.log(featured_button.id.slice(22))
     frontend.displayAnimePage(featured_button.id.slice(22))
+}) */
+
+// featured section buttons
+var featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
+
+var featured_left_button = document.getElementById('featured-scroll-left')
+featured_left_button.addEventListener('click', (event) => {
+    featured_scroller_div.scrollLeft -= 1800
+})
+
+var featured_right_button = document.getElementById('featured-scroll-right')
+featured_right_button.addEventListener('click', (event) => {
+    featured_scroller_div.scrollLeft += 1800
 })
 
 // anime page 'add to list/already on list' trigger

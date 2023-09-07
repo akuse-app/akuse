@@ -17,7 +17,7 @@ ipcRenderer.on('load-page-elements', async (event) => {
     const viewerId = await anilist.getViewerId()
     
     const viewerInfo = await anilist.getViewerInfo(viewerId)
-    const entryFeatured = await anilist.getTrendingAnimes()
+    const entriesFeatured = await anilist.getTrendingAnimes()
     const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
     const entriesMostPopular = await anilist.getMostPopularAnimes()
@@ -30,7 +30,7 @@ ipcRenderer.on('load-page-elements', async (event) => {
     frontend.removeLoadingPage()
 
     frontend.displayViewerAvatar(viewerInfo)
-    frontend.displayFeaturedAnime(entryFeatured.media[0])
+    frontend.displayFeaturedAnime(entriesFeatured)
     frontend.displayUserAnimeSection(entriesCurrent, 'current', true)
     frontend.displayGenreAnimeSection(entriesTrending, 'trending')
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular')
