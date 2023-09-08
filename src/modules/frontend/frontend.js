@@ -292,6 +292,22 @@ module.exports = class htmlManipulation {
     }
 
     /**
+     * Trigger for displaying the anime modal page opened from the featured section
+     * 
+     * @param {*} event 
+     */
+    triggerFeaturedAnime(event) {
+        if(!(event.target.tagName == 'button')) {
+            var entry = event.target.closest('button')
+            if(entry) {
+                this.displayAnimePage(entry.id.slice(22))
+            }
+        } else {
+            this.displayAnimePage(event.target.id.slice(22))
+        }
+    }
+
+    /**
      * Displays the featured anime
      * 
      * @param {*} animeEntry

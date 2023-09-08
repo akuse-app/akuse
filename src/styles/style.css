@@ -398,12 +398,13 @@ main .featured-scroller {
     width: 100%;
     overflow-x: hidden;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
 }
 
 main .featured-scroller button#featured-scroll-left,
 main .featured-scroller button#featured-scroll-right {
     color: var(--font-2);
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     border: none;
     outline: none;
     background-color: transparent;
@@ -539,7 +540,7 @@ main .featured .featured-img {
 main .featured .featured-img img {
     width: 100%;
     object-fit: cover;
-    object-position: 0% 50%; /* try 20px 10px */ 
+    object-position: 0% 50%;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
 }

@@ -1,7 +1,7 @@
 :root {
     --color-text-1: #F2F4F6;
     --color-text-2: #C1C3C5;
-    --color-text-3: #fbfdff65;
+    --color-text-3: #ffffff56;
     --color-icon: #CECECE;
     --color-icon-hover: #F2F4F6;
 }
@@ -17,6 +17,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .container {
     display: none; /* turning block */
     width: 100%;
@@ -86,7 +87,7 @@
     width: 0%;
     height: 100%;
     position: relative;
-    background: var(--color-text-2);
+    background: var(--color-important);
 }
 
 .progress-bar::before{
@@ -97,7 +98,7 @@
     width: 20px;
     position: absolute;
     border-radius: 50%;
-    background: var(--color-text-2);
+    background: var(--color-important);
     transform: translateY(-50%);
 }
 
@@ -115,7 +116,7 @@
     height: 100%;
     position: absolute;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.301);
+    background-color: rgba(0, 0, 0, 0.5);
     box-shadow: inset 0px 300px 400px -100px #000000;
     transition: 0.3s;
 }
@@ -298,5 +299,5 @@
 }
 
 .bottom-controls .bottom .video-timer .current-time {
-    color: var(--color-text-2);
+    color: var(--color-text-1);
 }

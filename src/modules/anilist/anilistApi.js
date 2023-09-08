@@ -261,7 +261,7 @@ module.exports = class AniListAPI extends Requests {
     async getTrendingAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 10) {
+            Page(page: 1, perPage: 30) {
                 pageInfo {
                     total
                     currentPage
@@ -295,6 +295,60 @@ module.exports = class AniListAPI extends Requests {
                     hasNextPage
                 }
                 media(sort: POPULARITY_DESC, type: ANIME) {
+                    ${this.mediaData}
+                }
+            } 
+        }
+        `
+
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Page
+    }
+
+    /**
+     * Gets the next anime releases
+     * 
+     * @returns object with next anime releases
+     */
+    async nextAnimeReleases() {
+        var query = `
+        {
+            Page(page: 1, perPage: 30) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
+                }
+                media(status: NOT_YET_RELEASED, sort: POPULARITY_DESC, type: ANIME) {
+                    ${this.mediaData}
+                }
+            } 
+        }
+        `
+
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Page
+    }
+
+    /**
+     * Gets the next anime releases
+     * 
+     * @returns object with next anime releases
+     */
+    async releasingAnimes() {
+        var query = `
+        {
+            Page(page: 1, perPage: 10) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
+                }
+                media(status: RELEASING, sort: POPULARITY_DESC, type: ANIME) {
                     ${this.mediaData}
                 }
             } 
