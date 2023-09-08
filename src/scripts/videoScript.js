@@ -123,25 +123,24 @@ mainVideo.addEventListener("click", (event) => {
     mainVideo.paused ? mainVideo.play() : mainVideo.pause()
 })
 
+// fullscreen when double click
+mainVideo.addEventListener('dblclick', (event) => {
+    if(event.target !== event.currentTarget) return;
+    toggleFullScreen()
+})
+
 document.getElementsByClassName('shadow-controls')[0].addEventListener("click", (event) => {
-    if (event.target !== this)
-        return
+    if(event.target !== event.currentTarget) return;
     mainVideo.paused ? mainVideo.play() : mainVideo.pause()
 })
 
-// fullscreen when double click
-mainVideo.addEventListener('dblclick', (event) => {
-    if (event.target !== this)
-        return
-    toggleFullScreen()
-})
-
 document.getElementsByClassName('shadow-controls')[0].addEventListener('dblclick', (event) => {
-    if (event.target !== this)
-        return
+    if(event.target !== event.currentTarget) return;
     toggleFullScreen()
 })
 
+videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
+document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
 playPauseBtn.addEventListener("click", () => mainVideo.paused ? mainVideo.play() : mainVideo.pause())
 mainVideo.addEventListener("play", () => playPauseBtn.classList.replace("fa-play", "fa-pause"))
 mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pause", "fa-play"))
@@ -165,28 +164,6 @@ speedBtn.addEventListener("click", () => {
 
     speedOptions.classList.toggle("show-options")
 })
-
-videoTimeline.addEventListener("mousedown", () => videoTimeline.addEventListener("mousemove", draggableProgressBar))
-document.addEventListener("mouseup", () => videoTimeline.removeEventListener("mousemove", draggableProgressBar))
-
-function videoIsDisplayed() {
-    if(container.style.display == 'block')
-        return true
-
-    return false
-}
-
-function toggleFullScreen() {
-    if(document.fullscreenElement) {
-        fullScreenBtn.classList.replace("fa-compress", "fa-expand")
-        
-        return document.exitFullscreen()
-    }
-    
-    container.classList.toggle("fullscreen")
-    fullScreenBtn.classList.replace("fa-expand", "fa-compress")
-    container.requestFullscreen()
-}
 
 document.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) {
@@ -224,3 +201,22 @@ document.addEventListener("keydown", (event) => {
         }
     }
 })
+
+function videoIsDisplayed() {
+    if(container.style.display == 'block')
+        return true
+
+    return false
+}
+
+function toggleFullScreen() {
+    if(document.fullscreenElement) {
+        fullScreenBtn.classList.replace("fa-compress", "fa-expand")
+        
+        return document.exitFullscreen()
+    }
+    
+    container.classList.toggle("fullscreen")
+    fullScreenBtn.classList.replace("fa-expand", "fa-compress")
+    container.requestFullscreen()
+}

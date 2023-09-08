@@ -10,6 +10,7 @@
     height: 100%;
     width: 100%;
     z-index: 890;
+    cursor: pointer;
 }
 
 .container, .video-controls, .video-timer, .options {
@@ -119,6 +120,7 @@
     background-color: rgba(0, 0, 0, 0.5);
     box-shadow: inset 0px 300px 400px -100px #000000;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 .container.show-controls .up-controls,
