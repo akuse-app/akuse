@@ -32,11 +32,12 @@
     background-color: var(--color-3);
     border: 2px solid transparent;
     background-clip: content-box;
+    transition: var(--transition);
 }
 
-/* ::-webkit-scrollbar-thumb:active {
-    background-color: var(--color-1);
-} */
+::-webkit-scrollbar-thumb:active {
+    background-color: var(--color-2);
+}
 
 * {
     margin: 0;
@@ -71,6 +72,13 @@ body {
 }
 
 body {
+    overflow: hidden;
+}
+
+.body-container {
+    height: 100%;
+    padding-top: 30px;
+    z-index: 20;
     overflow: auto;
 }
 
@@ -137,42 +145,34 @@ body {
     }
 }
 
-/* #login-page {
-    z-index: 100;
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
+.document-controls {
     width: 100%;
-    height: 100%;
+    height: 30px;
+    position: fixed;
+    z-index: 21;
+    background-color: var(--color-nav);
+}
+
+.document-controls ul {
+    width: max-content;
+    margin-left: auto;
+    padding-left: 0;
+}
+
+.document-controls ul li {
+    color: var(--font-1);
+    padding: 6px 10px;
+    display: inline-block;
+    transition: var(--transition);
+}
+
+.document-controls ul li:hover {
     background-color: var(--color-1);
 }
 
-    #login-page img {
-        width: 500px;
-    }
-
-    #login-page button#login-button {
-        font-size: 1.6rem;
-        font-weight: var(--font-weight);
-        color: var(--color-1);
-        background-color: var(--font-1);
-        width: 200px;
-        height: 60px;
-        border-radius: var(--border-radius);
-        border: none;
-        outline: none;
-        cursor: pointer;
-        transition: 0.1s ease-out;
-    }
-
-    #login-page button#login-button:active {
-        filter: brightness(80%)
-    } */
+.document-controls ul li i {
+    font-size: 0.8rem;
+}
 
 #loading-page {
     width: 100%;
@@ -199,7 +199,7 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    z-index: 19;
+    z-index: 15;
     background-color: transparent;
     transition: 0.2s ease-out;
 }

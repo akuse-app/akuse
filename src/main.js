@@ -19,10 +19,10 @@ const createWindow = () => {
         minWidth: 400,
         minHeight: 600,
         autoHideMenuBar: true,
-        frame: false, // undraggable
+        frame: false,
         icon: 'assets/img/icon/icon-1024.png'
     })
-
+    
     mainWin  = new BrowserWindow({
         width: 1920,
         height: 1080,
@@ -30,6 +30,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
+        /* frame: false, */
         icon: 'assets/img/icon/icon-1024.png',
         webPreferences: {
             nodeIntegration: true,

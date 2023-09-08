@@ -19,6 +19,7 @@ module.exports = class AniListAPI extends Requests {
     constructor(clientData) {
         super()
         this.clientData = clientData
+        this.pages = 30
         this.method = 'POST'
         this.graphQLUrl = 'https://graphql.anilist.co'
         this.headers = {
@@ -261,7 +262,7 @@ module.exports = class AniListAPI extends Requests {
     async getTrendingAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 30) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage
@@ -288,7 +289,7 @@ module.exports = class AniListAPI extends Requests {
     async getMostPopularAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 30) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage
@@ -315,7 +316,7 @@ module.exports = class AniListAPI extends Requests {
     async nextAnimeReleases() {
         var query = `
         {
-            Page(page: 1, perPage: 30) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage
@@ -342,7 +343,7 @@ module.exports = class AniListAPI extends Requests {
     async releasingAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 10) {
+            Page(page: 1, perPage: 15) {
                 pageInfo {
                     total
                     currentPage
@@ -370,7 +371,7 @@ module.exports = class AniListAPI extends Requests {
     async getAnimesByGenre(genre) {
         var query = `
         {
-            Page(page: 1, perPage: 30) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage
