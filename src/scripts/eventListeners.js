@@ -55,20 +55,19 @@ searchMainInput.addEventListener('input', async (event) => {
 
 // navbar background changing
 var lastScroll = 0
-var nav = document.getElementById('nav-wrapper')
+var nav_div = document.getElementById('nav-wrapper')
+var body_container_div = document.getElementsByClassName('body-container')[0]
 var color = getComputedStyle(document.documentElement).getPropertyValue('--color-nav');
 
-document.addEventListener("scroll", (event) => {
-    var scroll = window.scrollY
+body_container_div.addEventListener("scroll", (event) => {
+    var scroll = body_container_div.scrollTop
 
         if(scroll > lastScroll && lastScroll === 0) {
-            /* console.log("attiva") */
             setTimeout(() => {
-                nav.style.backgroundColor = color
+                nav_div.style.backgroundColor = color
             }, 100)
         } else if(scroll === 0 && lastScroll !== 0){
-            /* console.log("disattiva") */
-            nav.style.backgroundColor = 'transparent'
+            nav_div.style.backgroundColor = 'transparent'
         }
     
     lastScroll = scroll

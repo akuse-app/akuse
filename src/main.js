@@ -30,7 +30,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        frame: false,
+        /* frame: false, */
         icon: 'assets/img/icon/icon-1024.png',
         webPreferences: {
             nodeIntegration: true,

@@ -506,7 +506,7 @@ module.exports = class htmlManipulation {
 
         document.getElementById('anime-page').classList.add('show-page')
         document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
-        document.getElementsByTagName('body')[0].style.overflow = 'hidden'
+        document.getElementsByClassName('body-container')[0].style.overflow = 'hidden'
     }
     
     triggerListUpdater() {
@@ -523,7 +523,7 @@ module.exports = class htmlManipulation {
         
         // enable body scrolling only if main search container isn't enabled
         if(document.getElementById('main-search-list-container').style.display == 'none') {
-            document.getElementsByTagName('body')[0].style.overflow = 'auto'
+            document.getElementsByClassName('body-container')[0].style.overflow = 'auto'
         }
 
         // clear infos

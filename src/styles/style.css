@@ -199,7 +199,7 @@ body {
 
 .nav-container {
     width: 100%;
-    padding-top: 33px;
+    padding-top: 25px;
 }
 
 .nav-wrapper {
@@ -397,8 +397,8 @@ nav#nav-main {
 /* MAIN SECTION */
 
 main {
-    color: var(--font-1);
     width: 100%;
+    color: var(--font-1);
     padding-top: 80px;
 }
 
@@ -406,6 +406,7 @@ main .featured-scroller {
     display: block;
     height: 100%;
     width: 100%;
+    padding-bottom: 35px;
     overflow-x: hidden;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -454,8 +455,8 @@ main .featured {
 main .featured .featured-container {
     display: flex;
     z-index: 0;
-    width: 100%; 
-    height: 99%;
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     bottom: 0;
