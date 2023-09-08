@@ -77,7 +77,6 @@ body {
 
 .body-container {
     height: 100%;
-    padding-top: 30px;
     z-index: 20;
     overflow: auto;
 }
@@ -146,14 +145,15 @@ body {
 }
 
 .document-controls {
+    -webkit-app-region: drag;
     width: 100%;
-    height: 30px;
     position: fixed;
     z-index: 21;
     background-color: var(--color-nav);
 }
 
 .document-controls ul {
+    -webkit-app-region: none;
     width: max-content;
     margin-left: auto;
     padding-left: 0;
@@ -161,13 +161,22 @@ body {
 
 .document-controls ul li {
     color: var(--font-1);
-    padding: 6px 10px;
+    padding: 2px 7px;
     display: inline-block;
     transition: var(--transition);
+    cursor: pointer;
 }
 
 .document-controls ul li:hover {
     background-color: var(--color-1);
+}
+
+.document-controls ul li#document-quit:hover {
+    background-color: rgb(255, 61, 61);
+}
+
+.document-controls ul li:active {
+    background-color: var(--color-2);
 }
 
 .document-controls ul li i {
@@ -190,6 +199,7 @@ body {
 
 .nav-container {
     width: 100%;
+    padding-top: 33px;
 }
 
 .nav-wrapper {
@@ -397,6 +407,7 @@ main .featured-scroller {
     height: 100%;
     width: 100%;
     overflow-x: hidden;
+    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 }

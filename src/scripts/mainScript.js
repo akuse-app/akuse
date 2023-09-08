@@ -9,11 +9,26 @@ const clientData = require('../modules/clientData.js')
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
+var iconifyButton = document.getElementById('document-iconify')
+iconifyButton.addEventListener('click', () => {
+    ipcRenderer.send('iconify-document')
+})
+
+var maximizeButton = document.getElementById('document-maximize')
+maximizeButton.addEventListener('click', () => {
+    ipcRenderer.send('maximize-document')
+})
+
+var quitButton = document.getElementById('document-quit')
+quitButton.addEventListener('click', () => {
+    ipcRenderer.send('quit-document')
+})
+
 /**
  * OAuth is completed, so load the page with all the elements
  * 
  */
-ipcRenderer.on('load-page-elements', async (event) => {
+ipcRenderer.on('load-page', async (event) => {
     const viewerId = await anilist.getViewerId()
     
     const viewerInfo = await anilist.getViewerInfo(viewerId)

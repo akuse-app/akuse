@@ -24,13 +24,13 @@ const createWindow = () => {
     })
     
     mainWin  = new BrowserWindow({
-        width: 1920,
+        width: 1300,
         height: 1080,
         minWidth: 1280,
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        /* frame: false, */
+        frame: false,
         icon: 'assets/img/icon/icon-1024.png',
         webPreferences: {
             nodeIntegration: true,
@@ -60,10 +60,22 @@ const createWindow = () => {
         mainWin.webContents.on('did-finish-load', () => {
             authWin.close()
             store.set('access_token', token)
-            mainWin.webContents.send('load-page-elements')
+            mainWin.webContents.send('load-page')
         })
     })
 }
+
+ipcMain.on('iconify-document', (event) => {
+    mainWin.minimize()
+})
+
+ipcMain.on('maximize-document', (event) => {
+    mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
+})
+
+ipcMain.on('quit-document', (event) => {
+    mainWin.close()
+})
 
 app.whenReady().then(() => {
     createWindow()

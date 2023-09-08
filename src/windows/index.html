@@ -10,15 +10,53 @@
     <title>Akuse</title>
 </head>
 <body>
+    <div id="loading-page" style="opacity: 1; display: flex"></div>
     <div class="document-controls">
         <ul>
-            <li><i class="fa-regular fa-window-minimize"></i></li>
-            <li><i class="fa-regular fa-square"></i></li>
-            <li><i style="font-size: 1rem;" class="fa-solid fa-xmark"></i></li>
+            <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
+            <li id="document-maximize"><i class="fa-regular fa-square"></i></li>
+            <li id="document-quit"><i style="font-size: 1rem;" class="fa-solid fa-xmark"></i></li>
         </ul>
     </div>
+        <!-- NAVBAR + MAIN SEARCH BAR -->
+        <div class="nav-container">
+            <div id="nav-wrapper" class="nav-wrapper">
+                <nav id="nav-main">
+                    <ul>
+                        <li>
+                            <i class="fa-solid fa-house"></i>
+                            Home
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-list-ul"></i>
+                            My List
+                        </li>
+                        <li  id="search-main-button">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Search
+                        </li>
+                        <div class="right">
+                            <div class="user">
+                                <div id="user-name">Welcome back, </div>
+                                <img id="user-icon" src="" alt="user-icon">
+                            </div>
+                        </div>
+                    </ul>
+                </nav>
+            </div>
+            <div id="main-search-list-container" class="search-main-container" style="display: none">
+                <div id="search-main">
+                    <div class="input-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="search-main-input" type="text" placeholder="Search">
+                    </div>
+                </div>
+                <div class="scroller">
+                    <div id="main-search-list" class="search-list"></div>
+                </div>
+            </div>
+        </div>
     <div class="body-container">
-        <div id="loading-page" style="opacity: 1; display: flex"></div>
         <!-- VIDEO -->
         <div class="container show-controls">
                 <div class="shadow-controls">
@@ -76,44 +114,7 @@
                 </div>
             <video id="video"></video>
         </div>
-        <!-- NAVBAR + MAIN SEARCH BAR -->
-        <div class="nav-container">
-            <div id="nav-wrapper" class="nav-wrapper">
-                <nav id="nav-main">
-                    <ul>
-                        <li>
-                            <i class="fa-solid fa-house"></i>
-                            Home
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-list-ul"></i>
-                            My List
-                        </li>
-                        <li  id="search-main-button">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            Search
-                        </li>
-                        <div class="right">
-                            <div class="user">
-                                <div id="user-name">Welcome back, </div>
-                                <img id="user-icon" src="" alt="user-icon">
-                            </div>
-                        </div>
-                    </ul>
-                </nav>
-            </div>
-            <div id="main-search-list-container" class="search-main-container" style="display: none">
-                <div id="search-main">
-                    <div class="input-container">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input id="search-main-input" type="text" placeholder="Search">
-                    </div>
-                </div>
-                <div class="scroller">
-                    <div id="main-search-list" class="search-list"></div>
-                </div>
-            </div>
-        </div>
+
         <!-- MAIN -->
         <main>
             <!-- FEATURED CONTENT -->
