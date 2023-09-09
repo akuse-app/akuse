@@ -103,22 +103,22 @@ module.exports = class htmlManipulation {
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
         const description = animeEntry.description
-
-        var title = this.getTitle(animeEntry)
-        var episodes = this.getEpisodes(animeEntry)
+        const title = this.getTitle(animeEntry)
+        const episodes = this.getEpisodes(animeEntry)
 
         var cover_div = document.createElement('img')
-        cover_div.src = cover
-
         var content_div = document.createElement('div')
-        content_div.classList.add('content')
-
         var title_h1 = document.createElement('h1')
+        var infos_div = document.createElement('div')
+        var entry_div = document.createElement('div')
+        
+        cover_div.src = cover
+        content_div.classList.add('content')
         title_h1.classList.add('title')
         title_h1.innerHTML = title
-
-        var infos_div = document.createElement('div')
         infos_div.classList.add('infos')
+        entry_div.classList.add('search-entry')
+        entry_div.id = ('search-anime-entry-' + animeId)
 
         var h2 = document.createElement('h2')
         h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
@@ -159,17 +159,10 @@ module.exports = class htmlManipulation {
         description_div.classList.add('description')
         description_div.innerHTML = description
 
-        // append to content
+
         content_div.appendChild(title_h1)
         content_div.appendChild(infos_div)
-        content_div.appendChild(description_div)
-
-        var entry_div = document.createElement('div')
-        entry_div.classList.add('search-entry')
-        entry_div.classList.add('fade-in')
-        entry_div.id = ('search-anime-entry-' + animeId)
-        
-        // append to entry
+        content_div.appendChild(description_div)        
         entry_div.appendChild(cover_div)
         entry_div.appendChild(content_div)
 
@@ -200,6 +193,7 @@ module.exports = class htmlManipulation {
      */
     displayUserAnimeSection(entries, list, needProgressBar) {
         var anime_list_div = document.getElementById(list)
+
         Object.keys(entries).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
 
@@ -210,7 +204,6 @@ module.exports = class htmlManipulation {
                     parseInt(entries[key].progress)
                 )
             }
-
             anime_list_div.appendChild(anime_entry_div)
         })
     }
@@ -238,11 +231,10 @@ module.exports = class htmlManipulation {
      */
     appendProgressBar(div, episodes, progress) {
         var progressWidth = 100 * progress / episodes
-        
         let bar_div = document.createElement('div')
-        bar_div.classList.add('bar')
-
         let progress_bar_div = document.createElement('div')
+        
+        bar_div.classList.add('bar')
         progress_bar_div.classList.add('progress-bar')
         progress_bar_div.style.width = `calc(${progressWidth}% - 20px)`
 
@@ -262,32 +254,27 @@ module.exports = class htmlManipulation {
         const cover = animeEntry.coverImage.extraLarge
     
         let anime_entry_div = document.createElement('div')
-        anime_entry_div.classList.add('anime-entry')
-        
-        anime_entry_div.id = ('anime-entry-' + animeId)
-
         let anime_cover_div = document.createElement('div')
-        anime_cover_div.classList.add('anime-cover')
-
         let anime_cover_img = document.createElement('img')
+        let anime_title_div = document.createElement('div')
+        let anime_entry_content = document.createElement('div')
+        
+        anime_entry_div.classList.add('anime-entry')
+        anime_cover_div.classList.add('anime-cover')
+        anime_title_div.classList.add('anime-title')
+        anime_entry_content.classList.add('content')
+
+        anime_entry_div.id = ('anime-entry-' + animeId)
+        anime_title_div.innerHTML = animeName
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
+
         anime_cover_div.appendChild(anime_cover_img)
-    
-        let anime_title_div = document.createElement('div')
-        anime_title_div.classList.add('anime-title')
-        anime_title_div.innerHTML = animeName
-        
-        let anime_entry_content = document.createElement('div')
-        anime_entry_content.classList.add('content')
         anime_entry_content.appendChild(anime_title_div)
-        
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
-        /* anime_entry_div.classList.add('fade-in') */
-        /* anime_entry_div.classList.add('show') */
-
+        anime_entry_div.classList.add('show')
         return anime_entry_div
     }
 
@@ -360,7 +347,6 @@ module.exports = class htmlManipulation {
         anime_description_div.classList.add('anime-description')
         anime_year_div.classList.add('anime-year')
         anime_episodes_div.classList.add('anime-episodes')
-        
         featured_anime_button.id = 'featured-anime-button-'
         featured_anime_button.id += id
         featured_anime_button.innerHTML = 'Go to the page'
@@ -385,7 +371,6 @@ module.exports = class htmlManipulation {
         featured_img_div.appendChild(featured_img)
         featured_div.appendChild(featured_img_div)
         
-        content_div.classList.add('fade-in')
         content_div.classList.add('show')
 
         return featured_div
@@ -437,20 +422,17 @@ module.exports = class htmlManipulation {
         const format = animeEntry.format
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
-        
-        var endDate
-        animeEntry.endDate.year == null
-        ? endDate = '?'
-        : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
-        
         const title = this.getTitle(animeEntry)
         const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
         const episodes = this.getEpisodes(animeEntry)
-
         const userStatus = this.getUserStatus(animeEntry)
         const score = this.getScore(animeEntry)
         const progress = this.getProgress(animeEntry)
-
+        var endDate
+            animeEntry.endDate.year == null
+            ? endDate = '?'
+            : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
+        
         // display infos
         var list_updater_button = document.getElementById('page-anime-list-updater')
         if(animeEntry.mediaListEntry == null) {
@@ -478,13 +460,6 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-progress').innerHTML = progress
         document.getElementById('page-anime-episodes').innerHTML = episodes
         
-        /* var anime_genres_ul = document.getElementById('page-anime-genres')
-        Object.keys(genres).forEach( (key) => {
-            var anime_genres_li = document.createElement('li')
-            anime_genres_li.innerHTML += genres[key]
-            anime_genres_ul.appendChild(anime_genres_li)
-        }) */
-
         var anime_titles_div = document.getElementById('page-anime-titles')
         Object.keys(animeTitles).forEach( (key) => {
             let h2 = document.createElement('h2')
@@ -492,7 +467,6 @@ module.exports = class htmlManipulation {
             anime_titles_div.appendChild(h2)
         })
 
-        // episodes list
         var episodes_list_div = document.getElementById('page-anime-episodes-list')
         
         for(let i=0; i<episodes; i++) {
@@ -500,12 +474,22 @@ module.exports = class htmlManipulation {
             episodes_list_div.appendChild(episode_div)
         }
 
+        /* var anime_genres_ul = document.getElementById('page-anime-genres')
+        Object.keys(genres).forEach( (key) => {
+            var anime_genres_li = document.createElement('li')
+            anime_genres_li.innerHTML += genres[key]
+            anime_genres_ul.appendChild(anime_genres_li)
+        }) */
+
         // show modal page
         document.getElementById('anime-page').style.display = 'flex'
         document.getElementById('anime-page-shadow-background').style.display = 'flex'
 
+        document.getElementById('anime-page').classList.remove('hide-page')
         document.getElementById('anime-page').classList.add('show-page')
+        document.getElementById('anime-page-shadow-background').classList.remove('hide-page-shadow-background')
         document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
+        
         document.getElementsByClassName('body-container')[0].style.overflow = 'hidden'
     }
     
@@ -518,13 +502,20 @@ module.exports = class htmlManipulation {
      */
     closeAnimePage() {
         // hide modal page
-        document.getElementById('anime-page').style.display = 'none'
-        document.getElementById('anime-page-shadow-background').style.display = 'none'
+        document.getElementById('anime-page').classList.remove('show-page')
+        document.getElementById('anime-page').classList.add('hide-page')
+        document.getElementById('anime-page-shadow-background').classList.remove('show-page-shadow-background')
+        document.getElementById('anime-page-shadow-background').classList.add('hide-page-shadow-background')
+
+        setTimeout(() => {
+            document.getElementById('anime-page').style.display = 'none'
+            document.getElementById('anime-page-shadow-background').style.display = 'none'
+        }, 400)
         
         // enable body scrolling only if main search container isn't enabled
-        if(document.getElementById('main-search-list-container').style.display == 'none') {
+        /* if(document.getElementById('main-search-list-container').style.display == 'none') {
             document.getElementsByClassName('body-container')[0].style.overflow = 'auto'
-        }
+        } */
 
         // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
@@ -557,19 +548,18 @@ module.exports = class htmlManipulation {
      */
     createEpisode(episodeNumber, banner) {
         var episode_div = document.createElement('div')
+        var episode_content_div = document.createElement('div')
+        var h3 = document.createElement('h3')
+
         episode_div.classList.add('episode')
         episode_div.id = 'episode-' + (episodeNumber+1)
         episode_div.style.backgroundImage = `url(${banner})`
-
-        var episode_content_div = document.createElement('div')
         episode_content_div.classList.add('content')
-        
-        var h3 = document.createElement('h3')
         h3.innerHTML = 'Episode ' + (episodeNumber+1)
-
+        
+        episode_div.classList.add('show')
         episode_content_div.appendChild(h3)
         episode_div.appendChild(episode_content_div)
-        episode_div.classList.add('show-episode')
 
         return episode_div
     }

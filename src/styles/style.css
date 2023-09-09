@@ -51,15 +51,6 @@
     user-select: none;
 }
 
-img {
-    /* user-drag: none; */
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
 html,
 body {
     /* background-color: var(--color-1); */
@@ -75,73 +66,13 @@ body {
     overflow: hidden;
 }
 
-.body-container {
-    height: 100%;
-    z-index: 20;
-    overflow: auto;
-}
-
-/* fade-in animation when elements are on view */
-.fade-in {
-    opacity: 0;
-}
-
-/* .fade-in.show {
-    opacity: 1;
-} */
-
-.show {
-    animation: fadeInAnimation 1s ease-in-out;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
-
-.show-episode {
-    animation: fadeInAnimation 1s ease-in-out;
-    animation-iteration-count: 1;
-    /* animation-fill-mode: forwards; */
-}
-
-@keyframes fadeInAnimation {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.show-page {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-@keyframes fadeInPageAnimation {
-    0% {
-        opacity: 0;
-        transform: translateY(100px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.show-page-shadow-background {
-    animation: fadeInPageShadowBackgroundAnimation 0.4s ease-out;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
-
-@keyframes fadeInPageShadowBackgroundAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+img {
+    /* user-drag: none; */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .document-controls {
@@ -181,6 +112,12 @@ body {
 
 .document-controls ul li i {
     font-size: 0.8rem;
+}
+
+.body-container {
+    height: 100%;
+    z-index: 20;
+    overflow: auto;
 }
 
 #loading-page {
@@ -745,10 +682,6 @@ main .anime-page {
             box-shadow: var(--shadow);
         }
 
-        main .anime-page .content .page-anime-right .user-stats {
-            
-        }
-
         main .anime-page .content .page-anime-right .user-stats button.list-updater {
             outline: none;
             background-color: transparent;
@@ -773,8 +706,9 @@ main .anime-page {
         }
 
     .page-anime-right-scroller {
-        margin-right: 30px;
+        width: 100%;
         height: 750px;
+        margin-right: 30px;
         overflow-y: auto;
         overflow-x: hidden;
     }

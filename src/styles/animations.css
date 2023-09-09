@@ -1,0 +1,76 @@
+:root {
+    --animation-transition: 0.4s ease-out;
+}
+
+.fade-in {
+    opacity: 0;
+}
+
+.show {
+    animation: showPageAnimation 1s ease-in-out;
+    animation-iteration-count: 1;
+}
+
+.show-page {
+    animation: showPageAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showPageAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hide-page {
+    animation: hidePageAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hidePageAnimation {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+}
+
+.show-page-shadow-background {
+    animation: showPageShadowBackgroundAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showPageShadowBackgroundAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.hide-page-shadow-background {
+    animation: hidePageShadowBackgroundAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hidePageShadowBackgroundAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
