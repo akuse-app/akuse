@@ -6,9 +6,7 @@
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
-    <img alt="last-commit" src="https://img.shields.io/github/stars/aleganza/akuse?color=%20%23ffc830"> 
-    <img alt="top-language" src="https://img.shields.io/github/languages/top/aleganza/akuse"> 
-    <img alt="status-developing" src="https://img.shields.io/badge/status-developing-828DFD">
+    <img alt="stars" src="https://img.shields.io/github/stars/aleganza/akuse"> 
 </p>
 
 <img title="img" alt="img" src="https://i.imgur.com/cQL3i8H.png">
