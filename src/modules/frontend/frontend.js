@@ -223,7 +223,7 @@ module.exports = class htmlManipulation {
     }
     
     /**
-     * Appends a bar above the anime cover showing the user progress (in anime sections)
+     * Appends a bar showing the user progress
      * 
      * @param {*} div 
      * @param {*} episodes 
@@ -236,10 +236,30 @@ module.exports = class htmlManipulation {
         
         bar_div.classList.add('bar')
         progress_bar_div.classList.add('progress-bar')
-        progress_bar_div.style.width = `calc(${progressWidth}% - 20px)`
+        progress_bar_div.style.width = `${progressWidth}%` // TODO fix for when calc is needed (-20px)
 
         div.appendChild(bar_div)
         div.appendChild(progress_bar_div)
+    }
+
+    /**
+     * Appends a stars row showing the user score
+     * 
+     * @param {*} div 
+     * @param {*} score 
+     */
+    appendScoreStars(div, score) {
+        const max = 10
+
+        for(let i=1; i<=max; i+=2) {
+            if(i < score) {
+                div.innerHTML += '<i style="margin-right: 5px" class="fa-solid fa-star"></i>'
+            } else if(i === score) {
+                div.innerHTML += '<i style="margin-right: 5px" class="fa-regular fa-star-half-stroke"></i>'
+            } else {
+                div.innerHTML += '<i style="margin-right: 5px" class="fa-regular fa-star"></i>'
+            }
+        }
     }
     
     /**
@@ -449,8 +469,10 @@ module.exports = class htmlManipulation {
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
-        document.getElementById('page-anime-progress-episodes').innerHTML = (progress + ' / ' + episodes)
-        document.getElementById('page-anime-user-score').innerHTML = (score + ' / 10')
+        /* document.getElementById('page-anime-progress-episodes').innerHTML = (progress + ' / ' + episodes) */
+        this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
+        /* document.getElementById('page-anime-user-score').innerHTML = (score + ' / 10') */
+        this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
         document.getElementById('page-anime-user-status').innerHTML = userStatus
         document.getElementById('page-anime-status').innerHTML = status
         document.getElementById('page-anime-startDate').innerHTML = startDate
@@ -511,6 +533,8 @@ module.exports = class htmlManipulation {
             document.getElementById('anime-page').style.display = 'none'
             document.getElementById('anime-page-shadow-background').style.display = 'none'
         }, 400)
+        
+        document.getElementsByClassName('body-container')[0].style.overflow = 'auto'
         
         // enable body scrolling only if main search container isn't enabled
         /* if(document.getElementById('main-search-list-container').style.display == 'none') {

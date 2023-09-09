@@ -572,6 +572,27 @@ main .anime-page {
         border-radius: var(--border-radius);
         box-shadow: var(--shadow);
     }
+
+    main .anime-page .content .page-anime-left #page-anime-progress-episodes {
+        width: 100% ;
+        height: 10px;
+        position: relative;
+        margin-top: 8px;
+    }
+
+    #page-anime-progress-episodes .bar,
+    #page-anime-progress-episodes .progress-bar {
+        margin: 0;
+    }
+    
+    #page-anime-progress-episodes .bar {
+        width: 100%;
+        background-color: var(--color-1);
+    }
+
+    main .anime-page .content .page-anime-left #page-anime-user-score i {
+        color: var(--color-important)
+    }
     
     main .anime-page .content .page-anime-right {
         width: calc(100% - 60px);
@@ -805,9 +826,9 @@ main section .anime-list-wrapper {
             transform: scale(1.05);
         }
 
-        main section .anime-list .anime-entry:active {
-            transform: scale(1);
-        }
+        /* main section .anime-list .anime-entry:active {
+            filter: brightness(0.80);
+        } */
         
         main section .anime-list .anime-entry .content {
             margin-top: 10px;
@@ -825,8 +846,8 @@ main section .anime-list-wrapper {
             position: relative;
         }
 
-        main section .anime-list .anime-entry .anime-cover .bar,
-        main section .anime-list .anime-entry .anime-cover .progress-bar {
+        .bar,
+        .progress-bar {
             height: 10px;
             position: absolute;
             bottom: 0;
@@ -835,13 +856,13 @@ main section .anime-list-wrapper {
             border-radius: var(--border-radius);
         }
 
-        main section .anime-list .anime-entry .anime-cover .bar {
+        .bar {
             width: calc(100% - 20px);
             background-color: var(--color-darker);
             box-shadow: var(--shadow);
         }
 
-        main section .anime-list .anime-entry .anime-cover .progress-bar {
+        .progress-bar {
             background-color: var(--color-important);
         }
         
