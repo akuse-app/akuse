@@ -5,8 +5,8 @@
 
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
-    <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
     <img alt="stars" src="https://img.shields.io/github/stars/aleganza/akuse"> 
+    <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
 </p>
 
 <img title="img" alt="img" src="https://i.imgur.com/cQL3i8H.png">
