@@ -25,9 +25,9 @@ Now go inside the src/modules folder and create a clientData.js file with a stru
 
 ```
 module.exports = {
-    clientId: {},
-    redirectUri: "{}",
-    clientSecret: "{}"
+    clientId: ,
+    redirectUri: "",
+    clientSecret: ""
 }
 ```
 
