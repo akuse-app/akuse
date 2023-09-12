@@ -84,14 +84,14 @@
     transform: translateX(-50%);
 }
 
-.progress-area .progress-bar{
+.progress-area .video-progress-bar{
     width: 0%;
     height: 100%;
     position: relative;
     background: var(--color-important);
 }
 
-.progress-bar::before{
+.video-progress-bar::before{
     content: "";
     right: 0;
     top: 50%;
@@ -103,11 +103,11 @@
     transform: translateY(-50%);
 }
 
-.progress-bar::before, .progress-area span{
+.video-progress-bar::before, .progress-area span{
     display: none;
 }
 
-.video-timeline:hover .progress-bar::before,
+.video-timeline:hover .video-progress-bar::before,
 .video-timeline:hover .progress-area span{
     display: block;
 }

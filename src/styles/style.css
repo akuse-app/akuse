@@ -158,6 +158,8 @@ nav#nav-main {
     height: 70px;
     display: flex;
     border-radius: var(--border-radius);
+    align-items: center;
+    justify-content: center;
 }
 
     nav#nav-main ul {
@@ -211,28 +213,38 @@ nav#nav-main {
                 border-radius: 1000px;
             }
 
+.search-main-bar {
+    z-index: 19;
+    width: 500px;
+    position: absolute;
+    padding: 0 20px;
+    background-color: var(--color-1);
+    border: 2px solid var(--color-2);
+    border-radius: 200px;
+    transition: var(--transition);
+}
+
 .search-main-container {
     z-index: 19;
-    width: 1000px;
+    width: 500px;
     position: fixed;
     flex-direction: column;
     margin: auto;
     margin-top: 60px;
-    padding: 0 20px 15px 20px;
+    padding: 0 20px;
     background-color: var(--color-2);
     border: 2px solid var(--color-3);
     border-radius: var(--border-radius);
     transition: var(--transition);
 }
 
-.search-main-container #search-main {
-    height: 60px;
+.search-main-bar #search-main {
+    height: 50px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--color-3);
 }
 
-.search-main-container .input-container {
+.search-main-bar .input-container {
         width: 100%;
         display: flex;
         justify-content: center;
@@ -240,13 +252,13 @@ nav#nav-main {
         gap: 15px;
     }
 
-        .search-main-container .input-container i {
+    .search-main-bar .input-container i {
             font-size: 1.3rem;
             color: var(--font-2);
             font-weight: var(--font-weight);
         }
 
-        .search-main-container .input-container input {
+        .search-main-bar .input-container input {
             width: 100%;
             border: none;
             outline: none;
@@ -256,7 +268,7 @@ nav#nav-main {
             font-weight: var(--font-weight);
         }
 
-            .search-main-container .input-container input::placeholder {
+            .search-main-bar .input-container input::placeholder {
                 color: var(--font-2);
             }
 
@@ -845,25 +857,22 @@ main section .anime-list-wrapper {
             height: 100%;
             position: relative;
         }
-
-        .bar,
-        .progress-bar {
-            height: 10px;
-            position: absolute;
-            bottom: 0;
-            margin: 10px;
-            /* margin-bottom: 4px; */
-            border-radius: var(--border-radius);
-        }
-
+        
         .bar {
             width: calc(100% - 20px);
+            height: 10px;
+            margin: 10px;
+            bottom: 0;
+            position: absolute;
             background-color: var(--color-darker);
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
         }
-
+        
         .progress-bar {
+            height: 100%;
             background-color: var(--color-important);
+            border-radius: var(--border-radius);
         }
         
         main section .anime-list .anime-entry .anime-cover img {

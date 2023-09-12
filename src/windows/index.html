@@ -11,7 +11,7 @@
     <title>Akuse</title>
 </head>
 <body>
-    <div id="loading-page" style="opacity: 1; display: flex"></div>
+    <!-- <div id="loading-page" style="opacity: 1; display: flex"></div> -->
     <div class="document-controls">
         <ul>
             <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
@@ -23,16 +23,24 @@
         <div class="nav-container">
             <div id="nav-wrapper" class="nav-wrapper">
                 <nav id="nav-main">
+                    <div class="search-main-bar">
+                        <div id="search-main">
+                            <div class="input-container">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input id="search-main-input" type="text" placeholder="Search">
+                            </div>
+                        </div>
+                    </div>
                     <ul>
                         <li>
                             <i class="fa-solid fa-house"></i>
                             Home
                         </li>
-                        <li>
+                        <li style="color: var(--font-2)">
                             <i class="fa-solid fa-list-ul"></i>
                             My List
                         </li>
-                        <li  id="search-main-button">
+                        <li id="search-main-button">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             Search
                         </li>
@@ -45,13 +53,7 @@
                     </ul>
                 </nav>
             </div>
-            <div id="main-search-list-container" class="search-main-container" style="display: none">
-                <div id="search-main">
-                    <div class="input-container">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input id="search-main-input" type="text" placeholder="Search">
-                    </div>
-                </div>
+            <div id="main-search-list-container" class="search-main-container" style="display: flex">
                 <div class="scroller">
                     <div id="main-search-list" class="search-list"></div>
                 </div>
@@ -99,7 +101,7 @@
                         <div class="video-timeline">
                             <div class="progress-area">
                                 <span>00:00</span>
-                                <div class="progress-bar"></div>
+                                <div class="video-progress-bar"></div>
                             </div>
                         </div>
                         <div class="bottom">

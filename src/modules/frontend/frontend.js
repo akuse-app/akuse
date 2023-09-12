@@ -238,8 +238,8 @@ module.exports = class htmlManipulation {
         progress_bar_div.classList.add('progress-bar')
         progress_bar_div.style.width = `${progressWidth}%` // TODO fix for when calc is needed (-20px)
 
+        bar_div.appendChild(progress_bar_div)
         div.appendChild(bar_div)
-        div.appendChild(progress_bar_div)
     }
 
     /**
