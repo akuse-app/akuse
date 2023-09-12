@@ -406,7 +406,7 @@ module.exports = class AniListAPI extends Requests {
     async getSearchedAnimes(input) {
         var query = `
         {
-            Page(page: 1, perPage: 10) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage

@@ -11,7 +11,7 @@
     <title>Akuse</title>
 </head>
 <body>
-    <!-- <div id="loading-page" style="opacity: 1; display: flex"></div> -->
+    <div id="loading-page" style="opacity: 1; display: flex"></div>
     <div class="document-controls">
         <ul>
             <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
@@ -40,20 +40,30 @@
                             <i class="fa-solid fa-list-ul"></i>
                             My List
                         </li>
-                        <li id="search-main-button">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            Search
-                        </li>
                         <div class="right">
-                            <div class="user">
+                            <div id="user-section" class="user">
+                                <h2><i class="fa-solid fa-chevron-down"></i></h2>
                                 <div id="user-name">Welcome back, </div>
                                 <img id="user-icon" src="" alt="user-icon">
+                            </div>
+                            <div id="user-dropdown" class="dropdown" style="display: none;">
+                                <ul>
+                                    <li>
+
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                    <li>
+                                        
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </ul>
                 </nav>
             </div>
-            <div id="main-search-list-container" class="search-main-container" style="display: flex">
+            <div id="main-search-list-container" class="search-main-container" style="display: none">
                 <div class="scroller">
                     <div id="main-search-list" class="search-list"></div>
                 </div>

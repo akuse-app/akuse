@@ -18,29 +18,19 @@ document.getElementById('page-anime-search-button').addEventListener('click', (e
     }
 })
 
+// user section
+var userSection = document.getElementById('user-section')
+var userDropdown = document.getElementById('user-dropdown')
+userSection.addEventListener('click', (event) => {
+    userDropdown.style.display == 'none'
+    ? userDropdown.style.display = 'block'
+    : userDropdown.style.display = 'none' 
+})
+
 // main search bar listeners
-var searchMainDiv = document.getElementById('main-search-list-container')
-var searchMainButton = document.getElementById('search-main-button')
-var searchMainButtonIcon = document.querySelector('#search-main-button i')
+var scroller = document.getElementsByClassName('body-container')[0]
 var searchMainInput = document.getElementById('search-main-input')
-var body = document.getElementsByTagName('body')[0]
-var main = document.getElementsByClassName('body-container')[0]
-var navContainer = document.getElementsByClassName('nav-container')[0]
-var nav = document.getElementById('nav-main')
-
-searchMainButton.addEventListener('click', (event) => {
-    if (searchMainDiv.style.display == 'none') {
-        frontend.openMainSearchBar()
-    } else {
-        frontend.closeMainSearchBar()
-    }
-})
-
-document.addEventListener("scroll", (event) => {
-    if(searchMainDiv.style.display == 'flex') {
-        frontend.closeMainSearchBar()
-    }
-})
+var searchMainDiv = document.getElementById('main-search-list-container')
 
 var typingTimer
 var doneTypingInterval = 250
@@ -50,7 +40,33 @@ searchMainInput.addEventListener('input', async (event) => {
     typingTimer = setTimeout(async () => {
         let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
         frontend.displaySearchedAnimes(searchEntries)
+
+        if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
+
     }, doneTypingInterval)
+})
+
+/*
+    close main search bar when:
+    - an element outside the search bar / list is clicked
+    - input is empty
+    - the document is scrolled
+*/
+document.addEventListener('click', (event) => {
+    if(searchMainDiv.style.display == 'flex' && (!(event.target.closest('#main-search-list-container')) && !(event.target.closest('.search-main-bar')))) {
+        console.log('ora')
+        frontend.closeMainSearchBar()
+    }
+})
+
+if(searchMainInput.value == '') {
+    frontend.closeMainSearchBar
+}
+
+scroller.addEventListener("scroll", (event) => {
+    if(searchMainDiv.style.display == 'flex') {
+        frontend.closeMainSearchBar()
+    }
 })
 
 // navbar background changing

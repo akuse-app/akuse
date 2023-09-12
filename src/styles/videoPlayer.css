@@ -88,6 +88,7 @@
     width: 0%;
     height: 100%;
     position: relative;
+    margin: 0;
     background: var(--color-important);
 }
 
