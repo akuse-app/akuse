@@ -9,7 +9,7 @@
     <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
 </p>
 
-<img title="img" alt="img" src="https://i.imgur.com/cQL3i8H.png">
+<img title="img" alt="img" src="https://i.imgur.com/TCXJQm2.png">
 
 ## Running locally for development
 
