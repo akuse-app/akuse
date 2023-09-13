@@ -45,7 +45,6 @@
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "electron": "^25.2.0",
     "electron-builder": "^24.6.3",
-    "shell": "^0.9.4",
     "uninstall": "^0.0.0"
   },
   "dependencies": {
