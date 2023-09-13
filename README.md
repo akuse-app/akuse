@@ -33,11 +33,11 @@ module.exports = {
 
 ```bash
 # Example:
-# module.exports = {
-#     clientId: 12345,
-#     redirectUri: "https://www.example.com/",
-#     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
-# }
+module.exports = {
+    clientId: 12345,
+    redirectUri: "https://www.example.com/",
+    clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
+}
 ```
 
 Fill it with the data retrieved from the creation of your AniList API Client.
