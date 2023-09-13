@@ -9,7 +9,7 @@
     <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
 </p>
 
-<img title="img" alt="img" src="https://i.imgur.com/cQL3i8H.png">
+<img title="img" alt="img" src="https://i.imgur.com/TCXJQm2.png">
 
 ## Running locally for development
 
@@ -33,11 +33,11 @@ module.exports = {
 
 ```bash
 # Example:
-# module.exports = {
-#     clientId: 12345,
-#     redirectUri: "https://www.example.com/",
-#     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
-# }
+module.exports = {
+    clientId: 12345,
+    redirectUri: "https://www.example.com/",
+    clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
+}
 ```
 
 Fill it with the data retrieved from the creation of your AniList API Client.
