@@ -9,6 +9,7 @@ const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
 
 const store = new Store();
+const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 
 let authWin
 let mainWin
@@ -30,7 +31,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        frame: false,
+        /* frame: false, */
         icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,
@@ -75,6 +76,10 @@ ipcMain.on('maximize-document', (event) => {
 
 ipcMain.on('quit-document', (event) => {
     mainWin.close()
+})
+
+ipcMain.on('load-issues-url', (event) => {
+    require('electron').shell.openExternal(githubOpenNewIssueUrl);
 })
 
 app.whenReady().then(() => {

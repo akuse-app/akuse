@@ -11,7 +11,7 @@ const clientData = require ('../clientData.js')
  * 
  * @class
  */
-module.exports = class htmlManipulation {
+module.exports = class Frontend {
 
     /**
      * @constructor
@@ -35,10 +35,36 @@ module.exports = class htmlManipulation {
             '12': 'Dec'
         }
     }
-
+    
+    /**
+     * Removes the loading div when the document has finished loading
+     */
     removeLoadingPage() {
         document.getElementById('loading-page').style.opacity = 0;
         document.getElementById('loading-page').style.display = 'none';
+    }
+
+    /**
+     * Toggles the user dropdown, handling animations and style changes
+     */
+    toggleUserDropdown() {
+        var userSection = document.getElementById('user-section')
+        var userDropdown = document.getElementById('user-dropdown')
+        var color_1 = getComputedStyle(document.documentElement).getPropertyValue('--color-1');
+
+        if(userDropdown.style.display == 'none') {
+            userSection.style.backgroundColor = color_1
+            userDropdown.style.display = 'block'
+            userDropdown.classList.remove('hide-user-dropdown')
+            userDropdown.classList.add('show-user-dropdown')
+        } else {
+            userSection.style.backgroundColor = 'transparent'
+            userDropdown.classList.remove('show-user-dropdown')
+            userDropdown.classList.add('hide-user-dropdown')
+            setTimeout(() => {
+                userDropdown.style.display = 'none'
+            }, 400)
+        }
     }
 
     /**

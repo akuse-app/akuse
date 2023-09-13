@@ -6,6 +6,40 @@
     opacity: 0;
 }
 
+.show-user-dropdown {
+    animation: showUserDropdownAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes showUserDropdownAnimation {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hide-user-dropdown {
+    animation: hideUserDropdownAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes hideUserDropdownAnimation {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
 .show {
     animation: showPageAnimation 1s ease-in-out;
     animation-iteration-count: 1;

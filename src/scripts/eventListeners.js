@@ -20,11 +20,8 @@ document.getElementById('page-anime-search-button').addEventListener('click', (e
 
 // user section
 var userSection = document.getElementById('user-section')
-var userDropdown = document.getElementById('user-dropdown')
 userSection.addEventListener('click', (event) => {
-    userDropdown.style.display == 'none'
-    ? userDropdown.style.display = 'block'
-    : userDropdown.style.display = 'none' 
+    frontend.toggleUserDropdown()
 })
 
 // main search bar listeners

@@ -24,6 +24,11 @@ quitButton.addEventListener('click', () => {
     ipcRenderer.send('quit-document')
 })
 
+var bugReportButton = document.getElementById('user-dropdown-bug-report')
+bugReportButton.addEventListener('click', (event) => {
+    ipcRenderer.send('load-issues-url')
+})
+
 /**
  * OAuth is completed, so load the page with all the elements
  * 

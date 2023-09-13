@@ -31,12 +31,12 @@
                             </div>
                         </div>
                     </div>
-                    <ul>
-                        <li>
+                    <ul class="nav-ul">
+                        <li class="nav-li active">
                             <i class="fa-solid fa-house"></i>
                             Home
                         </li>
-                        <li style="color: var(--font-2)">
+                        <li class="nav-li">
                             <i class="fa-solid fa-list-ul"></i>
                             My List
                         </li>
@@ -46,8 +46,21 @@
                                 <div id="user-name">Welcome back, </div>
                                 <img id="user-icon" src="" alt="user-icon">
                             </div>
-                            <div id="user-dropdown" class="dropdown" style="display: none;">
-                                
+                            <div id="user-dropdown" class="dropdown fade-in" style="display: none;">
+                                <ul class="dropdown-ul">
+                                    <li id="user-dropdown-settings">
+                                        <i class="fa-solid fa-gear"></i>
+                                        Settings
+                                    </li>
+                                    <li id="user-dropdown-bug-report">
+                                        <i class="fa-solid fa-bug"></i>
+                                        Bug report
+                                    </li>
+                                    <li id="user-dropdown-exit">
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                        Exit
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </ul>
@@ -157,7 +170,7 @@
                 <div id="anime-page-shadow-background" class="fade-in"></div>
                 <div id="anime-page" class="anime-page-wrapper fade-in"> <!-- fade-in -->
                     <div class="anime-page">
-                        <button id="exit"><i class="fa-regular fa-circle-xmark"></i></button>
+                        <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
                         <div class="div">
                             <div class="content-wrapper">
                                 <div class="content">

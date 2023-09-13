@@ -7,6 +7,7 @@
     --color-important: #FF6B6B;
     --color-nav: #0f0f0f;
     --color-darker: rgba(0, 0, 0, 0.8);
+    --color-warning: rgb(255, 61, 61);
     
     --font-1: #fffdff;
     --font-2: rgb(179, 179, 179);
@@ -14,7 +15,7 @@
     
     --font-weight: 600;
     --border-radius: 8px;
-    --transition: 0.1s ease-out;
+    --transition: 0.1s ease;
     --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
 
@@ -103,7 +104,7 @@ img {
 }
 
 .document-controls ul li#document-quit:hover {
-    background-color: rgb(255, 61, 61);
+    background-color: var(--color-warning);
 }
 
 .document-controls ul li:active {
@@ -164,7 +165,7 @@ nav#nav-main {
     justify-content: center;
 }
 
-    nav#nav-main ul {
+    nav#nav-main ul.nav-ul {
         display: flex;
         align-items: center;
         width: 100%;
@@ -172,10 +173,10 @@ nav#nav-main {
         padding-left: 0;
     }
 
-        nav#nav-main ul li {
+        nav#nav-main .nav-ul li.nav-li {
             font-size: 1.3rem;
             display: inline;
-            color: var(--font-1);
+            color: var(--font-2);
             font-weight: var(--font-weight);
             padding: 10px 20px;
             margin-right: 20px;
@@ -183,11 +184,15 @@ nav#nav-main {
             transition: var(--transition);
         }
 
-        nav#nav-main ul li:hover {
-            color: var(--color-important)
+        nav#nav-main .nav-ul li.nav-li.active {
+            color: var(--font-1);
+        }
+
+        nav#nav-main ul.nav-ul li.nav-li:hover {
+            color: var(--font-1)
         }
         
-        nav#nav-main ul li:active {
+        nav#nav-main ul.nav-ul li.nav-li:active {
             transform: scale(0.95);
         }
         
@@ -205,10 +210,22 @@ nav#nav-main {
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 20;
             gap: 20px;
-            padding: 10px;
-            border-radius: var(--border-radius);
+            padding: 10px 30px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
             cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        nav#nav-main .right .user h2 i ,
+        nav#nav-main .right .user #user-name {
+            transition: var(--transition);
+        }
+
+        nav#nav-main .right .user:hover h2 i,
+        nav#nav-main .right .user:hover #user-name {
+            color: var(--font-1);
         }
         
         nav .right .user #user-name {
@@ -228,11 +245,34 @@ nav#nav-main {
             
         nav#nav-main .right .dropdown {
             width: 100%;
-            height: 60px;
-            top: 65px;
-            background-color: var(--color-nav);
-            border-radius: var();
+            height: max-content;
+            top: 60px;
+            z-index: 19;
+            background-color: var(--color-1);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
             position: absolute;
+            transition: var(--transition);
+        }
+        
+        nav#nav-main .right .dropdown ul.dropdown-ul {
+            padding-left: 0px;
+            text-decoration: none;
+            padding: 20px;
+        }
+
+        nav#nav-main .right .dropdown ul.dropdown-ul li {
+            list-style-type: none;
+            color: var(--font-2);
+            font-size: 1.1rem;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        nav#nav-main .right .dropdown ul.dropdown-ul li:hover {
+            color: var(--font-1);
+            background-color: var(--color-2);
         }
 
 .search-main-bar {
@@ -808,10 +848,10 @@ main .anime-page {
 
     main .anime-page button#exit {
         position: absolute;
-        top: 0px;
-        right: 0px;
+        top: -25px;
+        right: -25px;
         margin: 10px;
-        color: var(--font-2);
+        color: var(--font-1);
         font-size: 2rem;
         font-weight: var(--font-weight);
         cursor: pointer;
@@ -821,9 +861,8 @@ main .anime-page {
         transition: var(--transition);
     }
 
-    main .anime-page .menu ul li:hover,
     main .anime-page button#exit:hover {
-        color: var(--font-1);
+        color: var(--color-important);
     }
 
 main section h1 {
