@@ -20,7 +20,7 @@ const createWindow = () => {
         minHeight: 600,
         autoHideMenuBar: true,
         frame: false,
-        icon: 'assets/img/icon/icon-1024'
+        icon: 'assets/img/icon/icon'
     })
     
     mainWin  = new BrowserWindow({
@@ -31,7 +31,7 @@ const createWindow = () => {
         show: false,
         autoHideMenuBar: true,
         frame: false,
-        icon: 'assets/img/icon/icon-1024.png',
+        icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

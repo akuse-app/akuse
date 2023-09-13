@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="100px" src="https://github.com/aleganza/akuse/blob/main/assets/img/icon/icon-1024.png"/>
+    <img width="100px" src="https://github.com/aleganza/akuse/blob/main/assets/img/icon/icon.png"/>
     <h1 align="center">Akuse</h1>
 </p>
 
