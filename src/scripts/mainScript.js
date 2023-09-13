@@ -31,10 +31,20 @@ quitButton.addEventListener('click', () => {
 ipcRenderer.on('load-page', async (event) => {
     const viewerId = await anilist.getViewerId()
     
+    // load first part
     const viewerInfo = await anilist.getViewerInfo(viewerId)
     const entriesFeatured = await anilist.releasingAnimes()
     const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
+
+    frontend.displayViewerAvatar(viewerInfo)
+    frontend.displayFeaturedAnime(entriesFeatured)
+    frontend.displayUserAnimeSection(entriesCurrent, 'current', true)
+    frontend.displayGenreAnimeSection(entriesTrending, 'trending')
+
+    frontend.removeLoadingPage()
+
+    // load second part
     const entriesMostPopular = await anilist.getMostPopularAnimes()
     const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
     const entriesComedy = await anilist.getAnimesByGenre("Comedy")
@@ -42,12 +52,6 @@ ipcRenderer.on('load-page', async (event) => {
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     
-    frontend.removeLoadingPage()
-
-    frontend.displayViewerAvatar(viewerInfo)
-    frontend.displayFeaturedAnime(entriesFeatured)
-    frontend.displayUserAnimeSection(entriesCurrent, 'current', true)
-    frontend.displayGenreAnimeSection(entriesTrending, 'trending')
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular')
     frontend.displayGenreAnimeSection(entriesAdventure, 'adventure')
     frontend.displayGenreAnimeSection(entriesComedy, 'comedy')
