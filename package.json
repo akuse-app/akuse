@@ -1,5 +1,5 @@
 {
-  "name": "akuse",
+  "name": "Akuse",
   "version": "1.0.0",
   "description": "Anime streaming client for PC",
   "main": "src/main.js",
@@ -16,7 +16,7 @@
       "target": [
         "nsis"
       ],
-      "icon": "assets/img/icon/icon-1024.ico"
+      "icon": "assets/img/icon/icon.ico"
     },
     "nsis": {
       "oneClick": false,
