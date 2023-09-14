@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../styles/style.css">
     <link rel="stylesheet" href="../styles/animations.css">
     <link rel="stylesheet" href="../styles/videoPlayer.css">
+    <link rel="stylesheet" href="../styles/elements.css">
     <script src="https://kit.fontawesome.com/223615c47d.js" crossorigin="anonymous"></script>
     <title>Akuse</title>
 </head>
@@ -19,61 +20,196 @@
             <li id="document-quit"><i style="font-size: 1rem;" class="fa-solid fa-xmark"></i></li>
         </ul>
     </div>
-        <!-- NAVBAR + MAIN SEARCH BAR -->
-        <div class="nav-container">
-            <div id="nav-wrapper" class="nav-wrapper">
-                <nav id="nav-main">
-                    <div class="search-main-bar">
-                        <div id="search-main">
-                            <div class="input-container">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input id="search-main-input" type="text" placeholder="Search">
+    <!-- NAVBAR + MAIN SEARCH BAR -->
+    <div class="nav-container">
+        <div id="nav-wrapper" class="nav-wrapper">
+            <nav id="nav-main">
+                <div class="search-main-bar">
+                    <div id="search-main">
+                        <div class="input-container">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="search-main-input" type="text" placeholder="Search">
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav-ul">
+                    <li class="nav-li active">
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </li>
+                    <li class="nav-li">
+                        <i class="fa-solid fa-list-ul"></i>
+                        My List
+                    </li>
+                    <div class="right">
+                        <div id="user-section" class="user">
+                            <h2><i class="fa-solid fa-chevron-down"></i></h2>
+                            <div id="user-name">Welcome back, </div>
+                            <img id="user-icon" src="" alt="user-icon">
+                        </div>
+                        <div id="user-dropdown" class="dropdown fade-in" style="display: none;">
+                            <ul class="dropdown-ul">
+                                <li id="user-dropdown-settings">
+                                    <i class="fa-solid fa-gear"></i>
+                                    Settings
+                                </li>
+                                <li id="user-dropdown-bug-report">
+                                    <i class="fa-solid fa-bug"></i>
+                                    Bug report
+                                </li>
+                                <li id="user-dropdown-exit">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                    Exit
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+        <div id="main-search-list-container" class="search-main-container" style="display: none">
+            <div class="scroller">
+                <div id="main-search-list" class="search-list"></div>
+            </div>
+        </div>
+    </div>
+    <!-- SETTINGS MODAL PAGE -->
+    <div id="settings-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
+    <div id="settings-page" class="modal-page-wrapper fade-in">
+        <div class="settings-page">
+            <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="left">
+                        <ul>
+                            <li id="source-item" class="active">Source</li>
+                            <li id="anilist-item">AniList</li>
+                        </ul>
+                    </div>
+                    <div class="right">
+                        <div id="source-right-element" class="right-element"  style="display: block">
+                            <form>
+                                <p>Select the language in which you want to watch the episodes</p>
+                                <div class="form-element">
+                                    <input type="radio" id="us" name="fav_language" value="HTML">
+                                    <label for="us">
+                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/IT.svg" alt="">
+                                    </label><br>
+                                </div>
+                                <div class="form-element">   
+                                    <input type="radio" id="it" name="fav_language" value="CSS">
+                                    <label for="it">
+                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg" alt="">
+                                    </label><br>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="anilist-right-element" class="right-element" style="display: none">
+                            <div class="toggler">
+                                <p>Update progress automatically</p>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <ul class="nav-ul">
-                        <li class="nav-li active">
-                            <i class="fa-solid fa-house"></i>
-                            Home
-                        </li>
-                        <li class="nav-li">
-                            <i class="fa-solid fa-list-ul"></i>
-                            My List
-                        </li>
-                        <div class="right">
-                            <div id="user-section" class="user">
-                                <h2><i class="fa-solid fa-chevron-down"></i></h2>
-                                <div id="user-name">Welcome back, </div>
-                                <img id="user-icon" src="" alt="user-icon">
-                            </div>
-                            <div id="user-dropdown" class="dropdown fade-in" style="display: none;">
-                                <ul class="dropdown-ul">
-                                    <li id="user-dropdown-settings">
-                                        <i class="fa-solid fa-gear"></i>
-                                        Source language
-                                        <img alt="United States" src="http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg"/>
-                                        <img alt="Italy" src="http://purecatamphetamine.github.io/country-flag-icons/3x2/IT.svg"/>
-                                    </li>
-                                    <li id="user-dropdown-bug-report">
-                                        <i class="fa-solid fa-bug"></i>
-                                        Bug report
-                                    </li>
-                                    <li id="user-dropdown-exit">
-                                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                        Exit
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </ul>
-                </nav>
-            </div>
-            <div id="main-search-list-container" class="search-main-container" style="display: none">
-                <div class="scroller">
-                    <div id="main-search-list" class="search-list"></div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- ANIME MODAL PAGE -->
+    <div id="anime-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
+    <div id="anime-page" class="modal-page-wrapper fade-in">
+        <div class="anime-page">
+            <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
+            <div>
+                <div class="content-wrapper">
+                    <div class="content">
+                        <div class="page-anime-left">
+                            <img id="page-anime-cover" src="/assets/img/cover.png" alt="">
+                            <div class="anime-episodes">
+                                <h4>Your progress</h4>
+                                <div id="page-anime-progress-episodes"></div>
+                            </div>
+                            <div class="anime-user-score">
+                                <h4>Your score</h4>
+                                <div id="page-anime-user-score"></div>
+                            </div>
+                            <div class="anime-user-status">
+                                <h4>Your list status</h4>
+                                <h3 id="page-anime-user-status"></h3>
+                            </div>
+                            <div class="anime-status">
+                                <h4>Anime status</h4>
+                                <h3 id="page-anime-status"></h3>
+                            </div>
+                            <div class="anime-startDate">
+                                <h4>Start Date</h4>
+                                <h3 id="page-anime-startDate"></h3>
+                            </div>
+                            <div class="anime-endDate">
+                                <h4>End Date</h4>
+                                <h3 id="page-anime-endDate"></h3>
+                            </div>
+                            <!-- store useful data -->
+                            <div style="display: none;" id="page-anime-titles"></div>
+                            <div style="display: none;" id="page-anime-id"></div>
+                            <div style="display: none;" id="page-anime-progress"></div>
+                            <div style="display: none;" id="page-anime-episodes"></div>
+                        </div>
+                        <div class="page-anime-right-scroller">
+                            <div class="page-anime-right">
+                                <div id="page-anime-info-section">
+                                    <div class="anime-title">
+                                        <h2 id="page-anime-title">
+                                            Un bel nome di un Anime bello
+                                        </h2>
+                                    </div>
+                                    <div id="page-anime-infos" class="anime-infos">
+                                        <div class="anime-infos-child">
+                                            <i class="fa-regular fa-calendar-plus"></i> <span id="page-anime-seasonYear"></span>
+                                        </div>
+                                        <div class="anime-infos-child">
+                                            <i class="fa-solid fa-tv"></i> <span id="page-anime-format"></span> 
+                                        </div>
+                                        <div class="anime-infos-child">
+                                            <i class="fa-regular fa-clock"></i> <span id="page-anime-duration"></span> 
+                                        </div>
+                                        <div class="anime-infos-child">
+                                            <i class="fa-regular fa-star"></i> <span id="page-anime-meanScore"></span>
+                                        </div>
+                                    </div>
+                                    <!-- <ul id="page-anime-genres" class="anime-genres">
+                                    </ul> -->
+                                    <div id="page-anime-user-stats" class="user-stats">
+                                        <button id="page-anime-list-updater" class="list-updater">
+
+                                        </button>
+                                    </div>
+                                    <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
+                                        Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.
+                                    </div>
+                                </div>
+                                <div id="page-anime-watch-section">
+                                    <div class="episodes-list-header">
+                                        <h1>Episodes</h1>
+                                        <div class="search-bar-wrapper">
+                                            <button id="page-anime-search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                            <input id="page-anime-search-input" placeholder="Search"></input>
+                                        </div>
+                                    </div>
+                                    <div class="episodes-list-wrapper">
+                                        <div id="page-anime-episodes-list" class="episodes-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="body-container">
         <!-- VIDEO -->
         <div class="container show-controls">
@@ -132,7 +268,6 @@
                 </div>
             <video id="video"></video>
         </div>
-
         <!-- MAIN -->
         <main>
             <!-- FEATURED CONTENT -->
@@ -168,98 +303,6 @@
                 </div>
             </div>
             <div class="section-container">
-                <!-- ANIME MODAL PAGE -->
-                <div id="anime-page-shadow-background" class="fade-in"></div>
-                <div id="anime-page" class="anime-page-wrapper fade-in"> <!-- fade-in -->
-                    <div class="anime-page">
-                        <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
-                        <div class="div">
-                            <div class="content-wrapper">
-                                <div class="content">
-                                    <div class="page-anime-left">
-                                        <img id="page-anime-cover" src="/assets/img/cover.png" alt="">
-                                        <div class="anime-episodes">
-                                            <h4>Your progress</h4>
-                                            <div id="page-anime-progress-episodes"></div>
-                                        </div>
-                                        <div class="anime-user-score">
-                                            <h4>Your score</h4>
-                                            <div id="page-anime-user-score"></div>
-                                        </div>
-                                        <div class="anime-user-status">
-                                            <h4>Your list status</h4>
-                                            <h3 id="page-anime-user-status"></h3>
-                                        </div>
-                                        <div class="anime-status">
-                                            <h4>Anime status</h4>
-                                            <h3 id="page-anime-status"></h3>
-                                        </div>
-                                        <div class="anime-startDate">
-                                            <h4>Start Date</h4>
-                                            <h3 id="page-anime-startDate"></h3>
-                                        </div>
-                                        <div class="anime-endDate">
-                                            <h4>End Date</h4>
-                                            <h3 id="page-anime-endDate"></h3>
-                                        </div>
-                                        <!-- store useful data -->
-                                        <div style="display: none;" id="page-anime-titles"></div>
-                                        <div style="display: none;" id="page-anime-id"></div>
-                                        <div style="display: none;" id="page-anime-progress"></div>
-                                        <div style="display: none;" id="page-anime-episodes"></div>
-                                    </div>
-                                    <div class="page-anime-right-scroller">
-                                        <div class="page-anime-right">
-                                            <div id="page-anime-info-section">
-                                                <div class="anime-title">
-                                                    <h2 id="page-anime-title">
-                                                        Un bel nome di un Anime bello
-                                                    </h2>
-                                                </div>
-                                                <div id="page-anime-infos" class="anime-infos">
-                                                    <div class="anime-infos-child">
-                                                        <i class="fa-regular fa-calendar-plus"></i> <span id="page-anime-seasonYear"></span>
-                                                    </div>
-                                                    <div class="anime-infos-child">
-                                                        <i class="fa-solid fa-tv"></i> <span id="page-anime-format"></span> 
-                                                    </div>
-                                                    <div class="anime-infos-child">
-                                                        <i class="fa-regular fa-clock"></i> <span id="page-anime-duration"></span> 
-                                                    </div>
-                                                    <div class="anime-infos-child">
-                                                        <i class="fa-regular fa-star"></i> <span id="page-anime-meanScore"></span>
-                                                    </div>
-                                                </div>
-                                                <!-- <ul id="page-anime-genres" class="anime-genres">
-                                                </ul> -->
-                                                <div id="page-anime-user-stats" class="user-stats">
-                                                    <button id="page-anime-list-updater" class="list-updater">
-
-                                                    </button>
-                                                </div>
-                                                <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
-                                                    Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.
-                                                </div>
-                                            </div>
-                                            <div id="page-anime-watch-section">
-                                                <div class="episodes-list-header">
-                                                    <h1>Episodes</h1>
-                                                    <div class="search-bar-wrapper">
-                                                        <button id="page-anime-search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                                                        <input id="page-anime-search-input" placeholder="Search"></input>
-                                                    </div>
-                                                </div>
-                                                <div class="episodes-list-wrapper">
-                                                    <div id="page-anime-episodes-list" class="episodes-list"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <!-- ANIME SECTIONS -->
                 <section>
                     <h1>Continue watching</h1>

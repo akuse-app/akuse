@@ -275,6 +275,149 @@ nav#nav-main {
             background-color: var(--color-2);
         }
 
+.modal-page-shadow-background {
+    display: none; /* turning flex */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 19;
+    background-color: var(--color-darker);
+}
+
+.modal-page-wrapper {
+    display: none; /* turning flex */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+}
+
+.settings-page {
+    position: relative;
+    width: 1000px;
+    height: 600px;
+    border-radius: var(--border-radius);
+    background: var(--color-2);
+    background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+    .settings-page .content-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 30px;
+    }
+    
+    .settings-page .content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+        .settings-page .content .left {
+            width: 20%;
+            height: 100%;
+            border-right: 2px solid var(--color-3);
+        }
+
+            .settings-page .content .left ul {
+                padding-left: 0px;
+                text-decoration: none;
+                padding-right: 30px;
+            }
+            
+            .settings-page .content .left ul li {
+                list-style-type: none;
+                color: var(--font-2);
+                font-size: 1.1rem;
+                padding: 10px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                border-radius: var(--border-radius);
+                transition: var(--transition);
+            }
+            
+            .settings-page .content .left ul li.active {
+                color: var(--font-1);
+                background-color: var(--color-2);
+            }
+
+            .settings-page .content .left ul li:hover {
+                color: var(--font-1);
+                background-color: var(--color-2);
+            }
+        
+        .settings-page .content .right {
+            width: 80%;
+            height: 100%;
+            padding-left: 30px;
+        }
+        
+            .settings-page .content .right .toggler {
+                width: calc(100% - 100px);
+                display: flex;
+                align-items: center;
+                padding: 10px 20px;
+                color: var(--font-1);
+                background-color: var(--color-2);
+                margin-bottom: 15px;
+                border-radius: var(--border-radius);
+            }
+
+            .settings-page .content .right .toggler label {
+                margin-left: auto;
+            }
+
+        .settings-page .content .right form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .settings-page .content .right form p {
+            color: var(--font-1);
+        }
+
+        .settings-page .content .right form .form-element {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .settings-page .content .right img {
+            width: 75px;
+        }
+
+    .settings-page button#exit {
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        margin: 10px;
+        color: var(--font-1);
+        font-size: 2rem;
+        font-weight: var(--font-weight);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        transition: var(--transition);
+    }
+
+    .settings-page button#exit:hover {
+        color: var(--color-important);
+    }
+
 .search-main-bar {
     z-index: 19;
     width: 500px;
@@ -577,34 +720,12 @@ main section {
     margin-top: 40px;
 }
 
-main #anime-page-shadow-background {
-    display: none; /* turning flex */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 19;
-    background-color: var(--color-darker);
-}
-
-main #anime-page {
-    display: none; /* turning flex */
-    position: fixed;
-    z-index: 20;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-main .anime-page {
+.anime-page {
     position: relative;
     width: 1800px;
     height: 800px;
     border-radius: var(--border-radius);
+    color: var(--font-1);
     background: var(--color-2);
     background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
     background-repeat: no-repeat;
@@ -613,42 +734,42 @@ main .anime-page {
     flex-direction: column;
 }
 
-    main .anime-page .content-wrapper {
+    .anime-page .content-wrapper {
         width: 100%;
         height: 100%;
         display: flex;
         align-items: center;
     }
     
-    main .anime-page .content {
+    .anime-page .content {
         width: 100%;
-        display: flex;
         height: max-content;
+        display: flex;
         margin: 30px;
     }
 
-    main .anime-page .content .page-anime-left {
+    .anime-page .content .page-anime-left {
         display: flex;
         flex-direction: column;
         gap: 5px;
     }
 
-    main .anime-page .content .page-anime-left h4 {
+    .anime-page .content .page-anime-left h4 {
         font-weight: var(--font-weight);
         color: var(--font-2);
     }
 
-    main .anime-page .content .page-anime-left h3 {
+    .anime-page .content .page-anime-left h3 {
         color: var(--font-1);
     }
     
-    main .anime-page .content .page-anime-left img#page-anime-cover {
+    .anime-page .content .page-anime-left img#page-anime-cover {
         height: 450px;
         border-radius: var(--border-radius);
         box-shadow: var(--shadow);
     }
 
-    main .anime-page .content .page-anime-left #page-anime-progress-episodes {
+    .anime-page .content .page-anime-left #page-anime-progress-episodes {
         width: 100% ;
         height: 10px;
         position: relative;
@@ -665,11 +786,11 @@ main .anime-page {
         background-color: var(--color-1);
     }
 
-    main .anime-page .content .page-anime-left #page-anime-user-score i {
+    .anime-page .content .page-anime-left #page-anime-user-score i {
         color: var(--color-important)
     }
     
-    main .anime-page .content .page-anime-right {
+    .anime-page .content .page-anime-right {
         width: calc(100% - 60px);
         display: flex;
         flex-direction: column;
@@ -677,7 +798,7 @@ main .anime-page {
         padding: 0 30px;
     }
 
-        main .anime-page .content .page-anime-right #page-anime-info-section {
+        .anime-page .content .page-anime-right #page-anime-info-section {
             display: flex;
             width: 100%;
             height: 100%;
@@ -685,20 +806,20 @@ main .anime-page {
             gap: 10px;
         }
         
-        main .anime-page .content .page-anime-right #page-anime-watch-section {
+        .anime-page .content .page-anime-right #page-anime-watch-section {
             display: flex;
             flex-direction: column;
             width: 100%;
             height: 100%;
         }
 
-            main .anime-page .content .page-anime-right #page-anime-watch-section .episodes-list-header {
+            .anime-page .content .page-anime-right #page-anime-watch-section .episodes-list-header {
                 width: 100%;
                 display: flex;
                 align-items: center;
             }
 
-                main .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper {
+                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper {
                     display: flex;
                     align-items: center;
                     margin-left: auto;
@@ -708,7 +829,7 @@ main .anime-page {
                     padding: 6px;
                 }
 
-                main .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper input {
+                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper input {
                     display: none;
                     width: 100px;
                     font-size: 1.4rem;
@@ -719,7 +840,7 @@ main .anime-page {
                     background-color: transparent;
                 }
 
-                main .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button {
+                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button {
                     border: none;
                     outline: none;
                     background-color: transparent;
@@ -727,46 +848,46 @@ main .anime-page {
                     padding: 5px;
                 }
 
-                main .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button:active {
+                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button:active {
                     transform: scale(0.90);
                 }
 
-                main .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button i {
+                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button i {
                     color: var(--font-1);
                     font-size: 1.4rem;
                 }
 
-        main .anime-page .content .page-anime-right .anime-title {
+        .anime-page .content .page-anime-right .anime-title {
             font-size: 3rem;
             font-weight: var(--font-weight);
         }
 
-        main .anime-page .content .page-anime-right .anime-title h2 {
+        .anime-page .content .page-anime-right .anime-title h2 {
             width: fit-content;
         }
 
-        main .anime-page .content .page-anime-right .anime-title span{
+        .anime-page .content .page-anime-right .anime-title span{
             color: var(--font-2);
         }
 
-        main .anime-page .content .page-anime-right .anime-description {
+        .anime-page .content .page-anime-right .anime-description {
             color: var(--font-2);
             font-size: 1.2rem;
         }
 
-        main .anime-page .content .page-anime-right .anime-infos {
+        .anime-page .content .page-anime-right .anime-infos {
             color: var(--font-2);
             font-size: 1.2rem;
             display: flex;
             gap: 20px;
         }
 
-        main .anime-page .content .page-anime-right ul.anime-genres {
+        .anime-page .content .page-anime-right ul.anime-genres {
             margin: 10px 0;
             padding-left: 0;
         }
 
-        main .anime-page .content .page-anime-right ul.anime-genres li {
+        .anime-page .content .page-anime-right ul.anime-genres li {
             display: inline;
             background-color: var(--font-1);
             color: var(--color-2);
@@ -778,7 +899,7 @@ main .anime-page {
             box-shadow: var(--shadow);
         }
 
-        main .anime-page .content .page-anime-right .user-stats button.list-updater {
+        .anime-page .content .page-anime-right .user-stats button.list-updater {
             outline: none;
             background-color: transparent;
             width: max-content;
@@ -793,11 +914,11 @@ main .anime-page {
             cursor: pointer;
         }
 
-        main .anime-page .content .page-anime-right .user-stats .list-updater:hover {
+        .anime-page .content .page-anime-right .user-stats .list-updater:hover {
             filter: brightness(1.2);
         }
         
-        main .anime-page .content .page-anime-right .user-stats .list-updater:active {
+        .anime-page .content .page-anime-right .user-stats .list-updater:active {
             filter: brightness(1);
         }
 
@@ -809,13 +930,13 @@ main .anime-page {
         overflow-x: hidden;
     }
 
-    main .anime-page .content .page-anime-right .episodes-list {
+    .anime-page .content .page-anime-right .episodes-list {
         display: grid;
         grid-template-columns: repeat(auto-fill, 25%);
         height: max-content;
     }
     
-    main .anime-page .content .page-anime-right .episodes-list .episode {
+    .anime-page .content .page-anime-right .episodes-list .episode {
         background-image: url(/assets/img/banner.jpg);
         background-position: center center;
         background-size: cover;
@@ -827,15 +948,15 @@ main .anime-page {
         box-shadow: var(--shadow);
     }
 
-    main .anime-page .content .page-anime-right .episodes-list .episode:hover {
+    .anime-page .content .page-anime-right .episodes-list .episode:hover {
         transform: scale(1.05);
     }
     
-    main .anime-page .content .page-anime-right .episodes-list .episode:active {
+    .anime-page .content .page-anime-right .episodes-list .episode:active {
         transform: scale(1);
     }
 
-    main .anime-page .content .page-anime-right .episodes-list .episode .content {
+    .anime-page .content .page-anime-right .episodes-list .episode .content {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -846,7 +967,7 @@ main .anime-page {
         justify-content: center;
     }
 
-    main .anime-page button#exit {
+    .anime-page button#exit {
         position: absolute;
         top: -25px;
         right: -25px;
@@ -861,7 +982,7 @@ main .anime-page {
         transition: var(--transition);
     }
 
-    main .anime-page button#exit:hover {
+    .anime-page button#exit:hover {
         color: var(--color-important);
     }
 

@@ -29,6 +29,11 @@ bugReportButton.addEventListener('click', (event) => {
     ipcRenderer.send('load-issues-url')
 })
 
+var exitReportButton = document.getElementById('user-dropdown-exit')
+exitReportButton.addEventListener('click', (event) => {
+    ipcRenderer.send('exit-app')
+})
+
 /**
  * OAuth is completed, so load the page with all the elements
  * 

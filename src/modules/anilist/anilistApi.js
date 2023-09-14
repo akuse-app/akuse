@@ -224,9 +224,6 @@ module.exports = class AniListAPI extends Requests {
 
         const options = this.getOptions(query, variables)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
-
-        console.log(typeof respData.data)
-        console.log(" -> " + JSON.stringify(respData))
     }
 
     /**
@@ -250,7 +247,7 @@ module.exports = class AniListAPI extends Requests {
 
         const options = this.getOptions(query, variables)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
-        console.log(respData.data.Media)
+
         return respData.data.Media
     }
 

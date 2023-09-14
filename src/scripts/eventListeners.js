@@ -66,6 +66,40 @@ scroller.addEventListener("scroll", (event) => {
     }
 })
 
+// open settings modal page
+var settingsButton = document.getElementById('user-dropdown-settings')
+settingsButton.addEventListener('click', (event) => {
+    frontend.displaySettingsPage()
+})
+
+var exit_button = document.querySelector('.settings-page #exit')
+exit_button.addEventListener('click', (event) => {
+    frontend.closeSettingsPage()
+})
+
+var sourceItem = document.getElementById('source-item')
+var anilistItem = document.getElementById('anilist-item')
+var sourceRightElement = document.getElementById('source-right-element')
+var anilistRightElement = document.getElementById('anilist-right-element')
+
+sourceItem.addEventListener('click', (event) => {
+    if(sourceRightElement.style.display == 'none') {
+        sourceItem.classList.toggle('active')
+        anilistItem.classList.toggle('active')
+        anilistRightElement.style.display = 'none'
+        sourceRightElement.style.display = 'block'
+    }
+})
+
+anilistItem.addEventListener('click', (event) => {
+    if(anilistRightElement.style.display == 'none') {
+        anilistItem.classList.toggle('active')
+        sourceItem.classList.toggle('active')
+        sourceRightElement.style.display = 'none'
+        anilistRightElement.style.display = 'block'
+    }
+})
+
 // navbar background changing
 var lastScroll = 0
 var nav_div = document.getElementById('nav-wrapper')
@@ -173,7 +207,7 @@ list_updater_button.addEventListener('click', (event) => {
 }) 
 
 // anime page closer
-const exit_button = document.getElementById('exit')
+var exit_button = document.querySelector('.anime-page #exit')
 exit_button.addEventListener('click', (event) => {
     frontend.closeAnimePage()
 })

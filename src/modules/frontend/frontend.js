@@ -45,6 +45,44 @@ module.exports = class Frontend {
     }
 
     /**
+     * Shows the modal page
+     * 
+     * @param {*} shadowModalDiv the shadow modal page to show
+     * @param {*} pageModalDiv the modal page to show
+     */
+    showModalPage(shadowModalDiv, pageModalDiv) {
+        document.getElementById(pageModalDiv).style.display = 'flex'
+        document.getElementById(shadowModalDiv).style.display = 'flex'
+
+        document.getElementById(pageModalDiv).classList.remove('hide-page')
+        document.getElementById(pageModalDiv).classList.add('show-page')
+        document.getElementById(shadowModalDiv).classList.remove('hide-page-shadow-background')
+        document.getElementById(shadowModalDiv).classList.add('show-page-shadow-background')
+        
+        /* document.getElementsByClassName('body-container')[0].style.overflow = 'hidden' */
+    }
+
+    /**
+     * Hides the modal page
+     * 
+     * @param {*} shadowModalDiv the shadow modal page to hide
+     * @param {*} pageModalDiv the modal page to hide
+     */
+    hideModalPage(shadowModalDiv, pageModalDiv) {
+        document.getElementById(pageModalDiv).classList.remove('show-page')
+        document.getElementById(pageModalDiv).classList.add('hide-page')
+        document.getElementById(shadowModalDiv).classList.remove('show-page-shadow-background')
+        document.getElementById(shadowModalDiv).classList.add('hide-page-shadow-background')
+
+        setTimeout(() => {
+            document.getElementById(pageModalDiv).style.display = 'none'
+            document.getElementById(shadowModalDiv).style.display = 'none'
+        }, 400)
+        
+        /* document.getElementsByClassName('body-container')[0].style.overflow = 'auto' */
+    }
+
+    /**
      * Toggles the user dropdown, handling animations and style changes
      */
     toggleUserDropdown() {
@@ -65,6 +103,14 @@ module.exports = class Frontend {
                 userDropdown.style.display = 'none'
             }, 400)
         }
+    }
+
+    displaySettingsPage() {
+        this.showModalPage('settings-page-shadow-background', 'settings-page')
+    }
+    
+    closeSettingsPage() {
+        this.hideModalPage('settings-page-shadow-background', 'settings-page')
     }
 
     /**
@@ -530,15 +576,7 @@ module.exports = class Frontend {
         }) */
 
         // show modal page
-        document.getElementById('anime-page').style.display = 'flex'
-        document.getElementById('anime-page-shadow-background').style.display = 'flex'
-
-        document.getElementById('anime-page').classList.remove('hide-page')
-        document.getElementById('anime-page').classList.add('show-page')
-        document.getElementById('anime-page-shadow-background').classList.remove('hide-page-shadow-background')
-        document.getElementById('anime-page-shadow-background').classList.add('show-page-shadow-background')
-        
-        document.getElementsByClassName('body-container')[0].style.overflow = 'hidden'
+        this.showModalPage('anime-page-shadow-background', 'anime-page')
     }
     
     triggerListUpdater() {
@@ -550,17 +588,7 @@ module.exports = class Frontend {
      */
     closeAnimePage() {
         // hide modal page
-        document.getElementById('anime-page').classList.remove('show-page')
-        document.getElementById('anime-page').classList.add('hide-page')
-        document.getElementById('anime-page-shadow-background').classList.remove('show-page-shadow-background')
-        document.getElementById('anime-page-shadow-background').classList.add('hide-page-shadow-background')
-
-        setTimeout(() => {
-            document.getElementById('anime-page').style.display = 'none'
-            document.getElementById('anime-page-shadow-background').style.display = 'none'
-        }, 400)
-        
-        document.getElementsByClassName('body-container')[0].style.overflow = 'auto'
+        this.hideModalPage('anime-page-shadow-background', 'anime-page')
         
         // enable body scrolling only if main search container isn't enabled
         /* if(document.getElementById('main-search-list-container').style.display == 'none') {
