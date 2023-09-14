@@ -91,15 +91,15 @@
                             <form>
                                 <p>Select the language in which you want to watch the episodes</p>
                                 <div class="form-element">
-                                    <input type="radio" id="us" name="fav_language" value="HTML">
-                                    <label for="us">
-                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/IT.svg" alt="">
+                                    <input type="radio" id="us-flag" name="flag" value="US">
+                                    <label for="us-flag">
+                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg" alt="">
                                     </label><br>
                                 </div>
-                                <div class="form-element">   
-                                    <input type="radio" id="it" name="fav_language" value="CSS">
-                                    <label for="it">
-                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg" alt="">
+                                <div class="form-element"> 
+                                    <input type="radio" id="it-flag" name="flag" value="IT">
+                                    <label for="it-flag">
+                                        <img src="https://purecatamphetamine.github.io/country-flag-icons/3x2/IT.svg" alt="">
                                     </label><br>
                                 </div>
                             </form>
@@ -108,7 +108,7 @@
                             <div class="toggler">
                                 <p>Update progress automatically</p>
                                 <label class="switch">
-                                    <input type="checkbox">
+                                    <input type="checkbox" id="update-progress-checkbox">
                                     <span class="slider round"></span>
                                 </label>
                             </div>
@@ -384,7 +384,8 @@
 </body>
 <script>
     require('../scripts/mainScript.js')
-    require('../scripts/eventListeners.js')
+    require('../scripts/settingsScript.js')
     require('../scripts/videoScript.js')
+    require('../scripts/eventListeners.js')
 </script>
 </html>

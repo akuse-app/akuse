@@ -1,6 +1,7 @@
 'use-strict'
 
 const Hls = require('hls.js')
+const Store = require('electron-store')
 const AnimeSaturn = require('../providers/animesaturn')
 const AniListAPI = require('../anilist/anilistApi')
 
@@ -8,13 +9,14 @@ const AniListAPI = require('../anilist/anilistApi')
  * Methods for video playing and functionalities
  * 
  * @class
- */
+*/
 module.exports = class Video {
-
+    
     /**
      * @constructor
      */
     constructor() {
+        this.store = new Store()
         this.cons = new AnimeSaturn()
         this.anilist = new AniListAPI()
 
@@ -71,7 +73,9 @@ module.exports = class Video {
             return
         }
 
-        this.anilist.updateAnimeProgress(animeId, progress)
+        if(this.store.get('update_progress')) {
+            this.anilist.updateAnimeProgress(animeId, progress)
+        }
         
         var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())

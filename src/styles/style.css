@@ -215,7 +215,7 @@ nav#nav-main {
             padding: 10px 30px;
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             cursor: pointer;
-            transition: var(--transition);
+            transition: var(--animation-transition);
         }
         
         nav#nav-main .right .user h2 i ,
@@ -252,6 +252,7 @@ nav#nav-main {
             border-radius: 0 0 var(--border-radius) var(--border-radius);
             position: absolute;
             transition: var(--transition);
+            box-shadow: var(--shadow);
         }
         
         nav#nav-main .right .dropdown ul.dropdown-ul {
@@ -268,6 +269,10 @@ nav#nav-main {
             cursor: pointer;
             border-radius: var(--border-radius);
             transition: var(--transition);
+        }
+
+        nav#nav-main .right .dropdown ul.dropdown-ul li:not(:last-child) {
+            margin-bottom: 10px;
         }
 
         nav#nav-main .right .dropdown ul.dropdown-ul li:hover {
