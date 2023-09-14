@@ -4,18 +4,19 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 const fsExtra = require('fs-extra')
-const Store = require('electron-store');
+const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
 
 
-const store = new Store();
+const store = new Store()
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
 
 let authWin
 let mainWin
+
 const createWindow = () => {
     authWin  = new BrowserWindow({
         width: 400,
@@ -61,37 +62,37 @@ const createWindow = () => {
         mainWin.maximize()
         
         mainWin.webContents.on('did-finish-load', () => {
-            authWin.close()
+            authWin.hide()
             store.set('access_token', token)
             mainWin.webContents.send('load-page')
         })
     })
+    
+    ipcMain.on('iconify-document', (event) => {
+        mainWin.minimize()
+    })
+    
+    ipcMain.on('maximize-document', (event) => {
+        mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
+    })
+    
+    ipcMain.on('quit-document', (event) => {
+        mainWin.close()
+    })
+    
+    ipcMain.on('load-issues-url', (event) => {
+        require('electron').shell.openExternal(githubOpenNewIssueUrl);
+    })
+    
+    // not working
+    ipcMain.on('exit-app', (event) => {
+        mainWin.webContents.session.clearStorageData().then((data) => {
+            // mainWin.hide()
+            // authWin.show()
+            // authWin.loadURL(authUrl)
+        })
+    })
 }
-
-ipcMain.on('iconify-document', (event) => {
-    mainWin.minimize()
-})
-
-ipcMain.on('maximize-document', (event) => {
-    mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
-})
-
-ipcMain.on('quit-document', (event) => {
-    mainWin.close()
-})
-
-ipcMain.on('load-issues-url', (event) => {
-    require('electron').shell.openExternal(githubOpenNewIssueUrl);
-})
-
-// not working
-ipcMain.on('exit-app', (event) => {
-    // const localPath = 'C:/Users/' + require("os").userInfo().username + '/AppData/Roaming/Akuse/Network'
-    // fsExtra.emptyDirSync(localPath)
-
-    // mainWin.close()
-    // authWin.loadURL(authUrl)
-})
 
 app.whenReady().then(() => {
     createWindow()
