@@ -6,7 +6,7 @@ const store = new Store()
 
 const defaultFlag = 'US'
 
-// flags
+// FLAGS
 if(!(store.has('source_flag'))) {
     store.set('source_flag', `${defaultFlag}`)
     document.querySelector(`input[value="${defaultFlag}"]:checked`).checked = true
@@ -18,11 +18,11 @@ var sourceFlagRadios = document.querySelectorAll('input[name="flag"]')
 
 Object.keys(sourceFlagRadios).forEach(radio => {
     Object.values(sourceFlagRadios)[radio].addEventListener('click', (event) => {
-        store.set('source_flag', document.querySelector('input[name="flag"]:checked').value) // UK, IT...
+        store.set('source_flag', document.querySelector('input[name="flag"]:checked').value) // US, IT...
     })
 })
 
-// checkboxes
+// CHECKBOXES
 if(!(store.has('update_progress'))) {
     store.set('update_progress', false)
 }

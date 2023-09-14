@@ -2,6 +2,8 @@
 
 const Hls = require('hls.js')
 const Store = require('electron-store')
+const Zoro = require('../providers/zoro')
+const Gogoanime = require('../providers/gogoanime')
 const AnimeSaturn = require('../providers/animesaturn')
 const AniListAPI = require('../anilist/anilistApi')
 
@@ -17,8 +19,22 @@ module.exports = class Video {
      */
     constructor() {
         this.store = new Store()
-        this.cons = new AnimeSaturn()
         this.anilist = new AniListAPI()
+
+        switch(this.store.get('source_flag')) {
+            case 'US': {
+                this.cons = new Gogoanime()
+                // this.cons = new Zoro()
+                console.log('siamo US')
+                break
+            }
+            case 'IT': {
+                console.log('siamo IT')
+                this.cons = new AnimeSaturn()
+                break
+            }
+        }
+
 
         this.container = document.querySelector(".container")
         this.videoElement = document.getElementById('video')

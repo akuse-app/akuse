@@ -81,13 +81,13 @@ const createWindow = () => {
     })
     
     ipcMain.on('load-issues-url', (event) => {
-        require('electron').shell.openExternal(githubOpenNewIssueUrl);
+        require('electron').shell.openExternal(githubOpenNewIssueUrl)
     })
     
-    // not working
+    // working partially
     ipcMain.on('exit-app', (event) => {
         mainWin.webContents.session.clearStorageData().then((data) => {
-            // mainWin.hide()
+            mainWin.close()
             // authWin.show()
             // authWin.loadURL(authUrl)
         })
