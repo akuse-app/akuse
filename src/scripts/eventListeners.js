@@ -7,6 +7,8 @@ const clientData = require('../modules/clientData.js')
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
+document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
+
 // dynamic episodes search bar (NOT WORKING)
 document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
     var input = document.getElementById('page-anime-search-input')
@@ -112,9 +114,11 @@ body_container_div.addEventListener("scroll", (event) => {
         if(scroll > lastScroll && lastScroll === 0) {
             setTimeout(() => {
                 nav_div.style.backgroundColor = color
+                nav_div.classList.toggle('shadow')
             }, 100)
         } else if(scroll === 0 && lastScroll !== 0){
             nav_div.style.backgroundColor = 'transparent'
+            nav_div.classList.toggle('shadow')
         }
     
     lastScroll = scroll

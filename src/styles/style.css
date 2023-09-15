@@ -15,7 +15,7 @@
     
     --font-weight: 600;
     --border-radius: 8px;
-    --transition: 0.1s ease;
+    --transition: 0.2s ease;
     --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
 
@@ -81,7 +81,7 @@ img {
     width: 100%;
     position: fixed;
     z-index: 21;
-    background-color: var(--color-nav);
+    background-color: black;
 }
 
 .document-controls ul {
@@ -154,6 +154,10 @@ img {
     transition: 0.2s ease-out;
 }
 
+.nav-wrapper.shadow {
+    box-shadow: var(--shadow);
+}
+
 nav#nav-main {
     width: calc(100% - 100px);
     z-index: 19;
@@ -164,6 +168,16 @@ nav#nav-main {
     align-items: center;
     justify-content: center;
 }
+
+    nav#nav-main img#nav-img {
+        width: 140px;
+        margin-right: 30px;
+        cursor: pointer;
+    }
+
+    nav#nav-main img#nav-img:active {
+        filter: brightness(0.90);
+    }
 
     nav#nav-main ul.nav-ul {
         display: flex;
@@ -177,23 +191,21 @@ nav#nav-main {
             font-size: 1.3rem;
             display: inline;
             color: var(--font-2);
+            border-radius: var(--border-radius);
             font-weight: 500;
+            margin-right: 5px;
             padding: 10px 20px;
-            margin-right: 20px;
             cursor: pointer;
             transition: var(--transition);
         }
-
+        
         nav#nav-main .nav-ul li.nav-li.active {
             color: var(--font-1);
-        }
-
-        nav#nav-main ul.nav-ul li.nav-li:hover {
-            color: var(--font-1)
+            background-color: var(--color-1);
         }
         
-        nav#nav-main ul.nav-ul li.nav-li:active {
-            transform: scale(0.95);
+        nav#nav-main ul.nav-ul li.nav-li:hover {
+            color: var(--font-1)
         }
         
     nav#nav-main .right {
@@ -450,7 +462,7 @@ nav#nav-main {
 }
 
 .search-main-bar #search-main {
-    height: 50px;
+    height: 45px;
     display: flex;
     align-items: center;
 }
@@ -1025,10 +1037,6 @@ main section .anime-list-wrapper {
         main section .anime-list .anime-entry:hover {
             transform: scale(1.05);
         }
-
-        /* main section .anime-list .anime-entry:active {
-            filter: brightness(0.80);
-        } */
         
         main section .anime-list .anime-entry .content {
             margin-top: 10px;
