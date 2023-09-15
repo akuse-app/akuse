@@ -2,7 +2,6 @@
 
 const Hls = require('hls.js')
 const Store = require('electron-store')
-const Zoro = require('../providers/zoro')
 const Gogoanime = require('../providers/gogoanime')
 const AnimeSaturn = require('../providers/animesaturn')
 const AniListAPI = require('../anilist/anilistApi')
@@ -21,26 +20,30 @@ module.exports = class Video {
         this.store = new Store()
         this.anilist = new AniListAPI()
 
-        switch(this.store.get('source_flag')) {
-            case 'US': {
-                this.cons = new Gogoanime()
-                // this.cons = new Zoro()
-                console.log('siamo US')
-                break
-            }
-            case 'IT': {
-                console.log('siamo IT')
-                this.cons = new AnimeSaturn()
-                break
-            }
-        }
-
-
         this.container = document.querySelector(".container")
         this.videoElement = document.getElementById('video')
         this.videoSource = this.videoElement.src
         this.videoTitle = document.getElementById('video-title')
         this.videoEpisode = document.getElementById('video-episode')
+    }
+
+    /**
+     * Get the language in which the episodes will be played
+     * 
+     * @returns the respective Object to the streaming source
+     */
+    getSourceFlagObject() {
+        switch(this.store.get('source_flag')) {
+            case 'US': {
+                return new Gogoanime()
+            }
+            case 'IT': {
+                return new AnimeSaturn()
+            }
+            default: {
+                return null
+            }
+        }
     }
     
     /**
@@ -49,6 +52,7 @@ module.exports = class Video {
      * @param {*} episode 
      */
     async displayVideo(episode) {
+        const cons = this.getSourceFlagObject()
         const title = document.getElementById('page-anime-title').innerHTML
 
         var animeTitles = []
@@ -63,7 +67,7 @@ module.exports = class Video {
 
         var i = 0
         do {
-            var videoSource = await this.cons.getEpisodeUrl(animeTitles[i], episode)
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episode)
             console.log(animeTitles[i] + ' -> ' + videoSource)
             i++
         } while(videoSource === -1 && i < animeTitles.length)
@@ -81,6 +85,7 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
+        const cons = this.getSourceFlagObject()
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
         const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
         
@@ -93,7 +98,7 @@ module.exports = class Video {
             this.anilist.updateAnimeProgress(animeId, progress)
         }
         
-        var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
+        var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 
@@ -107,12 +112,13 @@ module.exports = class Video {
      * @returns if you are watching the first episode
      */
     async previousEpisode() {
+        const cons = this.getSourceFlagObject()
         if(this.episodeElementDecrease() == -1) {
             console.warn('This is the first episode, You can\'t go back any further!')
             return
         }
 
-        var videoSource = await this.cons.getEpisodeUrl(this.videoTitle.innerHTML,
+        var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 

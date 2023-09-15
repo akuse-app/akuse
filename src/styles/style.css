@@ -100,7 +100,7 @@ img {
 }
 
 .document-controls ul li:hover {
-    background-color: var(--color-1);
+    background-color: var(--color-2);
 }
 
 .document-controls ul li#document-quit:hover {
