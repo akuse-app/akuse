@@ -154,9 +154,9 @@ img {
     transition: 0.2s ease-out;
 }
 
-.nav-wrapper.shadow {
-    box-shadow: var(--shadow);
-}
+    .nav-wrapper.shadow {
+        box-shadow: var(--shadow);
+    }
 
 nav#nav-main {
     width: calc(100% - 100px);
