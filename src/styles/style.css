@@ -224,7 +224,7 @@ nav#nav-main {
             align-items: center;
             z-index: 20;
             gap: 20px;
-            padding: 10px 30px;
+            padding: 10px 8px;
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             cursor: pointer;
             transition: var(--animation-transition);
@@ -916,27 +916,33 @@ main section {
             box-shadow: var(--shadow);
         }
 
-        .anime-page .content .page-anime-right .user-stats button.list-updater {
+        .anime-page .content .page-anime-right .user-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .anime-page .content .page-anime-right .user-stats button {
             outline: none;
-            background-color: transparent;
+            border: 2px solid var(--font-1);
+            border-radius: var(--border-radius);
             width: max-content;
             font-size: 1.2rem;
-            font-weight: var(--font-weight);
-            color: var(--color-important);
+            font-weight: 500;
             text-transform: uppercase;
             margin: 20px 0;
-            padding: 10px;
-            border: 2px solid var(--color-important);
+            padding: 15px 30px;
             transition: var(--transition);
             cursor: pointer;
         }
 
-        .anime-page .content .page-anime-right .user-stats .list-updater:hover {
-            filter: brightness(1.2);
+        .anime-page .content .page-anime-right .user-stats button.resume-episode {
+            color: var(--color-1);
+            background-color: var(--font-1);
         }
-        
-        .anime-page .content .page-anime-right .user-stats .list-updater:active {
-            filter: brightness(1);
+
+        .anime-page .content .page-anime-right .user-stats button.trailer {
+            color: var(--font-1);
+            background-color: var(--color-nav);
         }
 
     .page-anime-right-scroller {
