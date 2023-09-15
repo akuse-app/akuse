@@ -177,7 +177,7 @@ nav#nav-main {
             font-size: 1.3rem;
             display: inline;
             color: var(--font-2);
-            font-weight: var(--font-weight);
+            font-weight: 500;
             padding: 10px 20px;
             margin-right: 20px;
             cursor: pointer;
