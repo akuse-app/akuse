@@ -3,7 +3,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
-const fsExtra = require('fs-extra')
 const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
