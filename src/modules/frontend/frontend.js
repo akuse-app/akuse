@@ -4,6 +4,7 @@ const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
+const { watch } = require('original-fs')
 
 
 /**
@@ -521,18 +522,17 @@ module.exports = class Frontend {
         const score = this.getScore(animeEntry)
         const progress = this.getProgress(animeEntry)
         var endDate
-            animeEntry.endDate.year == null
-            ? endDate = '?'
-            : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
+        animeEntry.endDate.year == null
+        ? endDate = '?'
+        : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
         
         // display infos
         var list_updater_button = document.getElementById('page-anime-list-updater')
         if(animeEntry.mediaListEntry == null) {
-            list_updater_button.innerHTML = '<i style="margin-right: 10px" class="fa-regular fa-bookmark"></i>'
-            list_updater_button.innerHTML += 'Add to your list'
+            list_updater_button.innerHTML = '<i class="fa-solid fa-plus"></i>'
         } else {
-            list_updater_button.innerHTML = '<i style="margin-right: 10px" class="fa-solid fa-bookmark"></i>'
-            list_updater_button.innerHTML += 'In list'
+            list_updater_button.innerHTML = '<i class="fa-solid fa-check"></i>'
+            list_updater_button.classList.add('in-list')
         }
 
         document.getElementById('page-anime-title').innerHTML = title
@@ -553,6 +553,8 @@ module.exports = class Frontend {
         document.getElementById('page-anime-id').innerHTML = animeId
         document.getElementById('page-anime-progress').innerHTML = progress
         document.getElementById('page-anime-episodes').innerHTML = episodes
+
+
         
         var anime_titles_div = document.getElementById('page-anime-titles')
         Object.keys(animeTitles).forEach( (key) => {
@@ -562,18 +564,24 @@ module.exports = class Frontend {
         })
 
         var episodes_list_div = document.getElementById('page-anime-episodes-list')
-        
         for(let i=0; i<episodes; i++) {
             let episode_div = this.createEpisode(i, banner)
             episodes_list_div.appendChild(episode_div)
         }
+        
+        var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
+        watch_button.id += (progress + 1)
+        watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
+        progress == 0
+        ? watch_button.innerHTML += 'Start watching'
+        : watch_button.innerHTML += 'Resume'
 
-        /* var anime_genres_ul = document.getElementById('page-anime-genres')
+        var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
             var anime_genres_li = document.createElement('li')
             anime_genres_li.innerHTML += genres[key]
             anime_genres_ul.appendChild(anime_genres_li)
-        }) */
+        })
 
         // show modal page
         this.showModalPage('anime-page-shadow-background', 'anime-page')
@@ -599,7 +607,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-title').innerHTML = ""
         document.getElementById('page-anime-description').innerHTML = ""
         document.getElementById('page-anime-cover').src = ""
-        /* document.getElementById('page-anime-genres').innerHTML = "" */
+        document.getElementById('page-anime-genres').innerHTML = ""
         document.getElementById('page-anime-episodes-list').innerHTML = ""
         document.getElementById('page-anime-progress-episodes').innerHTML = ""
         document.getElementById('page-anime-user-score').innerHTML = ""
@@ -615,6 +623,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-format').innerHTML = ""
         document.getElementById('page-anime-duration').innerHTML = ""
         document.getElementById('page-anime-meanScore').innerHTML = ""
+        document.getElementById('page-anime-list-updater').classList.remove('in-list')
     }
 
     /**

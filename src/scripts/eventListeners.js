@@ -2,10 +2,12 @@
 
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
+const Video = require('../modules/frontend/video')
 const clientData = require('../modules/clientData.js')
 
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
+const video = new Video()
 
 document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
 
@@ -202,6 +204,12 @@ featured_left_button.addEventListener('click', (event) => {
 
 featured_right_button.addEventListener('click', (event) => {
     featured_scroller_div.scrollLeft += 1800
+})
+
+// anime page start watching/resume episode
+var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
+watch_button.addEventListener('click', (event) => {
+    video.displayVideo(watch_button.id.slice(17))
 })
 
 // anime page 'add to list/already on list' trigger
