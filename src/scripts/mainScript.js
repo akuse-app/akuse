@@ -38,7 +38,7 @@ exitReportButton.addEventListener('click', (event) => {
  * OAuth is completed, so load the page with all the elements
  * 
  */
-ipcRenderer.on('load-page', async (event) => {
+ipcRenderer.on('load-index', async (event) => {
     const viewerId = await anilist.getViewerId()
     
     // load first part
@@ -46,15 +46,6 @@ ipcRenderer.on('load-page', async (event) => {
     const entriesFeatured = await anilist.releasingAnimes()
     const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
-
-    frontend.displayViewerAvatar(viewerInfo)
-    frontend.displayFeaturedAnime(entriesFeatured)
-    frontend.displayUserAnimeSection(entriesCurrent, 'current', true)
-    frontend.displayGenreAnimeSection(entriesTrending, 'trending')
-
-    frontend.removeLoadingPage()
-
-    // load second part
     const entriesMostPopular = await anilist.getMostPopularAnimes()
     const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
     const entriesComedy = await anilist.getAnimesByGenre("Comedy")
@@ -62,10 +53,29 @@ ipcRenderer.on('load-page', async (event) => {
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     
-    frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular')
-    frontend.displayGenreAnimeSection(entriesAdventure, 'adventure')
-    frontend.displayGenreAnimeSection(entriesComedy, 'comedy')
-    frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy')
-    frontend.displayGenreAnimeSection(entriesHorror, 'horror')
-    frontend.displayGenreAnimeSection(entriesMusic, 'music')
+    frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular-home')
+    frontend.displayGenreAnimeSection(entriesAdventure, 'adventure-home')
+    frontend.displayGenreAnimeSection(entriesComedy, 'comedy-home')
+    frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy-home')
+    frontend.displayGenreAnimeSection(entriesHorror, 'horror-home')
+    frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
+    frontend.displayViewerAvatar(viewerInfo)
+    frontend.displayFeaturedAnime(entriesFeatured)
+    frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
+    frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
+
+    frontend.removeLoadingPage()
+
+    const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
+    const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
+    const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
+    const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
+    const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
+
+    frontend.displayUserAnimeSection(entriesCurrent, 'current-my-list', true)
+    frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
+    frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
+    frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
+    frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
+    frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
 })

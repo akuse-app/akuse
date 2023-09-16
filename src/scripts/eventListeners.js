@@ -9,6 +9,21 @@ const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 const video = new Video()
 
+// toggler for the app apges
+var homeNav = document.getElementById('nav-home')
+var myListNav = document.getElementById('nav-my-list')
+var homePageMain = document.querySelector('main#home-page')
+var myListPageMain = document.querySelector('main#my-list-page')
+
+homeNav.addEventListener('click', (event) => {
+    frontend.togglePage(homePageMain, myListPageMain, homeNav, myListNav)
+})
+
+myListNav.addEventListener('click', (event) => {
+    frontend.togglePage(myListPageMain, homePageMain, myListNav, homeNav)
+})
+
+// akuse logo in navbar takes you to the top of the page
 document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
 
 // dynamic episodes search bar (NOT WORKING)
@@ -137,42 +152,72 @@ entry_list.addEventListener('click', (event) => {
     frontend.triggerMainSearchAnime(event)
 })
 
-var entry_list = document.getElementById('current')
+var entry_list = document.getElementById('current-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('trending')
+var entry_list = document.getElementById('trending-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('most-popular')
+var entry_list = document.getElementById('most-popular-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('adventure')
+var entry_list = document.getElementById('adventure-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('comedy')
+var entry_list = document.getElementById('comedy-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('fantasy')
+var entry_list = document.getElementById('fantasy-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('horror')
+var entry_list = document.getElementById('horror-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('music')
+var entry_list = document.getElementById('music-home')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('current-my-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('planning-my-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('completed-my-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('dropped-my-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('paused-my-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerAnimeEntry(event)
+})
+
+var entry_list = document.getElementById('repeating-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })

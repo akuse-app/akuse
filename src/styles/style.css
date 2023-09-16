@@ -15,7 +15,7 @@
     
     --font-weight: 600;
     --border-radius: 8px;
-    --transition: 0.2s ease;
+    --transition: 0.2s ease-out;
     --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
 
@@ -193,19 +193,16 @@ nav#nav-main {
             color: var(--font-2);
             border-radius: var(--border-radius);
             font-weight: 500;
-            margin-right: 5px;
+            margin-right: 10px;
             padding: 10px 20px;
             cursor: pointer;
             transition: var(--transition);
         }
         
-        nav#nav-main .nav-ul li.nav-li.active {
+        nav#nav-main .nav-ul li.nav-li.active,
+        nav#nav-main ul.nav-ul li.nav-li:hover {
             color: var(--font-1);
             background-color: var(--color-1);
-        }
-        
-        nav#nav-main ul.nav-ul li.nav-li:hover {
-            color: var(--font-1)
         }
         
     nav#nav-main .right {
@@ -270,7 +267,7 @@ nav#nav-main {
         nav#nav-main .right .dropdown ul.dropdown-ul {
             padding-left: 0px;
             text-decoration: none;
-            padding: 20px;
+            padding: 10px;
         }
 
         nav#nav-main .right .dropdown ul.dropdown-ul li {
@@ -567,6 +564,8 @@ nav#nav-main {
             }
 
 /* MAIN SECTION */
+
+
 
 main {
     width: 100%;
@@ -988,7 +987,6 @@ main section {
     }
     
     .anime-page .content .page-anime-right .episodes-list .episode {
-        background-image: url(/assets/img/banner.jpg);
         background-position: center center;
         background-size: cover;
         border-radius: var(--border-radius);
@@ -1131,3 +1129,10 @@ main section .anime-list-wrapper {
             font-weight: var(--font-weight);
         }
         
+main#my-list-page h1#your-list-header {
+    font-size: 3rem;
+}
+
+main#my-list-page .section-container {
+    margin-top: 50px;
+}

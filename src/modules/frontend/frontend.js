@@ -46,6 +46,23 @@ module.exports = class Frontend {
     }
 
     /**
+     * Toggler for the app apges
+     * 
+     * @param {*} divToShow 
+     * @param {*} divToHide 
+     * @param {*} navLiToShow 
+     * @param {*} navLiToHide 
+     */
+    togglePage(divToShow, divToHide, navLiToShow, navLiToHide) {
+        if(divToShow.style.display == 'none') {
+            divToShow.style.display = 'block'
+            divToHide.style.display = 'none'
+            navLiToShow.classList.add('active')
+            navLiToHide.classList.remove('active')
+        }
+    }
+
+    /**
      * Shows the modal page
      * 
      * @param {*} shadowModalDiv the shadow modal page to show
@@ -263,8 +280,11 @@ module.exports = class Frontend {
      * 
      * @param {*} entries 
      * @param {*} list the viewer list (current, completed...)
+     * @returns -1 if entries is empty
      */
     displayUserAnimeSection(entries, list, needProgressBar) {
+        if(Object.values(entries).length == 0) return -1
+
         var anime_list_div = document.getElementById(list)
 
         Object.keys(entries).forEach(key => {
@@ -624,6 +644,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-duration').innerHTML = ""
         document.getElementById('page-anime-meanScore').innerHTML = ""
         document.getElementById('page-anime-list-updater').classList.remove('in-list')
+        document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
     }
 
     /**

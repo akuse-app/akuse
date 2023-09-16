@@ -17,7 +17,7 @@
         <ul>
             <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
             <li id="document-maximize"><i class="fa-regular fa-square"></i></li>
-            <li id="document-quit"><i style="font-size: 1rem;" class="fa-solid fa-xmark"></i></li>
+            <li id="document-quit"><i style="font-size: 1rem" class="fa-solid fa-xmark"></i></li>
         </ul>
     </div>
     <!-- NAVBAR + MAIN SEARCH BAR -->
@@ -34,10 +34,10 @@
                 </div>
                 <img id="nav-img" src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt="">
                 <ul class="nav-ul">
-                    <li class="nav-li active">
+                    <li id="nav-home" class="nav-li active">
                         Home
                     </li>
-                    <li class="nav-li">
+                    <li id="nav-my-list" class="nav-li">
                         My List
                     </li>
                     <div class="right">
@@ -184,7 +184,6 @@
                                     <div id="page-anime-user-stats" class="user-stats">
                                         <button id="page-anime-watch-" class="watch">
                                             <i style="margin-right: 5px" class="fa-solid fa-play"></i>
-                                            Resume
                                         </button>
                                         <!-- <button id="page-anime-trailer" class="trailer">
                                             Trailer
@@ -273,63 +272,25 @@
             <video id="video"></video>
         </div>
         <!-- MAIN -->
-        <main>
+        <main id="home-page" style="display: block">
             <!-- FEATURED CONTENT -->
             <div id="featured-scroller" class="featured-scroller">
                 <button id="featured-scroll-left" style="display: none"><i class="fa-solid fa-chevron-left"></i></button>
                 <button id="featured-scroll-right" style="display: none"><i class="fa-solid fa-chevron-right"></i></button>
-                <div class="featured-scroller-wrapper">
-<!--                     <div class="featured">
-                        <div class="featured-container">
-                            <div class="featured-left">
-                                <div id="featured-content" class="content fade-in">
-                                    <div id="featured-anime-title" class="anime-title"></div>
-                                    <div class="anime-info">
-                                        <div id="featured-anime-year" class="anime-year">
-                                            
-                                        </div>
-                                        <div id="featured-anime-episodes" class="anime-episodes">
-                                            
-                                        </div>
-                                    </div>
-                                    <div id="featured-anime-genres" class="anime-genres"></div>
-                                    <div id="featured-anime-description" class="anime-description"></div>
-                                    <button id="featured-anime-button-">Go to the page</button>
-                                </div>
-                            </div>
-                            <div class="featured-shadow"></div>
-                            <div class="featured-right"></div>
-                        </div>
-                        <div class="featured-img">
-                            <img id="featured-img" src="/assets/img/banner.jpg" alt="">
-                        </div>
-                    </div> -->
-                </div>
+                <div class="featured-scroller-wrapper"></div>
             </div>
             <div class="section-container">
                 <!-- ANIME SECTIONS -->
                 <section>
                     <h1>Continue watching</h1>
                     <div class="anime-list-wrapper">
-                        <div id="current" class="anime-list">
-                            <!-- <div class="anime-entry">
-                                <div class="anime-cover">
-                                    <img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-YJvLbgJQPCoI.jpg" alt="">
-                                    <div class="bar"></div>
-                                    <div class="progress-bar"></div>
-                                </div>
-                                <div class="content">
-                                    <div class="anime-title">pisls ABA cinc i iu iowahn io owai a wao owia djsapo poje dajpoi ie o aoi own fp3 o3 oi3 oin iojm iof ano fe poe oafnoa nwao</div>
-                                    <div class="anime-progress">23 / 24</div>
-                                </div>
-                            </div> -->
-                        </div>
+                        <div id="current-home" class="anime-list"></div>
                     </div>
                 </section>
                 <section>
                     <h1>Trending Now</h1>
                     <div class="anime-list-wrapper">
-                        <div id="trending" class="anime-list">
+                        <div id="trending-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -337,7 +298,7 @@
                 <section>
                     <h1>Most Popular</h1>
                     <div class="anime-list-wrapper">
-                        <div id="most-popular" class="anime-list">
+                        <div id="most-popular-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -345,7 +306,7 @@
                 <section>
                     <h1>Adventure</h1>
                     <div class="anime-list-wrapper">
-                        <div id="adventure" class="anime-list">
+                        <div id="adventure-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -353,7 +314,7 @@
                 <section>
                     <h1>Comedy</h1>
                     <div class="anime-list-wrapper">
-                        <div id="comedy" class="anime-list">
+                        <div id="comedy-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -361,7 +322,7 @@
                 <section>
                     <h1>Fantasy</h1>
                     <div class="anime-list-wrapper">
-                        <div id="fantasy" class="anime-list">
+                        <div id="fantasy-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -369,7 +330,7 @@
                 <section>
                     <h1>Horror</h1>
                     <div class="anime-list-wrapper">
-                        <div id="horror" class="anime-list">
+                        <div id="horror-home" class="anime-list">
                             
                         </div>
                     </div>
@@ -377,9 +338,51 @@
                 <section>
                     <h1>Music</h1>
                     <div class="anime-list-wrapper">
-                        <div id="music" class="anime-list">
+                        <div id="music-home" class="anime-list">
                             
                         </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <main id="my-list-page" style="display: none">
+            <div class="section-container">
+                <h1 id="your-list-header">Your list</h1>
+                <!-- ANIME SECTIONS -->
+                <section>
+                    <h1>Current</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="current-my-list" class="anime-list"></div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Planning</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="planning-my-list" class="anime-list"></div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Completed</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="completed-my-list" class="anime-list"></div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Dropped</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="dropped-my-list" class="anime-list"></div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Paused</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="paused-my-list" class="anime-list"></div>
+                    </div>
+                </section>
+                <section>
+                    <h1>Repeating</h1>
+                    <div class="anime-list-wrapper">
+                        <div id="repeating-my-list" class="anime-list"></div>
                     </div>
                 </section>
             </div>

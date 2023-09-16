@@ -201,7 +201,11 @@ module.exports = class AniListAPI extends Requests {
         const options = this.getOptions(query, variables)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
 
-        return respData.data.MediaListCollection.lists[0].entries
+        if(Object.keys(respData.data.MediaListCollection.lists).length !== 0) {
+            return respData.data.MediaListCollection.lists[0].entries
+        }
+
+        console.log('we')
     }
 
     // NOT WORKING

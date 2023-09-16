@@ -63,6 +63,7 @@ module.exports = class AnimeSaturn {
      */
     async getAnimeEpisodeId(animeId, episode) {
         const data = await this.consumet.fetchAnimeInfo(animeId)
+        console.log(episode)
         return data.episodes[episode-1].id
     }
 }

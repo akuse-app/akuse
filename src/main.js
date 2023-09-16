@@ -63,35 +63,35 @@ const createWindow = () => {
         mainWin.webContents.on('did-finish-load', () => {
             authWin.hide()
             store.set('access_token', token)
-            mainWin.webContents.send('load-page')
-        })
-    })
-    
-    ipcMain.on('iconify-document', (event) => {
-        mainWin.minimize()
-    })
-    
-    ipcMain.on('maximize-document', (event) => {
-        mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
-    })
-    
-    ipcMain.on('quit-document', (event) => {
-        mainWin.close()
-    })
-    
-    ipcMain.on('load-issues-url', (event) => {
-        require('electron').shell.openExternal(githubOpenNewIssueUrl)
-    })
-    
-    // working partially
-    ipcMain.on('exit-app', (event) => {
-        mainWin.webContents.session.clearStorageData().then((data) => {
-            mainWin.close()
-            // authWin.show()
-            // authWin.loadURL(authUrl)
+            mainWin.webContents.send('load-index')
         })
     })
 }
+
+ipcMain.on('iconify-document', (event) => {
+    mainWin.minimize()
+})
+
+ipcMain.on('maximize-document', (event) => {
+    mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
+})
+
+ipcMain.on('quit-document', (event) => {
+    mainWin.close()
+})
+
+ipcMain.on('load-issues-url', (event) => {
+    require('electron').shell.openExternal(githubOpenNewIssueUrl)
+})
+
+// working partially
+ipcMain.on('exit-app', (event) => {
+    mainWin.webContents.session.clearStorageData().then((data) => {
+        mainWin.close()
+        // authWin.show()
+        // authWin.loadURL(authUrl)
+    })
+})
 
 app.whenReady().then(() => {
     createWindow()

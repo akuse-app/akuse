@@ -62,8 +62,8 @@ module.exports = class Video {
             anime_titles_div[key]
         })
 
-        /* console.log('titles: ' + animeTitles)
-        console.log('playground: ') */
+        // console.log('titles: ' + animeTitles)
+        // console.log('playground: ')
 
         var i = 0
         do {
