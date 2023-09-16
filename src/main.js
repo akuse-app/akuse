@@ -78,6 +78,7 @@ ipcMain.on('maximize-document', (event) => {
 
 ipcMain.on('quit-document', (event) => {
     mainWin.close()
+    authWin.close()
 })
 
 ipcMain.on('load-issues-url', (event) => {
