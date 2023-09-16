@@ -123,10 +123,16 @@ module.exports = class Frontend {
         }
     }
 
+    /**
+     * Displays the settings modal page
+     */
     displaySettingsPage() {
         this.showModalPage('settings-page-shadow-background', 'settings-page')
     }
     
+    /**
+     * Closes the settings modal page
+     */
     closeSettingsPage() {
         this.hideModalPage('settings-page-shadow-background', 'settings-page')
     }
@@ -162,6 +168,9 @@ module.exports = class Frontend {
         document.getElementById('main-search-list').innerHTML = ''
     }
 
+    /**
+     * Opens the main search bar
+     */
     openMainSearchBar() {
         var searchMainDiv = document.getElementById('main-search-list-container')
         var searchMainInput = document.getElementById('search-main-input')
@@ -170,6 +179,9 @@ module.exports = class Frontend {
         searchMainInput.focus()
     }
 
+    /**
+     * Closes the main search bar
+     */
     closeMainSearchBar() {
         var searchMainDiv = document.getElementById('main-search-list-container')
         var searchMainInput = document.getElementById('search-main-input')
@@ -618,11 +630,6 @@ module.exports = class Frontend {
         // hide modal page
         this.hideModalPage('anime-page-shadow-background', 'anime-page')
         
-        // enable body scrolling only if main search container isn't enabled
-        /* if(document.getElementById('main-search-list-container').style.display == 'none') {
-            document.getElementsByClassName('body-container')[0].style.overflow = 'auto'
-        } */
-
         // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
         document.getElementById('page-anime-description').innerHTML = ""

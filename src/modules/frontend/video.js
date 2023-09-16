@@ -55,6 +55,7 @@ module.exports = class Video {
         const cons = this.getSourceFlagObject()
         const title = document.getElementById('page-anime-title').innerHTML
 
+        // creating array with anime title plus its synonyms
         var animeTitles = []
         var anime_titles_div = document.querySelectorAll('#page-anime-titles h2')
         Object.keys(anime_titles_div).forEach( (key) => {
