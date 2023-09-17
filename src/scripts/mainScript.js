@@ -43,9 +43,8 @@ ipcRenderer.on('load-index', async (event) => {
     
     // load first part
     const viewerInfo = await anilist.getViewerInfo(viewerId)
-    const entriesFeatured = await anilist.releasingAnimes()
-    const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesTrending = await anilist.getTrendingAnimes()
+    const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     const entriesMostPopular = await anilist.getMostPopularAnimes()
     const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
     const entriesComedy = await anilist.getAnimesByGenre("Comedy")
@@ -53,16 +52,16 @@ ipcRenderer.on('load-index', async (event) => {
     const entriesHorror = await anilist.getAnimesByGenre("Horror")
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     
+    frontend.displayViewerAvatar(viewerInfo)
+    frontend.displayFeaturedAnime(entriesTrending)
+    frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
+    /* frontend.displayGenreAnimeSection(entriesTrending, 'trending-home') */
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular-home')
     frontend.displayGenreAnimeSection(entriesAdventure, 'adventure-home')
     frontend.displayGenreAnimeSection(entriesComedy, 'comedy-home')
     frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy-home')
     frontend.displayGenreAnimeSection(entriesHorror, 'horror-home')
     frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
-    frontend.displayViewerAvatar(viewerInfo)
-    frontend.displayFeaturedAnime(entriesFeatured)
-    frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
-    frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
 
     frontend.removeLoadingPage()
 

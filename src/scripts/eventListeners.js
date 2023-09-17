@@ -157,10 +157,10 @@ entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
 })
 
-var entry_list = document.getElementById('trending-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
+// var entry_list = document.getElementById('trending-home')
+// entry_list.addEventListener('click', (event) => {
+//     frontend.triggerAnimeEntry(event)
+// })
 
 var entry_list = document.getElementById('most-popular-home')
 entry_list.addEventListener('click', (event) => {
