@@ -508,7 +508,7 @@ module.exports = class Frontend {
      */
     displayViewerAvatar(userInfo) {
         document.getElementById('user-icon').src = userInfo.User.avatar.large
-        document.getElementById('user-name').innerHTML += userInfo.User.name
+        /* document.getElementById('user-name').innerHTML += userInfo.User.name */
     }
 
     /**

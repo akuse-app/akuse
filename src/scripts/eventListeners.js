@@ -38,10 +38,10 @@ document.getElementById('page-anime-search-button').addEventListener('click', (e
 })
 
 // user section
-var userSection = document.getElementById('user-section')
+/* var userSection = document.getElementById('user-section')
 userSection.addEventListener('click', (event) => {
     frontend.toggleUserDropdown()
-})
+}) */
 
 // main search bar listeners
 var scroller = document.getElementsByClassName('body-container')[0]

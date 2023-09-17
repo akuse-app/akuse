@@ -199,6 +199,10 @@ nav#nav-main {
             transition: var(--transition);
         }
         
+        nav#nav-main .nav-ul li.nav-li.right {
+            padding: 10px;
+        }
+        
         nav#nav-main .nav-ul li.nav-li.active,
         nav#nav-main ul.nav-ul li.nav-li:hover {
             color: var(--font-1);
@@ -210,7 +214,6 @@ nav#nav-main {
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
         margin-left: auto;
     }
 
@@ -221,7 +224,7 @@ nav#nav-main {
             align-items: center;
             z-index: 20;
             gap: 20px;
-            padding: 10px 8px;
+            padding: 10px;
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             cursor: pointer;
             transition: var(--animation-transition);
@@ -253,12 +256,13 @@ nav#nav-main {
             }
             
         nav#nav-main .right .dropdown {
-            width: 100%;
+            width: 200px;
             height: max-content;
             top: 60px;
+            right: 0;
             z-index: 19;
             background-color: var(--color-1);
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
             position: absolute;
             transition: var(--transition);
             box-shadow: var(--shadow);
@@ -279,15 +283,35 @@ nav#nav-main {
             border-radius: var(--border-radius);
             transition: var(--transition);
         }
+        
+            nav#nav-main .right .dropdown ul.dropdown-ul li:not(:last-child) {
+                margin-bottom: 10px;
+            }
+            
+            nav#nav-main .right .dropdown ul.dropdown-ul li:hover {
+                color: var(--font-1);
+                background-color: var(--color-2);
+            }
 
-        nav#nav-main .right .dropdown ul.dropdown-ul li:not(:last-child) {
-            margin-bottom: 10px;
-        }
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate {
+                text-align: center;
+                color: var(--font-1);
+                font-weight: var(--font-weight);
+                background-color: var(--color-important);
+            }
 
-        nav#nav-main .right .dropdown ul.dropdown-ul li:hover {
-            color: var(--font-1);
-            background-color: var(--color-2);
-        }
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate:hover {
+                filter: brightness(0.80);
+            }
+
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate:active {
+                filter: brightness(0.70);
+            }
+        
+            nav#nav-main .right .dropdown ul.dropdown-ul li i {
+                font-size: 1.2rem;
+                margin-right: 8px;
+            }
 
 .modal-page-shadow-background {
     display: none; /* turning flex */
