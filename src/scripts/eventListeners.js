@@ -119,6 +119,17 @@ anilistItem.addEventListener('click', (event) => {
     }
 })
 
+// open add anime to list modal page
+var settingsButton = document.getElementById('page-anime-list-editor')
+settingsButton.addEventListener('click', (event) => {
+    frontend.displayAddToListPage()
+})
+
+var exit_button = document.querySelector('.list-editor-page #exit')
+exit_button.addEventListener('click', (event) => {
+    frontend.closeAddToListPage()
+})
+
 // navbar background changing
 var lastScroll = 0
 var nav_div = document.getElementById('nav-wrapper')
@@ -258,9 +269,9 @@ watch_button.addEventListener('click', (event) => {
 })
 
 // anime page 'add to list/already on list' trigger
-var list_updater_button = document.getElementById('page-anime-list-updater')
+var list_updater_button = document.getElementById('page-anime-list-editor')
 list_updater_button.addEventListener('click', (event) => {
-    frontend.triggerListUpdater()
+    frontend.triggerListEditor()
 }) 
 
 // anime page closer

@@ -978,7 +978,7 @@ main section {
             background-color: var(--color-nav);
         }
 
-        .anime-page .content .page-anime-right .user-stats button.list-updater {
+        .anime-page .content .page-anime-right .user-stats button.list-editor {
             width: 59px;
             color: var(--font-1);
             background-color: var(--color-nav);
@@ -986,12 +986,12 @@ main section {
             border-radius: 200px;
         }
 
-            .anime-page .content .page-anime-right .user-stats button.list-updater:hover {
+            .anime-page .content .page-anime-right .user-stats button.list-editor:hover {
                 color: var(--color-nav);
                 background-color: var(--font-1);
             }
             
-            .anime-page .content .page-anime-right .user-stats button.list-updater.in-list {
+            .anime-page .content .page-anime-right .user-stats button.list-editor.in-list {
                 color: var(--color-important);
                 background-color: var(--font-1);
             }
@@ -1057,6 +1057,95 @@ main section {
 
     .anime-page button#exit:hover {
         color: var(--color-important);
+    }
+
+/* ADD ANIME TO LIST MODAL PAGE */
+
+#list-editor-page-shadow-background {
+    z-index: 20;
+}
+
+.list-editor-page {
+    position: relative;
+    border-radius: var(--border-radius);
+    background: var(--color-2);
+    background: radial-gradient(circle, var(--color-1) 12%, var(--color-nav) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+    .list-editor-page .content-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 30px;
+    }
+    
+        .list-editor-page .content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .list-editor-page .content h1 {
+            font-size: 2rem;
+            color: var(--font-1);
+        }
+
+        .list-editor-page .content .input-container {
+            width: 256px;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            color: var(--font-2);
+            font-size: 1.2rem;
+            border: 2px solid var(--font-2);
+            border-radius: var(--border-radius);
+        }
+
+        .list-editor-page .content .input-container select,
+        .list-editor-page .content .input-container input {
+            width: 100%;
+            color: var(--font-2);
+            font-size: 1.2rem;
+            outline: none;
+            border: none;
+            background-color: transparent;
+        }
+
+        .list-editor-page .content .input-divisor {
+            width: 300px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .list-editor-page .content .input-divisor .input-container {
+            width: 50%;
+        }
+
+    .list-editor-page button#exit {
+    position: absolute;
+    top: -25px;
+    right: -25px;
+    margin: 10px;
+    color: var(--font-1);
+    font-size: 2rem;
+    font-weight: var(--font-weight);
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: var(--transition);
+    }
+
+    .list-editor-page button#exit:hover {
+    color: var(--color-important);
     }
 
 main section h1 {

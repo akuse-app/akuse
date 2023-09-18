@@ -132,11 +132,25 @@ module.exports = class Frontend {
     
     /**
      * Closes the settings modal page
-     */
+    */
     closeSettingsPage() {
         this.hideModalPage('settings-page-shadow-background', 'settings-page')
     }
-
+    
+    /**
+     * Displays the list editor modal page
+     */
+    displayAddToListPage() {
+        this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
+    }
+    
+    /**
+     * Closes the list editor modal page
+     */
+    closeAddToListPage() {
+        this.hideModalPage('list-editor-page-shadow-background', 'list-editor-page')
+    }
+ 
     /**
      * Displays a div with the searched animes
      * 
@@ -559,7 +573,7 @@ module.exports = class Frontend {
         : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
         
         // display infos
-        var list_updater_button = document.getElementById('page-anime-list-updater')
+        var list_updater_button = document.getElementById('page-anime-list-editor')
         if(animeEntry.mediaListEntry == null) {
             list_updater_button.innerHTML = '<i class="fa-solid fa-plus"></i>'
         } else {
@@ -619,8 +633,8 @@ module.exports = class Frontend {
         this.showModalPage('anime-page-shadow-background', 'anime-page')
     }
     
-    triggerListUpdater() {
-        var list_updater_button = document.getElementById('page-anime-list-updater')
+    triggerListEditor() {
+        var list_updater_button = document.getElementById('page-anime-list-editor')
     }
 
     /**
@@ -650,7 +664,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-format').innerHTML = ""
         document.getElementById('page-anime-duration').innerHTML = ""
         document.getElementById('page-anime-meanScore').innerHTML = ""
-        document.getElementById('page-anime-list-updater').classList.remove('in-list')
+        document.getElementById('page-anime-list-editor').classList.remove('in-list')
         document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
     }
 

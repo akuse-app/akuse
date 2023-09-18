@@ -186,7 +186,7 @@
                                         <!-- <button id="page-anime-trailer" class="trailer">
                                             Trailer
                                         </button> -->
-                                        <button id="page-anime-list-updater" class="list-updater"></button>
+                                        <button id="page-anime-list-editor" class="list-editor"></button>
                                     </div>
                                     <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
                                         Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.
@@ -205,6 +205,40 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ADD ANIME TO LIST MODAL PAGE -->
+    <div id="list-editor-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
+    <div id="list-editor-page" class="modal-page-wrapper fade-in">
+        <div class="list-editor-page">
+            <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
+            <div class="content-wrapper">
+                <div class="content">
+                    <h1>List Editor</h1>
+                    <div class="input-container">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <select name="" id="">
+                            <option value="" disabled selected>CHOOSE A LIST</option>
+                            <option value="CURRENT">CURRENT</option>
+                            <option value="PLANNING">PLANNING</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="DROPPED">DROPPED</option>
+                            <option value="PAUSED">PAUSED</option>
+                            <option value="REPEATING">REPEATING</option>
+                        </select>
+                    </div>
+                    <div class="input-divisor">
+                        <div class="input-container">
+                            <i class="fa-solid fa-bars-progress"></i>
+                            <input type="number" min="0">
+                        </div>
+                        <div class="input-container">
+                            <i class="fa-solid fa-star"></i>
+                            <input type="number" min="0" max="10">
                         </div>
                     </div>
                 </div>
@@ -277,8 +311,8 @@
                 <button id="featured-scroll-right" style="display: none"><i class="fa-solid fa-chevron-right"></i></button>
                 <div class="featured-scroller-wrapper"></div>
             </div>
+            <!-- HOME ANIME SECTIONS -->
             <div class="section-container">
-                <!-- ANIME SECTIONS -->
                 <section>
                     <h1>Continue watching</h1>
                     <div class="anime-list-wrapper">
@@ -344,9 +378,9 @@
             </div>
         </main>
         <main id="my-list-page" style="display: none">
+            <!-- MY LIST ANIME SECTIONS -->
             <div class="section-container">
                 <h1 id="your-list-header">Your list</h1>
-                <!-- ANIME SECTIONS -->
                 <section>
                     <h1>Current</h1>
                     <div class="anime-list-wrapper">
