@@ -295,7 +295,7 @@ module.exports = class Frontend {
      * @returns -1 if entries is empty
      */
     displayUserAnimeSection(entries, list, needProgressBar) {
-        if(Object.keys(entries).length == 0) return -1
+        if(Object.values(entries).length == 0) return -1
 
         var anime_list_div = document.getElementById(list)
 
