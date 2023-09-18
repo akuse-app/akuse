@@ -204,8 +204,6 @@ module.exports = class AniListAPI extends Requests {
         if(Object.keys(respData.data.MediaListCollection.lists).length !== 0) {
             return respData.data.MediaListCollection.lists[0].entries
         }
-
-        console.log('we')
     }
 
     // NOT WORKING
