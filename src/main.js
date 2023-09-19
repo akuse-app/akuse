@@ -10,8 +10,8 @@ const server = require('./server.js')
 
 
 const store = new Store()
-const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
+const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 
 let authWin
 let mainWin
@@ -61,7 +61,7 @@ const createWindow = () => {
         mainWin.maximize()
         
         mainWin.webContents.on('did-finish-load', () => {
-            authWin.hide()
+            authWin.close()
             store.set('access_token', token)
             mainWin.webContents.send('load-index')
         })
@@ -78,7 +78,6 @@ ipcMain.on('maximize-document', (event) => {
 
 ipcMain.on('quit-document', (event) => {
     mainWin.close()
-    authWin.close()
 })
 
 ipcMain.on('load-issues-url', (event) => {
