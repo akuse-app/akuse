@@ -965,11 +965,13 @@ main section {
             background-color: var(--font-1);
         }
 
-        .anime-page .content .page-anime-right .user-stats button.watch:hover {
+        .anime-page .content .page-anime-right .user-stats button.watch:hover,
+        .anime-page .content .page-anime-right .user-stats button.list-editor.in-list:hover {
             filter: brightness(0.80);
         }
 
-        .anime-page .content .page-anime-right .user-stats button.watch:active {
+        .anime-page .content .page-anime-right .user-stats button.watch:active,
+        .anime-page .content .page-anime-right .user-stats button.list-editor.in-list:active {
             filter: brightness(0.70);
         }
         
@@ -1097,6 +1099,16 @@ main section {
             color: var(--font-1);
         }
 
+        .list-editor-page .content .input-divisor {
+            width: 300px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .list-editor-page .content .input-divisor .input-container {
+            width: 50%;
+        }
+
         .list-editor-page .content .input-container {
             width: 256px;
             padding: 20px;
@@ -1108,6 +1120,28 @@ main section {
             border: 2px solid var(--font-2);
             border-radius: var(--border-radius);
         }
+        
+        .list-editor-page .content .input-divisor button.list-editor-button {
+            width: 50%;
+            height: 50px;
+            border: none;
+            outline: none;
+            color: var(--color-1);
+            background-color: var(--font-1);
+            font-size: 1.2rem;
+            font-weight: var(--font-weight);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+    
+        .list-editor-page .content .input-divisor button.list-editor-button:hover {
+            filter: brightness(0.80);
+        }
+    
+        .list-editor-page .content .input-divisor button.list-editor-button:active {
+            filter: brightness(0.70);
+        }
 
         .list-editor-page .content .input-container select,
         .list-editor-page .content .input-container input {
@@ -1117,16 +1151,6 @@ main section {
             outline: none;
             border: none;
             background-color: transparent;
-        }
-
-        .list-editor-page .content .input-divisor {
-            width: 300px;
-            display: flex;
-            gap: 20px;
-        }
-
-        .list-editor-page .content .input-divisor .input-container {
-            width: 50%;
         }
 
     .list-editor-page button#exit {

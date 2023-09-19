@@ -153,6 +153,7 @@
                             <div style="display: none;" id="page-anime-titles"></div>
                             <div style="display: none;" id="page-anime-id"></div>
                             <div style="display: none;" id="page-anime-progress"></div>
+                            <div style="display: none;" id="page-anime-score-number"></div>
                             <div style="display: none;" id="page-anime-episodes"></div>
                         </div>
                         <div class="page-anime-right-scroller">
@@ -219,10 +220,10 @@
             <div class="content-wrapper">
                 <div class="content">
                     <h1>List Editor</h1>
-                    <div class="input-container">
+                    <div id="list-editor-user-list-container" class="input-container">
                         <i class="fa-solid fa-list-ul"></i>
-                        <select name="" id="">
-                            <option value="" disabled selected>CHOOSE A LIST</option>
+                        <select id="list-editor-user-list">
+                            <option value="" disabled selected>NOT IN LIST</option>
                             <option value="CURRENT">CURRENT</option>
                             <option value="PLANNING">PLANNING</option>
                             <option value="COMPLETED">COMPLETED</option>
@@ -231,15 +232,19 @@
                             <option value="REPEATING">REPEATING</option>
                         </select>
                     </div>
+                    <div id="list-editor-progress-container" class="input-container">
+                        <i class="fa-solid fa-bars-progress"></i>
+                        <input id="list-editor-progress" type="number" min="0" placeholder="PROGRESS">
+                        <div id="list-editor-progress-limit"></div>
+                    </div>
+                    <div id="list-editor-score-container" class="input-container">
+                        <i class="fa-solid fa-star"></i>
+                        <input id="list-editor-score" type="number" min="0" max="10" placeholder="SCORE">
+                        <div id="list-editor-score-limit">/10</div>
+                    </div>
                     <div class="input-divisor">
-                        <div class="input-container">
-                            <i class="fa-solid fa-bars-progress"></i>
-                            <input type="number" min="0">
-                        </div>
-                        <div class="input-container">
-                            <i class="fa-solid fa-star"></i>
-                            <input type="number" min="0" max="10">
-                        </div>
+                        <button id="list-editor-delete" class="list-editor-button">DELETE</button>
+                        <button id="list-editor-save" class="list-editor-button">SAVE</button>
                     </div>
                 </div>
             </div>
