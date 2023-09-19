@@ -657,8 +657,9 @@ module.exports = class Frontend {
     }
     
     /**
+     * List editor: you can create or change a entry status, progress and score in one of your lists
      * 
-     * @returns if some data from form is incorrect
+     * @returns if some form inputs are incorrect
      */
     listEditor() {
         const animeEpisodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
@@ -688,12 +689,19 @@ module.exports = class Frontend {
         if(warn) return
         
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
-        this.anilist.updateAnimeList(animeId,
-                                     userList.value, 
-                                     userScore.value*10, 
+        this.anilist.updateAnimeFromList(animeId,
+                                     userList.value,
+                                     userScore.value*10,
                                      userProgress.value)
+            
+        this.closeListEditorPage()
     }
-
+        
+    /**
+     * If a form input is not correct, warn it
+     * 
+     * @param {*} div to warn
+    */
     listEditorWarn(div) {
         div.classList.remove('user-list-warn-off')
         div.classList.add('user-list-warn-on')
@@ -703,6 +711,15 @@ module.exports = class Frontend {
             div.classList.add('user-list-warn-off')
         }, 400)
     }
+    
+    
+    listEditorDelete() {
+        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        this.anilist.deleteAnimeFromList(animeId)
+
+        this.closeListEditorPage()
+    }
+    
     /**
      * Closes and clears the anime modal page
      */

@@ -433,9 +433,9 @@ module.exports = class AniListAPI extends Requests {
 
     /* MUTATIONS */
     
-    async updateAnimeList(mediaId, status, scoreRaw, progress) {
+    async updateAnimeFromList(mediaId, status, scoreRaw, progress) {
         var query = `
-        mutation ($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
+        mutation($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
             SaveMediaListEntry(mediaId: $mediaId, progress: $progress, scoreRaw: $scoreRaw, status: $status) {
                 score(format:POINT_10_DECIMAL)
             }
@@ -452,14 +452,25 @@ module.exports = class AniListAPI extends Requests {
         const options = this.getOptions(query, variables)
         await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
     }
+    
+    async deleteAnimeFromList(id) {
+        var query = "mutation($id:Int){DeleteMediaListEntry(id:$id){deleted}}"
+        
+        var variables = {
+            "id": id
+        }
+        
+        const options = this.getOptions(query, variables)
+        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+    }
 
     /**
      * Updates the progress of an anime on list
      * 
-     * @param {*} animeId 
+     * @param {*} mediaId 
      * @param {*} progress 
      */
-    async updateAnimeProgress(animeId, progress) {
+    async updateAnimeProgress(mediaId, progress) {
         var query = `
         mutation($mediaId: Int, $progress: Int) {
             SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
@@ -470,7 +481,7 @@ module.exports = class AniListAPI extends Requests {
         `
         
         var variables = {
-            "mediaId": animeId,
+            "mediaId": mediaId,
             "progress": progress
         }
         

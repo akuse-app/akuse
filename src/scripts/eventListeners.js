@@ -136,6 +136,13 @@ list_editor_button.addEventListener('click', (event) => {
     frontend.listEditor()
 })
 
+// list-editor delete
+var list_editor_button = document.getElementById('list-editor-delete')
+list_editor_button.addEventListener('click', (event) => {
+    // not working due to an unusual bug
+    /* frontend.listEditorDelete() */
+})
+
 // navbar background changing
 var lastScroll = 0
 var nav_div = document.getElementById('nav-wrapper')
