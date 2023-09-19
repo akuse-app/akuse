@@ -432,6 +432,26 @@ module.exports = class AniListAPI extends Requests {
     }
 
     /* MUTATIONS */
+    
+    async updateAnimeList(mediaId, status, scoreRaw, progress) {
+        var query = `
+        mutation ($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
+            SaveMediaListEntry(mediaId: $mediaId, progress: $progress, scoreRaw: $scoreRaw, status: $status) {
+                score(format:POINT_10_DECIMAL)
+            }
+        }
+        `
+
+        var variables = {
+            "mediaId": mediaId,
+            "status": status,
+            "scoreRaw": scoreRaw,
+            "progress": progress
+        }
+        
+        const options = this.getOptions(query, variables)
+        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+    }
 
     /**
      * Updates the progress of an anime on list

@@ -119,15 +119,21 @@ anilistItem.addEventListener('click', (event) => {
     }
 })
 
-// open add anime to list modal page
-var settingsButton = document.getElementById('page-anime-list-editor')
-settingsButton.addEventListener('click', (event) => {
-    frontend.displayAddToListPage()
+// open list-editor modal page
+var settings_button = document.getElementById('page-anime-list-editor')
+settings_button.addEventListener('click', (event) => {
+    frontend.displayListEditorPage()
 })
 
 var exit_button = document.querySelector('.list-editor-page #exit')
 exit_button.addEventListener('click', (event) => {
-    frontend.closeAddToListPage()
+    frontend.closeListEditorPage()
+})
+
+// list-editor save
+var list_editor_button = document.getElementById('list-editor-save')
+list_editor_button.addEventListener('click', (event) => {
+    frontend.listEditor()
 })
 
 // navbar background changing
@@ -267,12 +273,6 @@ var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
 watch_button.addEventListener('click', (event) => {
     video.displayVideo(watch_button.id.slice(17))
 })
-
-// anime page 'add to list/already on list' trigger
-var list_updater_button = document.getElementById('page-anime-list-editor')
-list_updater_button.addEventListener('click', (event) => {
-    frontend.triggerListEditor()
-}) 
 
 // anime page closer
 var exit_button = document.querySelector('.anime-page #exit')

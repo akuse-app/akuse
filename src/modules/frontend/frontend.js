@@ -5,6 +5,7 @@ const AnimeSaturn = require('../providers/animesaturn')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
 const { watch } = require('original-fs')
+const { parse } = require('dotenv')
 
 
 /**
@@ -102,6 +103,8 @@ module.exports = class Frontend {
 
     /**
      * Toggles the user dropdown, handling animations and style changes
+     * 
+     * @deprecated
      */
     toggleUserDropdown() {
         var userSection = document.getElementById('user-section')
@@ -140,14 +143,35 @@ module.exports = class Frontend {
     /**
      * Displays the list editor modal page
      */
-    displayAddToListPage() {
+    displayListEditorPage() {
+        // display current infos (if present)
+        const status = document.getElementById('page-anime-user-status').innerHTML
+        const progress = document.getElementById('page-anime-progress').innerHTML
+        const score = document.getElementById('page-anime-score-number').innerHTML
+          
+        status == 'NOT IN LIST'
+        ? document.getElementById('list-editor-user-list').value = ""
+        : document.getElementById('list-editor-user-list').value = status
+        
+        progress == ""
+        ? document.getElementById('list-editor-progress').value = ""
+        : document.getElementById('list-editor-progress').value = progress
+        
+        score == ""
+        ? document.getElementById('list-editor-score').value = ""
+        : document.getElementById('list-editor-score').value = score
+
+        // display the limit of episodes (/24, /12...)
+        const animeEpisodes = document.getElementById('page-anime-episodes').innerHTML
+        document.getElementById('list-editor-progress-limit').innerHTML = ('/' + animeEpisodes)
+
         this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
     }
     
     /**
      * Closes the list editor modal page
      */
-    closeAddToListPage() {
+    closeListEditorPage() {
         this.hideModalPage('list-editor-page-shadow-background', 'list-editor-page')
     }
  
@@ -176,7 +200,7 @@ module.exports = class Frontend {
     }
 
     /**
-     * Clears the div with the searched animes
+     * Clears the div with the searched animes in main search bar
      */
     clearSearchedAnimes() {
         document.getElementById('main-search-list').innerHTML = ''
@@ -598,9 +622,8 @@ module.exports = class Frontend {
         document.getElementById('page-anime-cover').src = cover
         document.getElementById('page-anime-id').innerHTML = animeId
         document.getElementById('page-anime-progress').innerHTML = progress
+        document.getElementById('page-anime-score-number').innerHTML = score
         document.getElementById('page-anime-episodes').innerHTML = episodes
-
-
         
         var anime_titles_div = document.getElementById('page-anime-titles')
         Object.keys(animeTitles).forEach( (key) => {
@@ -633,10 +656,53 @@ module.exports = class Frontend {
         this.showModalPage('anime-page-shadow-background', 'anime-page')
     }
     
-    triggerListEditor() {
-        var list_updater_button = document.getElementById('page-anime-list-editor')
+    /**
+     * 
+     * @returns if some data from form is incorrect
+     */
+    listEditor() {
+        const animeEpisodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
+        let warn = 0
+        
+        let userList = document.getElementById('list-editor-user-list')
+        if(userList.value == "") {
+            let userListContainer = document.getElementById('list-editor-user-list-container')
+            this.listEditorWarn(userListContainer)
+            warn = 1
+        }
+        
+        let userProgress = document.getElementById('list-editor-progress')
+        if(userProgress.value == "" || userProgress.value < 0 || userProgress.value > animeEpisodes) {
+            let useProgressContainer = document.getElementById('list-editor-progress-container')
+            this.listEditorWarn(useProgressContainer)
+            warn = 1
+        }
+        
+        let userScore = document.getElementById('list-editor-score')
+        if(userScore.value == "" || userScore.value < 0 || userScore.value > 10) {
+            let userScoreContainer = document.getElementById('list-editor-score-container')
+            this.listEditorWarn(userScoreContainer)
+            warn = 1
+        }
+        
+        if(warn) return
+        
+        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        this.anilist.updateAnimeList(animeId,
+                                     userList.value, 
+                                     userScore.value*10, 
+                                     userProgress.value)
     }
 
+    listEditorWarn(div) {
+        div.classList.remove('user-list-warn-off')
+        div.classList.add('user-list-warn-on')
+        
+        setTimeout(() => {
+            div.classList.remove('user-list-warn-on')
+            div.classList.add('user-list-warn-off')
+        }, 400)
+    }
     /**
      * Closes and clears the anime modal page
      */
@@ -660,6 +726,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-id').innerHTML = ""
         document.getElementById('page-anime-progress').innerHTML = ""
         document.getElementById('page-anime-episodes').innerHTML = ""
+        document.getElementById('page-anime-score-number').innerHTML = ""
         document.getElementById('page-anime-seasonYear').innerHTML = ""
         document.getElementById('page-anime-format').innerHTML = ""
         document.getElementById('page-anime-duration').innerHTML = ""
@@ -769,7 +836,7 @@ module.exports = class Frontend {
     getUserStatus(animeEntry) {
         var userStatus 
         animeEntry.mediaListEntry == null
-        ? userStatus = 'Not in list'
+        ? userStatus = 'NOT IN LIST'
         : userStatus = animeEntry.mediaListEntry.status
 
         return userStatus
@@ -784,7 +851,7 @@ module.exports = class Frontend {
     getScore(animeEntry) {
         var score
         animeEntry.mediaListEntry == null
-        ? score = 0
+        ? score = ""
         : score = animeEntry.mediaListEntry.score
 
         return score
@@ -799,7 +866,7 @@ module.exports = class Frontend {
     getProgress(animeEntry) {
         var progress
         animeEntry.mediaListEntry == null
-        ? progress = 0
+        ? progress = ""
         : progress = animeEntry.mediaListEntry.progress
 
         return progress

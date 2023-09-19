@@ -104,3 +104,33 @@
         opacity: 0;
     }
 }
+
+.user-list-warn-on {
+    animation: userListWarnAnimationOn 0s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes userListWarnAnimationOn {
+    0% {
+        border: 2px solid var(--font-2);
+    }
+    100% {
+        border: 2px solid var(--color-warning);
+    }
+}
+
+.user-list-warn-off {
+    animation: userListWarnAnimationOff var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes userListWarnAnimationOff {
+    0% {
+        border: 2px solid var(--color-warning);
+    }
+    100% {
+        border: 2px solid var(--font-2);
+    }
+}
