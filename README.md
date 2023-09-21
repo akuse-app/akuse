@@ -9,6 +9,12 @@
     <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
 </p>
 
+<p align="center">
+    <a href="https://www.buymeacoffee.com/aleganza">
+        <img style="width:250px" alt="buymeacoffee" src="https://i.imgur.com/fxJ4BNq.png">
+    </a>
+</p>
+
 <img title="img" alt="img" src="https://i.imgur.com/2qxWL2Z.png">
 
 ## Running locally for development
