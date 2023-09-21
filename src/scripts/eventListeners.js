@@ -147,7 +147,7 @@ list_editor_button.addEventListener('click', (event) => {
 var lastScroll = 0
 var nav_div = document.getElementById('nav-wrapper')
 var body_container_div = document.getElementsByClassName('body-container')[0]
-var color = getComputedStyle(document.documentElement).getPropertyValue('--color-nav')
+var color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
 
 body_container_div.addEventListener("scroll", (event) => {
     var scroll = body_container_div.scrollTop
