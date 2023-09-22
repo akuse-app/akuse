@@ -63,20 +63,26 @@ module.exports = class Video {
             anime_titles_div[key]
         })
 
-        // console.log('titles: ' + animeTitles)
-        // console.log('playground: ')
+        console.log('titles: ' + animeTitles)
+        console.log('playground: ')
 
         let i = 0
         do {
             var videoSource = await cons.getEpisodeUrl(animeTitles[i], episode)
-            console.log(animeTitles[i] + ' -> ' + videoSource)
+
+            if(videoSource != -1) {
+                console.log(animeTitles[i] + ' -> ' + videoSource.url)
+            } else {
+                console.log(animeTitles[i] + ' -> ' + -1)
+            }
+
             i++
         } while(videoSource === -1 && i < animeTitles.length)
 
         this.videoTitle.innerHTML = title
         this.videoEpisode.innerHTML = ('Episode ' + episode)
 
-        this.putSource(videoSource)
+        this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
     }
 
@@ -103,7 +109,7 @@ module.exports = class Video {
                                                         this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 
-        this.putSource(videoSource)
+        this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
     }
 
@@ -111,6 +117,7 @@ module.exports = class Video {
      * While watching, plays the previous episode
      * 
      * @returns if you are watching the first episode
+     * @deprecated
      */
     async previousEpisode() {
         const cons = this.getSourceFlagObject()
@@ -123,7 +130,7 @@ module.exports = class Video {
                                                         this.getEpisodeIdFromTitle())
         /* videoSource = this.toHD(videoSource) */
 
-        this.putSource(videoSource)
+        this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
     }
 
@@ -179,15 +186,20 @@ module.exports = class Video {
      * 
      * @param {*} videoSource 
      */
-    putSource(videoSource) {
-        var hls = new Hls()
+    putSource(url, isM3U8) {
+        if(isM3U8) {
+            var hls = new Hls()
         
-        if(Hls.isSupported()) {
-            hls.loadSource(videoSource)
-            hls.attachMedia(this.videoElement)
-            this.container.style.display = 'block'
-        } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-            this.videoElement.src = videoSource
+            if(Hls.isSupported()) {
+                hls.loadSource(url)
+                hls.attachMedia(this.videoElement)
+                this.container.style.display = 'block'
+            } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                this.videoElement.src = url
+                this.container.style.display = 'block'
+            }
+        } else {
+            this.videoElement.src = url
             this.container.style.display = 'block'
         }
     }

@@ -1,0 +1,2 @@
+when search for episode urls, remove -.,; etc
+my hero academia not working because is called boku no
