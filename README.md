@@ -60,6 +60,10 @@ To start, run:
 npm start
 ```
 
+## Known Issues
+* Some UI elements are not responsive
+* Some animes don't work because of different names as compared to AniList
+
 ## Disclaimer
 
 Akuse is a no-profit project developed only for educational purposes by the [Author](https://github.com/aleganza), I am not affiliated with Anilist and I do not host illegal files. By no means this encourage content piracy. Please support original content creators!

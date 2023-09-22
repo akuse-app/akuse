@@ -638,13 +638,15 @@ module.exports = class Frontend {
             episodes_list_div.appendChild(episode_div)
         }
         
+        // start watching / resume / rewatch button
         var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-        watch_button.id += (progress + 1)
+        progress == episodes ? watch_button.id += 1 : watch_button.id += (progress + 1)
         watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
-        progress == 0
-        ? watch_button.innerHTML += 'Start watching'
-        : watch_button.innerHTML += 'Resume'
 
+        progress == 0 ? watch_button.innerHTML += 'Start watching' :
+        progress == episodes ? watch_button.innerHTML += 'Rewatch' :
+        watch_button.innerHTML += 'Resume'
+        
         var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
             var anime_genres_li = document.createElement('li')
