@@ -2,11 +2,13 @@
 
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
+const LoadingBar = require('../modules/frontend/loadingBar')
 const Video = require('../modules/frontend/video')
 const clientData = require('../modules/clientData.js')
 
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
+const loadingBar = new LoadingBar()
 const video = new Video()
 
 // toggler for the app apges
@@ -174,82 +176,98 @@ featured_scroller.addEventListener('click', (event) => {
 var entry_list = document.getElementById('main-search-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerMainSearchAnime(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('current-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('trending-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('most-popular-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('adventure-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('comedy-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('fantasy-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('horror-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('music-home')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('current-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('planning-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('completed-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('dropped-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('paused-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 var entry_list = document.getElementById('repeating-my-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerAnimeEntry(event)
+    loadingBar.completeBar()
 })
 
 // trigger when episode is pressed, so generate video link
 var episode_list = document.getElementById('page-anime-episodes-list')
 episode_list.addEventListener('click', (event) => {
     frontend.triggerEpisode(event)
+    loadingBar.completeBar()
 })
 
 // featured section buttons

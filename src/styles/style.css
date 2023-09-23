@@ -118,6 +118,16 @@ img {
     font-size: 0.8rem;
 }
 
+#loading-bar {
+    display: block;
+    width: 0%;
+    height: 2px;
+    position: fixed;
+    bottom: 0;
+    background-color: var(--color-important);
+    z-index: 21;
+}
+
 .body-container {
     height: 100%;
     z-index: 20;

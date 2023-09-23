@@ -451,9 +451,11 @@ module.exports = class Frontend {
             var entry = event.target.closest('button')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(22))
+                loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(22))
+            loadingBar.completeBar()
         }
     }
 

@@ -294,14 +294,14 @@
     color: var(--color-icon-hover);
 }
 
-.bottom-controls .bottom .previous {
+/* .bottom-controls .bottom .previous {
     border-right: 1px solid var(--font-2);
 }
 
 .bottom-controls .bottom .next {
     border-left: 1px solid var(--font-2);
 }
-
+ */
 .bottom-controls .bottom button {
     margin-left: auto;
 }
@@ -313,4 +313,9 @@
 
 .bottom-controls .bottom .video-timer .current-time {
     color: var(--color-text-1);
+}
+
+.bottom-controls .bottom .video-timer .current-time,
+.bottom-controls .bottom .video-timer .video-duration {
+    width: 65px;
 }
