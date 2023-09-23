@@ -1,0 +1,65 @@
+@media only screen and (max-width: 1850px) {
+    :root {
+        font-size: 14px;
+    }
+
+    .anime-page {
+        width: 1550px;
+        height: 690px;
+    }
+
+    .page-anime-right-scroller {
+        height: 640px;
+    }
+    
+    .anime-page .content .page-anime-left img#page-anime-cover {
+        height: 388px;
+    }
+}
+
+@media only screen and (max-width: 1600px) {
+    :root {
+        font-size: 12px;
+    }
+
+    main .featured .featured-container .featured-left .content {
+        gap: 10px;
+    }
+
+    main .featured button {
+        width: 145px;
+        height: 40;
+    }
+
+    .anime-page {
+        width: 1350px;
+        height: 600px;
+    }
+
+    .page-anime-right-scroller {
+        height: 550px;
+    }
+    
+    .anime-page .content .page-anime-left img#page-anime-cover {
+        height: 308px;
+    }
+}
+
+@media only screen and (max-width: 1350px) {
+    :root {
+        font-size: 12px;
+    }
+
+    .anime-page {
+        width: 1150px;
+        height: 510px;
+    }
+
+    .page-anime-right-scroller {
+        height: 460px;
+    }
+    
+    .anime-page .content .page-anime-left img#page-anime-cover {
+        height: 235px;
+    }
+}
