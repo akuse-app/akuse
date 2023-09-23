@@ -17,6 +17,8 @@
 
 <img title="img" alt="img" src="https://i.imgur.com/2qxWL2Z.png">
 
+## C
+
 ## Running locally for development
 
 Start cloning Akuse:
@@ -61,14 +63,21 @@ npm start
 ```
 
 ## Known Issues
+
 * Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so I can fix them all!
-* Some UI elements may not be responsive
-* "Delete" button in List Editor don't work (can't figure out why)
-* Logout button only disconnects you from your AniList account, does not close the app instance
+* All anime are subbed, but some may be dubbed.
+* Some UI elements may not be responsive.
+* "Delete" button in List Editor don't work (can't figure out why).
+* Logout button only disconnects you from your AniList account, does not close the app instance.
 
 ## Disclaimer
 
-Akuse is a no-profit project developed only for educational purposes by the [Author](https://github.com/aleganza), I am not affiliated with Anilist and I do not host illegal files. By no means this encourage content piracy. Please support original content creators!
+- Akuse helps users find anime by simply scraping links from various websites.
+- Akuse or its developers do not host the content found on Akuse. All images and anime information found in the app are retrieved from AniList public API.
+- Additionally, all anime links found on Akuse are from various third party anime hosting websites.
+- Akuse or its owner are not responsible for the misuse of any content inside or outside the app and shall not be responsible for the dissemination of any content within the app.
+- By using this app, you agree that the app developer is not responsible for the content within the app. Nevertheless, they may or may not come from legitimate sources.
+- For internet violations, please contact the source website. The developer is not legally responsible.
 
 ## License
 
