@@ -18,11 +18,11 @@ module.exports = class Gogoanime {
     }
 
     /**
-     * Gets the episode url
+     * Gets the episode url and isM3U8 flag
      * 
      * @param {*} animeSearch 
      * @param {*} episode 
-     * @returns episode url
+     * @returns episode object (url + isM3U8 flag) searching for best quality in decrescent order (1080p -> 720p -> default)
      * @returns -1 if could not get the animeId
      */
     async getEpisodeUrl(animeSearch, episode) {
@@ -30,10 +30,32 @@ module.exports = class Gogoanime {
         if (animeId == -1) {
             return -1
         }
-        const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
         
+        const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
         const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
-        return data.sources[0].url
+
+        for(let i=0; i<Object.keys(data.sources).length; i++) {
+            if(data.sources[i].quality == '1080p') {
+                console.log('Playing episode in ' + data.sources[i].quality)
+                return data.sources[i]
+            }
+        }
+
+        for(let i=0; i<Object.keys(data.sources).length; i++) {
+            if(data.sources[i].quality == '720p') {
+                console.log('Playing episode in ' + data.sources[i].quality)
+                return data.sources[i]
+            }
+        }
+        
+        for(let i=0; i<Object.keys(data.sources).length; i++) {
+            if(data.sources[i].quality == 'default') {
+                console.log('Playing episode in ' + data.sources[i].quality)
+                return data.sources[i]
+            }
+        }
+
+        return data.sources[0]
     }
 
     /**

@@ -22,19 +22,19 @@ module.exports = class AnimeSaturn {
      * 
      * @param {*} animeSearch 
      * @param {*} episode 
-     * @returns episode object: url + isM3U8 flag
+     * @returns episode object (url + isM3U8 flag) in streamtape quality
      * @returns -1 if could not get the animeId
      */
     async getEpisodeUrl(animeSearch, episode) {
-            const animeId = await this.getAnimeId(animeSearch)
-            if (animeId == -1) {
-                return -1
-            }
+        const animeId = await this.getAnimeId(animeSearch)
+        if (animeId == -1) {
+            return -1
+        }
 
-            const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
-            
-            const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
-            return data.sources[1] // [1] is streamtape
+        const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
+        const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
+
+        return data.sources[1] // [1] is streamtape
     }
 
     /**
