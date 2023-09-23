@@ -453,7 +453,7 @@ module.exports = class Frontend {
     triggerFeaturedAnime(event) {
         if(!(event.target.tagName == 'button')) {
             var entry = event.target.closest('button')
-            if(entry) {
+            if(entry && event.target.innerHTML == 'Go to the page') {
                 this.displayAnimePage(entry.id.slice(22))
                 this.loadingBar.completeBar()
             }

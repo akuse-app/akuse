@@ -629,8 +629,8 @@ main .featured-scroller button#featured-scroll-right {
     border: none;
     outline: none;
     background-color: transparent;
-    position: absolute;
-    top: 45%;
+    position: fixed;
+    top: 250px;
     z-index: 7;
     cursor: pointer;
     transition: 0.3s ease-out;
