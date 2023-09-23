@@ -282,14 +282,24 @@
     display: flex;
 }
 
+.bottom-controls .bottom .previous,
 .bottom-controls .bottom .next {
     font-size: 1.4rem;
     font-weight: 400;
     color: var(--color-icon)
 }
 
+.bottom-controls .bottom .previous:hover,
 .bottom-controls .bottom .next:hover {
     color: var(--color-icon-hover);
+}
+
+.bottom-controls .bottom .previous {
+    border-right: 1px solid var(--font-2);
+}
+
+.bottom-controls .bottom .next {
+    border-left: 1px solid var(--font-2);
 }
 
 .bottom-controls .bottom button {

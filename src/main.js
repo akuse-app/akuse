@@ -8,7 +8,6 @@ const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
 
-
 const store = new Store()
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
@@ -34,7 +33,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        frame: false,
+        /* frame: false, */
         icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,

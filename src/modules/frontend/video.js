@@ -79,11 +79,15 @@ module.exports = class Video {
             i++
         } while(videoSource === -1 && i < animeTitles.length)
 
-        this.videoTitle.innerHTML = title
-        this.videoEpisode.innerHTML = ('Episode ' + episode)
+        if(videoSource !== -1) {
+            this.videoTitle.innerHTML = title
+            this.videoEpisode.innerHTML = ('Episode ' + episode)
 
-        this.putSource(videoSource.url, videoSource.isM3U8)
-        this.videoElement.play()
+            this.putSource(videoSource.url, videoSource.isM3U8)
+            this.videoElement.play()
+        } else {
+            this.animePageWarn(document.getElementById('page-anime-title'))
+        }
     }
 
     /**
@@ -92,14 +96,14 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
-        const cons = this.getSourceFlagObject()
-        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
-        const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
-        
-        if(this.episodeElementIncrease() == -1) {
+        if(this.episodeElementIncrease() === -1) {
             console.warn('This is the last episode, You can\'t go any further!')
             return
         }
+
+        const cons = this.getSourceFlagObject()
+        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
 
         if(this.store.get('update_progress')) {
             this.anilist.updateAnimeProgress(animeId, progress)
@@ -107,7 +111,6 @@ module.exports = class Video {
         
         var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())
-        /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
@@ -116,34 +119,24 @@ module.exports = class Video {
     /**
      * While watching, plays the previous episode
      * 
-     * @returns if you are watching the first episode
      * @deprecated
+     * @returns if you are watching the first episode
      */
     async previousEpisode() {
-        const cons = this.getSourceFlagObject()
-        if(this.episodeElementDecrease() == -1) {
+        if(this.episodeElementDecrease() === -1) {
             console.warn('This is the first episode, You can\'t go back any further!')
             return
         }
+        
+        const cons = this.getSourceFlagObject()
 
         var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
                                                         this.getEpisodeIdFromTitle())
-        /* videoSource = this.toHD(videoSource) */
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
     }
-
-    /**
-     * Temporary HD m3u8 file porter
-     * @deprecated
-     * @param {*} videoSource 
-     * @returns video source in HD
-     */
-    toHD(videoSource) {
-        return videoSource.slice(0, -13) + '720p/playlist_720p.m3u8'
-    }
-
+    
     /**
      * Increases the episode in the video controls title
      * 
@@ -221,5 +214,20 @@ module.exports = class Video {
         this.container.requestFullscreen();
 
         video.play()
+    }
+
+    /**
+     * Highlights anime title to warn something
+     * 
+     * @param {*} div 
+     */
+    animePageWarn(div) {
+        div.classList.remove('anime-page-warn-off')
+        div.classList.add('anime-page-warn-on')
+        
+        setTimeout(() => {
+            div.classList.remove('anime-page-warn-on')
+            div.classList.add('anime-page-warn-off')
+        }, 400)
     }
 }
