@@ -61,7 +61,7 @@ npm start
 ```
 
 ## Known Issues
-* Some anime don't work because of different names as compared to AniList
+* Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so I can fix them all!
 * Some UI elements may not be responsive
 * "Delete" button in List Editor don't work (can't figure out why)
 * Logout button only disconnects you from your AniList account, does not close the app instance
