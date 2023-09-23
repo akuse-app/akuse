@@ -1,15 +1,12 @@
 'use-strict'
 
 const { ipcRenderer } = require('electron')
-const Consumet = require('@consumet/extensions')
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
-const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
 
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
-const loadingBar = new LoadingBar()
 
 var iconifyButton = document.getElementById('document-iconify')
 iconifyButton.addEventListener('click', () => {

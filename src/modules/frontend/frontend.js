@@ -2,6 +2,7 @@
 
 const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
+const LoadingBar = require('../frontend/loadingBar')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
 const { watch } = require('original-fs')
@@ -21,6 +22,7 @@ module.exports = class Frontend {
     constructor() {
         this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
+        this.loadingBar = new LoadingBar()
         this.video = new Video()
         this.months = {
             '1': 'Jan',
@@ -319,9 +321,11 @@ module.exports = class Frontend {
             var entry = event.target.closest('.search-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(19))
+                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(19))
+            this.loadingBar.completeBar()
         }
     }
 
@@ -451,11 +455,11 @@ module.exports = class Frontend {
             var entry = event.target.closest('button')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(22))
-                loadingBar.completeBar()
+                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(22))
-            loadingBar.completeBar()
+            this.loadingBar.completeBar()
         }
     }
 
@@ -561,9 +565,11 @@ module.exports = class Frontend {
             var entry = event.target.closest('.anime-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(12))
+                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(12))
+            this.loadingBar.completeBar()
         }
     }
 
@@ -791,9 +797,11 @@ module.exports = class Frontend {
             var entry = event.target.closest('.episode')
             if(entry) {
                 this.video.displayVideo(entry.id.slice(8))
+                this.loadingBar.completeBar()
             }
         } else {
             this.video.displayVideo(event.target.id.slice(8))
+            this.loadingBar.completeBar()
         }
     }
 
