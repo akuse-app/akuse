@@ -19,7 +19,7 @@ module.exports = class AniListAPI extends Requests {
     constructor(clientData) {
         super()
         this.clientData = clientData
-        this.pages = 30
+        this.pages = 15
         this.method = 'POST'
         this.graphQLUrl = 'https://graphql.anilist.co'
         this.headers = {
@@ -57,7 +57,7 @@ module.exports = class AniListAPI extends Requests {
             episodes
             duration
             coverImage {
-                extraLarge
+                large
             }
             bannerImage
             genres
@@ -179,7 +179,7 @@ module.exports = class AniListAPI extends Requests {
                                     english
                                 }
                                 coverImage {
-                                    extraLarge
+                                    large
                                 }
                                 episodes
                                 nextAiringEpisode {
@@ -342,7 +342,7 @@ module.exports = class AniListAPI extends Requests {
     async releasingAnimes() {
         var query = `
         {
-            Page(page: 1, perPage: 15) {
+            Page(page: 1, perPage: ${this.pages}) {
                 pageInfo {
                     total
                     currentPage
@@ -383,7 +383,7 @@ module.exports = class AniListAPI extends Requests {
                         english
                     }
                     coverImage {
-                        extraLarge
+                        large
                     }
                 }
             } 
@@ -420,12 +420,7 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
-        var variables = {
-            page: 1,
-            perPage: 10 
-        }
-
-        const options = this.getOptions(query, variables)
+        const options = this.getOptions(query)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
 
         return respData.data.Page.media

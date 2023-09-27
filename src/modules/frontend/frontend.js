@@ -418,7 +418,7 @@ module.exports = class Frontend {
     createAnimeSectionEntry(animeEntry) {
         const animeId = animeEntry.id
         const animeName = this.getTitle(animeEntry)
-        const cover = animeEntry.coverImage.extraLarge
+        const cover = animeEntry.coverImage.large
     
         let anime_entry_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
@@ -586,7 +586,7 @@ module.exports = class Frontend {
         const description = animeEntry.description
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
-        const cover = animeEntry.coverImage.extraLarge
+        const cover = animeEntry.coverImage.large
         const banner = animeEntry.bannerImage
         const genres = animeEntry.genres
         const seasonYear = animeEntry.seasonYear
