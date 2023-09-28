@@ -28,7 +28,7 @@ git clone https://github.com/aleganza/akuse.git
 ```
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
-As Redirect URL, you can insert http://localhost:9009/logged and it should work.
+As Redirect I, you can insert http://localhost:9009/logged and it should work.
 Now go inside the src/modules folder and create a clientData.js file with a structure like this:
 
 ```
@@ -43,7 +43,7 @@ module.exports = {
 # Example:
 module.exports = {
     clientId: 12345,
-    redirectUri: "https://www.example.com/",
+    redirectUri: "http://localhost:9009/logged",
     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
 }
 ```
