@@ -136,6 +136,7 @@ exit_button.addEventListener('click', (event) => {
 var list_editor_button = document.getElementById('list-editor-save')
 list_editor_button.addEventListener('click', (event) => {
     frontend.listEditor()
+    frontend.updateAnimePageElements()
 })
 
 // list-editor delete

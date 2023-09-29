@@ -683,17 +683,25 @@ module.exports = class Frontend {
         }
         
         let userProgress = document.getElementById('list-editor-progress')
-        if(userProgress.value == "" || userProgress.value < 0 || userProgress.value > animeEpisodes) {
+        if(userProgress.value < 0 || userProgress.value > animeEpisodes) {
             let useProgressContainer = document.getElementById('list-editor-progress-container')
             this.listEditorWarn(useProgressContainer)
             warn = 1
+        } else if(userProgress.value == "") {
+            userProgress.value = 0
+        }
+
+        if(userList.value = "COMPLETED") {
+            userProgress.value = animeEpisodes
         }
         
         let userScore = document.getElementById('list-editor-score')
-        if(userScore.value == "" || userScore.value < 0 || userScore.value > 10) {
+        if(userScore.value < 0 || userScore.value > 10) {
             let userScoreContainer = document.getElementById('list-editor-score-container')
             this.listEditorWarn(userScoreContainer)
             warn = 1
+        } else if(userScore.value == "") {
+            userScore.value = 0
         }
         
         if(warn) return
@@ -728,6 +736,27 @@ module.exports = class Frontend {
         this.anilist.deleteAnimeFromList(animeId)
 
         this.closeListEditorPage()
+    }
+
+    async updateAnimePageElements() {
+        const animeId = document.getElementById('page-anime-id').innerHTML
+
+        const anilist = new AniListAPI(clientData)
+        const animeEntry = await anilist.getAnimeInfo(animeId)
+
+        const episodes = this.getEpisodes(animeEntry)
+        const userStatus = this.getUserStatus(animeEntry)
+        const score = this.getScore(animeEntry)
+        const progress = this.getProgress(animeEntry)
+
+        document.getElementById('page-anime-progress-episodes').innerHTML = ""
+        document.getElementById('page-anime-user-score').innerHTML = ""
+        this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
+        this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
+        document.getElementById('page-anime-user-status').innerHTML = userStatus
+        document.getElementById('page-anime-progress').innerHTML = progress
+        document.getElementById('page-anime-score-number').innerHTML = score
+
     }
     
     /**
