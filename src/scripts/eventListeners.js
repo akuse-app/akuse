@@ -278,6 +278,16 @@ featured_scroller_div.addEventListener('mouseout', (event) => {
     featured_right_button.style.display = 'none'
 })
 
+featured_left_button.addEventListener('mouseover', (event) => {
+    featured_left_button.style.display = 'block'
+    featured_right_button.style.display = 'block'
+})
+
+featured_right_button.addEventListener('mouseout', (event) => {
+    featured_left_button.style.display = 'none'
+    featured_right_button.style.display = 'none'
+})
+
 featured_left_button.addEventListener('click', (event) => {
     featured_scroller_div.scrollLeft -= 1800
 })

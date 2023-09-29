@@ -608,13 +608,13 @@ main {
     width: 100%;
     color: var(--font-1);
     padding-top: 80px;
+    position: relative;
 }
 
 main .featured-scroller {
     display: block;
     height: 100%;
     width: 100%;
-    position: relative;
     padding-bottom: 35px;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -622,30 +622,30 @@ main .featured-scroller {
     scroll-behavior: smooth;
 }
 
-main .featured-scroller button#featured-scroll-left,
-main .featured-scroller button#featured-scroll-right {
+main button#featured-scroll-left,
+main button#featured-scroll-right {
     color: var(--font-2);
     font-size: 2.2rem;
     border: none;
     outline: none;
     background-color: transparent;
-    position: fixed;
+    position: absolute;
     top: 250px;
     z-index: 7;
     cursor: pointer;
     transition: 0.3s ease-out;
 }
 
-main .featured-scroller button#featured-scroll-left {
+main button#featured-scroll-left {
     left: 10px;
 }
 
-main .featured-scroller button#featured-scroll-right {
+main button#featured-scroll-right {
     right: 10px;
 }
 
-main .featured-scroller button#featured-scroll-left:hover,
-main .featured-scroller button#featured-scroll-right:hover {
+main button#featured-scroll-left:hover,
+main button#featured-scroll-right:hover {
     transform: scale(1.40);
 }
 
@@ -749,6 +749,7 @@ main .featured .featured-container .featured-shadow {
 
 main .featured .featured-container .featured-right{
     width: 50%;
+    margin-right: 50px;
     z-index: 3;
     background-color: transparent;
 }
