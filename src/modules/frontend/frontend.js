@@ -691,7 +691,7 @@ module.exports = class Frontend {
             userProgress.value = 0
         }
 
-        if(userList.value = "COMPLETED") {
+        if(userList.value === "COMPLETED") {
             userProgress.value = animeEpisodes
         }
         
@@ -716,7 +716,7 @@ module.exports = class Frontend {
     }
         
     /**
-     * If a form input is not correct, warn it
+     * If a form input is not correct, warn the user
      * 
      * @param {*} div to warn
     */
@@ -730,7 +730,9 @@ module.exports = class Frontend {
         }, 400)
     }
     
-    
+    /**
+     * Closes the list editor modal page
+     */
     listEditorDelete() {
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
         this.anilist.deleteAnimeFromList(animeId)
@@ -738,17 +740,20 @@ module.exports = class Frontend {
         this.closeListEditorPage()
     }
 
+    /**
+     * When the list editor is used, update elements on anime page
+     */
     async updateAnimePageElements() {
         const animeId = document.getElementById('page-anime-id').innerHTML
-
+        
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
-
+        
         const episodes = this.getEpisodes(animeEntry)
         const userStatus = this.getUserStatus(animeEntry)
         const score = this.getScore(animeEntry)
         const progress = this.getProgress(animeEntry)
-
+        
         document.getElementById('page-anime-progress-episodes').innerHTML = ""
         document.getElementById('page-anime-user-score').innerHTML = ""
         this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
@@ -756,7 +761,25 @@ module.exports = class Frontend {
         document.getElementById('page-anime-user-status').innerHTML = userStatus
         document.getElementById('page-anime-progress').innerHTML = progress
         document.getElementById('page-anime-score-number').innerHTML = score
-
+    }
+    
+    /**
+     * When the list editor is used, update elements on anime entries lists
+     */
+    async updateAnimeEntries() {
+        const viewerId = await this.anilist.getViewerId()
+        const animeStatus = document.getElementById('page-anime-user-status').innerHTML
+        const entries = await this.anilist.getViewerList(viewerId, animeStatus)
+        
+        let my_list_div = `${animeStatus.toLowerCase()}-my-list`
+        
+        // reset and update lists
+        document.getElementById(my_list_div).innerHTML = ""
+        this.displayUserAnimeSection(entries, my_list_div, true)
+        
+        document.getElementById('current-home').innerHTML = ""
+        const entriesCurrent = await this.anilist.getViewerList(viewerId, 'CURRENT')
+        this.displayUserAnimeSection(entriesCurrent, 'current-home', true)
     }
     
     /**
