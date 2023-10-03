@@ -1,5 +1,5 @@
 {
-  "name": "Akuse-Beta",
+  "name": "akuse-beta",
   "version": "1.0.0",
   "description": "Anime streaming client for PC",
   "main": "src/main.js",
@@ -8,23 +8,71 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "build": "electron-builder"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux",
+    "dist:all": "electron-builder -mwl"
   },
   "build": {
-    "appId": "Akuse",
+    "appId": "com.electron.akuse",
+    "productName": "Akuse",
+    "copyright": "Copyright © 2023 aleganza",
+    "mac": {
+        "target": "dmg",
+        "hardenedRuntime": true,
+        "gatekeeperAssess": true,
+        "extendInfo": {
+          "NSAppleEventsUsageDescription": "Let me use Apple Events.",
+          "NSCameraUsageDescription": "Let me use the camera.",
+          "NSScreenCaptureDescription": "Let me take screenshots."
+        }
+      },
+      "dmg": {
+        "iconSize": 100,
+        "contents": [
+          {
+            "x": 255,
+            "y": 85,
+            "type": "file"
+          },
+          {
+            "x": 253,
+            "y": 325,
+            "type": "link",
+            "path": "/Applications"
+          }
+        ],
+        "window": {
+          "width": 500,
+          "height": 500
+        }
+      },
     "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "assets/img/icon/icon.ico"
+        "target": [
+            "nsis"
+        ],
+        "icon": "assets/img/icon/icon.ico"
     },
     "nsis": {
+      "deleteAppDataOnUninstall": true,
       "oneClick": false,
       "perMachine": true,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "license": "LICENSE"
-    }
+    },
+    "linux": {
+        "desktop": {
+          "StartupNotify": "false",
+          "Encoding": "UTF-8",
+          "MimeType": "x-scheme-handler/deeplink"
+        },
+        "target": ["AppImage", "deb"]   
+      },
+      "deb": {
+        "priority": "optional"
+      }
   },
   "repository": {
     "type": "git",
