@@ -6,7 +6,8 @@
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="stars" src="https://img.shields.io/github/stars/aleganza/akuse"> 
-    <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main"> 
+    <img alt="total-downloads" src="https://img.shields.io/github/downloads/aleganza/akuse/total"> 
+    <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main">
 </p>
 
 <p align="center">
@@ -16,8 +17,6 @@
 </p>
 
 <img title="img" alt="img" src="https://i.imgur.com/2qxWL2Z.png">
-
-## C
 
 ## Running locally for development
 
