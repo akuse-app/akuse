@@ -68,7 +68,7 @@
           "Encoding": "UTF-8",
           "MimeType": "x-scheme-handler/deeplink"
         },
-        "target": ["AppImage", "deb"]   
+        "target": ["AppImage", "deb"]
       },
       "deb": {
         "priority": "optional"

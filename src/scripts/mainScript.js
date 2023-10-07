@@ -1,10 +1,12 @@
 'use-strict'
 
 const { ipcRenderer } = require('electron')
+const Store = require('electron-store')
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
 const clientData = require('../modules/clientData.js')
 
+const store = new Store()
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 
@@ -60,21 +62,30 @@ ipcRenderer.on('load-index', async (event) => {
     frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
     frontend.displayViewerAvatar(viewerInfo)
     frontend.displayFeaturedAnime(entriesFeatured)
-    frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
+    if(entriesCurrent !== undefined)
+        frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
     frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
-
+    
+    // when first part is loaded, remove loading page
     frontend.removeLoadingPage()
 
+    // load second part
     const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
     const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
     const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
     const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
     const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
 
-    frontend.displayUserAnimeSection(entriesCurrent, 'current-my-list', true)
-    frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
-    frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
-    frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
-    frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
-    frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
+    if(entriesCurrent !== undefined)
+        frontend.displayUserAnimeSection(entriesCurrent, 'current-my-list', true)
+    if(entriesPlanning !== undefined)
+        frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
+    if(entriesCompleted !== undefined)
+        frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
+    if(entriesDropped !== undefined)
+        frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
+    if(entriesPaused !== undefined)
+        frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
+    if(entriesRepeating !== undefined)
+        frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
 })

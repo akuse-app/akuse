@@ -77,6 +77,7 @@ ipcMain.on('maximize-document', (event) => {
 
 ipcMain.on('quit-document', (event) => {
     mainWin.close()
+    store.delete('access_token')
 })
 
 ipcMain.on('load-issues-url', (event) => {
@@ -87,6 +88,7 @@ ipcMain.on('load-issues-url', (event) => {
 ipcMain.on('exit-app', (event) => {
     mainWin.webContents.session.clearStorageData().then((data) => {
         mainWin.close()
+        store.delete('access_token')
         // authWin.show()
         // authWin.loadURL(authUrl)
     })
