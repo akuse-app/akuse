@@ -165,6 +165,14 @@ speedBtn.addEventListener("click", () => {
     speedOptions.classList.toggle("show-options")
 })
 
+mainVideo.addEventListener('timeupdate', () => {
+
+
+    if(mainVideo.currentTime * 100 / mainVideo.duration > 75) {
+        console.log('oppalala' + mainVideo.currentTime + ' ' + mainVideo.duration)
+    }
+})
+
 document.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) {
         return

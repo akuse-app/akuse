@@ -109,6 +109,13 @@ module.exports = class AniListAPI extends Requests {
      * @returns viewer id
      */
     async getViewerId() {
+        /* == to this.authHeaders because of a bug */
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
         var query = `
             query {
                 Viewer {
@@ -118,7 +125,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Viewer.id
     }

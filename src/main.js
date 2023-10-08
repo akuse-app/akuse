@@ -49,21 +49,22 @@ const createWindow = () => {
         console.log("Log-in completed!")
         console.log('Navigated to Main Window')
         
-        const anilist = new AniListAPI(clientData)
-        
         const currentUrl = new URL(authWin.webContents.getURL())
-        const token = await anilist.getAccessToken(currentUrl)
+        if(currentUrl.searchParams.get("code") !== null) {
+            const anilist = new AniListAPI(clientData)
+            const token = await anilist.getAccessToken(currentUrl)
         
-        /* mainWin.loadFile('src/windows/index.html') */
-        mainWin.loadFile(__dirname + '/windows/index.html')
-        mainWin.show()
-        mainWin.maximize()
-        
-        mainWin.webContents.on('did-finish-load', () => {
-            authWin.close()
-            store.set('access_token', token)
-            mainWin.webContents.send('load-index')
-        })
+            /* mainWin.loadFile('src/windows/index.html') */
+            mainWin.loadFile(__dirname + '/windows/index.html')
+            mainWin.show()
+            mainWin.maximize()
+            
+            mainWin.webContents.on('did-finish-load', () => {
+                authWin.close()
+                store.set('access_token', token)
+                mainWin.webContents.send('load-index')
+            })
+        }
     })
 }
 
@@ -100,6 +101,10 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+/*     authWin.on('close', () => {
+        mainWin.close()
+    }) */
 })
 
 app.on('window-all-closed', () => {

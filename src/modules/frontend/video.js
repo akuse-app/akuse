@@ -155,6 +155,7 @@ module.exports = class Video {
     /**
      * Decreases the episode in the video controls title
      * 
+     * @deprecated
      * @returns -1 if you are watching the first episode
      */
     episodeElementDecrease() {
