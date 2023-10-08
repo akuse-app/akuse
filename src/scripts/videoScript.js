@@ -168,7 +168,7 @@ mainVideo.addEventListener('timeupdate', () => {
     if(mainVideo.currentTime * 100 / mainVideo.duration > 80
        && updated === 0) {
         updated = 1
-        video.canUpdateAnimeProgress()
+        video.updateAnimeProgress()
     }
     console.log(mainVideo.currentTime * 100 / mainVideo.duration)
     console.log(updated)

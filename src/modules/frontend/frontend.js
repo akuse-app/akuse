@@ -164,7 +164,7 @@ module.exports = class Frontend {
         : document.getElementById('list-editor-score').value = score
 
         // display the limit of episodes (/24, /12...)
-        const animeEpisodes = document.getElementById('page-anime-episodes').innerHTML
+        const animeEpisodes = document.getElementById('page-anime-available-episodes').innerHTML
         document.getElementById('list-editor-progress-limit').innerHTML = ('/' + animeEpisodes)
 
         this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
@@ -239,7 +239,7 @@ module.exports = class Frontend {
      */
     createSearchAnimeEntry(animeEntry) {
         const animeId = animeEntry.id
-        const cover = animeEntry.coverImage.extraLarge
+        const cover = animeEntry.coverImage.large
         const seasonYear = animeEntry.seasonYear
         const format = animeEntry.format
         const duration = animeEntry.duration
@@ -596,6 +596,7 @@ module.exports = class Frontend {
         const title = this.getTitle(animeEntry)
         const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
         const episodes = this.getEpisodes(animeEntry)
+        const availableEpisodes = this.getAvailableEpisodes(animeEntry)
         const userStatus = this.getUserStatus(animeEntry)
         const score = this.getScore(animeEntry)
         const progress = this.getProgress(animeEntry)
@@ -632,6 +633,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-progress').innerHTML = progress
         document.getElementById('page-anime-score-number').innerHTML = score
         document.getElementById('page-anime-episodes').innerHTML = episodes
+        document.getElementById('page-anime-available-episodes').innerHTML = availableEpisodes
         
         var anime_titles_div = document.getElementById('page-anime-titles')
         Object.keys(animeTitles).forEach( (key) => {
@@ -641,19 +643,27 @@ module.exports = class Frontend {
         })
 
         var episodes_list_div = document.getElementById('page-anime-episodes-list')
-        for(let i=0; i<episodes; i++) {
+        for(let i=0; i<availableEpisodes; i++) {
             let episode_div = this.createEpisode(i, banner)
             episodes_list_div.appendChild(episode_div)
         }
         
         // start watching / resume / rewatch button
         var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-        progress == episodes ? watch_button.id += 1 : watch_button.id += (progress + 1)
+        progress == episodes
+        ? watch_button.id += 1
+        : watch_button.id += (progress + 1)
         watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
 
-        progress == 0 ? watch_button.innerHTML += 'Start watching' :
-        progress == episodes ? watch_button.innerHTML += 'Rewatch' :
-        watch_button.innerHTML += 'Resume'
+        progress == 0
+        ? watch_button.innerHTML += 'Start watching' 
+        : progress == episodes ? watch_button.innerHTML += 'Rewatch' 
+        : watch_button.innerHTML += 'Resume'
+
+        if(availableEpisodes == '?') {
+            watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-ban"></i>'
+            watch_button.innerHTML += 'Not released'
+        }
         
         var anime_genres_ul = document.getElementById('page-anime-genres')
         Object.keys(genres).forEach( (key) => {
@@ -672,7 +682,7 @@ module.exports = class Frontend {
      * @returns if some form inputs are incorrect
      */
     listEditor() {
-        const animeEpisodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
+        const availableEpisodes = parseInt(document.getElementById('page-anime-available-episodes').innerHTML)
         let warn = 0
         
         let userList = document.getElementById('list-editor-user-list')
@@ -683,7 +693,7 @@ module.exports = class Frontend {
         }
         
         let userProgress = document.getElementById('list-editor-progress')
-        if(userProgress.value < 0 || userProgress.value > animeEpisodes) {
+        if(userProgress.value < 0 || userProgress.value > availableEpisodes) {
             let useProgressContainer = document.getElementById('list-editor-progress-container')
             this.listEditorWarn(useProgressContainer)
             warn = 1
@@ -692,7 +702,7 @@ module.exports = class Frontend {
         }
 
         if(userList.value === "COMPLETED") {
-            userProgress.value = animeEpisodes
+            userProgress.value = availableEpisodes
         }
         
         let userScore = document.getElementById('list-editor-score')
@@ -810,6 +820,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-id').innerHTML = ""
         document.getElementById('page-anime-progress').innerHTML = ""
         document.getElementById('page-anime-episodes').innerHTML = ""
+        document.getElementById('page-anime-available-episodes').innerHTML = ""
         document.getElementById('page-anime-score-number').innerHTML = ""
         document.getElementById('page-anime-seasonYear').innerHTML = ""
         document.getElementById('page-anime-format').innerHTML = ""
@@ -911,6 +922,23 @@ module.exports = class Frontend {
         : episodes = animeEntry.episodes
 
         return episodes
+    }
+
+    /**
+     * Gets the anime available episodes number from 'episodes' or 'nextAiringEpisode'
+     * 
+     * @param {*} animeEntry 
+     * @returns available episodes number
+     */
+    getAvailableEpisodes(animeEntry) {
+        var availableEpisodes
+        animeEntry.nextAiringEpisode == null
+        ? (animeEntry.episodes == null)
+           ? availableEpisodes = '?'
+           : availableEpisodes = animeEntry.episodes
+        : availableEpisodes = animeEntry.nextAiringEpisode.episode - 1
+
+        return availableEpisodes
     }
 
     /**

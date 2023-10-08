@@ -90,7 +90,10 @@ module.exports = class Video {
         }
     }
 
-    async canUpdateAnimeProgress() {
+    /**
+     * Updates the anime progress (if enabled in settings)
+     */
+    async updateAnimeProgress() {
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
         const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
 
@@ -120,12 +123,12 @@ module.exports = class Video {
     }
     
     /**
-     * Increases the episode in the video controls title
+     * Returns if you can update the episodes progress or not
      * 
      * @returns -1 if you are watching the last episode
      */
     canUpdateEpisode() {
-        const episodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
+        const episodes = parseInt(document.getElementById('page-anime-available-episodes').innerHTML)
         if(this.getEpisodeIdFromTitle() !== episodes) {
             return true
         }
