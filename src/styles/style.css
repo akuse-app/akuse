@@ -152,7 +152,7 @@ img {
     display: flex;
     justify-content: center;
     width: 100%;
-    padding-top: 25px;
+    padding-top: 20px;
 }
 
 .nav-wrapper {
@@ -781,10 +781,7 @@ main section {
     height: 800px;
     border-radius: var(--border-radius);
     color: var(--font-1);
-    background: var(--color-2);
     background: var(--main-bg-settings);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     display: flex;
     flex-direction: column;
 }
@@ -825,7 +822,7 @@ main section {
     }
 
     .anime-page .content .page-anime-left #page-anime-progress-episodes {
-        width: 100% ;
+        width: 100%;
         height: 10px;
         position: relative;
         margin-top: 8px;

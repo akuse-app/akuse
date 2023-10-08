@@ -26,11 +26,6 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
-        this.authHeaders = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
         this.mediaData = `
             id
             title {
@@ -109,13 +104,6 @@ module.exports = class AniListAPI extends Requests {
      * @returns viewer id
      */
     async getViewerId() {
-        /* == to this.authHeaders because of a bug */
-        var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
         var query = `
             query {
                 Viewer {
@@ -123,6 +111,12 @@ module.exports = class AniListAPI extends Requests {
                 }
             }
         `
+
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
 
         const options = this.getOptions(query)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
@@ -150,12 +144,18 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
         var variables = {
             userId: viewerId,
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data
     }
@@ -201,12 +201,18 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
         var variables = {
             userId: viewerId,
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         if(Object.keys(respData.data.MediaListCollection.lists).length !== 0) {
             return respData.data.MediaListCollection.lists[0].entries
@@ -227,12 +233,18 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
         var variables = {
             userId: viewerId,
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
 
     /**
@@ -250,12 +262,18 @@ module.exports = class AniListAPI extends Requests {
             }
         `
 
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
         var variables = {
             id: animeId
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Media
     }
@@ -437,12 +455,18 @@ module.exports = class AniListAPI extends Requests {
     
     async updateAnimeFromList(mediaId, status, scoreRaw, progress) {
         var query = `
-        mutation($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
-            SaveMediaListEntry(mediaId: $mediaId, progress: $progress, scoreRaw: $scoreRaw, status: $status) {
-                score(format:POINT_10_DECIMAL)
+            mutation($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
+                SaveMediaListEntry(mediaId: $mediaId, progress: $progress, scoreRaw: $scoreRaw, status: $status) {
+                    score(format:POINT_10_DECIMAL)
+                }
             }
-        }
         `
+
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
 
         var variables = {
             "mediaId": mediaId,
@@ -452,18 +476,24 @@ module.exports = class AniListAPI extends Requests {
         }
         
         const options = this.getOptions(query, variables)
-        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
     
     async deleteAnimeFromList(id) {
         var query = "mutation($id:Int){DeleteMediaListEntry(id:$id){deleted}}"
+
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
         
         var variables = {
             "id": id
         }
         
         const options = this.getOptions(query, variables)
-        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
 
     /**
@@ -474,13 +504,19 @@ module.exports = class AniListAPI extends Requests {
      */
     async updateAnimeProgress(mediaId, progress) {
         var query = `
-        mutation($mediaId: Int, $progress: Int) {
-            SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
-                id
-                progress
+            mutation($mediaId: Int, $progress: Int) {
+                SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
+                    id
+                    progress
+                }
             }
-        }
         `
+
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
         
         var variables = {
             "mediaId": mediaId,
@@ -488,7 +524,7 @@ module.exports = class AniListAPI extends Requests {
         }
         
         const options = this.getOptions(query, variables)
-        await this.makeRequest(this.method, this.graphQLUrl, this.authHeaders, options)
+        await this.makeRequest(this.method, this.graphQLUrl, headers, options)
         
         console.log(`Progress updated (${progress})`)
     }

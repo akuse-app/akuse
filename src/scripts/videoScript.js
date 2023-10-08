@@ -15,13 +15,13 @@ videoDuration = container.querySelector(".video-duration"),
 skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
 playPauseBtn = container.querySelector(".play-pause i"),
-/* previousEpisodeBtn = container.querySelector(".previous i") */
 nextEpisodeBtn = container.querySelector(".next")
 speedBtn = container.querySelector(".playback-speed i"),
 volumeOptions = container.querySelector(".volume-options"),
 speedOptions = container.querySelector(".speed-options"),
 fullScreenBtn = container.querySelector(".fullscreen i")
 let timer
+let updated = 0 /* for update anime progress automatically */
 
 const hideControls = () => {
     /* if(mainVideo.paused) return */
@@ -110,6 +110,7 @@ fullScreenBtn.addEventListener("click", () => {
 })
 
 exitBtn.addEventListener("click", () => {
+    updated = 0
     mainVideo.pause()
     container.style.display = 'none'
     if(document.fullscreenEnabled) {
@@ -149,9 +150,6 @@ skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
 nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
 })
-/* previousEpisodeBtn.addEventListener("click", async () => {
-    await video.previousEpisode()
-}) */
 volumeBtn.addEventListener("click", () => {
     if(speedOptions.classList.contains('show-options')) 
         speedOptions.classList.toggle("show-options")
@@ -165,12 +163,15 @@ speedBtn.addEventListener("click", () => {
     speedOptions.classList.toggle("show-options")
 })
 
+/* trigger auto updating episode when the user reaches the 80% of the anime */
 mainVideo.addEventListener('timeupdate', () => {
-
-
-    if(mainVideo.currentTime * 100 / mainVideo.duration > 75) {
-        console.log('oppalala' + mainVideo.currentTime + ' ' + mainVideo.duration)
+    if(mainVideo.currentTime * 100 / mainVideo.duration > 80
+       && updated === 0) {
+        updated = 1
+        video.canUpdateAnimeProgress()
     }
+    console.log(mainVideo.currentTime * 100 / mainVideo.duration)
+    console.log(updated)
 })
 
 document.addEventListener("keydown", (event) => {

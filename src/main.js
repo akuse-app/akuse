@@ -46,11 +46,10 @@ const createWindow = () => {
     authWin.loadURL(authUrl)
 
     authWin.webContents.on('did-navigate', async (event) => {
-        console.log("Log-in completed!")
-        console.log('Navigated to Main Window')
-        
         const currentUrl = new URL(authWin.webContents.getURL())
         if(currentUrl.searchParams.get("code") !== null) {
+            console.log("Log-in completed!")
+            console.log('Navigated to Main Window')
             const anilist = new AniListAPI(clientData)
             const token = await anilist.getAccessToken(currentUrl)
         

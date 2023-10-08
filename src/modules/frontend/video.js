@@ -90,51 +90,33 @@ module.exports = class Video {
         }
     }
 
-    /**
-     * While watching, plays the next episode
-     * 
-     * @returns if you are watching the last episode
-     */
-    async nextEpisode() {
-        if(this.episodeElementIncrease() === -1) {
-            console.warn('This is the last episode, You can\'t go any further!')
-            return
-        }
-
-        const cons = this.getSourceFlagObject()
+    async canUpdateAnimeProgress() {
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
         const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
 
         if(this.store.get('update_progress')) {
             this.anilist.updateAnimeProgress(animeId, progress)
         }
-        
-        var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
-                                                        this.getEpisodeIdFromTitle())
-
-        this.putSource(videoSource.url, videoSource.isM3U8)
-        this.videoElement.play()
     }
 
     /**
-     * While watching, plays the previous episode
+     * While watching, plays the next episode
      * 
-     * @deprecated
-     * @returns if you are watching the first episode
+     * @returns if you are watching the last episode
      */
-    async previousEpisode() {
-        if(this.episodeElementDecrease() === -1) {
-            console.warn('This is the first episode, You can\'t go back any further!')
+    async nextEpisode() {
+        if(!(this.canUpdateEpisode())) {
+            console.warn('This is the last episode, You can\'t go any further!')
             return
         }
-        
-        const cons = this.getSourceFlagObject()
 
+        const cons = this.getSourceFlagObject()
         var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
-                                                        this.getEpisodeIdFromTitle())
+                                                        this.getEpisodeIdFromTitle() + 1)
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
+        this.videoEpisode.innerHTML = this.videoEpisode.innerHTML.slice(0, 8) + parseInt(this.getEpisodeIdFromTitle() + 1)
     }
     
     /**
@@ -142,28 +124,13 @@ module.exports = class Video {
      * 
      * @returns -1 if you are watching the last episode
      */
-    episodeElementIncrease() {
+    canUpdateEpisode() {
         const episodes = parseInt(document.getElementById('page-anime-episodes').innerHTML)
-        
         if(this.getEpisodeIdFromTitle() !== episodes) {
-            this.videoEpisode.innerHTML = this.videoEpisode.innerHTML.slice(0, 8) + parseInt(this.getEpisodeIdFromTitle() + 1)
-        } else {
-            return -1
+            return true
         }
-    }
-    
-    /**
-     * Decreases the episode in the video controls title
-     * 
-     * @deprecated
-     * @returns -1 if you are watching the first episode
-     */
-    episodeElementDecrease() {
-        if (this.getEpisodeIdFromTitle() !== 1) {
-            this.videoEpisode.innerHTML = this.videoEpisode.innerHTML.slice(0, 8) + parseInt(this.getEpisodeIdFromTitle() - 1)
-        } else {
-            return -1
-        }
+
+        return false
     }
 
     /**

@@ -707,10 +707,15 @@ module.exports = class Frontend {
         if(warn) return
         
         const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        console.log(animeId + ' ' + 
+                    userList.value + ' ' + 
+                    userScore.value*10 + ' ' + 
+                    userProgress.value)
+
         this.anilist.updateAnimeFromList(animeId,
-                                     userList.value,
-                                     userScore.value*10,
-                                     userProgress.value)
+                                         userList.value,
+                                         userScore.value*10,
+                                         userProgress.value)
             
         this.closeListEditorPage()
     }
