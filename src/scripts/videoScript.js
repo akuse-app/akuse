@@ -170,8 +170,6 @@ mainVideo.addEventListener('timeupdate', () => {
         updated = 1
         video.updateAnimeProgress()
     }
-    console.log(mainVideo.currentTime * 100 / mainVideo.duration)
-    console.log(updated)
 })
 
 document.addEventListener("keydown", (event) => {

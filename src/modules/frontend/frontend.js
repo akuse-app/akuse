@@ -10,7 +10,7 @@ const { parse } = require('dotenv')
 
 
 /**
- * Methods to manipulate the DOM with the data fetched
+ * Methods to manipulate the DOM with fetched data
  * 
  * @class
  */

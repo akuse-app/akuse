@@ -20,6 +20,10 @@
         height: 260px;
         width: 190px;
     }
+
+    main section .anime-list .anime-entry {
+        width: 190px;
+    }
 }
 
 @media only screen and (max-width: 1600px) {
@@ -53,6 +57,10 @@
         height: 206px;
         width: 150px;
     }
+
+    main section .anime-list .anime-entry {
+        width: 150px;
+    }
 }
 
 @media only screen and (max-width: 1350px) {
@@ -75,6 +83,10 @@
     
     main section .anime-list .anime-entry .anime-cover img {
         height: 157px;
+        width: 115px;
+    }
+
+    main section .anime-list .anime-entry {
         width: 115px;
     }
 }
