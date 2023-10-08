@@ -23,7 +23,7 @@
 Start cloning Akuse:
 
 ```
-git clone https://github.com/aleganza/akuse.git
+git clone https://github.com/akuse-app/Akuse.git
 ```
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
