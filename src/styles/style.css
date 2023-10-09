@@ -9,7 +9,6 @@
     --color-dark-opacity: rgba(0, 0, 0, 0.8);
     --color-warning: rgb(255, 61, 61);
     --main-bg-settings: #1b1b1b;
-    /* --main-bg-settings: radial-gradient(circle, var(--color-1) 12%, var(--color-0) 100%); */
     
     --font-1: #fffdff;
     --font-2: rgb(179, 179, 179);
@@ -1237,13 +1236,12 @@ main section .anime-list-wrapper {
         
         .bar {
             width: calc(100% - 20px);
-            height: 10px;
+            height: 7px;
             margin: 10px;
             bottom: 0;
             position: absolute;
             background-color: var(--color-dark-opacity);
             border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
         }
         
         .progress-bar {
@@ -1258,6 +1256,15 @@ main section .anime-list-wrapper {
             object-fit: cover;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
+        }
+
+        main section .anime-list .anime-entry .anime-cover .anime-cover-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 5px);
+            box-shadow: inset 0px -50px 18px -22px #00000093;
         }
         
         main section .anime-list .anime-entry .anime-title {

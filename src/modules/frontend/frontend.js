@@ -343,8 +343,15 @@ module.exports = class Frontend {
 
         Object.keys(entries).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
-
+            
             if(needProgressBar) {
+                // append a shadow layer to the card
+                let anime_cover_div = anime_entry_div.getElementsByClassName('anime-cover')[0]
+                let anime_cover_shadow = document.createElement('div')
+                anime_cover_shadow.classList.add('anime-cover-shadow')
+                anime_cover_div.appendChild(anime_cover_shadow)
+                
+                // append the progress bar to the card
                 this.appendProgressBar(
                     anime_entry_div.getElementsByClassName('anime-cover')[0],
                     parseInt(this.getEpisodes(entries[key].media)),
