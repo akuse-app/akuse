@@ -39,12 +39,6 @@ document.getElementById('page-anime-search-button').addEventListener('click', (e
     }
 })
 
-// user section
-/* var userSection = document.getElementById('user-section')
-userSection.addEventListener('click', (event) => {
-    frontend.toggleUserDropdown()
-}) */
-
 // main search bar listeners
 var scroller = document.getElementsByClassName('body-container')[0]
 var searchMainInput = document.getElementById('search-main-input')
@@ -93,9 +87,16 @@ settingsButton.addEventListener('click', (event) => {
     frontend.displaySettingsPage()
 })
 
+// close settings modal page
 var exit_button = document.querySelector('.settings-page #exit')
 exit_button.addEventListener('click', (event) => {
     frontend.closeSettingsPage()
+})
+
+document.getElementById('settings-page').addEventListener('click', (event) => {
+    if(event.target.id === 'settings-page') {
+        frontend.closeSettingsPage()
+    }
 })
 
 var sourceItem = document.getElementById('source-item')
@@ -127,9 +128,22 @@ settings_button.addEventListener('click', (event) => {
     frontend.displayListEditorPage()
 })
 
+// close list-editor modal page
 var exit_button = document.querySelector('.list-editor-page #exit')
 exit_button.addEventListener('click', (event) => {
     frontend.closeListEditorPage()
+})
+
+document.getElementById('list-editor-page').addEventListener('click', (event) => {
+    if(event.target.id === 'list-editor-page') {
+        frontend.closeListEditorPage()
+    }
+})
+
+document.getElementById('settings-page').addEventListener('click', (event) => {
+    if(event.target.id === 'settings-page') {
+        frontend.closeSettingsPage()
+    }
 })
 
 // list-editor save
@@ -302,10 +316,16 @@ watch_button.addEventListener('click', (event) => {
     video.displayVideo(watch_button.id.slice(17))
 })
 
-// anime page closer
+// close anime page modal page
 var exit_button = document.querySelector('.anime-page #exit')
 exit_button.addEventListener('click', (event) => {
     frontend.closeAnimePage()
+})
+
+document.getElementById('anime-page').addEventListener('click', (event) => {
+    if(event.target.id === 'anime-page') {
+        frontend.closeAnimePage()
+    }
 })
 
 // drag n scroll

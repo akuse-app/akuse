@@ -665,7 +665,7 @@ module.exports = class Frontend {
         progress == 0
         ? watch_button.innerHTML += 'Start watching' 
         : progress == episodes ? watch_button.innerHTML += 'Rewatch' 
-        : watch_button.innerHTML += 'Resume'
+        : watch_button.innerHTML += 'Resume episode ' + (progress+1) 
 
         if(availableEpisodes == '?') {
             watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-ban"></i>'
