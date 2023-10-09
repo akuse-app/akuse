@@ -4,10 +4,12 @@ const { ipcRenderer } = require('electron')
 const Store = require('electron-store')
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
+const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
 
 const store = new Store()
 const frontend = new Frontend()
+const loadingBar = new LoadingBar()
 
 var iconifyButton = document.getElementById('document-iconify')
 iconifyButton.addEventListener('click', () => {
@@ -43,11 +45,11 @@ ipcRenderer.on('load-index', async (event) => {
         const anilist = new AniListAPI(clientData) // defining it here because its constructor must be loaded here
 
         const viewerId = await anilist.getViewerId()
-    
         // load first part
         const viewerInfo = await anilist.getViewerInfo(viewerId)
         const entriesFeatured = await anilist.releasingAnimes()
         const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
+        loadingBar.initPageBar()
         const entriesTrending = await anilist.getTrendingAnimes()
         const entriesMostPopular = await anilist.getMostPopularAnimes()
         const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
@@ -67,9 +69,12 @@ ipcRenderer.on('load-index', async (event) => {
         if(entriesCurrent !== undefined)
             frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
         frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
-        
+    
         // when first part is loaded, remove loading page
-        frontend.removeLoadingPage()
+        loadingBar.fillPageBar()
+        setTimeout(() => {
+            frontend.removeLoadingPage()
+        }, 400)
     
         // load second part
         const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')

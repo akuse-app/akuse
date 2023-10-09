@@ -136,6 +136,7 @@ img {
 #loading-page {
     width: 100%;
     height: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
@@ -145,6 +146,34 @@ img {
     background-attachment: fixed;
     z-index: 9999;
     transition: var(--transition);
+}
+
+.loading-page-container {
+    position: relative;
+    width: 750px;
+    height: 225px;
+}
+
+#loading-page img {
+    width: 100%;
+}
+
+#loading-page #loading-page-bar {
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--color-2);
+    border-radius: var(--border-radius);
+    box-sizing: var(--shadow);
+}
+
+#loading-page #loading-page-bar #loading-page-progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: var(--color-important);
+    border-radius: var(--border-radius);
 }
 
 .nav-container {

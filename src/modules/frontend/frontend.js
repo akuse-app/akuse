@@ -44,8 +44,12 @@ module.exports = class Frontend {
      * Removes the loading div when the document has finished loading
      */
     removeLoadingPage() {
-        document.getElementById('loading-page').style.opacity = 0;
-        document.getElementById('loading-page').style.display = 'none';
+        document.getElementById('loading-page').classList.add('loading-page-animation')
+        setTimeout(() => {
+            document.getElementById('loading-page').style.display = 'none'
+        }, 1000)
+        /* document.getElementById('loading-page').style.opacity = 0
+        document.getElementById('loading-page').style.display = 'none' */
     }
 
     /**

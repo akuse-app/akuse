@@ -2,6 +2,53 @@
     --animation-transition: 0.4s ease-out;
 }
 
+/* LOADING PAGE */
+
+.loading-page-animation {
+    animation: loadingPageAnimation 1s ease-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes loadingPageAnimation {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.loading-page-init-bar-animation {
+    animation: loadingPageInitBarAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes loadingPageInitBarAnimation {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 30%;
+    }
+}
+
+.loading-page-bar-animation {
+    animation: loadingPageBarAnimation var(--animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes loadingPageBarAnimation {
+    0% {
+        width: 30%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
 /* LOADING BAR */
 
 .loading-bar-animation {
