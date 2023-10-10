@@ -225,7 +225,7 @@
             </div>
         </div>
     </div>
-    <!-- ADD ANIME TO LIST MODAL PAGE -->
+    <!-- LIST EDITOR MODAL PAGE -->
     <div id="list-editor-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
     <div id="list-editor-page" class="modal-page-wrapper fade-in">
         <div class="list-editor-page">
@@ -247,13 +247,19 @@
                     </div>
                     <div id="list-editor-progress-container" class="input-container">
                         <i class="fa-solid fa-bars-progress"></i>
-                        <input id="list-editor-progress" type="number" min="0" placeholder="PROGRESS">
-                        <div id="list-editor-progress-limit"></div>
+                        <input id="list-editor-progress" type="range" min="0">
+                        <div id="list-editor-progress-limit">
+                            <div class="value"></div>
+                            <div class="limit"></div>
+                        </div>
                     </div>
                     <div id="list-editor-score-container" class="input-container">
                         <i class="fa-solid fa-star"></i>
-                        <input id="list-editor-score" type="number" min="0" max="10" placeholder="SCORE">
-                        <div id="list-editor-score-limit">/10</div>
+                        <input id="list-editor-score" type="range" min="0" max="10">
+                        <div id="list-editor-score-limit">
+                            <div class="value"></div>
+                            <div class="limit"></div>
+                        </div>
                     </div>
                     <div class="input-divisor">
                         <button id="list-editor-delete" class="list-editor-button">DELETE</button>

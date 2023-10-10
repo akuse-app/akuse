@@ -1192,6 +1192,17 @@ main section {
             border: none;
             background-color: transparent;
         }
+        
+        .list-editor-page .content .input-container input {
+            width: 100px;
+            accent-color: var(--color-important);
+        }
+
+        #list-editor-progress-limit,
+        #list-editor-score-limit {
+            display: flex;
+            margin-left: auto;
+        }
 
     .list-editor-page button#exit {
     position: absolute;

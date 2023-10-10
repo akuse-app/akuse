@@ -154,6 +154,7 @@ module.exports = class Frontend {
         const status = document.getElementById('page-anime-user-status').innerHTML
         const progress = document.getElementById('page-anime-progress').innerHTML
         const score = document.getElementById('page-anime-score-number').innerHTML
+        const availableEpisodes = document.getElementById('page-anime-available-episodes').innerHTML
           
         status == 'NOT IN LIST'
         ? document.getElementById('list-editor-user-list').value = ""
@@ -162,14 +163,19 @@ module.exports = class Frontend {
         progress == ""
         ? document.getElementById('list-editor-progress').value = ""
         : document.getElementById('list-editor-progress').value = progress
+
+        document.getElementById('list-editor-progress').setAttribute('max', availableEpisodes)
         
         score == ""
         ? document.getElementById('list-editor-score').value = ""
         : document.getElementById('list-editor-score').value = score
 
-        // display the limit of episodes (/24, /12...)
-        const animeEpisodes = document.getElementById('page-anime-available-episodes').innerHTML
-        document.getElementById('list-editor-progress-limit').innerHTML = ('/' + animeEpisodes)
+        // display the limit of episodes (/24, /12...) and score (/10)
+        document.querySelector('#list-editor-progress-limit .value').innerHTML = (progress)
+        document.querySelector('#list-editor-progress-limit .limit').innerHTML = ('/' + availableEpisodes)
+
+        document.querySelector('#list-editor-score-limit .value').innerHTML = (score)
+        document.querySelector('#list-editor-score-limit .limit').innerHTML = ('/10')
 
         this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
     }

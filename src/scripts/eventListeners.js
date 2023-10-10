@@ -168,6 +168,18 @@ list_editor_button.addEventListener('click', (event) => {
     /* frontend.listEditorDelete() */
 })
 
+// list-editor progress and score updating
+var list_editor_progress = document.getElementById('list-editor-progress')
+list_editor_progress.addEventListener('input', () => {
+    console.log('ciao')
+    document.querySelector('#list-editor-progress-limit .value').innerHTML = list_editor_progress.value
+})
+
+var list_editor_score = document.getElementById('list-editor-score')
+list_editor_score.addEventListener('input', () => {
+    document.querySelector('#list-editor-score-limit .value').innerHTML = list_editor_score.value
+})
+
 // navbar background changing
 var lastScroll = 0
 var nav_div = document.getElementById('nav-wrapper')
