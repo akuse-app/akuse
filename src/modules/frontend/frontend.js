@@ -115,7 +115,7 @@ module.exports = class Frontend {
     toggleUserDropdown() {
         var userSection = document.getElementById('user-section')
         var userDropdown = document.getElementById('user-dropdown')
-        var color_1 = getComputedStyle(document.documentElement).getPropertyValue('--color-1');
+        var color_1 = getComputedStyle(document.documentElement).getPropertyValue('--color-1')
 
         if(userDropdown.style.display == 'none') {
             userSection.style.backgroundColor = color_1
@@ -331,11 +331,9 @@ module.exports = class Frontend {
             var entry = event.target.closest('.search-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(19))
-                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(19))
-            this.loadingBar.completeBar()
         }
     }
 
@@ -472,11 +470,9 @@ module.exports = class Frontend {
             var entry = event.target.closest('button')
             if(entry && event.target.innerHTML == 'Go to the page') {
                 this.displayAnimePage(entry.id.slice(22))
-                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(22))
-            this.loadingBar.completeBar()
         }
     }
 
@@ -582,11 +578,9 @@ module.exports = class Frontend {
             var entry = event.target.closest('.anime-entry')
             if(entry) {
                 this.displayAnimePage(entry.id.slice(12))
-                this.loadingBar.completeBar()
             }
         } else {
             this.displayAnimePage(event.target.id.slice(12))
-            this.loadingBar.completeBar()
         }
     }
 
@@ -594,8 +588,9 @@ module.exports = class Frontend {
      * Displays the anime modal page
      * 
      * @param {*} animeId 
-     */
-    async displayAnimePage(animeId) {
+    */
+   async displayAnimePage(animeId) {
+        this.showModalPage('anime-page-shadow-background', 'anime-page')
         // get infos
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
@@ -689,8 +684,9 @@ module.exports = class Frontend {
             anime_genres_ul.appendChild(anime_genres_li)
         })
 
-        // show modal page
-        this.showModalPage('anime-page-shadow-background', 'anime-page')
+        // hide loader - show content
+        document.getElementById('page-anime-loader').style.display = 'none'
+        document.getElementById('page-anime-content-wrapper').style.display = 'flex'
     }
     
     /**
@@ -845,6 +841,12 @@ module.exports = class Frontend {
         document.getElementById('page-anime-meanScore').innerHTML = ""
         document.getElementById('page-anime-list-editor').classList.remove('in-list')
         document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
+
+        // hide content - show loader
+        document.getElementById('page-anime-content-wrapper').style.display = 'none'
+        setTimeout(() => {
+            document.getElementById('page-anime-loader').style.display = 'flex'
+        }, 400) // with timeout because a visual bug occurs when the modal page is closing
     }
 
     /**
@@ -882,11 +884,9 @@ module.exports = class Frontend {
             var entry = event.target.closest('.episode')
             if(entry) {
                 this.video.displayVideo(entry.id.slice(8))
-                this.loadingBar.completeBar()
             }
         } else {
             this.video.displayVideo(event.target.id.slice(8))
-            this.loadingBar.completeBar()
         }
     }
 

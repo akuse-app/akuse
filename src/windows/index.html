@@ -132,7 +132,12 @@
         <div class="anime-page">
             <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
             <div>
-                <div class="content-wrapper">
+                <div id="page-anime-loader" style="display: flex;">
+                    <svg class="ring" viewBox="25 25 50 50" stroke-width="5">
+                        <circle cx="50" cy="50" r="20" />
+                    </svg>
+                </div>
+                <div id="page-anime-content-wrapper" class="content-wrapper" style="display: none">
                     <div class="content">
                         <div class="page-anime-left">
                             <img id="page-anime-cover" src="/assets/img/cover.png" alt="">

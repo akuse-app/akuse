@@ -19,40 +19,40 @@
     "productName": "Akuse",
     "copyright": "Copyright © 2023 aleganza",
     "mac": {
-        "target": "dmg",
-        "hardenedRuntime": true,
-        "gatekeeperAssess": true,
-        "extendInfo": {
-          "NSAppleEventsUsageDescription": "Let me use Apple Events.",
-          "NSCameraUsageDescription": "Let me use the camera.",
-          "NSScreenCaptureDescription": "Let me take screenshots."
+      "target": "dmg",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": true,
+      "extendInfo": {
+        "NSAppleEventsUsageDescription": "Let me use Apple Events.",
+        "NSCameraUsageDescription": "Let me use the camera.",
+        "NSScreenCaptureDescription": "Let me take screenshots."
+      }
+    },
+    "dmg": {
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 255,
+          "y": 85,
+          "type": "file"
+        },
+        {
+          "x": 253,
+          "y": 325,
+          "type": "link",
+          "path": "/Applications"
         }
-      },
-      "dmg": {
-        "iconSize": 100,
-        "contents": [
-          {
-            "x": 255,
-            "y": 85,
-            "type": "file"
-          },
-          {
-            "x": 253,
-            "y": 325,
-            "type": "link",
-            "path": "/Applications"
-          }
-        ],
-        "window": {
-          "width": 500,
-          "height": 500
-        }
-      },
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    },
     "win": {
-        "target": [
-            "nsis"
-        ],
-        "icon": "assets/img/icon/icon.ico"
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/img/icon/icon.ico"
     },
     "nsis": {
       "deleteAppDataOnUninstall": true,
@@ -63,16 +63,19 @@
       "license": "LICENSE"
     },
     "linux": {
-        "desktop": {
-          "StartupNotify": "false",
-          "Encoding": "UTF-8",
-          "MimeType": "x-scheme-handler/deeplink"
-        },
-        "target": ["AppImage", "deb"]
+      "desktop": {
+        "StartupNotify": "false",
+        "Encoding": "UTF-8",
+        "MimeType": "x-scheme-handler/deeplink"
       },
-      "deb": {
-        "priority": "optional"
-      }
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "deb": {
+      "priority": "optional"
+    }
   },
   "repository": {
     "type": "git",

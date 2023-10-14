@@ -8,7 +8,6 @@ const clientData = require('../modules/clientData.js')
 
 const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
-const loadingBar = new LoadingBar()
 const video = new Video()
 
 // toggler for the app apges

@@ -67,6 +67,7 @@ body {
 
 body {
     overflow: hidden;
+    border-radius: 5px;
 }
 
 img {
@@ -83,7 +84,7 @@ img {
     width: 100%;
     position: fixed;
     z-index: 21;
-    background-color: black;
+    background-color: var(--color-0);
 }
 
 .document-controls ul {
@@ -442,6 +443,10 @@ nav#nav-main {
             height: 100%;
             padding-left: 30px;
         }
+
+            .settings-page .content .right #source-right-element {
+                
+            }
         
             .settings-page .content .right .toggler {
                 width: calc(100% - 100px);
@@ -813,11 +818,21 @@ main section {
     display: flex;
     flex-direction: column;
 }
+    .anime-page #page-anime-loader {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        z-index: 21;
+    }
 
     .anime-page .content-wrapper {
         width: 100%;
         height: 100%;
-        display: flex;
         align-items: center;
     }
     
@@ -1095,6 +1110,7 @@ main section {
         border: none;
         outline: none;
         transition: var(--transition);
+        z-index: 22;
     }
 
     .anime-page button#exit:hover {
