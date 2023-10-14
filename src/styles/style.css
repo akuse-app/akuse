@@ -443,10 +443,6 @@ nav#nav-main {
             height: 100%;
             padding-left: 30px;
         }
-
-            .settings-page .content .right #source-right-element {
-                
-            }
         
             .settings-page .content .right .toggler {
                 width: calc(100% - 100px);

@@ -19,7 +19,6 @@ var sourceFlagRadios = document.querySelectorAll('input[name="flag"]')
 Object.keys(sourceFlagRadios).forEach(radio => {
     Object.values(sourceFlagRadios)[radio].addEventListener('click', (event) => {
         store.set('source_flag', document.querySelector('input[name="flag"]:checked').value) // US, IT...
-        console.log(store.get('source_flag'))
     })
 })
 

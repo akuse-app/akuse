@@ -53,6 +53,7 @@ module.exports = class AniListAPI extends Requests {
             duration
             coverImage {
                 large
+                extraLarge
             }
             bannerImage
             genres
