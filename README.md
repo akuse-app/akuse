@@ -5,8 +5,10 @@
 
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
-    <img alt="stars" src="https://img.shields.io/github/stars/aleganza/akuse"> 
     <img alt="total-downloads" src="https://img.shields.io/github/downloads/aleganza/akuse/total"> 
+    <a href="https://discord.gg/f3wdnqSNX5">
+        <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?color=%235567E3">
+    </a>
     <img alt="last-commit" src="https://img.shields.io/github/last-commit/aleganza/akuse/main">
 </p>
 
