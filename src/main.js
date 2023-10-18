@@ -7,6 +7,7 @@ const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
 const server = require('./server.js')
+const { autoUpdater, AppUpdater } = require("electron-updater")
 
 const store = new Store()
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
@@ -14,6 +15,10 @@ const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 
 let authWin
 let mainWin
+
+//Basic flags
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
 
 const createWindow = () => {
     authWin  = new BrowserWindow({
@@ -101,9 +106,28 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 
-/*     authWin.on('close', () => {
-        mainWin.close()
-    }) */
+    autoUpdater.checkForUpdates()
+    console.log(`Checking for updates. Current version ${app.getVersion()}`)
+})
+
+/*New Update Available*/
+autoUpdater.on("update-available", (info) => {
+    console.log(`Update available. Current version ${app.getVersion()}`)
+    let pth = autoUpdater.downloadUpdate()
+    console.log(pth)
+})
+  
+autoUpdater.on("update-not-available", (info) => {
+    console.log(`No update available. Current version ${app.getVersion()}`)
+})
+  
+/*Download Completion Message*/
+autoUpdater.on("update-downloaded", (info) => {
+    console.log(`Update downloaded. Current version ${app.getVersion()}`)
+})
+  
+autoUpdater.on("error", (info) => {
+    console.log(info)
 })
 
 app.on('window-all-closed', () => {
