@@ -19,6 +19,7 @@ let mainWin
 //Basic flags
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
+autoUpdater.autoRunAppAfterInstall = true
 
 const createWindow = () => {
     authWin  = new BrowserWindow({
@@ -67,6 +68,8 @@ const createWindow = () => {
                 authWin.close()
                 store.set('access_token', token)
                 mainWin.webContents.send('load-index')
+
+                autoUpdater.checkForUpdates()
             })
         }
     })
@@ -89,7 +92,7 @@ ipcMain.on('load-issues-url', (event) => {
     require('electron').shell.openExternal(githubOpenNewIssueUrl)
 })
 
-// working partially
+// working partially :(
 ipcMain.on('exit-app', (event) => {
     mainWin.webContents.session.clearStorageData().then((data) => {
         mainWin.close()
@@ -105,30 +108,28 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
-
-    autoUpdater.checkForUpdates()
-    console.log(`Checking for updates. Current version ${app.getVersion()}`)
 })
 
-/*New Update Available*/
+/* AUTO UPDATING */
+
 autoUpdater.on("update-available", (info) => {
-    console.log(`Update available. Current version ${app.getVersion()}`)
-    let pth = autoUpdater.downloadUpdate()
-    console.log(pth)
+    mainWin.webContents.send('auto-update')
+    mainWin.webContents.send('update-available-info', info)
 })
-  
-autoUpdater.on("update-not-available", (info) => {
-    console.log(`No update available. Current version ${app.getVersion()}`)
-})
-  
-/*Download Completion Message*/
+
 autoUpdater.on("update-downloaded", (info) => {
-    console.log(`Update downloaded. Current version ${app.getVersion()}`)
+    autoUpdater.quitAndInstall()
+})
+
+ipcMain.on('download-update', (event) => {
+    let pth = autoUpdater.downloadUpdate()
 })
   
 autoUpdater.on("error", (info) => {
-    console.log(info)
+    mainWin.webContents.send('message', info)
 })
+
+/* APP CLOSING */
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()

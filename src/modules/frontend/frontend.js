@@ -133,6 +133,20 @@ module.exports = class Frontend {
     }
 
     /**
+     * Displays the auto update modal page
+     */
+    displayAutoUpdatePage() {
+        this.showModalPage('auto-update-page-shadow-background', 'auto-update-page')
+    }
+
+    /**
+     * Closes the auto update modal page
+     */
+    closeAutoUpdatePage() {
+        this.hideModalPage('auto-update-page-shadow-background', 'auto-update-page')
+    }
+
+    /**
      * Displays the settings modal page
      */
     displaySettingsPage() {

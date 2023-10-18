@@ -13,7 +13,7 @@
     <title>Akuse</title>
 </head>
 <body>
-    <!-- LOADING PAGE + DOCUMENT CONTROLS -->
+    <!-- LOADING PAGE -->
     <div id="loading-page" style="opacity: 1; display: flex">
         <div class="loading-page-container">
             <img src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt="">
@@ -22,12 +22,40 @@
             </div>
         </div>
     </div>
+    <!-- DOCUMENT CONTROLS -->
     <div class="document-controls">
         <ul>
             <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
             <li id="document-maximize"><i class="fa-regular fa-square"></i></li>
             <li id="document-quit"><i style="font-size: 1rem" class="fa-solid fa-xmark"></i></li>
         </ul>
+    </div>
+    <!-- AUTO UPDATE MODAL PAGE -->
+    <div id="auto-update-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
+    <div id="auto-update-page" class="modal-page-wrapper fade-in">
+        <div class="auto-update-page">
+            <div class="content-wrapper">
+                <div class="content">
+                    <h1 id="auto-update-title">Update available!</h1>
+                    <h2 id="auto-update-date"></h2>
+                    <h2 id="auto-update-version"></h2>
+                    <div class="notes">
+                        <div class="notes-scroller">
+                            <div id="auto-update-notes"></div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <button id="auto-update-later">
+                            Later
+                        </button>
+                        <button id="auto-update-download">
+                            <i class="fa-solid fa-download"></i>
+                            Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- BOTTOM LOADING BAR -->
     <div id="loading-bar"></div>
@@ -53,15 +81,18 @@
                     </li>
                     <div class="right">
                         <ul class="nav-ul">
+                            <!-- <li id="user-auto-update" class="nav-li right">
+                                <i class="fa-solid fa-download"></i>
+                            </li> -->
                             <li id="user-dropdown-settings" class="nav-li right">
                                 <i class="fa-solid fa-gear"></i>
                             </li>
                             <li id="user-dropdown-bug-report" class="nav-li right">
                                 <i class="fa-solid fa-bug"></i>
                             </li>
-                            <li id="user-dropdown-exit" class="nav-li right">
+                            <!-- <li id="user-dropdown-exit" class="nav-li right">
                                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                            </li>
+                            </li> -->
                         </ul>
                         <div id="user-section" class="user">
                             <img id="user-icon" src="" alt="user-icon">

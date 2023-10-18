@@ -10,6 +10,14 @@ const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 const video = new Video()
 
+/* document.getElementById('user-auto-update').addEventListener('click', (event) => {
+    frontend.displayAutoUpdatePage()
+}) */
+
+document.getElementById('auto-update-later').addEventListener('click', (event) => {
+    frontend.closeAutoUpdatePage()
+})
+
 // toggler for the app apges
 var homeNav = document.getElementById('nav-home')
 var myListNav = document.getElementById('nav-my-list')

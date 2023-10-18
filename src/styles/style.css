@@ -5,9 +5,10 @@
     --color-1: #222222;
     --color-2: #3d3d3d;
     --color-3: #535353;
-    --color-important: #FF6B6B;
+    --color-important: yellow;
     --color-dark-opacity: rgba(0, 0, 0, 0.8);
     --color-warning: rgb(255, 61, 61);
+    --color-success: #45AD67;
     --main-bg-settings: #1b1b1b;
     
     --font-1: #fffdff;
@@ -176,6 +177,102 @@ img {
     background-color: var(--color-important);
     border-radius: var(--border-radius);
 }
+
+/*  */
+.auto-update-page {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    border-radius: var(--border-radius);
+    background: var(--main-bg-settings);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+    .auto-update-page .content-wrapper {
+        width: calc(100% - 60px);
+        height: calc(100% - 60px);
+        display: flex;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    .auto-update-page .content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .auto-update-page .content h1 {
+            color: var(--font-1);
+            text-align: center;
+        }
+
+        .auto-update-page .content h2#auto-update-date {
+            font-size: 0.9rem;
+            font-weight: var(--font-weight);
+        }
+
+        .auto-update-page .content h2 {
+            color: var(--font-2);
+            text-align: center;
+        }
+
+        .auto-update-page .content .notes {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auto-update-page .content .notes #auto-update-notes {
+            width: 340px;
+            height: 340px;
+            display: flex;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 0 10px;
+            color: var(--font-2);
+            background-color: var(--color-0);
+            border-radius: var(--border-radius);
+        }
+
+        .auto-update-page .content .buttons {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            gap: 30px;
+        }
+
+            .auto-update-page .content .buttons button {
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline: none;
+                color: var(--font-1);
+                background-color: var(--color-0);
+                font-size: 1.2rem;
+                font-weight: var(--font-weight);
+                border-radius: var(--border-radius);
+                cursor: pointer;
+                transition: var(--transition);
+            }
+
+            .auto-update-page .content .buttons button#auto-update-download {
+                color: var(--color-success);
+            }
+        
+            .auto-update-page .content .buttons button:hover {
+                filter: brightness(0.80);
+            }
+        
+            .auto-update-page .content .buttons button:active {
+                filter: brightness(0.70);
+            }
 
 .nav-container {
     display: flex;

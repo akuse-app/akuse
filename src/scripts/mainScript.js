@@ -6,6 +6,7 @@ const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
 const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
+const { TvType } = require('@consumet/extensions')
 
 const store = new Store()
 const frontend = new Frontend()
@@ -31,9 +32,28 @@ bugReportButton.addEventListener('click', (event) => {
     ipcRenderer.send('load-issues-url')
 })
 
-var exitReportButton = document.getElementById('user-dropdown-exit')
+/* var exitReportButton = document.getElementById('user-dropdown-exit')
 exitReportButton.addEventListener('click', (event) => {
     ipcRenderer.send('exit-app')
+}) */
+
+ipcRenderer.on('auto-update', async (event) => {
+    frontend.displayAutoUpdatePage()
+})
+
+ipcRenderer.on('update-available-info', async (event, info) => {
+    document.getElementById('auto-update-date').innerHTML = info.releaseDate
+    document.getElementById('auto-update-version').innerHTML = info.releaseName
+    document.getElementById('auto-update-notes').innerHTML = info.releaseNotes
+})
+
+document.getElementById('auto-update-download').addEventListener('click', async () => {
+    ipcRenderer.send('download-update')
+})
+
+// auto update test
+ipcRenderer.on('message', async (event, msg) => {
+    console.log(msg)
 })
 
 /**

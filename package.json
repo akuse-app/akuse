@@ -1,6 +1,6 @@
 {
   "name": "akuse-beta",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Anime streaming client for PC",
   "main": "src/main.js",
   "scripts": {
@@ -15,10 +15,15 @@
     "dist:linux": "electron-builder --linux",
     "dist:all": "electron-builder -mwl"
   },
+  "repository": "https://github.com/akuse-app/Akuse",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
   "build": {
     "appId": "com.electron.akuse",
     "productName": "Akuse",
-    "copyright": "Copyright © 2023 aleganza",
+    "copyright": "Copyright © 2023 Alessio Ganzarolli",
     "mac": {
       "target": "dmg",
       "hardenedRuntime": true,
@@ -78,10 +83,6 @@
       "priority": "optional"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aleganza/akuse.git"
-  },
   "author": "aleganza",
   "license": "GPL-3.0-or-later",
   "bugs": {
@@ -95,6 +96,7 @@
   },
   "dependencies": {
     "@consumet/extensions": "^1.5.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
     "electron-squirrel-startup": "^1.0.0",

@@ -9,7 +9,7 @@ const defaultFlag = 'US'
 // FLAGS
 if(!(store.has('source_flag'))) {
     store.set('source_flag', `${defaultFlag}`)
-    document.querySelector(`input[value="${defaultFlag}"]:checked`).checked = true
+    document.querySelector(`input[value="${defaultFlag}"]`).checked = true
 } else {
     document.querySelector(`input[value="${store.get('source_flag')}"]`).checked = true
 }
