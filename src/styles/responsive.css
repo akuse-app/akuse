@@ -24,6 +24,11 @@
     main section .anime-list .anime-entry {
         width: 190px;
     }
+
+    main button#featured-scroll-left,
+    main button#featured-scroll-right {
+        top: 240px;
+    }
 }
 
 @media only screen and (max-width: 1600px) {
@@ -60,6 +65,11 @@
 
     main section .anime-list .anime-entry {
         width: 150px;
+    }
+
+    main button#featured-scroll-left,
+    main button#featured-scroll-right {
+        top: 220px;
     }
 }
 
@@ -98,4 +108,8 @@
         width: 115px;
     }
 
+    main button#featured-scroll-left,
+    main button#featured-scroll-right {
+        top: 190px;
+    }
 }

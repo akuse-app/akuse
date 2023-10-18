@@ -49,6 +49,9 @@ ipcRenderer.on('update-available-info', async (event, info) => {
 
 document.getElementById('auto-update-download').addEventListener('click', async () => {
     ipcRenderer.send('download-update')
+    document.getElementById('auto-update-notes').innerHTML = "Downloading update..."
+    document.getElementById('auto-update-notes').innerHTML += "<br>"
+    document.getElementById('auto-update-notes').innerHTML += "Please wait and do not close the application."
 })
 
 // auto update test
