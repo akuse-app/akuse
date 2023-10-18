@@ -65,12 +65,9 @@ npm start
 
 ## Known Issues
 
-- If the authentication window is closed, the app is still running.
 - Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
 - All anime are subbed, but some may be dubbed.
-- Some UI elements may not be responsive.
 - "Delete" button in List Editor doesn't work (can't figure out why).
-- Logout button only disconnects you from your AniList account, does not close the app instance.
 
 ## Disclaimer
 
