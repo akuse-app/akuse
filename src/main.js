@@ -32,28 +32,28 @@ const createWindow = () => {
         icon: 'assets/img/icon/icon'
     })
     
-    mainWin  = new BrowserWindow({
-        width: 1300,
-        height: 850,
-        minWidth: 1280,
-        minHeight: 720,
-        show: false,
-        autoHideMenuBar: true,
-        /* frame: false, */
-        icon: 'assets/img/icon/icon.png',
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            preload: path.join(__dirname, 'preload.js')
-        }
-    })
-
     console.log('Loaded OAuth url on Auth Window')
     authWin.loadURL(authUrl)
 
     authWin.webContents.on('did-navigate', async (event) => {
         const currentUrl = new URL(authWin.webContents.getURL())
         if(currentUrl.searchParams.get("code") !== null) {
+            mainWin  = new BrowserWindow({
+                width: 1300,
+                height: 850,
+                minWidth: 1280,
+                minHeight: 720,
+                show: false,
+                autoHideMenuBar: true,
+                /* frame: false, */
+                icon: 'assets/img/icon/icon.png',
+                webPreferences: {
+                    nodeIntegration: true,
+                    contextIsolation: false,
+                    preload: path.join(__dirname, 'preload.js')
+                }
+            })
+
             console.log("Log-in completed!")
             console.log('Navigated to Main Window')
             const anilist = new AniListAPI(clientData)
