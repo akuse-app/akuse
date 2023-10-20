@@ -178,30 +178,30 @@ document.addEventListener("keydown", (event) => {
     }
     
     if(videoIsDisplayed()) {
-        switch(event.keyCode) {
-            case 32: {
+        switch(event.code) {
+            case 'Space': {
                 mainVideo.paused ? mainVideo.play() : mainVideo.pause()
                 break
             }
-            case 37: {
+            case 'ArrowLeft': {
                 mainVideo.currentTime -= 5
                 break
             }
-            case 38: {
+            case 'ArrowUp': {
                 mainVideo.volume += 0.1
                 volumeSlider.value = mainVideo.volume
                 break
             }
-            case 39: {
+            case 'ArrowRight': {
                 mainVideo.currentTime += 5
                 break
             }
-            case 40: {
+            case 'ArrowDown': {
                 mainVideo.volume -= 0.1
                 volumeSlider.value = mainVideo.volume
                 break
             }
-            case 122: {
+            case 'F11': {
                 toggleFullScreen()
                 break
             }
