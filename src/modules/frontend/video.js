@@ -45,6 +45,23 @@ module.exports = class Video {
             }
         }
     }
+
+    /**
+     * Get the anime titles (title and synonyms)
+     * 
+     * @returns anime titles
+     */
+    getAnimeTitles() {
+        let animeTitles = []
+        let anime_titles_div = document.querySelectorAll('#page-anime-titles h2')
+        
+        Object.keys(anime_titles_div).forEach( (key) => {
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
+            anime_titles_div[key]
+        })
+
+        return animeTitles
+    }
     
     /**
      * Displays and plays the episode video
@@ -54,14 +71,7 @@ module.exports = class Video {
     async displayVideo(episode) {
         const cons = this.getSourceFlagObject()
         const title = document.getElementById('page-anime-title').innerHTML
-
-        // creating array with anime title plus its synonyms
-        var animeTitles = []
-        var anime_titles_div = document.querySelectorAll('#page-anime-titles h2')
-        Object.keys(anime_titles_div).forEach( (key) => {
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
-            anime_titles_div[key]
-        })
+        const animeTitles = this.getAnimeTitles()
 
         console.log('titles: ' + animeTitles)
         console.log('playground: ')
@@ -70,11 +80,9 @@ module.exports = class Video {
         do {
             var videoSource = await cons.getEpisodeUrl(animeTitles[i], episode)
 
-            if(videoSource != -1) {
-                console.log(animeTitles[i] + ' -> ' + videoSource.url)
-            } else {
-                console.log(animeTitles[i] + ' -> ' + -1)
-            }
+            videoSource != -1
+            ? console.log(animeTitles[i] + ' -> ' + videoSource.url)
+            : console.log(animeTitles[i] + ' -> ' + -1)
 
             i++
         } while(videoSource === -1 && i < animeTitles.length)
@@ -114,8 +122,13 @@ module.exports = class Video {
         }
 
         const cons = this.getSourceFlagObject()
-        var videoSource = await cons.getEpisodeUrl(this.videoTitle.innerHTML,
-                                                        this.getEpisodeIdFromTitle() + 1)
+        var animeTitles = this.getAnimeTitles()
+
+        let i = 0
+        do {
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], this.getEpisodeIdFromTitle() + 1)
+            i++
+        } while(videoSource === -1 && i < animeTitles.length)
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
