@@ -7,6 +7,7 @@ const Frontend = require('../modules/frontend/frontend')
 const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
 const { TvType } = require('@consumet/extensions')
+const { parse } = require('dotenv')
 
 const store = new Store()
 const frontend = new Frontend()
@@ -42,23 +43,22 @@ ipcRenderer.on('auto-update', async (event) => {
 })
 
 ipcRenderer.on('update-available-info', async (event, info) => {
-    document.getElementById('auto-update-date').innerHTML = info.releaseDate
+    document.getElementById('auto-update-date').innerHTML = info.releaseDate.split('T')[0]
     document.getElementById('auto-update-version').innerHTML = info.releaseName
     document.getElementById('auto-update-notes').innerHTML = info.releaseNotes
 })
 
-ipcRenderer.on('downloading', (progress, bytesPerSecond, percent, total, transferred) => {
-    console.log(progress, bytesPerSecond, percent, total, transferred)
-
+ipcRenderer.on('downloading', (sender, data) => {
     progress_bar_div = document.getElementById('auto-update-progress-bar')
     megabytes_div = document.getElementById('auto-update-megabytes')
 
-    progress_bar_div.style.width = percent + "%"
-    megabytes_div.innerHTML = (progress / 1024 / 1024).toFixed(2)
+    progress_bar_div.style.width = data.percent + "%"
+    console.log(progress_bar_div.style.width + ' ' + data.percent + "%")
+    megabytes_div.innerHTML = (data.percent * data.total / 100 / 1024 / 1024).toFixed(2)
                                + " / "
-                               + (total / 1024 / 1024).toFixed(2)
+                               + (data.total / 1024 / 1024).toFixed(2)
                                + " MB - "
-                               + (bytesPerSecond / 1024 / 1024).toFixed(2)
+                               + (data.bytesPerSecond / 1024 / 1024).toFixed(2)
                                + " MB/s"
 })
 

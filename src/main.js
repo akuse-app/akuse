@@ -44,7 +44,7 @@ const createWindow = () => {
                 minHeight: 720,
                 show: false,
                 autoHideMenuBar: true,
-                /* frame: false, */
+                frame: false,
                 icon: 'assets/img/icon/icon.png',
                 webPreferences: {
                     nodeIntegration: true,
@@ -120,8 +120,8 @@ autoUpdater.on("update-downloaded", (info) => {
     autoUpdater.quitAndInstall()
 })
 
-autoUpdater.on('download-progress', (progress, bytesPerSecond, percent, total, transferred) => {
-    mainWin.webContents.send('downloading', progress, bytesPerSecond, percent, total, transferred)
+autoUpdater.on('download-progress', (sender, data) => {
+    mainWin.webContents.send('downloading', sender, data)
 })
 
 autoUpdater.on("error", (info) => {
