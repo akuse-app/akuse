@@ -9,7 +9,7 @@
     --color-dark-opacity: rgba(0, 0, 0, 0.8);
     --color-warning: rgb(255, 61, 61);
     --color-success: #45AD67;
-    --main-bg-settings: #1b1b1b;
+    --main-bg: #1b1b1b;
     
     --font-1: #fffdff;
     --font-2: rgb(179, 179, 179);
@@ -57,9 +57,7 @@
 
 html,
 body {
-    /* background-color: var(--color-1); */
-    background: var(--color-2);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;
@@ -85,7 +83,7 @@ img {
     width: 100%;
     position: fixed;
     z-index: 21;
-    background-color: var(--color-0);
+    background: var(--main-bg);
 }
 
 .document-controls ul {
@@ -143,7 +141,7 @@ img {
     align-items: center;
     position: fixed;
     background: var(--color-2);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     z-index: 9999;
@@ -184,7 +182,7 @@ img {
     width: 400px;
     height: 600px;
     border-radius: var(--border-radius);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -278,7 +276,7 @@ img {
     display: flex;
     justify-content: center;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 
 .nav-wrapper {
@@ -481,7 +479,7 @@ nav#nav-main {
     height: 600px;
     border-radius: var(--border-radius);
     background: var(--color-2);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -690,6 +688,7 @@ nav#nav-main {
             width: 85px;
             /* height: 120px; */
             object-fit: cover;
+            border-radius: var(--border-radius);
             box-shadow: var(--shadow);
         }
 
@@ -907,7 +906,7 @@ main section {
     height: 800px;
     border-radius: var(--border-radius);
     color: var(--font-1);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     display: flex;
     flex-direction: column;
 }
@@ -952,7 +951,9 @@ main section {
     }
     
     .anime-page .content .page-anime-left img#page-anime-cover {
+        width: 300px;
         height: 450px;
+        object-fit: cover;
         border-radius: var(--border-radius);
         box-shadow: var(--shadow);
     }
@@ -1220,7 +1221,7 @@ main section {
     position: relative;
     border-radius: var(--border-radius);
     background: var(--color-2);
-    background: var(--main-bg-settings);
+    background: var(--main-bg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;

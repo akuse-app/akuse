@@ -14,6 +14,24 @@ const video = new Video()
     frontend.displayAutoUpdatePage()
 }) */
 
+// pressing esc closes the modal pages
+document.addEventListener('keydown', (event) => {
+    if(event.code === 'Escape') {
+        if(frontend.isAnimePageDisplayed()
+           && !frontend.isListEditorDisplayed()) {
+            frontend.closeAnimePage()
+        }
+
+        if(frontend.isListEditorDisplayed()) {
+            frontend.closeListEditorPage()
+        }
+
+        if(frontend.isSettingsPageDisplayed()) {
+            frontend.closeSettingsPage()
+        }
+    }
+})
+
 document.getElementById('auto-update-later').addEventListener('click', (event) => {
     frontend.closeAutoUpdatePage()
 })
@@ -144,12 +162,6 @@ exit_button.addEventListener('click', (event) => {
 document.getElementById('list-editor-page').addEventListener('click', (event) => {
     if(event.target.id === 'list-editor-page') {
         frontend.closeListEditorPage()
-    }
-})
-
-document.getElementById('settings-page').addEventListener('click', (event) => {
-    if(event.target.id === 'settings-page') {
-        frontend.closeSettingsPage()
     }
 })
 

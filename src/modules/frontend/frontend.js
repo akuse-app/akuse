@@ -702,6 +702,33 @@ module.exports = class Frontend {
         document.getElementById('page-anime-loader').style.display = 'none'
         document.getElementById('page-anime-content-wrapper').style.display = 'flex'
     }
+
+    /**
+     * Return if the anime page is displayed or not
+     * 
+     * @returns true if the anime page is displayed, false otherwise
+     */
+    isAnimePageDisplayed() {
+        return document.getElementById('anime-page').style.display == 'flex'
+    }
+
+    /**
+     * Return if the list editor page is displayed or not
+     * 
+     * @returns true if the list editor page is displayed, false otherwise
+     */
+    isListEditorDisplayed() {
+        return document.getElementById('list-editor-page').style.display == 'flex'
+    }
+
+    /**
+     * Return if the settings page is displayed or not
+     * 
+     * @returns true if the settings page is displayed, false otherwise
+     */
+    isSettingsPageDisplayed() {
+        return document.getElementById('settings-page').style.display == 'flex'
+    }
     
     /**
      * List editor: you can create or change a entry status, progress and score in one of your lists

@@ -3,6 +3,10 @@
         font-size: 14px;
     }
 
+    .nav-container {
+        padding-top: 22px;
+    }
+
     .anime-page {
         width: 1550px;
         height: 690px;
@@ -34,6 +38,10 @@
 @media only screen and (max-width: 1600px) {
     :root {
         font-size: 12px;
+    }
+
+    .nav-container {
+        padding-top: 20px;
     }
 
     main .featured .featured-container .featured-left .content {
@@ -76,6 +84,10 @@
 @media only screen and (max-width: 1350px) {
     :root {
         font-size: 12px;
+    }
+
+    .nav-container {
+        padding-top: 20px;
     }
 
     .search-main-bar {
