@@ -47,6 +47,21 @@ ipcRenderer.on('update-available-info', async (event, info) => {
     document.getElementById('auto-update-notes').innerHTML = info.releaseNotes
 })
 
+ipcRenderer.on('downloading', (progress, bytesPerSecond, percent, total, transferred) => {
+    console.log(progress, bytesPerSecond, percent, total, transferred)
+
+    progress_bar_div = document.getElementById('auto-update-progress-bar')
+    megabytes_div = document.getElementById('auto-update-megabytes')
+
+    progress_bar_div.style.width = percent + "%"
+    megabytes_div.innerHTML = (progress / 1024 / 1024).toFixed(2)
+                               + " / "
+                               + (total / 1024 / 1024).toFixed(2)
+                               + " MB - "
+                               + (bytesPerSecond / 1024 / 1024).toFixed(2)
+                               + " MB/s"
+})
+
 document.getElementById('auto-update-download').addEventListener('click', async () => {
     ipcRenderer.send('download-update')
     document.getElementById('auto-update-notes').innerHTML = "Downloading update..."

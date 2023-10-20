@@ -28,7 +28,6 @@ const createWindow = () => {
         minWidth: 400,
         minHeight: 600,
         autoHideMenuBar: true,
-        frame: false,
         icon: 'assets/img/icon/icon'
     })
     
@@ -68,7 +67,7 @@ const createWindow = () => {
                 authWin.close()
                 store.set('access_token', token)
                 mainWin.webContents.send('load-index')
-
+                mainWin.webContents.send('auto-update')
                 autoUpdater.checkForUpdates()
             })
         }
@@ -121,12 +120,16 @@ autoUpdater.on("update-downloaded", (info) => {
     autoUpdater.quitAndInstall()
 })
 
-ipcMain.on('download-update', (event) => {
-    let pth = autoUpdater.downloadUpdate()
+autoUpdater.on('download-progress', (progress, bytesPerSecond, percent, total, transferred) => {
+    mainWin.webContents.send('downloading', progress, bytesPerSecond, percent, total, transferred)
 })
-  
+
 autoUpdater.on("error", (info) => {
     mainWin.webContents.send('message', info)
+})
+
+ipcMain.on('download-update', (event) => {
+    let pth = autoUpdater.downloadUpdate()
 })
 
 /* APP CLOSING */

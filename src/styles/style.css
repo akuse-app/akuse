@@ -219,6 +219,11 @@ img {
             text-align: center;
         }
 
+        .auto-update-page .content h3#auto-update-megabytes {
+            color: var(--font-2);
+            text-align: center;
+        }
+
         .auto-update-page .content .notes {
             width: 100%;
             height: 100%;
@@ -233,10 +238,22 @@ img {
             display: flex;
             overflow-x: hidden;
             overflow-y: auto;
-            padding: 0 10px;
             color: var(--font-2);
             background-color: var(--color-0);
             border-radius: var(--border-radius);
+        }
+
+        .auto-update-page .content .bar {
+            width: 100%;
+            margin: 0;
+            position: static;
+            margin: 10px 0;
+            background-color: var(--color-0);
+        }
+        
+        .auto-update-page .content .progress-bar {
+            width: 0%;
+            background-color: var(--color-important);
         }
 
         .auto-update-page .content .buttons {
