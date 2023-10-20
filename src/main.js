@@ -28,7 +28,7 @@ const createWindow = () => {
         minWidth: 400,
         minHeight: 600,
         autoHideMenuBar: true,
-        /* frame: false, */
+        frame: false,
         icon: 'assets/img/icon/icon'
     })
     
