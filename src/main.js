@@ -66,8 +66,7 @@ const createWindow = () => {
             mainWin.webContents.on('did-finish-load', () => {
                 authWin.close()
                 store.set('access_token', token)
-                mainWin.webContents.send('load-index')
-                mainWin.webContents.send('auto-update')
+                
                 autoUpdater.checkForUpdates()
             })
         }
