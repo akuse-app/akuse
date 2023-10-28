@@ -345,10 +345,10 @@ nav#nav-main {
             font-size: 1.3rem;
             display: inline;
             color: var(--font-2);
-            border-radius: var(--border-radius);
             font-weight: 500;
             margin-right: 10px;
             padding: 10px 20px;
+            /* border-radius: var(--border-radius); */
             cursor: pointer;
             transition: var(--transition);
         }
@@ -360,7 +360,7 @@ nav#nav-main {
         nav#nav-main .nav-ul li.nav-li.active,
         nav#nav-main ul.nav-ul li.nav-li:hover {
             color: var(--font-1);
-            background-color: var(--color-1);
+            /* background-color: var(--color-1); */
         }
         
     nav#nav-main .right {
@@ -909,9 +909,9 @@ main .featured .featured-img img {
     box-shadow: var(--shadow);
 }
 
-main .section-container {
+/* main .section-container {
     padding: 0px 50px;
-}
+} */
 
 main section {
     margin-top: 40px;
@@ -1354,12 +1354,14 @@ main section h1 {
     font-weight: 800;
     font-size: 1.6rem;
     margin-bottom: 15px;
+    padding-left: 50px;
 }
 
 main section .anime-list-wrapper {
-    width: 100%;
+    width: calc(100% - 100px);
     overflow: hidden;
     margin-bottom: 20px;
+    padding: 0 50px;
 }
 
     main section .anime-list {
@@ -1370,18 +1372,18 @@ main section .anime-list-wrapper {
         flex-direction: row;
     }
 
-        main section .anime-list .anime-entry {
+        main section .anime-list .anime-entry:not(:last-child) {
             width: 212px;
             height: min-content;
             position: relative;
-            padding: 10px;
+            padding: 10px 20px 10px 0;
             border-radius: var(--border-radius);
             z-index: 2;
             cursor: pointer;
             transition: 0.2s ease-out;
         }
         
-        main section .anime-list .anime-entry:hover:not() {
+        main section .anime-list .anime-entry:hover:not(.disabled) {
             transform: scale(1.05);
         }
         
@@ -1412,6 +1414,7 @@ main section .anime-list-wrapper {
             color: var(--color-3);
             font-weight: var(--font-weight);
             border-radius: var(--border-radius);
+            cursor: auto;
         }
 
         main section .anime-list .anime-entry .anime-cover.disabled {
@@ -1431,7 +1434,7 @@ main section .anime-list-wrapper {
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% - 5px);
+            height: 100%;
             box-shadow: inset 0px -50px 18px -22px #00000093;
         }
         
@@ -1471,6 +1474,7 @@ main section .anime-list-wrapper {
         
 main#my-list-page h1#your-list-header {
     font-size: 3rem;
+    padding-left: 50px;
 }
 
 main#my-list-page .section-container {

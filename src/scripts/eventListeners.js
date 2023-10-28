@@ -221,7 +221,7 @@ body_container_div.addEventListener("scroll", (event) => {
     lastScroll = scroll
 })
 
-// trigger childs and retrieve id to open anime modal page
+// trigger children and retrieve id to open anime modal page
 var featured_scroller = document.getElementById('featured-scroller')
 featured_scroller.addEventListener('click', (event) => {
     frontend.triggerFeaturedAnime(event)
@@ -312,28 +312,6 @@ episode_list.addEventListener('click', (event) => {
 var featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
 var featured_left_button = document.getElementById('featured-scroll-left')
 var featured_right_button = document.getElementById('featured-scroll-right')
-
-/* featured_scroller_div.addEventListener('mouseover', (event) => {
-    console.log('in')
-    featured_left_button.style.display = 'block'
-    featured_right_button.style.display = 'block'
-})
-
-featured_scroller_div.addEventListener('mouseout', (event) => {
-    console.log('out')
-    featured_left_button.style.display = 'none'
-    featured_right_button.style.display = 'none'
-})
-
-featured_left_button.addEventListener('mouseover', (event) => {
-    featured_left_button.style.display = 'block'
-    featured_right_button.style.display = 'block'
-})
-
-featured_right_button.addEventListener('mouseout', (event) => {
-    featured_left_button.style.display = 'block'
-    featured_right_button.style.display = 'block'
-}) */
 
 featured_left_button.addEventListener('click', (event) => {
     featured_scroller_div.scrollLeft -= 1800

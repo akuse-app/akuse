@@ -361,7 +361,9 @@ module.exports = class Frontend {
     displayUserAnimeSection(entries, list, needProgressBar) {
         if(Object.values(entries).length == 0) return -1
 
+
         var anime_list_div = document.getElementById(list)
+        anime_list_div.innerHTML = ""
 
         Object.keys(entries).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
@@ -392,6 +394,8 @@ module.exports = class Frontend {
      */
     displayGenreAnimeSection(entries, genre) {
         var anime_list_div = document.getElementById(genre)
+        anime_list_div.innerHTML = ""
+
         Object.keys(entries.media).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
             anime_list_div.appendChild(anime_entry_div)

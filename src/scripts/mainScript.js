@@ -85,9 +85,9 @@ ipcRenderer.on('load-index', async (event) => {
         const viewerId = await anilist.getViewerId()
         // load first part
         const viewerInfo = await anilist.getViewerInfo(viewerId)
-        const entriesFeatured = await anilist.releasingAnimes()
-        const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
+        const entriesFeatured = await anilist.getTrendingAnimes()
         loadingBar.initPageBar()
+        const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
         const entriesTrending = await anilist.getTrendingAnimes()
         const entriesMostPopular = await anilist.getMostPopularAnimes()
         const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
