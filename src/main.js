@@ -44,7 +44,7 @@ const createWindow = () => {
                 minHeight: 720,
                 show: false,
                 autoHideMenuBar: true,
-                frame: false,
+                /* frame: false, */
                 icon: 'assets/img/icon/icon.png',
                 webPreferences: {
                     nodeIntegration: true,
@@ -66,6 +66,7 @@ const createWindow = () => {
             mainWin.webContents.on('did-finish-load', () => {
                 authWin.close()
                 store.set('access_token', token)
+                mainWin.webContents.send('load-index')
                 
                 autoUpdater.checkForUpdates()
             })
