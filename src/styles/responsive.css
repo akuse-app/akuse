@@ -20,6 +20,7 @@
         height: 388px;
     }
 
+    main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
         height: 260px;
         width: 190px;
@@ -66,6 +67,7 @@
         height: 308px;
     }
 
+    main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
         height: 206px;
         width: 150px;
@@ -111,6 +113,7 @@
         height: 235px;
     }
     
+    main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
         height: 157px;
         width: 115px;

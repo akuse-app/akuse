@@ -1381,7 +1381,7 @@ main section .anime-list-wrapper {
             transition: 0.2s ease-out;
         }
         
-        main section .anime-list .anime-entry:hover {
+        main section .anime-list .anime-entry:hover:not() {
             transform: scale(1.05);
         }
         
@@ -1400,6 +1400,40 @@ main section .anime-list-wrapper {
             height: 100%;
             position: relative;
         }
+
+        main section .anime-list .anime-entry .anime-cover,
+        main section .anime-list .anime-entry .anime-cover img {
+            width: 212px;
+            height: 300px;
+        }
+        
+        main section .anime-list .anime-entry.disabled {
+            border: 3px dashed var(--color-3);
+            color: var(--color-3);
+            font-weight: var(--font-weight);
+            border-radius: var(--border-radius);
+        }
+
+        main section .anime-list .anime-entry .anime-cover.disabled {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        main section .anime-list .anime-entry .anime-cover img {
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        main section .anime-list .anime-entry .anime-cover .anime-cover-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 5px);
+            box-shadow: inset 0px -50px 18px -22px #00000093;
+        }
         
         .bar {
             width: calc(100% - 20px);
@@ -1415,23 +1449,6 @@ main section .anime-list-wrapper {
             height: 100%;
             background-color: var(--color-important);
             border-radius: var(--border-radius);
-        }
-        
-        main section .anime-list .anime-entry .anime-cover img {
-            width: 212px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-
-        main section .anime-list .anime-entry .anime-cover .anime-cover-shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: calc(100% - 5px);
-            box-shadow: inset 0px -50px 18px -22px #00000093;
         }
         
         main section .anime-list .anime-entry .anime-title {
