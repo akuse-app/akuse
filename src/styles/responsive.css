@@ -17,6 +17,7 @@
     }
     
     .anime-page .content .page-anime-left img#page-anime-cover {
+        width: 259px;
         height: 388px;
     }
 
@@ -51,7 +52,7 @@
 
     main .featured button {
         width: 145px;
-        height: 40;
+        height: 40px;
     }
 
     .anime-page {
@@ -64,6 +65,7 @@
     }
     
     .anime-page .content .page-anime-left img#page-anime-cover {
+        width: 205px;
         height: 308px;
     }
 
@@ -85,7 +87,7 @@
 
 @media only screen and (max-width: 1350px) {
     :root {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .nav-container {
@@ -110,6 +112,7 @@
     }
     
     .anime-page .content .page-anime-left img#page-anime-cover {
+        width: 157px;
         height: 235px;
     }
     

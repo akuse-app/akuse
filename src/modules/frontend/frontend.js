@@ -416,7 +416,7 @@ module.exports = class Frontend {
         
         bar_div.classList.add('bar')
         progress_bar_div.classList.add('progress-bar')
-        progress_bar_div.style.width = `${progressWidth}%` // TODO fix for when calc is needed (-20px)
+        progress_bar_div.style.width = `${progressWidth}%`
 
         bar_div.appendChild(progress_bar_div)
         div.appendChild(bar_div)
@@ -620,6 +620,7 @@ module.exports = class Frontend {
         const status = animeEntry.status
         const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
         const cover = animeEntry.coverImage.extraLarge
+        const color = animeEntry.coverImage.color
         const banner = animeEntry.bannerImage
         const genres = animeEntry.genres
         const seasonYear = animeEntry.seasonYear
@@ -653,9 +654,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
-        /* document.getElementById('page-anime-progress-episodes').innerHTML = (progress + ' / ' + episodes) */
         this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
-        /* document.getElementById('page-anime-user-score').innerHTML = (score + ' / 10') */
         this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
         document.getElementById('page-anime-user-status').innerHTML = userStatus
         document.getElementById('page-anime-status').innerHTML = status
@@ -972,6 +971,12 @@ module.exports = class Frontend {
         return title
     }
 
+    /**
+     * Gets english, romaji and synonyms and combines them into an array
+     * 
+     * @param {*} animeEntry 
+     * @returns anime titles
+     */
     getTitlesAndSynonyms(animeEntry) {
         let animeTitles = []
 

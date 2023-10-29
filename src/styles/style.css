@@ -902,8 +902,8 @@ main .featured .featured-img {
 }
 
 main .featured .featured-img img {
-    width: 1810px;
-    height: 381.5px;
+    width: 100%;
+    aspect-ratio: 4.744 / 1;
     object-fit: cover;
     object-position: 0% 50%;
     border-radius: var(--border-radius);
@@ -993,8 +993,12 @@ main section {
         background-color: var(--color-1);
     }
 
+    #page-anime-progress-episodes .progress-bar {
+        background-color: var(--font-1);
+    }
+    
     .anime-page .content .page-anime-left #page-anime-user-score i {
-        color: var(--color-important)
+        color: var(--font-1);
     }
     
     .anime-page .content .page-anime-right {
@@ -1134,12 +1138,12 @@ main section {
 
         .anime-page .content .page-anime-right .user-stats button.watch:hover,
         .anime-page .content .page-anime-right .user-stats button.list-editor.in-list:hover {
-            filter: brightness(0.80);
+            filter: brightness(0.70);
         }
 
         .anime-page .content .page-anime-right .user-stats button.watch:active,
         .anime-page .content .page-anime-right .user-stats button.list-editor.in-list:active {
-            filter: brightness(0.70);
+            filter: brightness(0.60);
         }
         
         .anime-page .content .page-anime-right .user-stats button.trailer {
@@ -1149,6 +1153,7 @@ main section {
 
         .anime-page .content .page-anime-right .user-stats button.list-editor {
             width: 59px;
+            height: 59px;
             color: var(--font-1);
             background-color: var(--color-0);
             padding: 15px;
@@ -1161,7 +1166,7 @@ main section {
             }
             
             .anime-page .content .page-anime-right .user-stats button.list-editor.in-list {
-                color: var(--color-important);
+                color: var(--color-0);
                 background-color: var(--font-1);
             }
 

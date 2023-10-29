@@ -54,6 +54,7 @@ module.exports = class AniListAPI extends Requests {
             coverImage {
                 large
                 extraLarge
+                color
             }
             bannerImage
             genres
@@ -188,6 +189,7 @@ module.exports = class AniListAPI extends Requests {
                                 }
                                 coverImage {
                                     large
+                                    color
                                 }
                                 episodes
                                 nextAiringEpisode {
@@ -410,6 +412,7 @@ module.exports = class AniListAPI extends Requests {
                     }
                     coverImage {
                         large
+                        color
                     }
                 }
             } 
