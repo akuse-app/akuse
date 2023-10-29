@@ -47,7 +47,7 @@ module.exports = class Video {
     }
 
     /**
-     * Get the anime titles (title and synonyms)
+     * Get the anime titles (title and synonyms) from modal anime page div
      * 
      * @returns anime titles
      */

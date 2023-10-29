@@ -627,7 +627,7 @@ module.exports = class Frontend {
         const duration = animeEntry.duration
         const meanScore = animeEntry.meanScore
         const title = this.getTitle(animeEntry)
-        const animeTitles = [title].concat(Object.values(animeEntry.synonyms))
+        const animeTitles = this.getTitlesAndSynonyms(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
         const availableEpisodes = this.getAvailableEpisodes(animeEntry)
         const userStatus = this.getUserStatus(animeEntry)
@@ -945,7 +945,7 @@ module.exports = class Frontend {
      * @returns 
      */
     isInViewport(element) {
-        var bounding = element.getBoundingClientRect()
+        let bounding = element.getBoundingClientRect()
     
         if (
             bounding.top >= 0 &&
@@ -964,7 +964,7 @@ module.exports = class Frontend {
      * @returns title
      */
     getTitle(animeEntry) {
-        var title
+        let title
         animeEntry.title.english == null
         ? title = animeEntry.title.romaji
         : title = animeEntry.title.english
@@ -973,7 +973,14 @@ module.exports = class Frontend {
     }
 
     getTitlesAndSynonyms(animeEntry) {
-        
+        let animeTitles = []
+
+        if(animeEntry.title.romaji != null) animeTitles.push(animeEntry.title.romaji)
+        if(animeEntry.title.english != null) animeTitles.push(animeEntry.title.english)
+
+        animeTitles = animeTitles.concat(Object.values(animeEntry.synonyms))
+
+        return animeTitles
     }
 
     /**
@@ -983,7 +990,7 @@ module.exports = class Frontend {
      * @returns episodes number
      */
     getEpisodes(animeEntry) {
-        var episodes
+        let episodes
         animeEntry.episodes == null
         ? (animeEntry.nextAiringEpisode == null
            ? episodes = '?'
@@ -1000,7 +1007,7 @@ module.exports = class Frontend {
      * @returns available episodes number
      */
     getAvailableEpisodes(animeEntry) {
-        var availableEpisodes
+        let availableEpisodes
         animeEntry.nextAiringEpisode == null
         ? (animeEntry.episodes == null)
            ? availableEpisodes = '?'
@@ -1017,7 +1024,7 @@ module.exports = class Frontend {
      * @returns user status
      */
     getUserStatus(animeEntry) {
-        var userStatus 
+        let userStatus 
         animeEntry.mediaListEntry == null
         ? userStatus = 'NOT IN LIST'
         : userStatus = animeEntry.mediaListEntry.status
@@ -1032,7 +1039,7 @@ module.exports = class Frontend {
      * @returns anime score
      */
     getScore(animeEntry) {
-        var score
+        let score
         animeEntry.mediaListEntry == null
         ? score = ""
         : score = animeEntry.mediaListEntry.score
@@ -1047,7 +1054,7 @@ module.exports = class Frontend {
      * @returns anime progress
      */
     getProgress(animeEntry) {
-        var progress
+        let progress
         animeEntry.mediaListEntry == null
         ? progress = ""
         : progress = animeEntry.mediaListEntry.progress
