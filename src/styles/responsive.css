@@ -22,8 +22,8 @@
 
     main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
-        height: 260px;
         width: 190px;
+        height: 260px;
     }
 
     main section .anime-list .anime-entry {
@@ -69,8 +69,8 @@
 
     main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
-        height: 206px;
         width: 150px;
+        height: 206px;
     }
 
     main section .anime-list .anime-entry {
@@ -115,8 +115,8 @@
     
     main section .anime-list .anime-entry .anime-cover,
     main section .anime-list .anime-entry .anime-cover img {
-        height: 157px;
         width: 115px;
+        height: 157px;
     }
 
     main section .anime-list .anime-entry {

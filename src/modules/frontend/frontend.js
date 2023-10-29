@@ -608,7 +608,10 @@ module.exports = class Frontend {
      * @param {*} animeId 
     */
    async displayAnimePage(animeId) {
+        if(animeId == -1) return
+
         this.showModalPage('anime-page-shadow-background', 'anime-page')
+
         // get infos
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)
@@ -967,6 +970,10 @@ module.exports = class Frontend {
         : title = animeEntry.title.english
 
         return title
+    }
+
+    getTitlesAndSynonyms(animeEntry) {
+        
     }
 
     /**

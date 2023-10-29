@@ -1406,6 +1406,7 @@ main section .anime-list-wrapper {
             width: 100%;
             height: 100%;
             position: relative;
+            object-fit: cover;
         }
 
         main section .anime-list .anime-entry .anime-cover,
