@@ -1371,16 +1371,20 @@ main section .anime-list-wrapper {
         display: flex;
         flex-direction: row;
     }
-
-        main section .anime-list .anime-entry:not(:last-child) {
+    
+        main section .anime-list .anime-entry {
             width: 212px;
             height: min-content;
             position: relative;
-            padding: 10px 20px 10px 0;
             border-radius: var(--border-radius);
+            padding-top: 10px; /* must be in anime-entry or hover scaling won't work */
             z-index: 2;
             cursor: pointer;
             transition: 0.2s ease-out;
+        }
+        
+        main section .anime-list .anime-entry:not(:last-child) {
+            padding-right: 20px;
         }
         
         main section .anime-list .anime-entry:hover:not(.disabled) {
