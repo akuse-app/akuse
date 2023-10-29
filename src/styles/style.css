@@ -1408,16 +1408,15 @@ main section .anime-list-wrapper {
         }
 
         main section .anime-list .anime-entry .anime-cover {
-            width: 100%;
-            height: 100%;
+            width: 212px;
+            height: 300px;
             position: relative;
             object-fit: cover;
         }
-
-        main section .anime-list .anime-entry .anime-cover,
+        
         main section .anime-list .anime-entry .anime-cover img {
-            width: 212px;
-            height: 300px;
+            width: 100%;
+            height: 100%;
         }
         
         main section .anime-list .anime-entry.disabled {

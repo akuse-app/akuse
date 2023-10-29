@@ -505,19 +505,29 @@ module.exports = class Frontend {
 
         entries.media.forEach(key => {
             var featured_div = this.createAnimeFeaturedEntry(key)
-            featured_scroller_wrapper_div.appendChild(featured_div)
-            width += 100
+            if(featured_div != -1) {
+                featured_scroller_wrapper_div.appendChild(featured_div)
+                width += 100
+            }
         })
 
         featured_scroller_wrapper_div.style.width = (width + '%')
     }
 
+    /**
+     * Create a featured anime entry
+     * 
+     * @param {*} animeEntry 
+     * @returns featured anime entry div | -1 if no banner is present
+     */
     createAnimeFeaturedEntry(animeEntry) {
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
         const startYear = animeEntry.startDate.year
         const banner = animeEntry.bannerImage
+        if(banner == null) return -1 // if there is no banner, do not display this anime
+
         const description = animeEntry.description
 
         var featured_div = document.createElement('div')
