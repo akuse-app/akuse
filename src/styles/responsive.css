@@ -79,6 +79,10 @@
         width: 150px;
     }
 
+    main .featured .anime-description {
+        -webkit-line-clamp: 3;
+    }
+
     main button#featured-scroll-left,
     main button#featured-scroll-right {
         top: 220px;
@@ -87,7 +91,7 @@
 
 @media only screen and (max-width: 1350px) {
     :root {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .nav-container {
@@ -124,6 +128,10 @@
 
     main section .anime-list .anime-entry {
         width: 115px;
+    }
+
+    main .featured .anime-description {
+        -webkit-line-clamp: 3;
     }
 
     main button#featured-scroll-left,

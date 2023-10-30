@@ -10,7 +10,7 @@
     height: 100%;
     width: 100%;
     z-index: 890;
-    cursor: pointer;
+    cursor: none;
 }
 
 .container, .video-controls, .video-timer, .options {
@@ -59,9 +59,10 @@
 }
 
 .video-timeline {
-    height: 20px;
+    height: 5px;
     width: 100%;
     cursor: pointer;
+    margin-bottom: 15px;
 }
 
 .video-timer .separator{
@@ -72,6 +73,11 @@
     height: 5px;
     position: relative;
     background: var(--color-text-3);
+}
+
+.progress-area:hover {
+    height: 9px;
+    transform: translateY(-2px);
 }
 
 .progress-area span{
