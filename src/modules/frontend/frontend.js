@@ -185,13 +185,28 @@ module.exports = class Frontend {
         : document.getElementById('list-editor-score').value = score
 
         // display the limit of episodes (/24, /12...) and score (/10)
-        document.querySelector('#list-editor-progress-limit .value').innerHTML = (progress)
-        document.querySelector('#list-editor-progress-limit .limit').innerHTML = ('/' + availableEpisodes)
+        document.querySelector('#list-editor-progress-limit .value').innerHTML = progress
+        document.querySelector('#list-editor-progress-limit .limit').innerHTML = availableEpisodes
 
-        document.querySelector('#list-editor-score-limit .value').innerHTML = (score)
-        document.querySelector('#list-editor-score-limit .limit').innerHTML = ('/10')
+        document.querySelector('#list-editor-score-limit .value').innerHTML = score
+        document.querySelector('#list-editor-score-limit .limit').innerHTML = 10
 
         this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
+    }
+
+    /**
+     * Shows the VERY COOL wheel value above score/progress inputs in list-editor modal page
+     * 
+     * @param {*} type 
+     */
+    showListEditorInputValue(type) {
+        let output = document.getElementById(`list-editor-${type}-value`)
+        let value = document.getElementById(`list-editor-${type}`).value
+        let limit = document.querySelector(`#list-editor-${type}-limit .limit`).innerHTML
+    
+        output.value = value
+        output.style.left = 100 * value / limit + '%'
+        // output.style.left = 'calc(' + (100 * value / limit + '%') + ' - ' +  (output.offsetWidth + 'px') +')'
     }
     
     /**

@@ -287,7 +287,10 @@
                     </div>
                     <div id="list-editor-progress-container" class="input-container">
                         <i class="fa-solid fa-bars-progress"></i>
-                        <input id="list-editor-progress" type="range" min="0">
+                        <div class="in-out-container">
+                            <input id="list-editor-progress" type="range" min="0">
+                            <output for="list-editor-progress" id="list-editor-progress-value"></output>
+                        </div>
                         <div id="list-editor-progress-limit">
                             <div class="value"></div>
                             <div class="limit"></div>
@@ -295,7 +298,10 @@
                     </div>
                     <div id="list-editor-score-container" class="input-container">
                         <i class="fa-solid fa-star"></i>
-                        <input id="list-editor-score" type="range" min="0" max="10">
+                        <div class="in-out-container">
+                            <input id="list-editor-score" type="range" min="0" max="10">
+                            <output for="list-editor-score" id="list-editor-score-value"></output>
+                        </div>
                         <div id="list-editor-score-limit">
                             <div class="value"></div>
                             <div class="limit"></div>

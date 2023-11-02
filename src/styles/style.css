@@ -1277,6 +1277,11 @@ main .featured .featured-img img {
         .list-editor-page .content .input-divisor .input-container {
             width: 50%;
         }
+        
+        .list-editor-page .content .input-container .in-out-container {
+            position: relative;
+            width: 100%;
+        }
 
         .list-editor-page .content .input-container {
             width: 256px;
@@ -1287,6 +1292,24 @@ main .featured .featured-img img {
             color: var(--font-2);
             font-size: 1.2rem;
             border: 2px solid var(--font-2);
+            border-radius: var(--border-radius);
+        }
+
+        .list-editor-page .content .input-container .in-out-container:hover output,
+        .list-editor-page .content .input-container .in-out-container:active output {
+            display: flex;
+        }
+
+        .list-editor-page .content .input-container output {
+            display: none; /* turns flex */
+            position: absolute;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            top: -35px;
+            margin-left: -15px;
+            background-color: var(--color-1);
+            border: 2px solid var(--color-2);
             border-radius: var(--border-radius);
         }
         
@@ -1323,14 +1346,13 @@ main .featured .featured-img img {
         }
         
         .list-editor-page .content .input-container input {
-            width: 100px;
             accent-color: var(--color-important);
         }
 
         #list-editor-progress-limit,
         #list-editor-score-limit {
-            display: flex;
-            margin-left: auto;
+            display: none;
+            /* margin-left: auto; */
         }
 
     .list-editor-page button#exit {
@@ -1366,7 +1388,7 @@ main section {
 
     main section .anime-list-scroller {
         position: absolute;
-        top: 35%;
+        top: 40%;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1378,6 +1400,15 @@ main section {
         z-index: 30;
         cursor: pointer;
     }
+
+        main section .anime-list-scroller:hover {
+            transform: scale(1.05);
+        }
+
+        main section .anime-list-scroller:active {
+            transform: scale(1);
+            filter: brightness(0.80);
+        }
 
         main section .anime-list-scroller.left {
             left: 30px

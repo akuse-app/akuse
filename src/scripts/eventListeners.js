@@ -151,6 +151,8 @@ anilistItem.addEventListener('click', (event) => {
 var settings_button = document.getElementById('page-anime-list-editor')
 settings_button.addEventListener('click', (event) => {
     frontend.displayListEditorPage()
+    frontend.showListEditorInputValue('progress')
+    frontend.showListEditorInputValue('score')
 })
 
 // close list-editor modal page
@@ -187,10 +189,20 @@ list_editor_button.addEventListener('click', (event) => {
     /* frontend.listEditorDelete() */
 })
 
+// list-editor inputs
+let list_editor_progress_input = document.getElementById('list-editor-progress')
+list_editor_progress_input.addEventListener('input', (event) => {
+    frontend.showListEditorInputValue('progress')
+})
+
+let list_editor_score_input = document.getElementById('list-editor-score')
+list_editor_score_input.addEventListener('input', (event) => {
+    frontend.showListEditorInputValue('score')
+})
+
 // list-editor progress and score updating
 var list_editor_progress = document.getElementById('list-editor-progress')
 list_editor_progress.addEventListener('input', () => {
-    console.log('ciao')
     document.querySelector('#list-editor-progress-limit .value').innerHTML = list_editor_progress.value
 })
 
