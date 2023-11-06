@@ -1388,7 +1388,7 @@ main section {
 
     main section .anime-list-scroller {
         position: absolute;
-        top: 40%;
+        top: 44%;
         display: flex;
         justify-content: center;
         align-items: center;
