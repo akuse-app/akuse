@@ -17,6 +17,14 @@ module.exports = class AnimeSaturn {
         this.consumet = new Consumet.ANIME.AnimeSaturn
     }
 
+    // parseTitle(animeTitle) {
+    //     return animeTitle.replace('Season', '')
+    //                      .replace('season', '')
+    //                      .replace(' ', '')
+    //                      .replace('-', '')
+    //                      .replace('_', '')
+    // }
+
     /**
      * Gets the episode url and isM3U8 flag
      * 

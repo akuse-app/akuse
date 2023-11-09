@@ -57,7 +57,7 @@ module.exports = class Video {
         
         Object.keys(anime_titles_div).forEach( (key) => {
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
-            anime_titles_div[key]
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', ''))
         })
 
         return animeTitles

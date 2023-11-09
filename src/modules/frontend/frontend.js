@@ -953,6 +953,8 @@ module.exports = class Frontend {
         
         // clear infos
         document.getElementById('page-anime-title').innerHTML = ""
+        document.getElementById('page-anime-title').classList.remove('anime-page-warn-on')
+        document.getElementById('page-anime-title').classList.remove('anime-page-warn-off')
         document.getElementById('page-anime-description').innerHTML = ""
         document.getElementById('page-anime-cover').src = ""
         document.getElementById('page-anime-genres').innerHTML = ""
@@ -975,6 +977,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-meanScore').innerHTML = ""
         document.getElementById('page-anime-list-editor').classList.remove('in-list')
         document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
+
 
         // hide content - show loader
         document.getElementById('page-anime-content-wrapper').style.display = 'none'
