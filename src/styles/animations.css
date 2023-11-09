@@ -72,13 +72,13 @@
     opacity: 0;
 }
 
-.show-user-dropdown {
-    animation: showUserDropdownAnimation var(--animation-transition);
+.show-anime-sections-scrolling-buttons {
+    animation: showOpacityAnimation var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes showUserDropdownAnimation {
+@keyframes showOpacityAnimation {
     0% {
         opacity: 0;
     }
@@ -87,13 +87,13 @@
     }
 }
 
-.hide-user-dropdown {
-    animation: hideUserDropdownAnimation var(--animation-transition);
+.hide-anime-sections-scrolling-buttons {
+    animation: hideOpacityAnimation var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes hideUserDropdownAnimation {
+@keyframes hideOpacityAnimation {
     0% {
         opacity: 1;
     }

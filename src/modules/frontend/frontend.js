@@ -108,34 +108,9 @@ module.exports = class Frontend {
     }
 
     /**
-     * Toggles the user dropdown, handling animations and style changes
-     * 
-     * @deprecated
-     */
-    toggleUserDropdown() {
-        var userSection = document.getElementById('user-section')
-        var userDropdown = document.getElementById('user-dropdown')
-        var color_1 = getComputedStyle(document.documentElement).getPropertyValue('--color-1')
-
-        if(userDropdown.style.display == 'none') {
-            userSection.style.backgroundColor = color_1
-            userDropdown.style.display = 'block'
-            userDropdown.classList.remove('hide-user-dropdown')
-            userDropdown.classList.add('show-user-dropdown')
-        } else {
-            userSection.style.backgroundColor = 'transparent'
-            userDropdown.classList.remove('show-user-dropdown')
-            userDropdown.classList.add('hide-user-dropdown')
-            setTimeout(() => {
-                userDropdown.style.display = 'none'
-            }, 400)
-        }
-    }
-
-    /**
      * Call this to grant anime sections scrolling by "drag-n-dropping" them
      */
-    enableDragAndScroll() {
+    enableAnimeSectionsDragAndScroll() {
         var sliders = document.getElementsByClassName('anime-list-wrapper')
 
         Object.keys(sliders).forEach(slider => {
@@ -163,6 +138,59 @@ module.exports = class Frontend {
             Object.values(sliders)[slider].addEventListener('mousedown', startDragging, false)
             Object.values(sliders)[slider].addEventListener('mouseup', stopDragging, false)
             Object.values(sliders)[slider].addEventListener('mouseleave', stopDragging, false)
+        })
+    }
+
+    /**
+     * Call this to grant anime sections scrolling with buttons
+     */
+    enableAnimeSectionsScrollingButtons() {
+        let anime_sections = document.querySelectorAll('section')
+        const scrollAmount = 232 * 4
+
+        Object.keys(anime_sections).forEach(section => {
+            let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
+            let anime_section_list = anime_section_wrapper.querySelector('.anime-list')
+            let anime_section_scroll_left = Object.values(anime_sections)[section].querySelector('.anime-list-scroller.left')
+            let anime_section_scroll_right = Object.values(anime_sections)[section].querySelector('.anime-list-scroller.right')
+            
+            // update scroll value
+            anime_section_scroll_left.addEventListener('click', () => {
+                anime_section_wrapper.scrollLeft -= scrollAmount
+            })
+            
+            anime_section_scroll_right.addEventListener('click', () => {
+                anime_section_wrapper.scrollLeft += scrollAmount
+            })
+
+            let canShowButtons = () => {
+                console.log('oo')
+                return anime_section_list.offsetWidth > anime_section_wrapper.offsetWidth
+            }
+            
+            // show/hide buttons
+            let showButtons = () => {
+                anime_section_scroll_left.classList.remove('hide-anime-sections-scrolling-buttons')
+                anime_section_scroll_right.classList.remove('hide-anime-sections-scrolling-buttons')
+                anime_section_scroll_left.classList.add('show-anime-sections-scrolling-buttons')
+                anime_section_scroll_right.classList.add('show-anime-sections-scrolling-buttons')
+            }
+            
+            let hideButtons = () => {
+                anime_section_scroll_left.classList.remove('show-anime-sections-scrolling-buttons')
+                anime_section_scroll_right.classList.remove('show-anime-sections-scrolling-buttons')
+                anime_section_scroll_left.classList.add('hide-anime-sections-scrolling-buttons')
+                anime_section_scroll_right.classList.add('hide-anime-sections-scrolling-buttons')
+            }
+
+            anime_section_wrapper.addEventListener('mouseover', showButtons)
+            anime_section_scroll_left.addEventListener('mouseover', showButtons)
+            anime_section_scroll_right.addEventListener('mouseover', showButtons)
+            
+            anime_section_wrapper.addEventListener('mouseout', hideButtons)
+            anime_section_scroll_left.addEventListener('mouseout', hideButtons)
+            anime_section_scroll_right.addEventListener('mouseout', hideButtons)
+            
         })
     }
 

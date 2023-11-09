@@ -351,5 +351,5 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
     }
 })
 
-// drag n scroll
-frontend.enableDragAndScroll()
+// anime sections scrolling buttons
+frontend.enableAnimeSectionsScrollingButtons()

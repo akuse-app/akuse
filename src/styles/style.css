@@ -1300,7 +1300,7 @@ main .featured .featured-img img {
         }
 
         .list-editor-page .content .input-container output {
-            display: none; /* turns flex */
+            display: none; /* turning flex */
             position: absolute;
             justify-content: center;
             align-items: center;
@@ -1388,7 +1388,8 @@ main section {
     main section .anime-list-scroller {
         position: absolute;
         top: 44%;
-        display: flex;
+        opacity: 0;
+        display: flex; /* turning flex */
         justify-content: center;
         align-items: center;
         width: 60px;
@@ -1410,7 +1411,7 @@ main section {
         }
 
         main section .anime-list-scroller.left {
-            left: 30px
+            left: 40px
         }
         
         main section .anime-list-scroller.right {
@@ -1426,10 +1427,11 @@ main section .anime-list-wrapper {
     position: relative;
     width: calc(100% - 100px);
     overflow: hidden;
+    scroll-snap-type: x mandatory; /* disable if drag n scroll is enabled */
+    scroll-behavior: smooth; /* disable if drag n scroll is enabled */
     margin-bottom: 20px;
     padding: 0 50px;
 }
-
 
     main section .anime-list {
         float: left;
@@ -1437,7 +1439,7 @@ main section .anime-list-wrapper {
         /* gap: 10px; */
         display: flex;
         flex-direction: row;
-        padding-bottom: 10px; /* othewise titles are being cut */
+        padding-bottom: 10px; /* othewise titles will be cut */
     }
     
         main section .anime-list .anime-entry {
