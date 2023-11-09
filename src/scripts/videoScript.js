@@ -115,6 +115,7 @@ exitBtn.addEventListener("click", () => {
     container.style.display = 'none'
     if(document.fullscreenEnabled) {
         document.exitFullscreen()
+        fullScreenBtn.classList.replace("fa-compress", "fa-expand")
     }
 })
 

@@ -315,7 +315,6 @@ img {
 nav#nav-main {
     width: calc(100% - 100px);
     z-index: 19;
-    margin: 0 50px;
     height: 70px;
     display: flex;
     border-radius: var(--border-radius);
@@ -1438,6 +1437,7 @@ main section .anime-list-wrapper {
         /* gap: 10px; */
         display: flex;
         flex-direction: row;
+        padding-bottom: 10px; /* othewise titles are being cut */
     }
     
         main section .anime-list .anime-entry {
