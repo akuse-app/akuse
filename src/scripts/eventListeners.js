@@ -352,31 +352,4 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
 })
 
 // drag n scroll
-var sliders = document.getElementsByClassName('anime-list-wrapper')
-
-Object.keys(sliders).forEach(slider => {
-    let mouseDown = false
-    let startX, scrollLeft
-
-    let startDragging = function (event) {
-        mouseDown = true
-        startX = event.pageX - Object.values(sliders)[slider].offsetLeft
-        scrollLeft = Object.values(sliders)[slider].scrollLeft
-    }
-    
-    let stopDragging = function (event) {
-        mouseDown = false
-    }
-
-    Object.values(sliders)[slider].addEventListener('mousemove', (event) => {
-        event.preventDefault()
-        if(!mouseDown) { return }
-        const x = event.pageX - Object.values(sliders)[slider].offsetLeft
-        const scroll = x - startX
-        Object.values(sliders)[slider].scrollLeft = scrollLeft - scroll
-    })
-
-    Object.values(sliders)[slider].addEventListener('mousedown', startDragging, false)
-    Object.values(sliders)[slider].addEventListener('mouseup', stopDragging, false)
-    Object.values(sliders)[slider].addEventListener('mouseleave', stopDragging, false)
-})
+frontend.enableDragAndScroll()
