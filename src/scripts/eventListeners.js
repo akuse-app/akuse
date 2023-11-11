@@ -2,7 +2,6 @@
 
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
-const LoadingBar = require('../modules/frontend/loadingBar')
 const Video = require('../modules/frontend/video')
 const clientData = require('../modules/clientData.js')
 
@@ -12,7 +11,7 @@ const video = new Video()
 
 /* --- AUTO-UPDATE --- */
 
-document.getElementById('auto-update-later').addEventListener('click', (event) => {
+document.getElementById('auto-update-later').addEventListener('click', () => {
     frontend.closeAutoUpdatePage()
 })
 
@@ -35,13 +34,13 @@ myListNav.addEventListener('click', () => {
 /* --- NAVBAR --- */
 
 // navbar background changing
-var lastScroll = 0
-var nav_div = document.getElementById('nav-wrapper')
-var body_container_div = document.getElementsByClassName('body-container')[0]
-var color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
+let lastScroll = 0
+let nav_div = document.getElementById('nav-wrapper')
+let body_container_div = document.getElementsByClassName('body-container')[0]
+let color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
 
-body_container_div.addEventListener("scroll", (event) => {
-    var scroll = body_container_div.scrollTop
+body_container_div.addEventListener("scroll", () => {
+    let scroll = body_container_div.scrollTop
 
         if(scroll > lastScroll && lastScroll === 0) {
             setTimeout(() => {
@@ -62,12 +61,12 @@ document.getElementById('nav-img').onclick = () => document.getElementsByClassNa
 /* --- MAIN SEARCH BAR --- */
 
 // listeners
-var scroller = document.getElementsByClassName('body-container')[0]
-var searchMainInput = document.getElementById('search-main-input')
-var searchMainDiv = document.getElementById('main-search-list-container')
+let scroller = document.getElementsByClassName('body-container')[0]
+let searchMainInput = document.getElementById('search-main-input')
+let searchMainDiv = document.getElementById('main-search-list-container')
 
-var typingTimer
-var doneTypingInterval = 250
+let typingTimer
+let doneTypingInterval = 250
 
 searchMainInput.addEventListener('input', async () => {
     clearTimeout(typingTimer)
@@ -99,7 +98,7 @@ if(searchMainInput.value == '') {
     frontend.closeMainSearchBar
 }
 
-scroller.addEventListener("scroll", (event) => {
+scroller.addEventListener("scroll", () => {
     if(searchMainDiv.style.display == 'flex') {
         frontend.closeMainSearchBar()
     }
@@ -108,10 +107,10 @@ scroller.addEventListener("scroll", (event) => {
 /* --- FEATURED SECTION --- */
 
 // featured section buttons
-var featured_container_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
-var featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
-var featured_left_button = document.getElementById('featured-scroll-left')
-var featured_right_button = document.getElementById('featured-scroll-right')
+let featured_container_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
+let featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
+let featured_left_button = document.getElementById('featured-scroll-left')
+let featured_right_button = document.getElementById('featured-scroll-right')
 
 // show
 let showFeaturedScrollButtons = () => {
@@ -169,14 +168,14 @@ document.addEventListener('keydown', (event) => {
 /* --- SETTING MODAL PAGE --- */
 
 // open settings modal page
-var settingsButton = document.getElementById('user-dropdown-settings')
-settingsButton.addEventListener('click', (event) => {
+let settingsButton = document.getElementById('user-dropdown-settings')
+settingsButton.addEventListener('click', () => {
     frontend.displaySettingsPage()
 })
 
 // close
-var exit_button = document.querySelector('.settings-page #exit')
-exit_button.addEventListener('click', (event) => {
+let settings_page_exit_button = document.querySelector('.settings-page #exit')
+settings_page_exit_button.addEventListener('click', () => {
     frontend.closeSettingsPage()
 })
 
@@ -187,12 +186,12 @@ document.getElementById('settings-page').addEventListener('click', (event) => {
 })
 
 // toggler
-var sourceItem = document.getElementById('source-item')
-var anilistItem = document.getElementById('anilist-item')
-var sourceRightElement = document.getElementById('source-right-element')
-var anilistRightElement = document.getElementById('anilist-right-element')
+let sourceItem = document.getElementById('source-item')
+let anilistItem = document.getElementById('anilist-item')
+let sourceRightElement = document.getElementById('source-right-element')
+let anilistRightElement = document.getElementById('anilist-right-element')
 
-sourceItem.addEventListener('click', (event) => {
+sourceItem.addEventListener('click', () => {
     if(sourceRightElement.style.display == 'none') {
         sourceItem.classList.toggle('active')
         anilistItem.classList.toggle('active')
@@ -201,7 +200,7 @@ sourceItem.addEventListener('click', (event) => {
     }
 })
 
-anilistItem.addEventListener('click', (event) => {
+anilistItem.addEventListener('click', () => {
     if(anilistRightElement.style.display == 'none') {
         anilistItem.classList.toggle('active')
         sourceItem.classList.toggle('active')
@@ -213,16 +212,16 @@ anilistItem.addEventListener('click', (event) => {
 /* --- LIST-EDITOR MODAL PAGE --- */
 
 // open
-var settings_button = document.getElementById('page-anime-list-editor')
-settings_button.addEventListener('click', (event) => {
+let settings_button = document.getElementById('page-anime-list-editor')
+settings_button.addEventListener('click', () => {
     frontend.displayListEditorPage()
     frontend.showListEditorInputValue('progress')
     frontend.showListEditorInputValue('score')
 })
 
 // close
-var exit_button = document.querySelector('.list-editor-page #exit')
-exit_button.addEventListener('click', (event) => {
+let list_editor_page_exit_button = document.querySelector('.list-editor-page #exit')
+list_editor_page_exit_button.addEventListener('click', () => {
     frontend.closeListEditorPage()
 })
 
@@ -233,8 +232,8 @@ document.getElementById('list-editor-page').addEventListener('click', (event) =>
 })
 
 // save
-var list_editor_button = document.getElementById('list-editor-save')
-list_editor_button.addEventListener('click', (event) => {
+let list_editor_button = document.getElementById('list-editor-save')
+list_editor_button.addEventListener('click', () => {
     frontend.listEditor()
 
     // after using the list editor, update anime modal page and anime entries lists
@@ -248,30 +247,29 @@ list_editor_button.addEventListener('click', (event) => {
 })
 
 // delete
-var list_editor_button = document.getElementById('list-editor-delete')
-list_editor_button.addEventListener('click', (event) => {
+list_editor_button.addEventListener('click', () => {
     // not working due to an unusual bug
     /* frontend.listEditorDelete() */
 })
 
 // inputs
 let list_editor_progress_input = document.getElementById('list-editor-progress')
-list_editor_progress_input.addEventListener('input', (event) => {
+list_editor_progress_input.addEventListener('input', () => {
     frontend.showListEditorInputValue('progress')
 })
 
 let list_editor_score_input = document.getElementById('list-editor-score')
-list_editor_score_input.addEventListener('input', (event) => {
+list_editor_score_input.addEventListener('input', () => {
     frontend.showListEditorInputValue('score')
 })
 
 // progress and score updating
-var list_editor_progress = document.getElementById('list-editor-progress')
+let list_editor_progress = document.getElementById('list-editor-progress')
 list_editor_progress.addEventListener('input', () => {
     document.querySelector('#list-editor-progress-limit .value').innerHTML = list_editor_progress.value
 })
 
-var list_editor_score = document.getElementById('list-editor-score')
+let list_editor_score = document.getElementById('list-editor-score')
 list_editor_score.addEventListener('input', () => {
     document.querySelector('#list-editor-score-limit .value').innerHTML = list_editor_score.value
 })
@@ -279,14 +277,14 @@ list_editor_score.addEventListener('input', () => {
 /* --- ANIME MODAL PAGE--- */
 
 // start watching/resume
-var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
+let watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
 watch_button.addEventListener('click', () => {
     video.displayVideo(watch_button.id.slice(17))
 })
 
 // close
-var exit_button = document.querySelector('.anime-page #exit')
-exit_button.addEventListener('click', () => {
+let anime_page_exit_button = document.querySelector('.anime-page #exit')
+anime_page_exit_button.addEventListener('click', () => {
     frontend.closeAnimePage()
 })
 
@@ -304,13 +302,13 @@ frontend.enableAnimeSectionsScrollingButtons()
 /* --- TRIGGERS --- */
 
 // trigger when featured anime entry is pressed
-var featured_scroller = document.getElementById('featured-scroller')
+let featured_scroller = document.getElementById('featured-scroller')
 featured_scroller.addEventListener('click', (event) => {
     frontend.triggerFeaturedAnime(event)
 })
 
 // trigger when search anime entry is pressed
-var entry_list = document.getElementById('main-search-list')
+let entry_list = document.getElementById('main-search-list')
 entry_list.addEventListener('click', (event) => {
     frontend.triggerMainSearchAnime(event)
 })
@@ -324,7 +322,7 @@ anime_lists.forEach(list => {
 })
 
 // trigger when episode is pressed, so generate video link
-var episode_list = document.getElementById('page-anime-episodes-list')
+let episode_list = document.getElementById('page-anime-episodes-list')
 episode_list.addEventListener('click', (event) => {
     frontend.triggerEpisode(event)
 })

@@ -38,7 +38,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        /* frame: false, */
+        frame: false,
         icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,
@@ -47,15 +47,20 @@ const createWindow = () => {
         }
     })
 
+    // magari far partire authWin da hidden, poi showare subito oppure chiuderla, checkare anche se chiude app premendo X
     // if(store.get('access_token')) {
     //     mainWin.loadFile(__dirname + '/windows/index.html')
     //     mainWin.show()
     //     mainWin.maximize()
         
     //     mainWin.webContents.on('did-finish-load', () => {
+    //         authWin.close()
     //         mainWin.webContents.send('load-index')
     //         autoUpdater.checkForUpdates()
     //     })
+    // } else {
+    //     console.log('Loaded OAuth url on Auth Window')
+    //     authWin.loadURL(authUrl)    
     // }
 
     console.log('Loaded OAuth url on Auth Window')
@@ -69,7 +74,6 @@ const createWindow = () => {
             const anilist = new AniListAPI(clientData)
             const token = await anilist.getAccessToken(currentUrl)
         
-            /* mainWin.loadFile('src/windows/index.html') */
             mainWin.loadFile(__dirname + '/windows/index.html')
             mainWin.show()
             mainWin.maximize()
@@ -85,25 +89,25 @@ const createWindow = () => {
     })
 }
 
-ipcMain.on('iconify-document', (event) => {
+ipcMain.on('iconify-document', () => {
     mainWin.minimize()
 })
 
-ipcMain.on('maximize-document', (event) => {
+ipcMain.on('maximize-document', () => {
     mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
 })
 
-ipcMain.on('quit-document', (event) => {
+ipcMain.on('quit-document', () => {
     mainWin.close()
     store.delete('access_token')
 })
 
-ipcMain.on('load-issues-url', (event) => {
+ipcMain.on('load-issues-url', () => {
     require('electron').shell.openExternal(githubOpenNewIssueUrl)
 })
 
 // working partially :(
-ipcMain.on('exit-app', (event) => {
+ipcMain.on('exit-app', () => {
     mainWin.webContents.session.clearStorageData().then((data) => {
         mainWin.close()
         store.delete('access_token')
@@ -139,7 +143,7 @@ autoUpdater.on("error", (info) => {
     mainWin.webContents.send('message', info)
 })
 
-ipcMain.on('download-update', (event) => {
+ipcMain.on('download-update', () => {
     let pth = autoUpdater.downloadUpdate()
 })
 
