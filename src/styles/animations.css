@@ -1,5 +1,6 @@
 :root {
     --animation-transition: 0.4s ease-out;
+    --half-animation-transition: 0.2s ease-out;
 }
 
 /* LOADING PAGE */
@@ -72,8 +73,8 @@
     opacity: 0;
 }
 
-.show-anime-sections-scrolling-buttons {
-    animation: showOpacityAnimation var(--animation-transition);
+.show-opacity {
+    animation: showOpacityAnimation var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
@@ -87,8 +88,8 @@
     }
 }
 
-.hide-anime-sections-scrolling-buttons {
-    animation: hideOpacityAnimation var(--animation-transition);
+.hide-opacity {
+    animation: hideOpacityAnimation var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }

@@ -10,206 +10,29 @@ const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 const video = new Video()
 
-/* document.getElementById('user-auto-update').addEventListener('click', (event) => {
-    frontend.displayAutoUpdatePage()
-}) */
-
-// pressing esc closes the modal pages
-document.addEventListener('keydown', (event) => {
-    if(event.code === 'Escape') {
-        if(frontend.isAnimePageDisplayed()
-           && !frontend.isListEditorDisplayed()) {
-            frontend.closeAnimePage()
-        }
-
-        if(frontend.isListEditorDisplayed()) {
-            frontend.closeListEditorPage()
-        }
-
-        if(frontend.isSettingsPageDisplayed()) {
-            frontend.closeSettingsPage()
-        }
-    }
-})
+/* --- AUTO-UPDATE --- */
 
 document.getElementById('auto-update-later').addEventListener('click', (event) => {
     frontend.closeAutoUpdatePage()
 })
 
-// toggler for the app apges
-var homeNav = document.getElementById('nav-home')
-var myListNav = document.getElementById('nav-my-list')
-var homePageMain = document.querySelector('main#home-page')
-var myListPageMain = document.querySelector('main#my-list-page')
+/* --- MAIN PAGES --- */
 
-homeNav.addEventListener('click', (event) => {
+// toggler
+let homeNav = document.getElementById('nav-home')
+let myListNav = document.getElementById('nav-my-list')
+let homePageMain = document.querySelector('main#home-page')
+let myListPageMain = document.querySelector('main#my-list-page')
+
+homeNav.addEventListener('click', () => {
     frontend.togglePage(homePageMain, myListPageMain, homeNav, myListNav)
 })
 
-myListNav.addEventListener('click', (event) => {
+myListNav.addEventListener('click', () => {
     frontend.togglePage(myListPageMain, homePageMain, myListNav, homeNav)
 })
 
-// akuse logo in navbar takes you to the top of the page
-document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
-
-// dynamic episodes search bar (NOT WORKING)
-document.getElementById('page-anime-search-button').addEventListener('click', (event) => {
-    var input = document.getElementById('page-anime-search-input')
-
-    if(input.style.display == 'none') {
-        input.style.display = 'block'
-    } else if(input.style.display === 'block') {
-        input.style.display = 'none'
-    }
-})
-
-// main search bar listeners
-var scroller = document.getElementsByClassName('body-container')[0]
-var searchMainInput = document.getElementById('search-main-input')
-var searchMainDiv = document.getElementById('main-search-list-container')
-
-var typingTimer
-var doneTypingInterval = 250
-
-searchMainInput.addEventListener('input', async (event) => {
-    clearTimeout(typingTimer)
-    typingTimer = setTimeout(async () => {
-        let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
-        frontend.displaySearchedAnimes(searchEntries)
-
-        if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
-
-    }, doneTypingInterval)
-})
-
-/*
-    close main search bar when:
-    - an element outside the search bar / list is clicked
-    - input is empty
-    - the document is scrolled
-*/
-document.addEventListener('click', (event) => {
-    if(searchMainDiv.style.display == 'flex' && (!(event.target.closest('#main-search-list-container')) && !(event.target.closest('.search-main-bar')))) {
-        console.log('ora')
-        frontend.closeMainSearchBar()
-    }
-})
-
-if(searchMainInput.value == '') {
-    frontend.closeMainSearchBar
-}
-
-scroller.addEventListener("scroll", (event) => {
-    if(searchMainDiv.style.display == 'flex') {
-        frontend.closeMainSearchBar()
-    }
-})
-
-// open settings modal page
-var settingsButton = document.getElementById('user-dropdown-settings')
-settingsButton.addEventListener('click', (event) => {
-    frontend.displaySettingsPage()
-})
-
-// close settings modal page
-var exit_button = document.querySelector('.settings-page #exit')
-exit_button.addEventListener('click', (event) => {
-    frontend.closeSettingsPage()
-})
-
-document.getElementById('settings-page').addEventListener('click', (event) => {
-    if(event.target.id === 'settings-page') {
-        frontend.closeSettingsPage()
-    }
-})
-
-var sourceItem = document.getElementById('source-item')
-var anilistItem = document.getElementById('anilist-item')
-var sourceRightElement = document.getElementById('source-right-element')
-var anilistRightElement = document.getElementById('anilist-right-element')
-
-sourceItem.addEventListener('click', (event) => {
-    if(sourceRightElement.style.display == 'none') {
-        sourceItem.classList.toggle('active')
-        anilistItem.classList.toggle('active')
-        anilistRightElement.style.display = 'none'
-        sourceRightElement.style.display = 'block'
-    }
-})
-
-anilistItem.addEventListener('click', (event) => {
-    if(anilistRightElement.style.display == 'none') {
-        anilistItem.classList.toggle('active')
-        sourceItem.classList.toggle('active')
-        sourceRightElement.style.display = 'none'
-        anilistRightElement.style.display = 'block'
-    }
-})
-
-// open list-editor modal page
-var settings_button = document.getElementById('page-anime-list-editor')
-settings_button.addEventListener('click', (event) => {
-    frontend.displayListEditorPage()
-    frontend.showListEditorInputValue('progress')
-    frontend.showListEditorInputValue('score')
-})
-
-// close list-editor modal page
-var exit_button = document.querySelector('.list-editor-page #exit')
-exit_button.addEventListener('click', (event) => {
-    frontend.closeListEditorPage()
-})
-
-document.getElementById('list-editor-page').addEventListener('click', (event) => {
-    if(event.target.id === 'list-editor-page') {
-        frontend.closeListEditorPage()
-    }
-})
-
-// list-editor save
-var list_editor_button = document.getElementById('list-editor-save')
-list_editor_button.addEventListener('click', (event) => {
-    frontend.listEditor()
-
-    // after using the list editor, update anime modal page and anime entries lists
-    setTimeout(() => {
-        frontend.updateAnimePageElements()
-
-        setTimeout(() => {
-            frontend.updateAnimeEntries()
-        }, 500)
-    }, 500)
-})
-
-// list-editor delete
-var list_editor_button = document.getElementById('list-editor-delete')
-list_editor_button.addEventListener('click', (event) => {
-    // not working due to an unusual bug
-    /* frontend.listEditorDelete() */
-})
-
-// list-editor inputs
-let list_editor_progress_input = document.getElementById('list-editor-progress')
-list_editor_progress_input.addEventListener('input', (event) => {
-    frontend.showListEditorInputValue('progress')
-})
-
-let list_editor_score_input = document.getElementById('list-editor-score')
-list_editor_score_input.addEventListener('input', (event) => {
-    frontend.showListEditorInputValue('score')
-})
-
-// list-editor progress and score updating
-var list_editor_progress = document.getElementById('list-editor-progress')
-list_editor_progress.addEventListener('input', () => {
-    document.querySelector('#list-editor-progress-limit .value').innerHTML = list_editor_progress.value
-})
-
-var list_editor_score = document.getElementById('list-editor-score')
-list_editor_score.addEventListener('input', () => {
-    document.querySelector('#list-editor-score-limit .value').innerHTML = list_editor_score.value
-})
+/* --- NAVBAR --- */
 
 // navbar background changing
 var lastScroll = 0
@@ -233,115 +56,237 @@ body_container_div.addEventListener("scroll", (event) => {
     lastScroll = scroll
 })
 
-// trigger children and retrieve id to open anime modal page
-var featured_scroller = document.getElementById('featured-scroller')
-featured_scroller.addEventListener('click', (event) => {
-    frontend.triggerFeaturedAnime(event)
+// akuse logo in navbar takes you to the top of the page
+document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
+
+/* --- MAIN SEARCH BAR --- */
+
+// listeners
+var scroller = document.getElementsByClassName('body-container')[0]
+var searchMainInput = document.getElementById('search-main-input')
+var searchMainDiv = document.getElementById('main-search-list-container')
+
+var typingTimer
+var doneTypingInterval = 250
+
+searchMainInput.addEventListener('input', async () => {
+    clearTimeout(typingTimer)
+    typingTimer = setTimeout(async () => {
+        let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
+        frontend.displaySearchedAnimes(searchEntries)
+
+        if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
+
+    }, doneTypingInterval)
 })
 
-var entry_list = document.getElementById('main-search-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerMainSearchAnime(event)
+/*
+    close main search bar when:
+    - an element outside the search bar / list is clicked
+    - input is empty
+    - the document is scrolled
+*/
+document.addEventListener('click', (event) => {
+    if(searchMainDiv.style.display == 'flex' 
+       && (!(event.target.closest('#main-search-list-container')) 
+       && !(event.target.closest('.search-main-bar')))) {
+        console.log('ora')
+        frontend.closeMainSearchBar()
+    }
 })
 
-var entry_list = document.getElementById('current-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
+if(searchMainInput.value == '') {
+    frontend.closeMainSearchBar
+}
+
+scroller.addEventListener("scroll", (event) => {
+    if(searchMainDiv.style.display == 'flex') {
+        frontend.closeMainSearchBar()
+    }
 })
 
-var entry_list = document.getElementById('trending-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('most-popular-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('adventure-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('comedy-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('fantasy-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('horror-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('music-home')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('current-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('planning-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('completed-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('dropped-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('paused-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-var entry_list = document.getElementById('repeating-my-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerAnimeEntry(event)
-})
-
-// trigger when episode is pressed, so generate video link
-var episode_list = document.getElementById('page-anime-episodes-list')
-episode_list.addEventListener('click', (event) => {
-    frontend.triggerEpisode(event)
-})
+/* --- FEATURED SECTION --- */
 
 // featured section buttons
+var featured_container_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
 var featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
 var featured_left_button = document.getElementById('featured-scroll-left')
 var featured_right_button = document.getElementById('featured-scroll-right')
 
-featured_left_button.addEventListener('click', (event) => {
+// show
+let showFeaturedScrollButtons = () => {
+    featured_left_button.classList.remove('hide-opacity')
+    featured_right_button.classList.remove('hide-opacity')
+    featured_left_button.classList.add('show-opacity')
+    featured_right_button.classList.add('show-opacity')
+}
+
+// hide
+let hideFeaturedScrollButtons = () => {
+    featured_left_button.classList.remove('show-opacity')
+    featured_right_button.classList.remove('show-opacity')
+    featured_left_button.classList.add('hide-opacity')
+    featured_right_button.classList.add('hide-opacity')
+}
+
+featured_container_div.addEventListener('mouseover', showFeaturedScrollButtons)
+featured_left_button.addEventListener('mouseover', showFeaturedScrollButtons)
+featured_right_button.addEventListener('mouseover', showFeaturedScrollButtons)
+
+featured_container_div.addEventListener('mouseout', hideFeaturedScrollButtons)
+featured_left_button.addEventListener('mouseout', hideFeaturedScrollButtons)
+featured_right_button.addEventListener('mouseout', hideFeaturedScrollButtons)
+
+// scroll
+featured_left_button.addEventListener('click', () => {
     featured_scroller_div.scrollLeft -= 1800
 })
 
-featured_right_button.addEventListener('click', (event) => {
+featured_right_button.addEventListener('click', () => {
     featured_scroller_div.scrollLeft += 1800
 })
 
-// anime page start watching/resume episode
+/* --- MODAL PAGES --- */
+
+// pressing esc closes the modal pages
+document.addEventListener('keydown', (event) => {
+    if(event.code === 'Escape') {
+        if(frontend.isAnimePageDisplayed()
+           && !frontend.isListEditorDisplayed()) {
+            frontend.closeAnimePage()
+        }
+
+        if(frontend.isListEditorDisplayed()) {
+            frontend.closeListEditorPage()
+        }
+
+        if(frontend.isSettingsPageDisplayed()) {
+            frontend.closeSettingsPage()
+        }
+    }
+})
+
+/* --- SETTING MODAL PAGE --- */
+
+// open settings modal page
+var settingsButton = document.getElementById('user-dropdown-settings')
+settingsButton.addEventListener('click', (event) => {
+    frontend.displaySettingsPage()
+})
+
+// close
+var exit_button = document.querySelector('.settings-page #exit')
+exit_button.addEventListener('click', (event) => {
+    frontend.closeSettingsPage()
+})
+
+document.getElementById('settings-page').addEventListener('click', (event) => {
+    if(event.target.id === 'settings-page') {
+        frontend.closeSettingsPage()
+    }
+})
+
+// toggler
+var sourceItem = document.getElementById('source-item')
+var anilistItem = document.getElementById('anilist-item')
+var sourceRightElement = document.getElementById('source-right-element')
+var anilistRightElement = document.getElementById('anilist-right-element')
+
+sourceItem.addEventListener('click', (event) => {
+    if(sourceRightElement.style.display == 'none') {
+        sourceItem.classList.toggle('active')
+        anilistItem.classList.toggle('active')
+        anilistRightElement.style.display = 'none'
+        sourceRightElement.style.display = 'block'
+    }
+})
+
+anilistItem.addEventListener('click', (event) => {
+    if(anilistRightElement.style.display == 'none') {
+        anilistItem.classList.toggle('active')
+        sourceItem.classList.toggle('active')
+        sourceRightElement.style.display = 'none'
+        anilistRightElement.style.display = 'block'
+    }
+})
+
+/* --- LIST-EDITOR MODAL PAGE --- */
+
+// open
+var settings_button = document.getElementById('page-anime-list-editor')
+settings_button.addEventListener('click', (event) => {
+    frontend.displayListEditorPage()
+    frontend.showListEditorInputValue('progress')
+    frontend.showListEditorInputValue('score')
+})
+
+// close
+var exit_button = document.querySelector('.list-editor-page #exit')
+exit_button.addEventListener('click', (event) => {
+    frontend.closeListEditorPage()
+})
+
+document.getElementById('list-editor-page').addEventListener('click', (event) => {
+    if(event.target.id === 'list-editor-page') {
+        frontend.closeListEditorPage()
+    }
+})
+
+// save
+var list_editor_button = document.getElementById('list-editor-save')
+list_editor_button.addEventListener('click', (event) => {
+    frontend.listEditor()
+
+    // after using the list editor, update anime modal page and anime entries lists
+    setTimeout(() => {
+        frontend.updateAnimePageElements()
+
+        setTimeout(() => {
+            frontend.updateAnimeEntries()
+        }, 500)
+    }, 500)
+})
+
+// delete
+var list_editor_button = document.getElementById('list-editor-delete')
+list_editor_button.addEventListener('click', (event) => {
+    // not working due to an unusual bug
+    /* frontend.listEditorDelete() */
+})
+
+// inputs
+let list_editor_progress_input = document.getElementById('list-editor-progress')
+list_editor_progress_input.addEventListener('input', (event) => {
+    frontend.showListEditorInputValue('progress')
+})
+
+let list_editor_score_input = document.getElementById('list-editor-score')
+list_editor_score_input.addEventListener('input', (event) => {
+    frontend.showListEditorInputValue('score')
+})
+
+// progress and score updating
+var list_editor_progress = document.getElementById('list-editor-progress')
+list_editor_progress.addEventListener('input', () => {
+    document.querySelector('#list-editor-progress-limit .value').innerHTML = list_editor_progress.value
+})
+
+var list_editor_score = document.getElementById('list-editor-score')
+list_editor_score.addEventListener('input', () => {
+    document.querySelector('#list-editor-score-limit .value').innerHTML = list_editor_score.value
+})
+
+/* --- ANIME MODAL PAGE--- */
+
+// start watching/resume
 var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-watch_button.addEventListener('click', (event) => {
+watch_button.addEventListener('click', () => {
     video.displayVideo(watch_button.id.slice(17))
 })
 
-// close anime page modal page
+// close
 var exit_button = document.querySelector('.anime-page #exit')
-exit_button.addEventListener('click', (event) => {
+exit_button.addEventListener('click', () => {
     frontend.closeAnimePage()
 })
 
@@ -351,5 +296,35 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
     }
 })
 
-// anime sections scrolling buttons
+/* ANIME SECTIONS */
+
+// scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
+
+/* --- TRIGGERS --- */
+
+// trigger when featured anime entry is pressed
+var featured_scroller = document.getElementById('featured-scroller')
+featured_scroller.addEventListener('click', (event) => {
+    frontend.triggerFeaturedAnime(event)
+})
+
+// trigger when search anime entry is pressed
+var entry_list = document.getElementById('main-search-list')
+entry_list.addEventListener('click', (event) => {
+    frontend.triggerMainSearchAnime(event)
+})
+
+// trigger when anime entry is pressed
+let anime_lists = document.querySelectorAll('.anime-list')
+anime_lists.forEach(list => {
+    list.addEventListener('click', (event) => {
+        frontend.triggerAnimeEntry(event)
+    })
+})
+
+// trigger when episode is pressed, so generate video link
+var episode_list = document.getElementById('page-anime-episodes-list')
+episode_list.addEventListener('click', (event) => {
+    frontend.triggerEpisode(event)
+})

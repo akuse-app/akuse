@@ -665,6 +665,10 @@ nav#nav-main {
             font-weight: var(--font-weight);
         }
 
+            .search-main-bar .input-container input:focus {
+                
+            }
+
             .search-main-bar .input-container input::placeholder {
                 color: var(--font-2);
             }
@@ -763,8 +767,9 @@ main .featured-scroller {
     scroll-behavior: smooth;
 }
 
-main button#featured-scroll-left,
-main button#featured-scroll-right {
+main button.featured-scrolling-buttons {
+    display: block; /* turning block */
+    opacity: 0;
     color: var(--font-2);
     font-size: 2.2rem;
     border: none;
@@ -777,16 +782,19 @@ main button#featured-scroll-right {
     transition: 0.3s ease-out;
 }
 
-main button#featured-scroll-left {
+main button.featured-scrolling-buttons.show-buttons {
+    display: block;
+}
+
+main button.featured-scrolling-buttons.left {
     left: 10px;
 }
 
-main button#featured-scroll-right {
+main button.featured-scrolling-buttons.right {
     right: 10px;
 }
 
-main button#featured-scroll-left:hover,
-main button#featured-scroll-right:hover {
+main button.featured-scrolling-buttons:hover {
     transform: scale(1.40);
 }
 
@@ -1024,44 +1032,6 @@ main .featured .featured-img img {
                 display: flex;
                 align-items: center;
             }
-
-                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper {
-                    display: flex;
-                    align-items: center;
-                    margin-left: auto;
-                    border: 2px solid var(--color-2);
-                    background-color: var(--color-dark-opacity);
-                    border-radius: var(--border-radius);
-                    padding: 6px;
-                }
-
-                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper input {
-                    display: none;
-                    width: 100px;
-                    font-size: 1.4rem;
-                    font-weight: var(--font-weight);
-                    border: none;
-                    outline: none;
-                    color: var(--font-1);
-                    background-color: transparent;
-                }
-
-                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button {
-                    border: none;
-                    outline: none;
-                    background-color: transparent;
-                    cursor: pointer;
-                    padding: 5px;
-                }
-
-                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button:active {
-                    transform: scale(0.90);
-                }
-
-                .anime-page .content .page-anime-right #page-anime-watch-section .search-bar-wrapper button i {
-                    color: var(--font-1);
-                    font-size: 1.4rem;
-                }
 
         .anime-page .content .page-anime-right .anime-title {
             font-size: 3rem;

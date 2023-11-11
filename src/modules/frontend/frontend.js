@@ -162,25 +162,20 @@ module.exports = class Frontend {
             anime_section_scroll_right.addEventListener('click', () => {
                 anime_section_wrapper.scrollLeft += scrollAmount
             })
-
-            let canShowButtons = () => {
-                console.log('oo')
-                return anime_section_list.offsetWidth > anime_section_wrapper.offsetWidth
-            }
             
             // show/hide buttons
             let showButtons = () => {
-                anime_section_scroll_left.classList.remove('hide-anime-sections-scrolling-buttons')
-                anime_section_scroll_right.classList.remove('hide-anime-sections-scrolling-buttons')
-                anime_section_scroll_left.classList.add('show-anime-sections-scrolling-buttons')
-                anime_section_scroll_right.classList.add('show-anime-sections-scrolling-buttons')
+                anime_section_scroll_left.classList.remove('hide-opacity')
+                anime_section_scroll_right.classList.remove('hide-opacity')
+                anime_section_scroll_left.classList.add('show-opacity')
+                anime_section_scroll_right.classList.add('show-opacity')
             }
             
             let hideButtons = () => {
-                anime_section_scroll_left.classList.remove('show-anime-sections-scrolling-buttons')
-                anime_section_scroll_right.classList.remove('show-anime-sections-scrolling-buttons')
-                anime_section_scroll_left.classList.add('hide-anime-sections-scrolling-buttons')
-                anime_section_scroll_right.classList.add('hide-anime-sections-scrolling-buttons')
+                anime_section_scroll_left.classList.remove('show-opacity')
+                anime_section_scroll_right.classList.remove('show-opacity')
+                anime_section_scroll_left.classList.add('hide-opacity')
+                anime_section_scroll_right.classList.add('hide-opacity')
             }
 
             anime_section_wrapper.addEventListener('mouseover', showButtons)
@@ -190,7 +185,6 @@ module.exports = class Frontend {
             anime_section_wrapper.addEventListener('mouseout', hideButtons)
             anime_section_scroll_left.addEventListener('mouseout', hideButtons)
             anime_section_scroll_right.addEventListener('mouseout', hideButtons)
-            
         })
     }
 
