@@ -38,7 +38,13 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        frame: false,
+        // frame: false,
+        // titleBarStyle: 'hidden',
+        titleBarOverlay: {
+            color: '#17191c',
+            symbolColor: '#eee',
+            height: 28
+        },
         icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,

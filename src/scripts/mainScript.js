@@ -13,20 +13,20 @@ const store = new Store()
 const frontend = new Frontend()
 const loadingBar = new LoadingBar()
 
-var iconifyButton = document.getElementById('document-iconify')
-iconifyButton.addEventListener('click', () => {
-    ipcRenderer.send('iconify-document')
-})
+// var iconifyButton = document.getElementById('document-iconify')
+// iconifyButton.addEventListener('click', () => {
+//     ipcRenderer.send('iconify-document')
+// })
 
-var maximizeButton = document.getElementById('document-maximize')
-maximizeButton.addEventListener('click', () => {
-    ipcRenderer.send('maximize-document')
-})
+// var maximizeButton = document.getElementById('document-maximize')
+// maximizeButton.addEventListener('click', () => {
+//     ipcRenderer.send('maximize-document')
+// })
 
-var quitButton = document.getElementById('document-quit')
-quitButton.addEventListener('click', () => {
-    ipcRenderer.send('quit-document')
-})
+// var quitButton = document.getElementById('document-quit')
+// quitButton.addEventListener('click', () => {
+//     ipcRenderer.send('quit-document')
+// })
 
 var bugReportButton = document.getElementById('user-dropdown-bug-report')
 bugReportButton.addEventListener('click', (event) => {
