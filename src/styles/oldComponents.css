@@ -1,0 +1,178 @@
+/* OLD NAV */
+
+.nav-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-top: 25px;
+}
+
+.nav-wrapper {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 15;
+    background-color: transparent;
+    transition: 0.2s ease-out;
+}
+
+    .nav-wrapper.shadow {
+        box-shadow: var(--shadow);
+    }
+
+nav#nav-main {
+    width: calc(100% - 100px);
+    z-index: 19;
+    height: 70px;
+    display: flex;
+    border-radius: var(--border-radius);
+    align-items: center;
+    justify-content: center;
+}
+
+    nav#nav-main img#nav-img {
+        width: 140px;
+        margin-right: 30px;
+        cursor: pointer;
+    }
+
+    nav#nav-main img#nav-img:active {
+        filter: brightness(0.90);
+    }
+
+    nav#nav-main ul.nav-ul {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        nav#nav-main .nav-ul li.nav-li {
+            font-size: 1.3rem;
+            display: inline;
+            color: var(--font-2);
+            font-weight: 500;
+            margin-right: 10px;
+            padding: 10px 20px;
+            /* border-radius: var(--border-radius); */
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        nav#nav-main .nav-ul li.nav-li.right {
+            padding: 10px;
+        }
+        
+        nav#nav-main .nav-ul li.nav-li.active,
+        nav#nav-main ul.nav-ul li.nav-li:hover {
+            color: var(--font-1);
+            /* background-color: var(--color-1); */
+        }
+        
+    nav#nav-main .right {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: auto;
+    }
+
+        nav#nav-main .right .user {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            gap: 20px;
+            padding: 10px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            cursor: pointer;
+            transition: var(--animation-transition);
+        }
+        
+        nav#nav-main .right .user h2 i ,
+        nav#nav-main .right .user #user-name {
+            transition: var(--transition);
+        }
+
+        nav#nav-main .right .user:hover h2 i,
+        nav#nav-main .right .user:hover #user-name {
+            color: var(--font-1);
+        }
+        
+        nav .right .user #user-name {
+            color: var(--font-2);
+            font-size: 1.1rem;
+            }
+            
+            nav .right .user img {
+                width: 40px;
+                border-radius: 1000px;
+            }
+            
+            nav .right .user h2 {
+                color: var(--font-2);
+                font-size: 0.8rem;
+            }
+            
+        nav#nav-main .right .dropdown {
+            width: 200px;
+            height: max-content;
+            top: 60px;
+            right: 0;
+            z-index: 19;
+            background-color: var(--color-1);
+            border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+            position: absolute;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        nav#nav-main .right .dropdown ul.dropdown-ul {
+            padding-left: 0px;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        nav#nav-main .right .dropdown ul.dropdown-ul li {
+            list-style-type: none;
+            color: var(--font-2);
+            font-size: 1.1rem;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+        
+            nav#nav-main .right .dropdown ul.dropdown-ul li:not(:last-child) {
+                margin-bottom: 10px;
+            }
+            
+            nav#nav-main .right .dropdown ul.dropdown-ul li:hover {
+                color: var(--font-1);
+                background-color: var(--color-2);
+            }
+
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate {
+                text-align: center;
+                color: var(--font-1);
+                font-weight: var(--font-weight);
+                background-color: var(--color-important);
+            }
+
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate:hover {
+                filter: brightness(0.80);
+            }
+
+            nav#nav-main .right .dropdown ul.dropdown-ul li#user-dropdown-donate:active {
+                filter: brightness(0.70);
+            }
+        
+            nav#nav-main .right .dropdown ul.dropdown-ul li i {
+                font-size: 1.2rem;
+                margin-right: 8px;
+            }

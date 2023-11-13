@@ -66,56 +66,49 @@
     <!-- BOTTOM LOADING BAR (not used) -->
     <div id="loading-bar"></div>
     <!-- NAVBAR + MAIN SEARCH BAR -->
-    <div class="nav-container">
-        <div id="nav-wrapper" class="nav-wrapper">
-            <nav id="nav-main">
-                <div class="search-main-bar">
-                    <div id="search-main">
-                        <div class="input-container">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input id="search-main-input" type="text" placeholder="Search">
-                        </div>
-                    </div>
+    <aside id="nav-main">
+        <div class="big-logo">
+            <!-- <img src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt=""> -->
+        </div>
+        <h1>Menu</h1>
+        <ul class="upper">
+            <li id="nav-home" class="active">
+                <div class="i-wrapper">
+                    <i class="fa-solid fa-house"></i>
                 </div>
-                <img id="nav-img" src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt="">
-                <ul class="nav-ul">
-                    <li id="nav-home" class="nav-li active">
-                        Home
-                    </li>
-                    <li id="nav-my-list" class="nav-li">
-                        My List
-                    </li>
-                    <div class="right">
-                        <ul class="nav-ul">
-                            <!-- <li id="user-auto-update" class="nav-li right">
-                                <i class="fa-solid fa-download"></i>
-                            </li> -->
-                            <li id="user-dropdown-settings" class="nav-li right">
-                                <i class="fa-solid fa-gear"></i>
-                            </li>
-                            <li id="user-dropdown-bug-report" class="nav-li right">
-                                <i class="fa-solid fa-bug"></i>
-                            </li>
-                            <!-- <li id="user-dropdown-exit" class="nav-li right">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                            </li> -->
-                        </ul>
-                        <div id="user-section" class="user">
-                            <img id="user-icon" src="" alt="user-icon">
-                        </div>
-                        <div id="user-dropdown" class="dropdown fade-in" style="display: none">
-                            <ul class="dropdown-ul"></ul>
-                        </div>
-                    </div>
-                </ul>
-            </nav>
+                <span>Home</span>
+            </li>
+            <li>
+                <div class="i-wrapper">    
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <span>Search</span>
+            </li>
+            <li id="nav-my-list">
+                <div class="i-wrapper">    
+                    <i class="fa-regular fa-bookmark"></i>
+                </div>
+                <span>Library</span>
+            </li>
+        </ul>
+        <ul class="lower">
+            <li id="user-dropdown-bug-report">
+                <div class="i-wrapper">
+                    <i class="fa-solid fa-bug"></i>
+                </div>
+                <span>Report a bug</span>
+            </li>
+            <li id="user-dropdown-settings">
+                <div class="i-wrapper">
+                    <i class="fa-solid fa-gear"></i>
+                </div>
+                <span>Settings</span>
+            </li>
+        </ul>
+        <div id="user-section" class="user">
+            <img id="user-icon" src="" alt="user-icon">
         </div>
-        <div id="main-search-list-container" class="search-main-container" style="display: none">
-            <div class="scroller">
-                <div id="main-search-list" class="search-list"></div>
-            </div>
-        </div>
-    </div>
+    </aside>
     <!-- SETTINGS MODAL PAGE -->
     <div id="settings-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
     <div id="settings-page" class="modal-page-wrapper fade-in">
@@ -369,6 +362,12 @@
                 </div>
             <video id="video"></video>
         </div>
+        <!-- <nav>
+            <ul>
+                <li id="nav-home" class="active">Home</li>
+                <li id="nav-my-list">Library</li>
+            </ul>
+        </nav> -->
         <!-- MAIN -->
         <main id="home-page" style="display: block">
             <!-- FEATURED CONTENT -->
@@ -380,7 +379,7 @@
             <!-- HOME ANIME SECTIONS -->
             <div class="section-container">
                 <section>
-                    <h1>Continue Watching</h1>
+                    <h1>Continue watching</h1>
                     <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
                     <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="anime-list-wrapper">
@@ -394,7 +393,7 @@
                     </div>
                 </section>
                 <section>
-                    <h1>Trending Now</h1>
+                    <h1>Trending now</h1>
                     <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
                     <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="anime-list-wrapper">
@@ -408,7 +407,7 @@
                     </div>
                 </section>
                 <section>
-                    <h1>Most Popular</h1>
+                    <h1>Most popular</h1>
                     <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
                     <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="anime-list-wrapper">

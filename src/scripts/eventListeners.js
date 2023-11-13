@@ -34,75 +34,75 @@ myListNav.addEventListener('click', () => {
 /* --- NAVBAR --- */
 
 // navbar background changing
-let lastScroll = 0
-let nav_div = document.getElementById('nav-wrapper')
-let body_container_div = document.getElementsByClassName('body-container')[0]
-let color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
+// let lastScroll = 0
+// let nav_div = document.getElementById('nav-wrapper')
+// let body_container_div = document.getElementsByClassName('body-container')[0]
+// let color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
 
-body_container_div.addEventListener("scroll", () => {
-    let scroll = body_container_div.scrollTop
+// body_container_div.addEventListener("scroll", () => {
+//     let scroll = body_container_div.scrollTop
 
-        if(scroll > lastScroll && lastScroll === 0) {
-            setTimeout(() => {
-                nav_div.style.backgroundColor = color
-                nav_div.classList.toggle('shadow')
-            }, 100)
-        } else if(scroll === 0 && lastScroll !== 0){
-            nav_div.style.backgroundColor = 'transparent'
-            nav_div.classList.toggle('shadow')
-        }
+//         if(scroll > lastScroll && lastScroll === 0) {
+//             setTimeout(() => {
+//                 nav_div.style.backgroundColor = color
+//                 nav_div.classList.toggle('shadow')
+//             }, 100)
+//         } else if(scroll === 0 && lastScroll !== 0){
+//             nav_div.style.backgroundColor = 'transparent'
+//             nav_div.classList.toggle('shadow')
+//         }
     
-    lastScroll = scroll
-})
+//     lastScroll = scroll
+// })
 
 // akuse logo in navbar takes you to the top of the page
-document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
+// document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
 
 /* --- MAIN SEARCH BAR --- */
 
 // listeners
-let scroller = document.getElementsByClassName('body-container')[0]
-let searchMainInput = document.getElementById('search-main-input')
-let searchMainDiv = document.getElementById('main-search-list-container')
+// let scroller = document.getElementsByClassName('body-container')[0]
+// let searchMainInput = document.getElementById('search-main-input')
+// let searchMainDiv = document.getElementById('main-search-list-container')
 
-let typingTimer
-let doneTypingInterval = 250
+// let typingTimer
+// let doneTypingInterval = 250
 
-searchMainInput.addEventListener('input', async () => {
-    clearTimeout(typingTimer)
-    typingTimer = setTimeout(async () => {
-        let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
-        frontend.displaySearchedAnimes(searchEntries)
+// searchMainInput.addEventListener('input', async () => {
+//     clearTimeout(typingTimer)
+//     typingTimer = setTimeout(async () => {
+//         let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
+//         frontend.displaySearchedAnimes(searchEntries)
 
-        if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
+//         if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
 
-    }, doneTypingInterval)
-})
+//     }, doneTypingInterval)
+// })
 
-/*
-    close main search bar when:
-    - an element outside the search bar / list is clicked
-    - input is empty
-    - the document is scrolled
-*/
-document.addEventListener('click', (event) => {
-    if(searchMainDiv.style.display == 'flex' 
-       && (!(event.target.closest('#main-search-list-container')) 
-       && !(event.target.closest('.search-main-bar')))) {
-        console.log('ora')
-        frontend.closeMainSearchBar()
-    }
-})
+// /*
+//     close main search bar when:
+//     - an element outside the search bar / list is clicked
+//     - input is empty
+//     - the document is scrolled
+// */
+// document.addEventListener('click', (event) => {
+//     if(searchMainDiv.style.display == 'flex' 
+//        && (!(event.target.closest('#main-search-list-container')) 
+//        && !(event.target.closest('.search-main-bar')))) {
+//         console.log('ora')
+//         frontend.closeMainSearchBar()
+//     }
+// })
 
-if(searchMainInput.value == '') {
-    frontend.closeMainSearchBar
-}
+// if(searchMainInput.value == '') {
+//     frontend.closeMainSearchBar
+// }
 
-scroller.addEventListener("scroll", () => {
-    if(searchMainDiv.style.display == 'flex') {
-        frontend.closeMainSearchBar()
-    }
-})
+// scroller.addEventListener("scroll", () => {
+//     if(searchMainDiv.style.display == 'flex') {
+//         frontend.closeMainSearchBar()
+//     }
+// })
 
 /* --- FEATURED SECTION --- */
 
@@ -308,10 +308,10 @@ featured_scroller.addEventListener('click', (event) => {
 })
 
 // trigger when search anime entry is pressed
-let entry_list = document.getElementById('main-search-list')
-entry_list.addEventListener('click', (event) => {
-    frontend.triggerMainSearchAnime(event)
-})
+// let entry_list = document.getElementById('main-search-list')
+// entry_list.addEventListener('click', (event) => {
+//     frontend.triggerMainSearchAnime(event)
+// })
 
 // trigger when anime entry is pressed
 let anime_lists = document.querySelectorAll('.anime-list')
