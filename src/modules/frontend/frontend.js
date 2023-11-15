@@ -572,7 +572,7 @@ module.exports = class Frontend {
     triggerFeaturedAnime(event) {
         if(!(event.target.tagName == 'button')) {
             var entry = event.target.closest('button')
-            if(entry && event.target.innerHTML == 'Go to the page') {
+            if(entry && event.target.innerHTML == 'See More') {
                 this.displayAnimePage(entry.id.slice(22))
             }
         } else {
