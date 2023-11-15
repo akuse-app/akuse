@@ -96,7 +96,7 @@ button.circle-button-0.disabled:active {
 
 [data-title]:hover:after {
     opacity: 1;
-    transition: all 0.1s ease 0.8s;
+    transition: all 0.1s ease-out 0.8s;
     visibility: visible;
 }
 [data-title]:after {
