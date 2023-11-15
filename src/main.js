@@ -106,14 +106,6 @@ app.whenReady().then(() => {
     })
 })
 
-// process.noAsar = true
-// try { 
-//     require('electron-reloader')(module, { 
-//         debug: true, 
-//         watchRenderer: true
-//     }); 
-// } catch (_) { console.log('Error'); }  
-
 /* AUTO UPDATING */
 
 autoUpdater.on("update-available", (info) => {
