@@ -1037,25 +1037,6 @@ module.exports = class Frontend {
     }
 
     /**
-     * Checks if an DOM element is in viewport
-     * 
-     * @param {*} element 
-     * @returns 
-     */
-    isInViewport(element) {
-        let bounding = element.getBoundingClientRect()
-    
-        if (
-            bounding.top >= 0 &&
-            bounding.left >= 0 &&
-            bounding.right <= (window.innerWidth || document.documentElement.clientWidth) &&
-            bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight)   
-        ) return true
-        
-        return false
-    }
-
-    /**
      * Gets the anime title (english or romaji)
      * 
      * @param {*} animeEntry 
