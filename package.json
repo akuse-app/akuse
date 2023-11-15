@@ -92,8 +92,7 @@
   "homepage": "https://github.com/aleganza/akuse#readme",
   "devDependencies": {
     "electron": "^25.9.4",
-    "electron-builder": "^24.6.4",
-    "electron-reloader": "^1.2.3"
+    "electron-builder": "^24.6.4"
   },
   "dependencies": {
     "@consumet/extensions": "^1.5.2",
