@@ -31,119 +31,9 @@ myListNav.addEventListener('click', () => {
     frontend.togglePage(myListPageMain, homePageMain, myListNav, homeNav)
 })
 
-/* --- NAVBAR --- */
-
-// navbar background changing
-// let lastScroll = 0
-// let nav_div = document.getElementById('nav-wrapper')
-// let body_container_div = document.getElementsByClassName('body-container')[0]
-// let color = getComputedStyle(document.documentElement).getPropertyValue('--color-0')
-
-// body_container_div.addEventListener("scroll", () => {
-//     let scroll = body_container_div.scrollTop
-
-//         if(scroll > lastScroll && lastScroll === 0) {
-//             setTimeout(() => {
-//                 nav_div.style.backgroundColor = color
-//                 nav_div.classList.toggle('shadow')
-//             }, 100)
-//         } else if(scroll === 0 && lastScroll !== 0){
-//             nav_div.style.backgroundColor = 'transparent'
-//             nav_div.classList.toggle('shadow')
-//         }
-    
-//     lastScroll = scroll
-// })
-
-// akuse logo in navbar takes you to the top of the page
-// document.getElementById('nav-img').onclick = () => document.getElementsByClassName('body-container')[0].scrollTo({ top: 0, behavior: 'smooth' })
-
-/* --- MAIN SEARCH BAR --- */
-
-// listeners
-// let scroller = document.getElementsByClassName('body-container')[0]
-// let searchMainInput = document.getElementById('search-main-input')
-// let searchMainDiv = document.getElementById('main-search-list-container')
-
-// let typingTimer
-// let doneTypingInterval = 250
-
-// searchMainInput.addEventListener('input', async () => {
-//     clearTimeout(typingTimer)
-//     typingTimer = setTimeout(async () => {
-//         let searchEntries = await anilist.getSearchedAnimes(searchMainInput.value)
-//         frontend.displaySearchedAnimes(searchEntries)
-
-//         if(searchMainDiv.style.display == 'none') frontend.openMainSearchBar()
-
-//     }, doneTypingInterval)
-// })
-
-// /*
-//     close main search bar when:
-//     - an element outside the search bar / list is clicked
-//     - input is empty
-//     - the document is scrolled
-// */
-// document.addEventListener('click', (event) => {
-//     if(searchMainDiv.style.display == 'flex' 
-//        && (!(event.target.closest('#main-search-list-container')) 
-//        && !(event.target.closest('.search-main-bar')))) {
-//         console.log('ora')
-//         frontend.closeMainSearchBar()
-//     }
-// })
-
-// if(searchMainInput.value == '') {
-//     frontend.closeMainSearchBar
-// }
-
-// scroller.addEventListener("scroll", () => {
-//     if(searchMainDiv.style.display == 'flex') {
-//         frontend.closeMainSearchBar()
-//     }
-// })
-
 /* --- FEATURED SECTION --- */
 
-// featured section buttons
-let featured_container_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
-let featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
-let featured_left_button = document.getElementById('featured-scroll-left')
-let featured_right_button = document.getElementById('featured-scroll-right')
-
-// show
-let showFeaturedScrollButtons = () => {
-    featured_left_button.classList.remove('hide-opacity')
-    featured_right_button.classList.remove('hide-opacity')
-    featured_left_button.classList.add('show-opacity')
-    featured_right_button.classList.add('show-opacity')
-}
-
-// hide
-let hideFeaturedScrollButtons = () => {
-    featured_left_button.classList.remove('show-opacity')
-    featured_right_button.classList.remove('show-opacity')
-    featured_left_button.classList.add('hide-opacity')
-    featured_right_button.classList.add('hide-opacity')
-}
-
-featured_container_div.addEventListener('mouseover', showFeaturedScrollButtons)
-featured_left_button.addEventListener('mouseover', showFeaturedScrollButtons)
-featured_right_button.addEventListener('mouseover', showFeaturedScrollButtons)
-
-featured_container_div.addEventListener('mouseout', hideFeaturedScrollButtons)
-featured_left_button.addEventListener('mouseout', hideFeaturedScrollButtons)
-featured_right_button.addEventListener('mouseout', hideFeaturedScrollButtons)
-
-// scroll
-featured_left_button.addEventListener('click', () => {
-    featured_scroller_div.scrollLeft -= 1000
-})
-
-featured_right_button.addEventListener('click', () => {
-    featured_scroller_div.scrollLeft += 1000
-})
+frontend.enableFeaturedSectionScrollingButtons()
 
 /* --- MODAL PAGES --- */
 
@@ -298,6 +188,8 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
 
 // scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
+
+frontend.doDisplayAnimeSectionsScrollingButtons()
 
 /* --- TRIGGERS --- */
 

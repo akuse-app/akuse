@@ -141,34 +141,128 @@ module.exports = class Frontend {
     }
 
     /**
+     * Hides not needed scrolling buttons in anime sections 
+    */
+    doDisplayAnimeSectionsScrollingButtons() {
+        let anime_sections = document.querySelectorAll('section')
+
+        Object.keys(anime_sections).forEach(section => {
+            let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
+            let anime_section_list = Object.values(anime_sections)[section].querySelector('.anime-list')
+            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
+            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
+            let wrapperWidth = anime_section_wrapper.offsetWidth
+            let listWidth = anime_section_list.offsetWidth
+
+            if(listWidth > wrapperWidth) {
+                anime_section_scroll_left.classList.add('hide')
+                anime_section_scroll_right.classList.add('hide')
+            }
+        })
+    }
+
+    enableFeaturedSectionScrollingButtons() {
+        // featured section buttons
+        let featured_container_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
+        let featured_scroller_div = document.getElementsByClassName('featured-scroller')[0]
+        let featured_left_button = document.getElementById('featured-scroll-left')
+        let featured_right_button = document.getElementById('featured-scroll-right')
+
+        // scroll
+        featured_left_button.addEventListener('click', () => {
+            featured_scroller_div.scrollLeft -= 1000
+        })
+
+        featured_right_button.addEventListener('click', () => {
+            featured_scroller_div.scrollLeft += 1000
+        })
+
+        // show
+        let showFeaturedScrollButtons = () => {
+            featured_left_button.classList.remove('hide-opacity')
+            featured_right_button.classList.remove('hide-opacity')
+            featured_left_button.classList.add('show-opacity')
+            featured_right_button.classList.add('show-opacity')
+        }
+
+        // hide
+        let hideFeaturedScrollButtons = () => {
+            featured_left_button.classList.remove('show-opacity')
+            featured_right_button.classList.remove('show-opacity')
+            featured_left_button.classList.add('hide-opacity')
+            featured_right_button.classList.add('hide-opacity')
+        }
+
+        featured_container_div.addEventListener('mouseover', showFeaturedScrollButtons)
+        featured_left_button.addEventListener('mouseover', showFeaturedScrollButtons)
+        featured_right_button.addEventListener('mouseover', showFeaturedScrollButtons)
+
+        featured_container_div.addEventListener('mouseout', hideFeaturedScrollButtons)
+        featured_left_button.addEventListener('mouseout', hideFeaturedScrollButtons)
+        featured_right_button.addEventListener('mouseout', hideFeaturedScrollButtons)
+    }
+
+    /**
      * Call this to grant anime sections scrolling with buttons
      */
     enableAnimeSectionsScrollingButtons() {
         let anime_sections = document.querySelectorAll('section')
         const scrollAmount = 232 * 4
-
+        
         Object.keys(anime_sections).forEach(section => {
             let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
+            let anime_section_list = Object.values(anime_sections)[section].querySelector('.anime-list')
             let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
             let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
+            
+            let disableButtons = () => {
+                let maxScroll = anime_section_list.scrollWidth - anime_section_wrapper.clientWidth
+
+                if(anime_section_wrapper.scrollLeft == 0) {
+                    anime_section_scroll_left.classList.add('disabled')
+                } else {
+                    anime_section_scroll_left.classList.remove('disabled')
+                }
+
+                if(anime_section_wrapper.scrollLeft == maxScroll) {
+                    anime_section_scroll_right.classList.add('disabled')
+                } else {
+                    anime_section_scroll_right.classList.remove('disabled')
+                }
+            }
+
+            // if section is too small, hde scrolling buttons
+            let doHideButtons = () => {
+                if(anime_section_wrapper.clientWidth > anime_section_list.scrollWidth) return true; else return false
+            }
             
             // update scroll value
             anime_section_scroll_left.addEventListener('click', () => {
                 anime_section_wrapper.scrollLeft -= scrollAmount
+                setTimeout(() => {
+                    disableButtons()
+                }, 1000)
             })
             
             anime_section_scroll_right.addEventListener('click', () => {
                 anime_section_wrapper.scrollLeft += scrollAmount
+                setTimeout(() => {
+                    disableButtons()
+                }, 1000)
             })
             
-            // show/hide buttons
+            // show
             let showButtons = () => {
+                if(doHideButtons()) return
+                disableButtons()
+
                 anime_section_scroll_left.classList.remove('hide-opacity')
                 anime_section_scroll_right.classList.remove('hide-opacity')
                 anime_section_scroll_left.classList.add('show-opacity')
                 anime_section_scroll_right.classList.add('show-opacity')
             }
             
+            // hide
             let hideButtons = () => {
                 anime_section_scroll_left.classList.remove('show-opacity')
                 anime_section_scroll_right.classList.remove('show-opacity')
@@ -177,14 +271,14 @@ module.exports = class Frontend {
             }
 
             // anime_section_wrapper.addEventListener('mouseover', showButtons)
-            Object.values(anime_sections)[section].addEventListener('mouseover', showButtons)
-            anime_section_scroll_left.addEventListener('mouseover', showButtons)
-            anime_section_scroll_right.addEventListener('mouseover', showButtons)
+            Object.values(anime_sections)[section].addEventListener('mouseenter', showButtons)
+            // anime_section_scroll_left.addEventListener('mouseover', showButtons)
+            // anime_section_scroll_right.addEventListener('mouseover', showButtons)
             
             // anime_section_wrapper.addEventListener('mouseout', hideButtons)
-            Object.values(anime_sections)[section].addEventListener('mouseout', hideButtons)
-            anime_section_scroll_left.addEventListener('mouseout', hideButtons)
-            anime_section_scroll_right.addEventListener('mouseout', hideButtons)
+            Object.values(anime_sections)[section].addEventListener('mouseleave', hideButtons)
+            // anime_section_scroll_left.addEventListener('mouseout', hideButtons)
+            // anime_section_scroll_right.addEventListener('mouseout', hideButtons)
         })
     }
 
@@ -572,7 +666,7 @@ module.exports = class Frontend {
     triggerFeaturedAnime(event) {
         if(!(event.target.tagName == 'button')) {
             var entry = event.target.closest('button')
-            if(entry && event.target.innerHTML == 'See More') {
+            if(entry) {
                 this.displayAnimePage(entry.id.slice(22))
             }
         } else {
@@ -643,7 +737,8 @@ module.exports = class Frontend {
         anime_episodes_div.classList.add('anime-episodes')
         featured_anime_button.id = 'featured-anime-button-'
         featured_anime_button.id += id
-        featured_anime_button.innerHTML = 'Go to the page'
+        featured_anime_button.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-eye"></i>'
+        featured_anime_button.innerHTML += 'See More'
         featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
         // anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
@@ -1164,6 +1259,6 @@ module.exports = class Frontend {
      * @returns parsed string
      */
     capitalizeFirstLetter(string) {
-        return string.toLowerCase().charAt(0).toUpperCase() + string.slice(1);
+        return string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1);
     }
 }

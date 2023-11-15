@@ -331,9 +331,6 @@ aside h1 {
         padding-left: 0;
         gap: 10px;
     }
-    
-    aside ul.upper {
-    }
 
     aside ul.lower {
         position: absolute;
@@ -348,21 +345,34 @@ aside h1 {
             cursor: pointer;
             font-weight: var(--font-weight);
             display: flex;
-            transition: 0.1s ease;
+            transition: var(--transition);
         }
 
-        /* aside ul li::after {
-            content: '';
+        /* aside ul li.bubble::after {
+            content: 'Discover';
             position: absolute;
-            right: 0;
-            width: 4px;
-            height: 25px;
-            border-radius: var(--border-radius);
-            background-color: transparent;
+            left: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 10px;
+            transform: translateX(70px);
+            border-radius: 8px;
+            background-color: var(--color-2);
+            border: 1px solid var(--color-3);
+            transition: var(--transition);
         }
 
-        aside ul li.active::after {
-            background-color: var(--color-important);
+        aside ul li.bubble.active::after {
+            color: var(--font-3);
+        }
+
+        aside ul li.bubble.active:hover::after {
+            color: var(--font-2);
+        }
+
+        aside ul li.bubble:hover::after {
+            display: flex;
         } */
 
         aside ul li.active {
@@ -733,8 +743,8 @@ main button.circle-button-0 {
     z-index: 7;
 }
 
-main button.circle-button-0.show-buttons {
-    display: block;
+main button.circle-button-0.hide {
+    display: none;
 }
 
 main button.circle-button-0.left {
@@ -1287,6 +1297,10 @@ main section .anime-list-wrapper {
     overflow: hidden;
     scroll-snap-type: x mandatory; /* disable if drag n scroll is enabled */
     scroll-behavior: smooth; /* disable if drag n scroll is enabled */
+
+    /* othewise entries would be cut */
+    /* transform: translateX(-25px);
+    padding-left: 25px; */
 }
 
     main section .anime-list {
@@ -1295,7 +1309,7 @@ main section .anime-list-wrapper {
         /* gap: 10px; */
         display: flex;
         flex-direction: row;
-        padding-bottom: 10px; /* othewise titles will be cut */
+        padding-bottom: 10px; /* othewise titles would be cut */
     }
     
         main section .anime-list .anime-entry {

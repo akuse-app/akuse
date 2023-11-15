@@ -6,7 +6,7 @@ button.main-button-0 {
     color: var(--color-1);
     background-color: var(--color-important);
     width: max-content;
-    padding: 15px 25px;
+    padding: 12px 30px;
     margin-top: 10px;
     border-radius: var(--border-radius);
     border: none;
@@ -45,12 +45,29 @@ button.circle-button-0 i {
 }
 
 button.circle-button-0:hover {
-    background-color: var(--font-1);
     color: var(--color-1);
+    background-color: var(--font-1);
 }
 
 button.circle-button-0:active {
     filter: brightness(0.80);
+}
+
+button.circle-button-0.disabled {
+    cursor: auto;
+}
+
+button.circle-button-0.disabled i {
+    color: var(--color-1);
+}
+
+button.circle-button-0.disabled:hover {
+    color: var(--color-1);
+    background-color: var(--color-0);
+}
+
+button.circle-button-0.disabled:active {
+    filter: brightness(1);
 }
 
 /* PROGRESS BAR */
