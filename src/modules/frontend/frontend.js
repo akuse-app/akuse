@@ -8,7 +8,6 @@ const clientData = require ('../clientData.js')
 const { watch } = require('original-fs')
 const { parse } = require('dotenv')
 
-
 /**
  * Methods to manipulate the DOM with fetched data
  * 
@@ -150,9 +149,9 @@ module.exports = class Frontend {
 
         Object.keys(anime_sections).forEach(section => {
             let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
-            let anime_section_list = anime_section_wrapper.querySelector('.anime-list')
-            let anime_section_scroll_left = Object.values(anime_sections)[section].querySelector('.anime-list-scroller.left')
-            let anime_section_scroll_right = Object.values(anime_sections)[section].querySelector('.anime-list-scroller.right')
+            console.log(Object.values(anime_sections)[section])
+            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
+            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
             
             // update scroll value
             anime_section_scroll_left.addEventListener('click', () => {
@@ -178,11 +177,13 @@ module.exports = class Frontend {
                 anime_section_scroll_right.classList.add('hide-opacity')
             }
 
-            anime_section_wrapper.addEventListener('mouseover', showButtons)
+            // anime_section_wrapper.addEventListener('mouseover', showButtons)
+            Object.values(anime_sections)[section].addEventListener('mouseover', showButtons)
             anime_section_scroll_left.addEventListener('mouseover', showButtons)
             anime_section_scroll_right.addEventListener('mouseover', showButtons)
             
-            anime_section_wrapper.addEventListener('mouseout', hideButtons)
+            // anime_section_wrapper.addEventListener('mouseout', hideButtons)
+            Object.values(anime_sections)[section].addEventListener('mouseout', hideButtons)
             anime_section_scroll_left.addEventListener('mouseout', hideButtons)
             anime_section_scroll_right.addEventListener('mouseout', hideButtons)
         })

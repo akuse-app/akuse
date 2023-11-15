@@ -68,8 +68,6 @@ ipcRenderer.on('load-index', async (event) => {
     const entriesFeatured = await anilist.getTrendingAnimes()
     frontend.displayFeaturedAnime(entriesFeatured)
 
-    console.log(entriesFeatured)
-
     const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     if(entriesCurrent !== undefined)
         frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)

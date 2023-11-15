@@ -138,11 +138,11 @@ featured_right_button.addEventListener('mouseout', hideFeaturedScrollButtons)
 
 // scroll
 featured_left_button.addEventListener('click', () => {
-    featured_scroller_div.scrollLeft -= 1800
+    featured_scroller_div.scrollLeft -= 1000
 })
 
 featured_right_button.addEventListener('click', () => {
-    featured_scroller_div.scrollLeft += 1800
+    featured_scroller_div.scrollLeft += 1000
 })
 
 /* --- MODAL PAGES --- */

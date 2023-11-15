@@ -713,6 +713,7 @@ main {
 }
 
 main .featured-scroller {
+    position: relative;
     display: block;
     height: 100%;
     width: 100%;
@@ -723,36 +724,21 @@ main .featured-scroller {
     scroll-behavior: smooth;
 }
 
-main button.featured-scrolling-buttons {
-    display: block; /* turning block */
-    color: var(--font-3);
-    opacity: 0;
-    font-size: 2.2rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
+main button.circle-button-0 {
     position: absolute;
-    top: 175px;
+    display: block;
+    top: 355px;
+    right: 25px;
+    opacity: 0;
     z-index: 7;
-    cursor: pointer;
-    transition: 0.3s ease-out;
 }
 
-main button.featured-scrolling-buttons.show-buttons {
+main button.circle-button-0.show-buttons {
     display: block;
 }
 
-main button.featured-scrolling-buttons.left {
-    left: 10px;
-}
-
-main button.featured-scrolling-buttons.right {
-    right: 10px;
-}
-
-main button.featured-scrolling-buttons:hover {
-    color: var(--font-1);
-    transform: scale(1.40);
+main button.circle-button-0.left {
+    right: 90px;
 }
 
 main .featured-scroller .featured-scroller-wrapper {
@@ -1276,47 +1262,25 @@ main section:not(:last-child) {
         margin-bottom: 15px;
     }
 
-    main section .anime-list-scroller {
+    main section button.circle-button-0 {
+        display: block;
         position: absolute;
-        top: 44%;
+        top: 0;
+        right: 0;
         opacity: 0;
-        display: flex; /* turning flex */
-        justify-content: center;
-        align-items: center;
-        width: 40px;
-        height: 40px;
-        background-color: var(--color-dark-opacity);
-        /* background-color: transparent; */
-        border-radius: 100px;
+        width: 30px;
+        height: 30px;
+        background-color: var(--color-0);
         z-index: 30;
-        cursor: pointer;
     }
 
-    main section .anime-list-scroller i {
-        font-size: 1.3rem;
+    main section button.circle-button-0 i {
+        font-size: 1rem;
     }
 
-        main section .anime-list-scroller:hover {
-            transform: scale(1.05);
-        }
-
-        main section .anime-list-scroller:active {
-            transform: scale(1);
-            filter: brightness(0.80);
-        }
-
-        main section .anime-list-scroller.left {
-            left: 40px
-        }
-        
-        main section .anime-list-scroller.right {
-            right: 30px
-        }
-
-        main section .anime-list-scroller i {
-            font-size: 1.6rem;
-            color: var(--font-1);
-        }
+    main section button.circle-button-0.left {
+        right: 40px;
+    }
     
 main section .anime-list-wrapper {
     position: relative;
@@ -1400,22 +1364,6 @@ main section .anime-list-wrapper {
             width: 100%;
             height: 100%;
             box-shadow: inset 0px -50px 18px -22px #00000093;
-        }
-        
-        .bar {
-            width: calc(100% - 20px);
-            height: 7px;
-            margin: 10px;
-            bottom: 0;
-            position: absolute;
-            background-color: var(--color-dark-opacity);
-            border-radius: var(--border-radius);
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background-color: var(--color-important);
-            border-radius: var(--border-radius);
         }
         
         main section .anime-list .anime-entry .anime-title {

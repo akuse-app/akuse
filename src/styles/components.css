@@ -22,3 +22,50 @@ button.main-button-0:hover {
 button.main-button-0:active {
     filter: brightness(0.60);
 }
+
+/* CIRCLE BUTTON */
+
+button.circle-button-0 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    color: var(--font-3);
+    border: none;
+    outline: none;
+    background-color: var(--color-1);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: 0.1s ease-out;
+}
+
+button.circle-button-0 i {
+    font-size: 1.3rem;
+}
+
+button.circle-button-0:hover {
+    background-color: var(--font-1);
+    color: var(--color-1);
+}
+
+button.circle-button-0:active {
+    filter: brightness(0.80);
+}
+
+/* PROGRESS BAR */
+.bar {
+    width: calc(100% - 20px);
+    height: 5px;
+    margin: 10px;
+    bottom: 0;
+    position: absolute;
+    background-color: var(--color-dark-opacity);
+    border-radius: var(--border-radius);
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--color-important);
+    border-radius: var(--border-radius);
+}

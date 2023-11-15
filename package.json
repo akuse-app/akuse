@@ -4,11 +4,8 @@
   "description": "Anime streaming client for PC",
   "main": "src/main.js",
   "scripts": {
-    "prova": "electron .",
-    "start": "electron-forge start",
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win",
@@ -91,12 +88,12 @@
   },
   "homepage": "https://github.com/aleganza/akuse#readme",
   "devDependencies": {
+    "dotenv": "^16.3.1",
     "electron": "^25.9.4",
     "electron-builder": "^24.6.4"
   },
   "dependencies": {
     "@consumet/extensions": "^1.5.2",
-    "@electron-forge/plugin-auto-unpack-natives": "^6.4.2",
     "axios": "^1.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
