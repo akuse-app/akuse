@@ -68,7 +68,7 @@ input:checked + .slider:before {
 .ring {
     --uib-size: 80px;
     --uib-speed: 2s;
-    --uib-color: var(--font-2);
+    --uib-color: var(--font-3);
     
     height: var(--uib-size);
     width: var(--uib-size);

@@ -9,12 +9,13 @@
     <link rel="stylesheet" href="../styles/animations.css">
     <link rel="stylesheet" href="../styles/videoPlayer.css">
     <link rel="stylesheet" href="../styles/elements.css">
+    <link rel="stylesheet" href="../styles/components.css">
     <script src="https://kit.fontawesome.com/223615c47d.js" crossorigin="anonymous"></script>
     <title>Akuse</title>
 </head>
 <body>
     <!-- LOADING PAGE -->
-    <div id="loading-page" style="opacity: 1; display: flex">
+    <div id="loading-page" style="opacity: 1; display: none">
         <div class="loading-page-container">
             <img src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt="">
             <div id="loading-page-bar">
@@ -67,28 +68,29 @@
     <div id="loading-bar"></div>
     <!-- NAVBAR + MAIN SEARCH BAR -->
     <aside id="nav-main">
-        <div class="big-logo">
-            <!-- <img src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt=""> -->
-        </div>
-        <h1>Menu</h1>
+        <!-- <div class="big-logo">
+            <img src="https://github.com/aleganza/Akuse/blob/main/assets/img/big-logo/big-logo.png?raw=true" alt="">
+        </div> -->
+        <!-- <h1>Menu</h1> -->
         <ul class="upper">
             <li id="nav-home" class="active">
                 <div class="i-wrapper">
-                    <i class="fa-solid fa-house"></i>
+                    <i class="fa-regular fa-compass"></i>
+                    <!-- <i class="fa-solid fa-house"></i> -->
                 </div>
                 <span>Home</span>
-            </li>
-            <li>
-                <div class="i-wrapper">    
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <span>Search</span>
             </li>
             <li id="nav-my-list">
                 <div class="i-wrapper">    
                     <i class="fa-regular fa-bookmark"></i>
                 </div>
                 <span>Library</span>
+            </li>
+            <li>
+                <div class="i-wrapper">    
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <span>Search</span>
             </li>
         </ul>
         <ul class="lower">
@@ -104,10 +106,13 @@
                 </div>
                 <span>Settings</span>
             </li>
+            <li id="user-dropdown-settings">
+                <div class="i-wrapper">
+                    <img id="user-icon" src="" alt="user-icon">
+                </div>
+                <span>User</span>
+            </li>
         </ul>
-        <div id="user-section" class="user">
-            <img id="user-icon" src="" alt="user-icon">
-        </div>
     </aside>
     <!-- SETTINGS MODAL PAGE -->
     <div id="settings-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
@@ -369,219 +374,222 @@
             </ul>
         </nav> -->
         <!-- MAIN -->
-        <main id="home-page" style="display: block">
-            <!-- FEATURED CONTENT -->
-            <button id="featured-scroll-left" class="featured-scrolling-buttons left"><i class="fa-solid fa-chevron-left"></i></button> <!-- style="display: none" -->
-            <button id="featured-scroll-right" class="featured-scrolling-buttons right"><i class="fa-solid fa-chevron-right"></i></button> <!-- style="display: none" -->
-            <div id="featured-scroller" class="featured-scroller">
-                <div class="featured-scroller-wrapper"></div>
-            </div>
-            <!-- HOME ANIME SECTIONS -->
-            <div class="section-container">
-                <section>
-                    <h1>Continue watching</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="current-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+        <div class="main-container">
+            <main id="home-page" style="display: block">
+                <!-- FEATURED CONTENT -->
+                <h1>Popular Now</h1>
+                <button id="featured-scroll-left" class="featured-scrolling-buttons left"><i class="fa-solid fa-chevron-left"></i></button> <!-- style="display: none" -->
+                <button id="featured-scroll-right" class="featured-scrolling-buttons right"><i class="fa-solid fa-chevron-right"></i></button> <!-- style="display: none" -->
+                <div id="featured-scroller" class="featured-scroller">
+                    <div class="featured-scroller-wrapper"></div>
+                </div>
+                <!-- HOME ANIME SECTIONS -->
+                <div class="section-container">
+                    <section>
+                        <h1>Continue Watching</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="current-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Trending now</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="trending-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Trending Now</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="trending-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Most popular</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="most-popular-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Most Popular</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="most-popular-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Adventure</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="adventure-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Adventure</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="adventure-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Comedy</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="comedy-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Comedy</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="comedy-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Fantasy</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="fantasy-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Fantasy</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="fantasy-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Horror</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="horror-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Horror</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="horror-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Music</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="music-home" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Music</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="music-home" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-            </div>
-        </main>
-        <main id="my-list-page" style="display: none">
-            <!-- MY LIST ANIME SECTIONS -->
-            <div class="section-container">
-                <h1 id="your-list-header">Your list</h1>
-                <section>
-                    <h1>Current</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="current-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                </div>
+            </main>
+            <main id="my-list-page" style="display: none">
+                <!-- MY LIST ANIME SECTIONS -->
+                <div class="section-container">
+                    <!-- <h1 id="your-list-header">Your list</h1>
+                    <section>
+                        <h1>Current</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="current-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Planning</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="planning-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section> -->
+                    <section>
+                        <h1>Planning</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="planning-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Completed</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="completed-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Completed</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="completed-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Dropped</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="dropped-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Dropped</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="dropped-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Paused</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="paused-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Paused</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="paused-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-                <section>
-                    <h1>Repeating</h1>
-                    <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
-                    <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="anime-list-wrapper">
-                        <div id="repeating-my-list" class="anime-list">
-                            <div id="anime-entry--1" class="anime-entry disabled show">
-                                <div class="anime-cover disabled">
-                                    No elements found
+                    </section>
+                    <section>
+                        <h1>Repeating</h1>
+                        <div class="anime-list-scroller left"><i class="fa-solid fa-angle-left"></i></div>
+                        <div class="anime-list-scroller right"><i class="fa-solid fa-chevron-right"></i></div>
+                        <div class="anime-list-wrapper">
+                            <div id="repeating-my-list" class="anime-list">
+                                <div id="anime-entry--1" class="anime-entry disabled show">
+                                    <div class="anime-cover disabled">
+                                        No elements found
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-            </div>
-        </main>
+                    </section>
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 <script>

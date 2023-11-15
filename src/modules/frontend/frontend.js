@@ -522,26 +522,41 @@ module.exports = class Frontend {
     createAnimeSectionEntry(animeEntry) {
         const animeId = animeEntry.id
         const animeName = this.getTitle(animeEntry)
+        const startYear = animeEntry.startDate.year
+        const episodes = this.getEpisodes(animeEntry)
         const cover = animeEntry.coverImage.large
     
         let anime_entry_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
         let anime_cover_img = document.createElement('img')
         let anime_title_div = document.createElement('div')
+        let anime_info_div = document.createElement('div')
+        let startYear_div = document.createElement('div')
+        let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
         
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
         anime_title_div.classList.add('anime-title')
+        anime_info_div.classList.add('anime-info')
+        startYear_div.classList.add('startYear')
+        episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
 
         anime_entry_div.id = ('anime-entry-' + animeId)
         anime_title_div.innerHTML = animeName
+        startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
+        startYear_div.innerHTML += startYear
+        episodes_div.innerHTML = episodes
+        episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-list-ul"></i>`
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
 
         anime_cover_div.appendChild(anime_cover_img)
         anime_entry_content.appendChild(anime_title_div)
+        anime_info_div.appendChild(startYear_div)
+        anime_info_div.appendChild(episodes_div)
+        anime_entry_content.appendChild(anime_info_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
@@ -592,14 +607,14 @@ module.exports = class Frontend {
      * @returns featured anime entry div | -1 if no banner is present
      */
     createAnimeFeaturedEntry(animeEntry) {
+        const banner = animeEntry.bannerImage
+        if(banner == null) return -1 // if there is no banner, do not display this anime
+
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
         const startYear = animeEntry.startDate.year
-        const banner = animeEntry.bannerImage
-        if(banner == null) return -1 // if there is no banner, do not display this anime
-
-        const description = animeEntry.description
+        const description = this.parseDescription(animeEntry.description)
 
         var featured_div = document.createElement('div')
         var featured_container_div = document.createElement('div')
@@ -631,17 +646,18 @@ module.exports = class Frontend {
         featured_anime_button.id = 'featured-anime-button-'
         featured_anime_button.id += id
         featured_anime_button.innerHTML = 'Go to the page'
+        featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
-        anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
-        anime_year_div.innerHTML += startYear
+        // anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
+        anime_year_div.innerHTML = startYear
         anime_episodes_div.innerHTML = episodes + " Episodes"
         anime_description_div.innerHTML = description
         featured_img.src = banner
         
         anime_info_div.appendChild(anime_year_div)
         anime_info_div.appendChild(anime_episodes_div)
-        content_div.appendChild(anime_title_div)
         content_div.appendChild(anime_info_div)
+        content_div.appendChild(anime_title_div)
         content_div.appendChild(anime_description_div)
         content_div.appendChild(featured_anime_button)
         featured_container_div.appendChild(content_div)
@@ -1150,5 +1166,15 @@ module.exports = class Frontend {
         : progress = animeEntry.mediaListEntry.progress
 
         return progress
+    }
+
+    /**
+     * Removes unwanted spaces/new lines from anime description
+     * 
+     * @param {*} description 
+     * @returns parsed description
+     */
+    parseDescription(description) {
+        return description.replace('<br>', '')
     }
 }

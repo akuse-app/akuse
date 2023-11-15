@@ -16,6 +16,7 @@ const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 let authWin
 let mainWin
 
+//Basic flags
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
 autoUpdater.autoRunAppAfterInstall = true
@@ -94,8 +95,31 @@ const createWindow = () => {
     })
 }
 
+ipcMain.on('iconify-document', () => {
+    mainWin.minimize()
+})
+
+ipcMain.on('maximize-document', () => {
+    mainWin.isMaximized() ? mainWin.unmaximize() : mainWin.maximize()
+})
+
+ipcMain.on('quit-document', () => {
+    mainWin.close()
+    store.delete('access_token')
+})
+
 ipcMain.on('load-issues-url', () => {
     require('electron').shell.openExternal(githubOpenNewIssueUrl)
+})
+
+// working partially :(
+ipcMain.on('exit-app', () => {
+    mainWin.webContents.session.clearStorageData().then((data) => {
+        mainWin.close()
+        store.delete('access_token')
+        // authWin.show()
+        // authWin.loadURL(authUrl)
+    })
 })
 
 app.whenReady().then(() => {

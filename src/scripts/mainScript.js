@@ -13,30 +13,10 @@ const store = new Store()
 const frontend = new Frontend()
 const loadingBar = new LoadingBar()
 
-// var iconifyButton = document.getElementById('document-iconify')
-// iconifyButton.addEventListener('click', () => {
-//     ipcRenderer.send('iconify-document')
-// })
-
-// var maximizeButton = document.getElementById('document-maximize')
-// maximizeButton.addEventListener('click', () => {
-//     ipcRenderer.send('maximize-document')
-// })
-
-// var quitButton = document.getElementById('document-quit')
-// quitButton.addEventListener('click', () => {
-//     ipcRenderer.send('quit-document')
-// })
-
 var bugReportButton = document.getElementById('user-dropdown-bug-report')
 bugReportButton.addEventListener('click', (event) => {
     ipcRenderer.send('load-issues-url')
 })
-
-/* var exitReportButton = document.getElementById('user-dropdown-exit')
-exitReportButton.addEventListener('click', (event) => {
-    ipcRenderer.send('exit-app')
-}) */
 
 ipcRenderer.on('auto-update', async (event) => {
     frontend.displayAutoUpdatePage()
@@ -79,59 +59,49 @@ ipcRenderer.on('message', async (event, msg) => {
  * 
  */
 ipcRenderer.on('load-index', async (event) => {
-    setTimeout(async () => {
-        const anilist = new AniListAPI(clientData) // defining it here because its constructor must be loaded here
+    const anilist = new AniListAPI(clientData) // defining it here because its constructor must be loaded here
+    const viewerId = await anilist.getViewerId()
+    
+    const viewerInfo = await anilist.getViewerInfo(viewerId)
+    frontend.displayViewerAvatar(viewerInfo)
+    
+    const entriesFeatured = await anilist.getTrendingAnimes()
+    frontend.displayFeaturedAnime(entriesFeatured)
 
-        const viewerId = await anilist.getViewerId()
-        // load first part
-        const viewerInfo = await anilist.getViewerInfo(viewerId)
-        const entriesFeatured = await anilist.getTrendingAnimes()
-        loadingBar.initPageBar()
-        const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
-        const entriesTrending = await anilist.getTrendingAnimes()
-        const entriesMostPopular = await anilist.getMostPopularAnimes()
-        const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
-        const entriesComedy = await anilist.getAnimesByGenre("Comedy")
-        const entriesFantasy = await anilist.getAnimesByGenre("Fantasy")
-        const entriesHorror = await anilist.getAnimesByGenre("Horror")
-        const entriesMusic = await anilist.getAnimesByGenre("Music")
-        
-        frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular-home')
-        frontend.displayGenreAnimeSection(entriesAdventure, 'adventure-home')
-        frontend.displayGenreAnimeSection(entriesComedy, 'comedy-home')
-        frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy-home')
-        frontend.displayGenreAnimeSection(entriesHorror, 'horror-home')
-        frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
-        frontend.displayViewerAvatar(viewerInfo)
-        frontend.displayFeaturedAnime(entriesFeatured)
-        if(entriesCurrent !== undefined)
-            frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
-        frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
-    
-        // when first part is loaded, remove loading page
-        loadingBar.fillPageBar()
-        setTimeout(() => {
-            frontend.removeLoadingPage()
-        }, 400)
-    
-        // load second part
-        const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
-        const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
-        const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
-        const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
-        const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
-    
-        if(entriesCurrent !== undefined)
-            frontend.displayUserAnimeSection(entriesCurrent, 'current-my-list', true)
-        if(entriesPlanning !== undefined)
-            frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
-        if(entriesCompleted !== undefined)
-            frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
-        if(entriesDropped !== undefined)
-            frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
-        if(entriesPaused !== undefined)
-            frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
-        if(entriesRepeating !== undefined)
-            frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
-    }, 1000)
+    console.log(entriesFeatured)
+
+    const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
+    if(entriesCurrent !== undefined)
+        frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
+
+    const entriesTrending = await anilist.getTrendingAnimes()
+    frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
+
+    const entriesMostPopular = await anilist.getMostPopularAnimes()
+    frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular-home')
+    const entriesAdventure = await anilist.getAnimesByGenre("Adventure")
+    frontend.displayGenreAnimeSection(entriesAdventure, 'adventure-home')
+    const entriesComedy = await anilist.getAnimesByGenre("Comedy")
+    frontend.displayGenreAnimeSection(entriesComedy, 'comedy-home')
+    const entriesFantasy = await anilist.getAnimesByGenre("Fantasy")
+    frontend.displayGenreAnimeSection(entriesFantasy, 'fantasy-home')
+    const entriesHorror = await anilist.getAnimesByGenre("Horror")
+    frontend.displayGenreAnimeSection(entriesHorror, 'horror-home')
+    const entriesMusic = await anilist.getAnimesByGenre("Music")
+    frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
+    const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
+    if(entriesPlanning !== undefined)
+        frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
+    const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
+    if(entriesCompleted !== undefined)
+        frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
+    const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
+    if(entriesDropped !== undefined)
+        frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
+    const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
+    if(entriesPaused !== undefined)
+        frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
+    const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
+    if(entriesRepeating !== undefined)
+        frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
 })

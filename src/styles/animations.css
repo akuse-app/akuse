@@ -191,7 +191,7 @@
 
 @keyframes userListWarnAnimationOn {
     0% {
-        border: 2px solid var(--font-2);
+        border: 2px solid var(--font-3);
     }
     100% {
         border: 2px solid var(--color-warning);
@@ -209,7 +209,7 @@
         border: 2px solid var(--color-warning);
     }
     100% {
-        border: 2px solid var(--font-2);
+        border: 2px solid var(--font-3);
     }
 }
 

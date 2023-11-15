@@ -1,23 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900;9..40,1000&display=swap');
 
 :root {
-    --color-0: #010000;
-    --color-1: #0D0D0D;
-    --color-2: #0F0F0F;
-    --color-3: #1A171D;
+    --color-0: #0c0b0b;
+    --color-1: #191717;
+    --color-2: #201e1e;
+    --color-3: #292626;
+    --color-4: #383434;
     --color-important: #ff6b6b;
     --color-dark-opacity: rgba(0, 0, 0, 0.8);
     --color-warning: rgb(255, 61, 61);
     --color-success: #45AD67;
     
     --font-1: #FBFBFB;
-    --font-2: #9899A3;
-    /* --font-1: #fffdff;
-    --font-2: rgb(179, 179, 179); */
-    --font-2-transparent: rgba(179, 179, 179, 0.507);
+    --font-2: rgb(210, 210, 210);
+    --font-3: rgb(142, 142, 142);
+    --font-3-transparent: rgba(168, 168, 168, 0.5);
     
     --font-weight: 600;
-    --border-radius: 15px;
+    --border-radius: 12px;
+    --border-radius-cover: 5px;
     --transition: 0.2s ease-out;
     --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
 }
@@ -40,8 +41,8 @@
     transition: var(--transition);
 }
 
-::-webkit-scrollbar-thumb:active {
-    background-color: var(--color-2);
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-4);
 }
 
 * {
@@ -58,7 +59,7 @@
 
 html,
 body {
-    background: var(--color-1);
+    background: var(--color-0);
     background-repeat: no-repeat;
     background-attachment: fixed;
     width: 100%;
@@ -216,12 +217,12 @@ img {
         }
 
         .auto-update-page .content h2 {
-            color: var(--font-2);
+            color: var(--font-3);
             text-align: center;
         }
 
         .auto-update-page .content h3#auto-update-megabytes {
-            color: var(--font-2);
+            color: var(--font-3);
             text-align: center;
         }
 
@@ -239,7 +240,7 @@ img {
             display: flex;
             overflow-x: hidden;
             overflow-y: auto;
-            color: var(--font-2);
+            color: var(--font-3);
             background-color: var(--color-0);
             border-radius: var(--border-radius);
         }
@@ -294,17 +295,18 @@ img {
 
 aside {
     position: fixed;
-    width: 210px;
-    height: 100%;
-    padding: 0 20px;
-    background-color: var(--color-2);
-    border-right: 1px solid var(--color-3);
+    width: max-content;
+    height: calc(100% - 55px);
+    padding: 10px;
+    background-color: var(--color-1);
+    margin: 15px;
+    border-radius: var(--border-radius);
     z-index: 15;
 }
 
 aside .big-logo {
     display: flex;
-    /* justify-content: center; */
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 80px;
@@ -312,7 +314,7 @@ aside .big-logo {
 }
 
     aside .big-logo img {
-        width: 150px;
+        width: 100%;
         /* max-width: 50%; */
     }
 
@@ -327,38 +329,48 @@ aside h1 {
         flex-direction: column;
         list-style-type: none;
         padding-left: 0;
-        gap: 5px;
+        gap: 10px;
     }
     
     aside ul.upper {
-        margin-top: 8px;
-        padding-bottom: 18px;
-        border-bottom: 2px solid var(--color-3);
     }
 
     aside ul.lower {
-        margin-top: auto;
         position: absolute;
-        bottom: 0;
+        bottom: 10px;
     }
 
         aside ul li {
             display: flex;
             align-items: center;
-            gap: 20px;
-            color: var(--font-2);
-            transition: 0.1s ease;
+            gap: 10px;
+            color: var(--font-3);
             cursor: pointer;
             font-weight: var(--font-weight);
             display: flex;
+            transition: 0.1s ease;
         }
+
+        /* aside ul li::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 4px;
+            height: 25px;
+            border-radius: var(--border-radius);
+            background-color: transparent;
+        }
+
+        aside ul li.active::after {
+            background-color: var(--color-important);
+        } */
 
         aside ul li.active {
             color: var(--color-important);
         }
 
         aside ul li:hover:not(li.active) {
-            color: var(--font-1);
+            color: var(--font-2);
         }
         
         aside ul li .i-wrapper {
@@ -367,6 +379,13 @@ aside h1 {
             align-items: center;
             width: 50px;
             height: 50px;
+            background-color: var(--color-0);
+            border-radius: var(--border-radius);
+        }
+
+        aside ul li .i-wrapper img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
         }
 
         aside ul li .i-wrapper i {
@@ -374,7 +393,8 @@ aside h1 {
         }
         
         aside ul li span {
-            font-size: 1.1rem;
+            display: none;
+            font-size: 1.2rem;
         }
 
 nav {
@@ -388,11 +408,11 @@ nav {
         gap: 40px;
         padding-top: 30px;
         list-style-type: none;
-        padding-left: 50px;
+        padding-left: 25px;
     }
 
         nav ul li {
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.4rem;
             font-weight: var(--font-weight);
         }
@@ -460,7 +480,7 @@ nav {
             
             .settings-page .content .left ul li {
                 list-style-type: none;
-                color: var(--font-2);
+                color: var(--font-3);
                 font-size: 1.1rem;
                 padding: 10px;
                 margin-bottom: 10px;
@@ -581,7 +601,7 @@ nav {
 
     .search-main-bar .input-container i {
             font-size: 1.3rem;
-            color: var(--font-2);
+            color: var(--font-3);
             font-weight: var(--font-weight);
         }
 
@@ -600,7 +620,7 @@ nav {
             }
 
             .search-main-bar .input-container input::placeholder {
-                color: var(--font-2);
+                color: var(--font-3);
             }
 
 .search-main-container .scroller {
@@ -661,13 +681,13 @@ nav {
 
                 .search-main-container .search-list .search-entry .content .infos h2 {
                     font-size: 0.8rem;
-                    color: var(--font-2);
+                    color: var(--font-3);
                     font-weight: var(--font-weight);
                 }
 
             .search-main-container .search-list .search-entry .content .description {
                 font-size: 0.8rem;
-                color: var(--font-2);
+                color: var(--font-3);
                 display: -webkit-box;
                 -webkit-line-clamp: 5;
                 -webkit-box-orient: vertical;
@@ -677,19 +697,26 @@ nav {
 
 /* MAIN SECTION */
 
+.main-container {
+    /* width: calc(100% - 50px);
+    height: calc(100% - 50px); */
+    margin: 15px 15px 15px 100px;
+    background-color: var(--color-1);
+    border-radius: var(--border-radius);
+    padding: 25px;
+}
+
 main {
-    width: calc(100% - 250px);
     color: var(--font-1);
     /* padding-top: 80px; */
     position: relative;
-    margin-left: 250px;
 }
 
 main .featured-scroller {
     display: block;
     height: 100%;
     width: 100%;
-    padding-bottom: 35px;
+    padding-bottom: 25px;
     overflow-x: hidden;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -698,14 +725,14 @@ main .featured-scroller {
 
 main button.featured-scrolling-buttons {
     display: block; /* turning block */
+    color: var(--font-3);
     opacity: 0;
-    color: var(--font-2);
     font-size: 2.2rem;
     border: none;
     outline: none;
     background-color: transparent;
     position: absolute;
-    top: 250px;
+    top: 175px;
     z-index: 7;
     cursor: pointer;
     transition: 0.3s ease-out;
@@ -724,51 +751,43 @@ main button.featured-scrolling-buttons.right {
 }
 
 main button.featured-scrolling-buttons:hover {
+    color: var(--font-1);
     transform: scale(1.40);
 }
 
 main .featured-scroller .featured-scroller-wrapper {
     display: flex;
     align-content: flex-start;
-    height: 100%;
+    height: 382px;
 }
 
 main .featured {
     position: relative;
     width: calc(100% - 100px);
-    /* width: 100%; */
-    padding: 0 50px;
     scroll-snap-align: center;
 }
 
 main .featured .featured-container {
-    display: flex;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
     position: absolute;
     top: 0;
     bottom: 0;
-    background: linear-gradient(0.25turn, var(--color-dark-opacity), transparent);
-}
-
-main .featured .featured-container .featured-left{
+    display: flex;
+    width: 100%;
     height: 100%;
-    margin-left: 50px;
-    width: 40%;
-    z-index: 3;
-    background-color: var(--color-dark-opacity);
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    z-index: 0;
+    background: linear-gradient(0.13turn, var(--color-0), transparent);
+    border-radius: var(--border-radius);
 }
 
     main .featured .featured-container .content {
-        width: 33%;
+        position: absolute;
+        bottom: 20px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 20px;
-        height: 100%;
-        padding-left: 50px;
+        gap: 10px;
+        max-width: 500px;
+        height: max-content;
+        padding-left: 25px;
         font-weight: var(--font-weight);
     }
     
@@ -778,8 +797,9 @@ main .featured .featured-container .featured-left{
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         overflow: hidden;
-        font-size: 3rem;
-        line-height: 55px;
+        font-size: 2.1rem;
+        font-weight: 800;
+        line-height: 35px;
     }
 
     main .featured .anime-info {
@@ -789,52 +809,19 @@ main .featured .featured-container .featured-left{
 
     main .featured .anime-info,
     main .featured .anime-genres {
-        color: var(--font-1);
+        font-size: 0.8rem;
+        color: var(--font-2);
     }
     
     main .featured .anime-description {
-        color: var(--font-2);
+        font-size: 0.8rem;
+        color: var(--font-3);
         display: -webkit-box;
-        -webkit-line-clamp: 4;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         text-overflow: ellipsis;
         overflow: hidden;
     }
-
-    main .featured button {
-        font-size: 1.1rem;
-        font-weight: var(--font-weight);
-        color: var(--color-1);
-        background-color: var(--font-1);
-        width: 180px;
-        height: 50px;
-        border-radius: var(--border-radius);
-        border: none;
-        outline: none;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    main .featured button:hover {
-        filter: brightness(0.80);
-    }
-
-    main .featured button:active {
-        filter: brightness(0.70);
-    }
-    
-main .featured .featured-container .featured-shadow {
-    width: 10%;
-    z-index: 4;
-    background: linear-gradient(0.25turn, var(--color-dark-opacity), transparent);
-}
-
-main .featured .featured-container .featured-right{
-    width: 50%;
-    margin-right: 50px;
-    z-index: 3;
-    background-color: transparent;
-}
 
 main .featured .featured-img {
     height: 382px;
@@ -895,7 +882,7 @@ main .featured .featured-img img {
 
     .anime-page .content .page-anime-left h4 {
         font-weight: var(--font-weight);
-        color: var(--font-2);
+        color: var(--font-3);
     }
 
     .anime-page .content .page-anime-left h3 {
@@ -974,16 +961,16 @@ main .featured .featured-img img {
         }
 
         .anime-page .content .page-anime-right .anime-title span{
-            color: var(--font-2);
+            color: var(--font-3);
         }
 
         .anime-page .content .page-anime-right .anime-description {
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.2rem;
         }
 
         .anime-page .content .page-anime-right .anime-infos {
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.2rem;
             display: flex;
             gap: 20px;
@@ -997,12 +984,12 @@ main .featured .featured-img img {
         .anime-page .content .page-anime-right ul.anime-genres li {
             display: inline;
             background-color: var(--color-dark-opacity);
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.2rem;
             font-weight: var(--font-weight);
             margin-right: 8px;
             padding: 8px 15px;
-            border: 2px solid var(--font-2);
+            border: 2px solid var(--font-3);
             border-radius: var(--border-radius);
             /* box-shadow: var(--shadow); */
         }
@@ -1189,9 +1176,9 @@ main .featured .featured-img img {
             display: flex;
             gap: 20px;
             align-items: center;
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.2rem;
-            border: 2px solid var(--font-2);
+            border: 2px solid var(--font-3);
             border-radius: var(--border-radius);
         }
 
@@ -1238,7 +1225,7 @@ main .featured .featured-img img {
         .list-editor-page .content .input-container select,
         .list-editor-page .content .input-container input {
             width: 100%;
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.2rem;
             outline: none;
             border: none;
@@ -1276,15 +1263,17 @@ main .featured .featured-img img {
 
 main section {
     position: relative;
-    /* margin-top: 40px; */
 }
 
-    main section h1 {
-        color: var(--font-1);
+main section:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+    main h1 {
+        color: var(--font-3);
         font-weight: 800;
         font-size: 1.5rem;
         margin-bottom: 15px;
-        padding-left: 50px;
     }
 
     main section .anime-list-scroller {
@@ -1294,13 +1283,17 @@ main section {
         display: flex; /* turning flex */
         justify-content: center;
         align-items: center;
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         background-color: var(--color-dark-opacity);
         /* background-color: transparent; */
         border-radius: 100px;
         z-index: 30;
         cursor: pointer;
+    }
+
+    main section .anime-list-scroller i {
+        font-size: 1.3rem;
     }
 
         main section .anime-list-scroller:hover {
@@ -1327,12 +1320,9 @@ main section {
     
 main section .anime-list-wrapper {
     position: relative;
-    width: calc(100% - 100px);
     overflow: hidden;
     scroll-snap-type: x mandatory; /* disable if drag n scroll is enabled */
     scroll-behavior: smooth; /* disable if drag n scroll is enabled */
-    margin-bottom: 20px;
-    padding: 0 50px;
 }
 
     main section .anime-list {
@@ -1348,7 +1338,6 @@ main section .anime-list-wrapper {
             width: 150px;
             height: min-content;
             position: relative;
-            border-radius: var(--border-radius);
             padding-top: 10px; /* must be in anime-entry or hover scaling won't work */
             z-index: 2;
             cursor: pointer;
@@ -1356,7 +1345,7 @@ main section .anime-list-wrapper {
         }
         
         main section .anime-list .anime-entry:not(:last-child) {
-            padding-right: 20px;
+            padding-right: 25px;
         }
         
         main section .anime-list .anime-entry:hover:not(.disabled) {
@@ -1364,11 +1353,13 @@ main section .anime-list-wrapper {
         }
         
         main section .anime-list .anime-entry .content {
-            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
             width: 100%;
             height: 50%;
             bottom: 0;
-            margin-bottom: 2px;
+            margin-top: 10px;
             border-radius: 0 0 var(--border-radius) var(--border-radius);
             z-index: 3;
         }
@@ -1383,6 +1374,9 @@ main section .anime-list-wrapper {
         main section .anime-list .anime-entry .anime-cover img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
+            border-radius: var(--border-radius-cover);
+            /* box-shadow: var(--shadow); */
         }
         
         main section .anime-list .anime-entry.disabled {
@@ -1397,12 +1391,6 @@ main section .anime-list-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        
-        main section .anime-list .anime-entry .anime-cover img {
-            object-fit: cover;
-            border-radius: var(--border-radius);
-            /* box-shadow: var(--shadow); */
         }
 
         main section .anime-list .anime-entry .anime-cover .anime-cover-shadow {
@@ -1431,28 +1419,44 @@ main section .anime-list-wrapper {
         }
         
         main section .anime-list .anime-entry .anime-title {
+            font-size: 0.9rem;
             color: var(--font-1);
-            font-weight: var(--font-weight);
+            font-weight: 800;
+            min-height: 36px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             text-overflow: ellipsis;
             overflow: hidden;
             /* white-space: nowrap; */
-            font-size: 1rem;
+        }
+        
+        main section .anime-list .anime-entry .anime-info {
+            display: flex;
+            font-size: 0.9rem;
+            color: var(--font-3);
+            font-weight: var(--font-weight);
+        }
+
+        main section .anime-list .anime-entry .anime-info .startYear {
+            width: 50%;
+        }
+        
+        main section .anime-list .anime-entry .anime-info .episodes {
+            width: 50%;
+            text-align: end;
         }
 
         main section .anime-list .anime-entry .anime-progress {
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1rem;
             font-weight: var(--font-weight);
         }
         
 main#my-list-page h1#your-list-header {
     font-size: 3rem;
-    padding-left: 50px;
 }
 
-main#my-list-page .section-container {
+/* main#my-list-page .section-container {
     margin-top: 50px;
-}
+} */

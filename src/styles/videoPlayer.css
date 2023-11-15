@@ -301,11 +301,11 @@
 }
 
 /* .bottom-controls .bottom .previous {
-    border-right: 1px solid var(--font-2);
+    border-right: 1px solid var(--font-3);
 }
 
 .bottom-controls .bottom .next {
-    border-left: 1px solid var(--font-2);
+    border-left: 1px solid var(--font-3);
 }
  */
 .bottom-controls .bottom button {

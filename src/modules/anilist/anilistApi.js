@@ -197,6 +197,11 @@ module.exports = class AniListAPI extends Requests {
                                     airingAt
                                     episode
                                 }
+                                startDate {
+                                    year
+                                    month
+                                    day
+                                }
                             }
                         }
                     }
@@ -413,6 +418,11 @@ module.exports = class AniListAPI extends Requests {
                     coverImage {
                         large
                         color
+                    }
+                    startDate {
+                        year
+                        month
+                        day
                     }
                 }
             } 
