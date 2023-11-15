@@ -86,3 +86,33 @@ button.circle-button-0.disabled:active {
     background-color: var(--color-important);
     border-radius: var(--border-radius);
 }
+
+
+
+
+
+
+
+
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.8s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    background-color: var(--color-2);
+    color: var(--font-2);
+    font-size: 1.2rem;
+    position: absolute;
+    left: 67px;
+    padding: 4px 8px;
+    opacity: 0;
+    border: 2px solid var(--color-3);
+    border-radius: 8px;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}

@@ -737,7 +737,7 @@ module.exports = class Frontend {
         anime_episodes_div.classList.add('anime-episodes')
         featured_anime_button.id = 'featured-anime-button-'
         featured_anime_button.id += id
-        featured_anime_button.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-eye"></i>'
+        featured_anime_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-eye"></i>'
         featured_anime_button.innerHTML += 'See More'
         featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
