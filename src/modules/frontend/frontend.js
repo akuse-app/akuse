@@ -122,7 +122,7 @@ module.exports = class Frontend {
                 scrollLeft = Object.values(sliders)[slider].scrollLeft
             }
             
-            let stopDragging = function (event) {
+            let stopDragging = function () {
                 mouseDown = false
             }
         
@@ -149,7 +149,6 @@ module.exports = class Frontend {
 
         Object.keys(anime_sections).forEach(section => {
             let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
-            console.log(Object.values(anime_sections)[section])
             let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
             let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
             
@@ -614,16 +613,14 @@ module.exports = class Frontend {
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
-        const startYear = animeEntry.startDate.year
+        const season = this.capitalizeFirstLetter(animeEntry.season)
+        const seasonYear = animeEntry.seasonYear
         const description = this.parseDescription(animeEntry.description)
 
         var featured_div = document.createElement('div')
         var featured_container_div = document.createElement('div')
         var featured_img_div = document.createElement('div')
         var featured_img = document.createElement('img')
-        var featured_left_div = document.createElement('div')
-        var featured_shadow_div = document.createElement('div')
-        var featured_right_div = document.createElement('div')
         var content_div = document.createElement('div')
         var anime_title_div = document.createElement('div')
         var anime_info_div = document.createElement('div')
@@ -650,7 +647,7 @@ module.exports = class Frontend {
         featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
         // anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
-        anime_year_div.innerHTML = startYear
+        anime_year_div.innerHTML = season + ' ' + seasonYear
         anime_episodes_div.innerHTML = episodes + " Episodes"
         anime_description_div.innerHTML = description
         featured_img.src = banner
@@ -1177,5 +1174,15 @@ module.exports = class Frontend {
      */
     parseDescription(description) {
         return description.replace('<br>', '')
+    }
+
+    /**
+     * Capitalizes the first letter of a string
+     * 
+     * @param {*} string 
+     * @returns parsed string
+     */
+    capitalizeFirstLetter(string) {
+        return string.toLowerCase().charAt(0).toUpperCase() + string.slice(1);
     }
 }

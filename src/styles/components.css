@@ -37,7 +37,7 @@ button.circle-button-0 {
     background-color: var(--color-1);
     border-radius: 100px;
     cursor: pointer;
-    transition: 0.1s ease-out;
+    transition: var(--transition);
 }
 
 button.circle-button-0 i {
