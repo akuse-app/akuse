@@ -5,7 +5,6 @@
 
 <p align="center">Simple and easy to use anime streaming desktop app without ads.</p>
 
-
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/akuse-app/akuse">
@@ -21,6 +20,10 @@
     </a>
 </p>
 
+## Upcoming design (new)
+<img title="img" alt="img" src="https://i.imgur.com/0HAvUCA.png">
+
+## Current design (old)
 <img title="img" alt="img" src="https://i.imgur.com/2qxWL2Z.png">
 
 ## Running locally for development
