@@ -696,7 +696,7 @@ module.exports = class Frontend {
         const animeId = animeEntry.id
         const animeName = this.getTitle(animeEntry)
         const startYear = animeEntry.startDate.year
-        const episodes = this.getEpisodes(animeEntry)
+        const episodes = this.getAvailableEpisodes(animeEntry)
         const cover = animeEntry.coverImage.large
     
         let anime_entry_div = document.createElement('div')
