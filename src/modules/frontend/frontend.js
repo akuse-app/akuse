@@ -230,10 +230,13 @@ module.exports = class Frontend {
             let anime_section_list = Object.values(anime_sections)[section].querySelector('.anime-list')
             let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
             let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
-            let wrapperWidth = anime_section_wrapper.offsetWidth
-            let listWidth = anime_section_list.offsetWidth
+            let wrapperWidth = anime_section_wrapper.clientWidth
+            let listWidth = anime_section_list.scrollWidth
 
-            if(listWidth > wrapperWidth) {
+            if(wrapperWidth > listWidth) {
+                console.log(anime_section_list.id)
+                console.log(listWidth)
+                console.log(wrapperWidth + '\n')
                 anime_section_scroll_left.classList.add('hide')
                 anime_section_scroll_right.classList.add('hide')
             }
@@ -707,6 +710,7 @@ module.exports = class Frontend {
         let startYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
+        let overlay_div = document.createElement('div')
         
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
@@ -715,6 +719,7 @@ module.exports = class Frontend {
         startYear_div.classList.add('startYear')
         episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
+        overlay_div.classList.add('overlay')
 
         anime_entry_div.id = ('anime-entry-' + animeId)
         anime_title_div.innerHTML = animeName
@@ -730,6 +735,7 @@ module.exports = class Frontend {
         anime_info_div.appendChild(startYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
+        anime_entry_div.appendChild(overlay_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
@@ -817,8 +823,7 @@ module.exports = class Frontend {
         anime_episodes_div.classList.add('anime-episodes')
         featured_anime_button.id = 'featured-anime-button-'
         featured_anime_button.id += id
-        featured_anime_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-eye"></i>'
-        featured_anime_button.innerHTML += 'See More'
+        featured_anime_button.innerHTML = 'See More'
         featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
         // anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'

@@ -1304,6 +1304,7 @@ main section .anime-list-wrapper {
 }
 
     main section .anime-list {
+        position: relative;
         float: left;
         width: max-content;
         /* gap: 10px; */
@@ -1311,24 +1312,41 @@ main section .anime-list-wrapper {
         flex-direction: row;
         padding-bottom: 10px; /* othewise titles would be cut */
     }
+
+        main section .anime-list .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: -100px;
+            width: 260px;
+            height: 300px;
+            z-index: 3;
+            background-color: var(--color-2);
+            border: 2px solid var(--color-3);
+            border-radius: var(--border-radius);
+        }
     
         main section .anime-list .anime-entry {
             width: 150px;
             height: min-content;
-            position: relative;
             padding-top: 10px; /* must be in anime-entry or hover scaling won't work */
             z-index: 2;
             cursor: pointer;
             transition: 0.2s ease-out;
+        }
+
+
+        main section .anime-list .anime-entry:hover .overlay {
+            display: block;
         }
         
         main section .anime-list .anime-entry:not(:last-child) {
             padding-right: 25px;
         }
         
-        main section .anime-list .anime-entry:hover:not(.disabled) {
+        /* main section .anime-list .anime-entry:hover:not(.disabled) {
             transform: scale(1.05);
-        }
+        } */
         
         main section .anime-list .anime-entry .content {
             display: flex;

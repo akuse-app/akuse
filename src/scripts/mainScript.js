@@ -102,4 +102,8 @@ ipcRenderer.on('load-index', async (event) => {
     const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
     if(entriesRepeating !== undefined)
         frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
+
+    setTimeout(() => {
+        frontend.doDisplayAnimeSectionsScrollingButtons()
+    }, 1000)
 })
