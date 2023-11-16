@@ -114,15 +114,19 @@ button.circle-button-0.disabled:active {
 
 /* SKELETON LOADER */
 
+.loading .anime-title, 
+.loading .anime-description,
+.loading button,
 .loading .anime-cover, 
-.loading .anime-title,
 .loading .anime-info {
     background-color: var(--color-2);
     border-radius: var(--border-radius);
 }
 
-.loading .anime-cover, 
 .loading .anime-title,
+.loading .anime-description,
+.loading button,
+.loading .anime-cover, 
 .loading .anime-info {
   background: linear-gradient(
     90deg,
@@ -141,6 +145,27 @@ button.circle-button-0.disabled:active {
   }
 }
 
+.loading .anime-cover, 
 .loading .anime-info {
   min-height: 1.6rem;
+}
+
+.loading .content .anime-info {
+    min-width: 2rem;
+    min-height: 1rem;
+}
+
+.loading .anime-title {
+    min-width: 14rem;
+    min-height: 1rem;
+}
+
+.loading .anime-description {
+    min-width: 20rem;
+    min-height: 1rem;
+}
+
+.loading button {
+    min-width: 1rem;
+    min-height: 1rem;
 }

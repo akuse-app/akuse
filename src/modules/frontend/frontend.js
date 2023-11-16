@@ -70,8 +70,13 @@ module.exports = class Frontend {
 
     enableSkeletonLoader() {
         let anime_sections = document.querySelectorAll('section')
+        let featured_scroller = document.querySelector('#featured-scroller .featured-scroller-wrapper')
         const nLoaders = 10
 
+        // featured section
+        featured_scroller.appendChild(this.createFeaturedEntrySkeletonLoader())
+
+        // anime sections
         Object.keys(anime_sections).forEach(section => {
             let destination_div = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper .anime-list')
 
@@ -101,6 +106,45 @@ module.exports = class Frontend {
         anime_entry_div.appendChild(content_div)
 
         return anime_entry_div
+    }
+
+    createFeaturedEntrySkeletonLoader() {
+        var featured_div = document.createElement('div')
+        var featured_container_div = document.createElement('div')
+        var content_div = document.createElement('div')
+        var anime_title_div = document.createElement('div')
+        var anime_info_div = document.createElement('div')
+        var anime_description_div = document.createElement('div')
+        var featured_anime_button = document.createElement('button')
+        var anime_year_div = document.createElement('div')
+        var anime_episodes_div = document.createElement('div')
+        
+        featured_div.classList.add('featured')
+        featured_div.classList.add('loading')
+        featured_container_div.classList.add('featured-container')
+        // featured_left_div.classList.add('featured-left')
+        // featured_shadow_div.classList.add('featured-shadow')
+        // featured_right_div.classList.add('featured-right')
+        content_div.classList.add('content')
+        content_div.classList.add('show')
+        anime_title_div.classList.add('anime-title')
+        anime_info_div.classList.add('anime-info')
+        anime_description_div.classList.add('anime-description')
+        anime_year_div.classList.add('anime-year')
+        anime_episodes_div.classList.add('anime-episodes')
+        featured_anime_button.id = 'featured-anime-button--1'
+        featured_anime_button.classList.add('main-button-0')
+        
+        anime_info_div.appendChild(anime_year_div)
+        anime_info_div.appendChild(anime_episodes_div)
+        content_div.appendChild(anime_info_div)
+        content_div.appendChild(anime_title_div)
+        content_div.appendChild(anime_description_div)
+        content_div.appendChild(featured_anime_button)
+        featured_container_div.appendChild(content_div)
+        featured_div.appendChild(featured_container_div)
+        
+        return featured_div
     }
 
     /**
@@ -718,6 +762,7 @@ module.exports = class Frontend {
         var featured_scroller_wrapper_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
         var width = 0
 
+        featured_scroller_wrapper_div.innerHTML = ''
         entries.media.forEach(key => {
             var featured_div = this.createAnimeFeaturedEntry(key)
             if(featured_div != -1) {
