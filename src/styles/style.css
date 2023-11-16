@@ -1314,7 +1314,7 @@ main section .anime-list-wrapper {
     }
 
         main section .anime-list .overlay {
-            display: none;
+            /* display: none; */
             position: absolute;
             top: 0;
             left: -100px;
