@@ -15,6 +15,10 @@ document.getElementById('auto-update-later').addEventListener('click', () => {
     frontend.closeAutoUpdatePage()
 })
 
+/* --- SKELETON LOADER --- */
+
+frontend.enableSkeletonLoader()
+
 /* --- MAIN PAGES --- */
 
 // toggler

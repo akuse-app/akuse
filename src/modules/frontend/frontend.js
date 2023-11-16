@@ -68,6 +68,41 @@ module.exports = class Frontend {
         }
     }
 
+    enableSkeletonLoader() {
+        let anime_sections = document.querySelectorAll('section')
+        const nLoaders = 10
+
+        Object.keys(anime_sections).forEach(section => {
+            let destination_div = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper .anime-list')
+
+            for(let i=0; i<nLoaders; i++) {
+                let anime_entry_div = this.createAnimeEntrySkeletonLoader()
+                destination_div.appendChild(anime_entry_div)
+            }
+        })
+    }
+
+    createAnimeEntrySkeletonLoader() {
+        let anime_entry_div = document.createElement('div')
+        let anime_cover_div = document.createElement('div')
+        let content_div = document.createElement('div')
+        let anime_info_div = document.createElement('div')
+
+        anime_entry_div.id = 'anime-entry--1'
+        anime_entry_div.classList.add('anime-entry')
+        anime_entry_div.classList.add('loading')
+        anime_entry_div.classList.add('show')
+        anime_cover_div.classList.add('anime-cover')
+        content_div.classList.add('content')
+        anime_info_div.classList.add('anime-info')
+
+        content_div.appendChild(anime_info_div)
+        anime_entry_div.appendChild(anime_cover_div)
+        anime_entry_div.appendChild(content_div)
+
+        return anime_entry_div
+    }
+
     /**
      * Shows the modal page
      * 

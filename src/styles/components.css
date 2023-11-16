@@ -87,12 +87,7 @@ button.circle-button-0.disabled:active {
     border-radius: var(--border-radius);
 }
 
-
-
-
-
-
-
+/* BUBBLE */
 
 [data-title]:hover:after {
     opacity: 1;
@@ -115,4 +110,37 @@ button.circle-button-0.disabled:active {
 }
 [data-title] {
     position: relative;
+}
+
+/* SKELETON LOADER */
+
+.loading .anime-cover, 
+.loading .anime-title,
+.loading .anime-info {
+    background-color: var(--color-2);
+    border-radius: var(--border-radius);
+}
+
+.loading .anime-cover, 
+.loading .anime-title,
+.loading .anime-info {
+  background: linear-gradient(
+    90deg,
+    var(--color-2) 10%,
+    var(--color-3) 50%,
+    var(--color-2) 80%
+  ) var(--color-2);
+  background-size: 200% 100%;
+  background-position-x: 180%;
+  animation: 0.7s loading ease-in infinite;
+}
+
+@keyframes loading {
+  to {
+    background-position-x: -20%;
+  }
+}
+
+.loading .anime-info {
+  min-height: 1.6rem;
 }
