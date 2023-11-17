@@ -59,6 +59,10 @@ ipcRenderer.on('message', async (event, msg) => {
  * 
  */
 ipcRenderer.on('load-index', async (event) => {
+    // rendering stuff
+    frontend.createSectionOverlays()
+
+    // filling with anilist data
     const anilist = new AniListAPI(clientData) // defining it here because its constructor must be loaded here
     const viewerId = await anilist.getViewerId()
     

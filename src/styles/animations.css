@@ -119,6 +119,22 @@
     }
 }
 
+.show-overlay-delay {
+    animation: showOverlayDelayAnimation var(--half-animation-transition);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-delay: 1s;
+}
+
+@keyframes showOverlayDelayAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .show-page {
     animation: showPageAnimation var(--animation-transition);
     animation-iteration-count: 1;

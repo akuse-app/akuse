@@ -596,7 +596,8 @@ module.exports = class Frontend {
     /**
      * Trigger to display the anime modal page opened from the main search section
      * 
-     * @param {*} event 
+     * @param {*} event
+     * @deprecated
      */
     triggerMainSearchAnime(event) {
         if(!(event.target.classList.contains('search-entry'))) {
@@ -720,7 +721,6 @@ module.exports = class Frontend {
         let startYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
-        // let overlay_div = document.createElement('div')
         
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
@@ -729,7 +729,6 @@ module.exports = class Frontend {
         startYear_div.classList.add('startYear')
         episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
-        // overlay_div.classList.add('overlay')
 
         anime_entry_div.id = ('anime-entry-' + animeId)
         anime_title_div.innerHTML = animeName
@@ -745,7 +744,6 @@ module.exports = class Frontend {
         anime_info_div.appendChild(startYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
-        // anime_entry_div.appendChild(overlay_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
@@ -766,24 +764,81 @@ module.exports = class Frontend {
             let entry_div = Object.values(anime_entries)[entry]
             let overlay_div = section_div.querySelector('.overlay')
 
-            let showOverlay = i => {
-                overlay_div.style.left = `${175 * i - 60}px`
-                overlay_div.classList.add('show-overlay')
-            }
+            var timer
 
-            // let hideOverlay = () => {
-            //     overlay_div.style.display = 'none'
-            // }
+            let isOverlayHidden = () => overlay_div.classList.contains('show-overlay-delay')
+                                        ? false
+                                        : true
+            
+            let showOverlay = i => {
+                timer = setTimeout(() => {
+                    overlay_div.style.left = `${175 * i - 60}px`
+                    console.log('show')
+                    this.displayOverlayEntry(overlay_div, this.getIdFromAnimeEntry(entry_div))
+                    overlay_div.classList.add('show-overlay')
+                    overlay_div.classList.add('show-overlay-delay')
+                }, 1000)
+            }
+            
+            let hideOverlay = () => {
+                clearTimeout(timer)
+                console.log('hide')
+
+                overlay_div.classList.remove('show-overlay')
+                overlay_div.classList.remove('show-overlay-delay')
+            }
 
             entry_div.addEventListener('mouseenter', () => showOverlay(entry))
             
-            overlay_div.addEventListener('mouseout', () => {
-                console.log('fuori')
-                console.log(overlay_div.innerHTML)
-                overlay_div.classList.remove('show-overlay')
-            })
-            // overlay_div.addEventListener('mouseleave', () => hideOverlay())
+            overlay_div.addEventListener('mouseout', () => hideOverlay())
         })
+    }
+
+    /**
+     * Fills up all the overlays with their divs
+     */
+    createSectionOverlays() {
+        let overlays_div = document.querySelectorAll('section .overlay')
+
+        Object.keys(overlays_div).forEach(overlay => {
+            let overlay_div = Object.values(overlays_div)[overlay]
+            let img_wrapper_div = document.createElement('div')
+            let img_div = document.createElement('img')
+            let content_div = document.createElement('div')
+            let title_div = document.createElement('div')
+            let info_div = document.createElement('div')
+            let description_div = document.createElement('div')
+
+            img_wrapper_div.classList.add('img-wrapper')
+            content_div.classList.add('content')
+            title_div.classList.add('title')
+            info_div.classList.add('info')
+            description_div.classList.add('description')
+
+            img_wrapper_div.appendChild(img_div)
+            content_div.appendChild(title_div)
+            content_div.appendChild(info_div)
+            content_div.appendChild(description_div)
+            overlay_div.appendChild(img_wrapper_div)
+            overlay_div.appendChild(content_div)
+        })
+    }
+
+    async displayOverlayEntry(overlay, animeId) {
+        const animeEntry = await this.anilist.getOverlayInfo(animeId)
+
+        const banner = animeEntry.bannerImage
+        const title = this.getTitle(animeEntry)
+        const description = this.parseDescription(animeEntry.description)
+
+        let img_div = overlay.querySelector('.img-wrapper img')
+        let title_div = overlay.querySelector('.content .title')
+        let info_div = overlay.querySelector('.content .info')
+        let description_div = overlay.querySelector('.content .description')
+
+        img_div.src = banner
+        title_div.innerHTML = title
+        description_div.innerHTML = description
     }
 
     /**
@@ -914,10 +969,10 @@ module.exports = class Frontend {
         if(!(event.target.classList.contains('anime-entry'))) {
             var entry = event.target.closest('.anime-entry')
             if(entry) {
-                this.displayAnimePage(entry.id.slice(12))
+                this.displayAnimePage(this.getIdFromAnimeEntry(entry))
             }
         } else {
-            this.displayAnimePage(event.target.id.slice(12))
+            this.displayAnimePage(this.getIdFromAnimeEntry(event.target))
         }
     }
 
@@ -1253,12 +1308,28 @@ module.exports = class Frontend {
         if(!(event.target.classList.contains('episode'))) {
             var entry = event.target.closest('.episode')
             if(entry) {
-                this.video.displayVideo(entry.id.slice(8))
+                this.video.displayVideo(this.getIdFromAnimeEntry(entry))
             }
         } else {
-            this.video.displayVideo(event.target.id.slice(8))
+            this.video.displayVideo(this.getIdFromAnimeEntry(event.target))
         }
     }
+
+    /**
+     * Returns the anime entry id
+     * 
+     * @param {*} div 
+     * @returns 
+     */
+    getIdFromAnimeEntry = div => div.id.slice(12)
+    
+    /**
+     * Returns the featured anime id
+     * 
+     * @param {*} div 
+     * @returns 
+     */
+    getIdFromFeaturedAnime = div => div.id.slice(22)
 
     /**
      * Gets the anime title (english or romaji)

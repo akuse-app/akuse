@@ -286,6 +286,49 @@ module.exports = class AniListAPI extends Requests {
         return respData.data.Media
     }
 
+    async getOverlayInfo(animeId) {
+        var query = `
+            query($id: Int) {
+                Media(id: $id, type: ANIME) {
+                    id
+                    title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                    }
+                    format
+                    description
+                    season
+                    seasonYear
+                    episodes
+                    bannerImage
+                    isAdult
+                    nextAiringEpisode {
+                        id
+                        airingAt
+                        episode
+                    }
+                }
+            }
+        `
+
+        var headers = {
+            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        }
+
+        var variables = {
+            id: animeId
+        }
+
+        const options = this.getOptions(query, variables)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+
+        return respData.data.Media
+    }
+
     /**
      * Gets the current trending animes on anilist
      * 

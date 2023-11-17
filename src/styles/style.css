@@ -20,7 +20,7 @@
     --border-radius: 12px;
     --border-radius-cover: 5px;
     --transition: 0.2s ease-out;
-    --shadow: rgb(0, 0, 0) 0px 20px 30px -10px;
+    --shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 /* Scrollbar */
@@ -72,7 +72,7 @@ body {
 }
 
 img {
-    /* user-drag: none; */
+    font-style: italic;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -987,7 +987,6 @@ main .featured .featured-img img {
             padding: 8px 15px;
             border: 2px solid var(--font-3);
             border-radius: var(--border-radius);
-            /* box-shadow: var(--shadow); */
         }
 
         .anime-page .content .page-anime-right .user-stats {
@@ -1316,15 +1315,17 @@ main section .anime-list-wrapper {
     }
 
         main section .overlay {
-            /* display: none; */
+            display: none;
             position: absolute;
             top: 50px;
+            opacity: 0;
             height: 300px;
             aspect-ratio: 3.5 / 4;
             z-index: 3;
             background-color: var(--color-2);
             /* border: 2px solid var(--color-3); */
             border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
         }
         
             main section .overlay img {
@@ -1358,8 +1359,14 @@ main section .anime-list-wrapper {
 
                 main section .overlay .content .title {
                     color: var(--font-1);
-                    font-size: 1.4rem;
+                    font-size: 1.3rem;
                     font-weight: 800;
+
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
 
                 main section .overlay .content .description {
@@ -1424,7 +1431,6 @@ main section .anime-list-wrapper {
             height: 100%;
             object-fit: cover;
             border-radius: var(--border-radius-cover);
-            /* box-shadow: var(--shadow); */
         }
         
         main section .anime-list .anime-entry.disabled {
