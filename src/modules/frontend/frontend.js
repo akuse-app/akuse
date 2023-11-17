@@ -619,7 +619,6 @@ module.exports = class Frontend {
     displayUserAnimeSection(entries, list, needProgressBar) {
         if(Object.values(entries).length == 0) return -1
 
-
         var anime_list_div = document.getElementById(list)
         anime_list_div.innerHTML = ""
 
@@ -752,6 +751,39 @@ module.exports = class Frontend {
 
         anime_entry_div.classList.add('show')
         return anime_entry_div
+    }
+
+    /**
+     * Enables overlays for the passed anime section
+     * 
+     * @param {*} sectionId 
+     */
+    enableSectionOverlays(sectionId) {
+        let section_div = document.getElementById(sectionId)
+        let anime_entries = section_div.querySelectorAll('.anime-entry')
+
+        Object.keys(anime_entries).forEach(entry => {
+            let entry_div = Object.values(anime_entries)[entry]
+            let overlay_div = section_div.querySelector('.overlay')
+
+            let showOverlay = i => {
+                overlay_div.style.left = `${175 * i - 60}px`
+                overlay_div.classList.add('show-overlay')
+            }
+
+            // let hideOverlay = () => {
+            //     overlay_div.style.display = 'none'
+            // }
+
+            entry_div.addEventListener('mouseenter', () => showOverlay(entry))
+            
+            overlay_div.addEventListener('mouseout', () => {
+                console.log('fuori')
+                console.log(overlay_div.innerHTML)
+                overlay_div.classList.remove('show-overlay')
+            })
+            // overlay_div.addEventListener('mouseleave', () => hideOverlay())
+        })
     }
 
     /**
@@ -1235,8 +1267,8 @@ module.exports = class Frontend {
      * @returns title
      */
     getTitle = animeEntry => animeEntry.title.english == null
-                             ? title = animeEntry.title.romaji
-                             : title = animeEntry.title.english
+                             ? animeEntry.title.romaji
+                             : animeEntry.title.english
 
     /**
      * Gets english, romaji and synonyms and combines them into an array

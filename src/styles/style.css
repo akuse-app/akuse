@@ -1259,6 +1259,7 @@ main .featured .featured-img img {
 
 main section {
     position: relative;
+    z-index: 2;
 }
 
 main section:not(:last-child) {
@@ -1311,25 +1312,76 @@ main section .anime-list-wrapper {
         display: flex;
         flex-direction: row;
         padding-bottom: 10px; /* othewise titles would be cut */
+        z-index: 2;
     }
 
-        main section .anime-list .overlay {
+        main section .overlay {
             /* display: none; */
             position: absolute;
-            top: 0;
-            left: -100px;
-            width: 260px;
+            top: 50px;
             height: 300px;
+            aspect-ratio: 3.5 / 4;
             z-index: 3;
             background-color: var(--color-2);
-            border: 2px solid var(--color-3);
+            /* border: 2px solid var(--color-3); */
             border-radius: var(--border-radius);
         }
-    
+        
+            main section .overlay img {
+                height: 140px;
+                max-width: 100%;
+                display: block;
+                object-fit: cover;
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+            }
+
+            main section .overlay .img-wrapper {
+                position: relative;
+            }
+
+            /* for box-shadow */
+            main section .overlay .img-wrapper::after {
+                content: '';
+                display: block;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                box-shadow: inset 0px -40px 20px -15px var(--color-2);
+              }
+
+            main section .overlay .content {
+                width: calc(100% - 30px);
+                height: 160px;
+                padding: 0 15px 10px 15px;
+            }
+
+                main section .overlay .content .title {
+                    color: var(--font-1);
+                    font-size: 1.4rem;
+                    font-weight: 800;
+                }
+
+                main section .overlay .content .description {
+                    color: var(--font-3);
+                    font-size: 0.7rem;
+                    font-weight: var(--font-weight);
+
+                    display: -webkit-box;
+                    -webkit-line-clamp: 4;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            
+            main section .overlay.show-overlay {
+                display: block;
+            }
+
         main section .anime-list .anime-entry {
             width: 150px;
             height: min-content;
-            padding-top: 10px; /* must be in anime-entry or hover scaling won't work */
+            margin-top: 10px; /* must be in anime-entry or hover scaling won't work */
             z-index: 2;
             cursor: pointer;
             transition: 0.2s ease-out;
@@ -1341,7 +1393,7 @@ main section .anime-list-wrapper {
         }
         
         main section .anime-list .anime-entry:not(:last-child) {
-            padding-right: 25px;
+            margin-right: 25px;
         }
         
         /* main section .anime-list .anime-entry:hover:not(.disabled) {

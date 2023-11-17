@@ -59,7 +59,7 @@ document.addEventListener('keydown', (event) => {
     }
 })
 
-/* --- SETTING MODAL PAGE --- */
+/* --- SETTINGS MODAL PAGE --- */
 
 // open settings modal page
 let settingsButton = document.getElementById('user-dropdown-settings')
@@ -192,7 +192,6 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
 
 // scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
-
 frontend.doDisplayAnimeSectionsScrollingButtons()
 
 /* --- TRIGGERS --- */
