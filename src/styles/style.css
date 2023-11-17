@@ -1317,7 +1317,8 @@ main section .anime-list-wrapper {
         main section .overlay {
             display: none;
             position: absolute;
-            top: 50px;
+            top: 0;
+            left: -55px;
             opacity: 0;
             height: 300px;
             aspect-ratio: 3.5 / 4;
@@ -1386,10 +1387,10 @@ main section .anime-list-wrapper {
             }
 
         main section .anime-list .anime-entry {
+            position: relative;
             width: 150px;
             height: min-content;
             margin-top: 10px; /* must be in anime-entry or hover scaling won't work */
-            z-index: 2;
             cursor: pointer;
             transition: 0.2s ease-out;
         }

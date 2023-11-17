@@ -162,6 +162,22 @@ module.exports = class Frontend {
     }
 
     /**
+     * Assigns a different z-index to each section entry
+     * 
+     * @param {*} sectionId 
+     */
+    assignZIndexToAnimeEntries(sectionId){
+        let section_div = document.getElementById(sectionId)
+        let anime_entries = section_div.querySelectorAll('.anime-entry')
+
+        Object.keys(anime_entries).forEach(entry => {
+            let entry_div = Object.values(anime_entries)[entry]
+
+            entry_div.style.zIndex = Object.keys(anime_entries).length - entry
+        })
+    }
+
+    /**
      * Shows the modal page
      * 
      * @param {*} shadowModalDiv the shadow modal page to show
@@ -620,9 +636,10 @@ module.exports = class Frontend {
     displayUserAnimeSection(entries, list, needProgressBar) {
         if(Object.values(entries).length == 0) return -1
 
+        
         var anime_list_div = document.getElementById(list)
         anime_list_div.innerHTML = ""
-
+        
         Object.keys(entries).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
             
@@ -638,10 +655,12 @@ module.exports = class Frontend {
                     anime_entry_div.getElementsByClassName('anime-cover')[0],
                     parseInt(this.getEpisodes(entries[key].media)),
                     parseInt(entries[key].progress)
-                )
-            }
-            anime_list_div.appendChild(anime_entry_div)
-        })
+                    )
+                }
+                anime_list_div.appendChild(anime_entry_div)
+            })
+
+        this.assignZIndexToAnimeEntries(`${list}-section`)
     }
     
     /**
@@ -651,13 +670,16 @@ module.exports = class Frontend {
      * @param {*} genre
      */
     displayGenreAnimeSection(entries, genre) {
+        
         var anime_list_div = document.getElementById(genre)
         anime_list_div.innerHTML = ""
-
+        
         Object.keys(entries.media).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
             anime_list_div.appendChild(anime_entry_div)
         })
+        
+        this.assignZIndexToAnimeEntries(`${genre}-section`)
     }
     
     /**
@@ -712,8 +734,15 @@ module.exports = class Frontend {
         const startYear = animeEntry.startDate.year
         const episodes = this.getAvailableEpisodes(animeEntry)
         const cover = animeEntry.coverImage.large
-    
+        
         let anime_entry_div = document.createElement('div')
+        let overlay_div = document.createElement('div')
+        let img_wrapper_div = document.createElement('div')
+        let img_div = document.createElement('img')
+        let content_div = document.createElement('div')
+        let title_div = document.createElement('div')
+        let info_div = document.createElement('div')
+        let description_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
         let anime_cover_img = document.createElement('img')
         let anime_title_div = document.createElement('div')
@@ -722,6 +751,12 @@ module.exports = class Frontend {
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
         
+        overlay_div.classList.add('overlay')
+        img_wrapper_div.classList.add('img-wrapper')
+        content_div.classList.add('content')
+        title_div.classList.add('title')
+        info_div.classList.add('info')
+        description_div.classList.add('description')
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
         anime_title_div.classList.add('anime-title')
@@ -739,98 +774,34 @@ module.exports = class Frontend {
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
 
+        img_wrapper_div.appendChild(img_div)
+        content_div.appendChild(title_div)
+        content_div.appendChild(info_div)
+        content_div.appendChild(description_div)
+        overlay_div.appendChild(img_wrapper_div)
+        overlay_div.appendChild(content_div)
         anime_cover_div.appendChild(anime_cover_img)
         anime_entry_content.appendChild(anime_title_div)
         anime_info_div.appendChild(startYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
+        anime_entry_div.appendChild(overlay_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
         anime_entry_div.classList.add('show')
         return anime_entry_div
     }
-
-    /**
-     * Enables overlays for the passed anime section
-     * 
-     * @param {*} sectionId 
-     */
-    enableSectionOverlays(sectionId) {
-        let section_div = document.getElementById(sectionId)
-        let anime_entries = section_div.querySelectorAll('.anime-entry')
-
-        Object.keys(anime_entries).forEach(entry => {
-            let entry_div = Object.values(anime_entries)[entry]
-            let overlay_div = section_div.querySelector('.overlay')
-
-            var timer
-
-            let isOverlayHidden = () => overlay_div.classList.contains('show-overlay-delay')
-                                        ? false
-                                        : true
-            
-            let showOverlay = i => {
-                timer = setTimeout(() => {
-                    overlay_div.style.left = `${175 * i - 60}px`
-                    console.log('show')
-                    this.displayOverlayEntry(overlay_div, this.getIdFromAnimeEntry(entry_div))
-                    overlay_div.classList.add('show-overlay')
-                    overlay_div.classList.add('show-overlay-delay')
-                }, 1000)
-            }
-            
-            let hideOverlay = () => {
-                clearTimeout(timer)
-                console.log('hide')
-
-                overlay_div.classList.remove('show-overlay')
-                overlay_div.classList.remove('show-overlay-delay')
-            }
-
-            entry_div.addEventListener('mouseenter', () => showOverlay(entry))
-            
-            overlay_div.addEventListener('mouseout', () => hideOverlay())
-        })
-    }
-
-    /**
-     * Fills up all the overlays with their divs
-     */
-    createSectionOverlays() {
-        let overlays_div = document.querySelectorAll('section .overlay')
-
-        Object.keys(overlays_div).forEach(overlay => {
-            let overlay_div = Object.values(overlays_div)[overlay]
-            let img_wrapper_div = document.createElement('div')
-            let img_div = document.createElement('img')
-            let content_div = document.createElement('div')
-            let title_div = document.createElement('div')
-            let info_div = document.createElement('div')
-            let description_div = document.createElement('div')
-
-            img_wrapper_div.classList.add('img-wrapper')
-            content_div.classList.add('content')
-            title_div.classList.add('title')
-            info_div.classList.add('info')
-            description_div.classList.add('description')
-
-            img_wrapper_div.appendChild(img_div)
-            content_div.appendChild(title_div)
-            content_div.appendChild(info_div)
-            content_div.appendChild(description_div)
-            overlay_div.appendChild(img_wrapper_div)
-            overlay_div.appendChild(content_div)
-        })
-    }
-
+    
     async displayOverlayEntry(overlay, animeId) {
+        if(animeId == -1) return
+
         const animeEntry = await this.anilist.getOverlayInfo(animeId)
 
         const banner = animeEntry.bannerImage
         const title = this.getTitle(animeEntry)
         const description = this.parseDescription(animeEntry.description)
-
+        
         let img_div = overlay.querySelector('.img-wrapper img')
         let title_div = overlay.querySelector('.content .title')
         let info_div = overlay.querySelector('.content .info')
@@ -838,7 +809,40 @@ module.exports = class Frontend {
 
         img_div.src = banner
         title_div.innerHTML = title
-        description_div.innerHTML = description
+        description_div.innerHTML = description 
+    }
+
+    /**
+     * Trigger to display the anime overlay
+     * 
+     * @param {*} event 
+     */
+    triggerAnimeOverlay(event) {
+        let showHideOverlay = (entry) => {
+            let overlay_div = entry.querySelector('.overlay')
+
+            entry.style.zIndex += (entry.style.zIndex + 1)
+
+            this.displayOverlayEntry(overlay_div, this.getIdFromAnimeEntry(entry))
+            overlay_div.classList.add('show-overlay')
+            overlay_div.classList.add('show-overlay-delay')
+
+            overlay_div.addEventListener('mouseleave', () => {
+                entry.style.zIndex -= 1
+
+                overlay_div.classList.remove('show-overlay')
+                overlay_div.classList.remove('show-overlay-delay')
+            })
+        }
+
+        if(!(event.target.classList.contains('anime-entry'))) {
+            var entry = event.target.closest('.anime-entry')
+            if(entry) {
+                showHideOverlay(entry)
+            }
+        } else {
+            showHideOverlay(event.target)
+        }
     }
 
     /**
@@ -910,9 +914,6 @@ module.exports = class Frontend {
         featured_div.classList.add('featured')
         featured_container_div.classList.add('featured-container')
         featured_img_div.classList.add('featured-img')
-        // featured_left_div.classList.add('featured-left')
-        // featured_shadow_div.classList.add('featured-shadow')
-        // featured_right_div.classList.add('featured-right')
         content_div.classList.add('content')
         anime_title_div.classList.add('anime-title')
         anime_info_div.classList.add('anime-info')
@@ -924,7 +925,6 @@ module.exports = class Frontend {
         featured_anime_button.innerHTML = 'See More'
         featured_anime_button.classList.add('main-button-0')
         anime_title_div.innerHTML = title
-        // anime_year_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
         anime_year_div.innerHTML = season + ' ' + seasonYear
         anime_episodes_div.innerHTML = episodes + " Episodes"
         anime_description_div.innerHTML = description
@@ -937,10 +937,6 @@ module.exports = class Frontend {
         content_div.appendChild(anime_description_div)
         content_div.appendChild(featured_anime_button)
         featured_container_div.appendChild(content_div)
-        // featured_left_div.appendChild(content_div)
-        // featured_container_div.appendChild(featured_left_div)
-        // featured_container_div.appendChild(featured_shadow_div)
-        // featured_container_div.appendChild(featured_right_div)
         featured_div.appendChild(featured_container_div)
         featured_img_div.appendChild(featured_img)
         featured_div.appendChild(featured_img_div)
@@ -1028,7 +1024,6 @@ module.exports = class Frontend {
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
-        console.log(score, ' ',  progress)
         this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
         this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
         document.getElementById('page-anime-user-status').innerHTML = userStatus

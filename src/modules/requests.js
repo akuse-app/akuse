@@ -40,7 +40,7 @@ module.exports = class Requests {
             headers: headers,
             data: options
         }).catch((error) => {
-            throw new Error('Axios error: ' + error)
+            throw new Error('err')
         })
 
         return response.data

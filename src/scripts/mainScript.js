@@ -60,10 +60,9 @@ ipcRenderer.on('message', async (event, msg) => {
  */
 ipcRenderer.on('load-index', async (event) => {
     // rendering stuff
-    frontend.createSectionOverlays()
 
     // filling with anilist data
-    const anilist = new AniListAPI(clientData) // defining it here because its constructor must be loaded here
+    const anilist = new AniListAPI(clientData) // defining it here because its constructor must be created here
     const viewerId = await anilist.getViewerId()
     
     const viewerInfo = await anilist.getViewerInfo(viewerId)
@@ -75,11 +74,9 @@ ipcRenderer.on('load-index', async (event) => {
     const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
     if(entriesCurrent !== undefined)
         frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
-        frontend.enableSectionOverlays('current-home-section')
 
     const entriesTrending = await anilist.getTrendingAnimes()
     frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
-    frontend.enableSectionOverlays('trending-home-section')
     
     const entriesMostPopular = await anilist.getMostPopularAnimes()
     frontend.displayGenreAnimeSection(entriesMostPopular, 'most-popular-home')

@@ -196,17 +196,27 @@ frontend.doDisplayAnimeSectionsScrollingButtons()
 
 /* --- TRIGGERS --- */
 
+// trigger when anime entry is hovered
+let sections = document.querySelectorAll('section')
+sections.forEach(section => {
+    section.addEventListener('mouseover', (event) => {
+        frontend.triggerAnimeOverlay(event)
+    })
+})
+
+// let overlays = document.querySelectorAll('.overlay')
+// overlays.forEach(overlay => {
+//     console.log(overlay)
+//     overlay.addEventListener('mouseleave', () => {
+//         console.log('quit')
+//     })
+// })
+
 // trigger when featured anime entry is pressed
 let featured_scroller = document.getElementById('featured-scroller')
 featured_scroller.addEventListener('click', (event) => {
     frontend.triggerFeaturedAnime(event)
 })
-
-// trigger when search anime entry is pressed
-// let entry_list = document.getElementById('main-search-list')
-// entry_list.addEventListener('click', (event) => {
-//     frontend.triggerMainSearchAnime(event)
-// })
 
 // trigger when anime entry is pressed
 let anime_lists = document.querySelectorAll('.anime-list')

@@ -123,7 +123,7 @@
     animation: showOverlayDelayAnimation var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-    animation-delay: 1s;
+    /* animation-delay: 0.5s; */
 }
 
 @keyframes showOverlayDelayAnimation {
