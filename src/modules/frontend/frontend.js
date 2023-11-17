@@ -41,6 +41,7 @@ module.exports = class Frontend {
     
     /**
      * Removes the loading div when the document has finished loading
+     * @deprecated
      */
     removeLoadingPage() {
         document.getElementById('loading-page').classList.add('loading-page-animation')
@@ -68,6 +69,9 @@ module.exports = class Frontend {
         }
     }
 
+    /**
+     * Call to enable skeleton loader for featured section and anime sections
+     */
     enableSkeletonLoader() {
         let anime_sections = document.querySelectorAll('section')
         let featured_scroller = document.querySelector('#featured-scroller .featured-scroller-wrapper')
@@ -87,6 +91,11 @@ module.exports = class Frontend {
         })
     }
 
+    /**
+     * Creates a skeleton loader anime section entry div
+     * 
+     * @returns skeleton loader anime entry
+     */
     createAnimeEntrySkeletonLoader() {
         let anime_entry_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
@@ -108,6 +117,11 @@ module.exports = class Frontend {
         return anime_entry_div
     }
 
+    /**
+     * Creates a skeleton loader featured section div
+     * 
+     * @returns skeleton loader featured entry
+     */
     createFeaturedEntrySkeletonLoader() {
         var featured_div = document.createElement('div')
         var featured_container_div = document.createElement('div')
@@ -220,7 +234,7 @@ module.exports = class Frontend {
     }
 
     /**
-     * Hides not needed scrolling buttons in anime sections 
+     * Hides useless scrolling buttons in anime sections 
     */
     doDisplayAnimeSectionsScrollingButtons() {
         let anime_sections = document.querySelectorAll('section')
@@ -234,9 +248,6 @@ module.exports = class Frontend {
             let listWidth = anime_section_list.scrollWidth
 
             if(wrapperWidth > listWidth) {
-                console.log(anime_section_list.id)
-                console.log(listWidth)
-                console.log(wrapperWidth + '\n')
                 anime_section_scroll_left.classList.add('hide')
                 anime_section_scroll_right.classList.add('hide')
             }
@@ -583,7 +594,7 @@ module.exports = class Frontend {
     }
     
     /**
-     * Trigger for displaying the anime modal page opened from the main search section
+     * Trigger to display the anime modal page opened from the main search section
      * 
      * @param {*} event 
      */
@@ -710,7 +721,7 @@ module.exports = class Frontend {
         let startYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
-        let overlay_div = document.createElement('div')
+        // let overlay_div = document.createElement('div')
         
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
@@ -719,7 +730,7 @@ module.exports = class Frontend {
         startYear_div.classList.add('startYear')
         episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
-        overlay_div.classList.add('overlay')
+        // overlay_div.classList.add('overlay')
 
         anime_entry_div.id = ('anime-entry-' + animeId)
         anime_title_div.innerHTML = animeName
@@ -735,7 +746,7 @@ module.exports = class Frontend {
         anime_info_div.appendChild(startYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
-        anime_entry_div.appendChild(overlay_div)
+        // anime_entry_div.appendChild(overlay_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
@@ -744,7 +755,7 @@ module.exports = class Frontend {
     }
 
     /**
-     * Trigger for displaying the anime modal page opened from the featured section
+     * Trigger to display the anime modal page opened from the featured section
      * 
      * @param {*} event 
      */
@@ -863,7 +874,7 @@ module.exports = class Frontend {
     }
 
     /**
-     * Trigger for displaying the anime modal page opened from an anime section
+     * Trigger to display the anime modal page opened from an anime section
      * 
      * @param {*} event 
      */
@@ -930,6 +941,7 @@ module.exports = class Frontend {
         document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
         document.getElementById('page-anime-meanScore').innerHTML =  meanScore
         document.getElementById('page-anime-description').innerHTML = description
+        console.log(score, ' ',  progress)
         this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
         this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
         document.getElementById('page-anime-user-status').innerHTML = userStatus
@@ -1222,14 +1234,9 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns title
      */
-    getTitle(animeEntry) {
-        let title
-        animeEntry.title.english == null
-        ? title = animeEntry.title.romaji
-        : title = animeEntry.title.english
-
-        return title
-    }
+    getTitle = animeEntry => animeEntry.title.english == null
+                             ? title = animeEntry.title.romaji
+                             : title = animeEntry.title.english
 
     /**
      * Gets english, romaji and synonyms and combines them into an array
@@ -1254,16 +1261,11 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns episodes number
      */
-    getEpisodes(animeEntry) {
-        let episodes
-        animeEntry.episodes == null
-        ? (animeEntry.nextAiringEpisode == null
-           ? episodes = '?'
-           : episodes = animeEntry.nextAiringEpisode.episode - 1)
-        : episodes = animeEntry.episodes
-
-        return episodes
-    }
+    getEpisodes = animeEntry => animeEntry.episodes == null
+                                ? (animeEntry.nextAiringEpisode == null
+                                    ? '?'
+                                    : animeEntry.nextAiringEpisode.episode - 1)
+                                : animeEntry.episodes
 
     /**
      * Gets the anime available episodes number from 'episodes' or 'nextAiringEpisode'
@@ -1271,16 +1273,11 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns available episodes number
      */
-    getAvailableEpisodes(animeEntry) {
-        let availableEpisodes
-        animeEntry.nextAiringEpisode == null
-        ? (animeEntry.episodes == null)
-           ? availableEpisodes = '?'
-           : availableEpisodes = animeEntry.episodes
-        : availableEpisodes = animeEntry.nextAiringEpisode.episode - 1
-
-        return availableEpisodes
-    }
+    getAvailableEpisodes = animeEntry => animeEntry.nextAiringEpisode == null
+                                         ? (animeEntry.episodes == null)
+                                            ? '?'
+                                            : animeEntry.episodes
+                                         : animeEntry.nextAiringEpisode.episode - 1
 
     /**
      * Gets the anime user status
@@ -1288,14 +1285,9 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns user status
      */
-    getUserStatus(animeEntry) {
-        let userStatus 
-        animeEntry.mediaListEntry == null
-        ? userStatus = 'NOT IN LIST'
-        : userStatus = animeEntry.mediaListEntry.status
-
-        return userStatus
-    }
+    getUserStatus = animeEntry => animeEntry.mediaListEntry == null
+                                  ? 'NOT IN LIST'
+                                  : animeEntry.mediaListEntry.status
 
     /**
      * Gets the user anime score
@@ -1303,14 +1295,9 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns anime score
      */
-    getScore(animeEntry) {
-        let score
-        animeEntry.mediaListEntry == null
-        ? score = ""
-        : score = animeEntry.mediaListEntry.score
-
-        return score
-    }
+    getScore = animeEntry => animeEntry.mediaListEntry == null
+                             ? ""
+                             : animeEntry.mediaListEntry.score
 
     /**
      * Gets the user anime progress
@@ -1318,14 +1305,9 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      * @returns anime progress
      */
-    getProgress(animeEntry) {
-        let progress
-        animeEntry.mediaListEntry == null
-        ? progress = ""
-        : progress = animeEntry.mediaListEntry.progress
-
-        return progress
-    }
+    getProgress = animeEntry => animeEntry.mediaListEntry == null
+                                ? "" 
+                                : animeEntry.mediaListEntry.progress
 
     /**
      * Removes unwanted spaces/new lines from anime description
@@ -1333,9 +1315,7 @@ module.exports = class Frontend {
      * @param {*} description 
      * @returns parsed description
      */
-    parseDescription(description) {
-        return description.replace('<br>', '')
-    }
+    parseDescription = description => description.replace('<br>', '')
 
     /**
      * Capitalizes the first letter of a string
@@ -1343,7 +1323,5 @@ module.exports = class Frontend {
      * @param {*} string 
      * @returns parsed string
      */
-    capitalizeFirstLetter(string) {
-        return string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1);
-    }
+    capitalizeFirstLetter = string => string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1)
 }
