@@ -182,26 +182,7 @@ module.exports = class AniListAPI extends Requests {
                             mediaId
                             progress
                             media {
-                                id
-                                title {
-                                    romaji
-                                    english
-                                }
-                                coverImage {
-                                    large
-                                    color
-                                }
-                                episodes
-                                nextAiringEpisode {
-                                    id
-                                    airingAt
-                                    episode
-                                }
-                                startDate {
-                                    year
-                                    month
-                                    day
-                                }
+                                ${this.mediaData}
                             }
                         }
                     }
@@ -266,49 +247,6 @@ module.exports = class AniListAPI extends Requests {
             query($id: Int) {
                 Media(id: $id, type: ANIME) {
                     ${this.mediaData}
-                }
-            }
-        `
-
-        var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        }
-
-        var variables = {
-            id: animeId
-        }
-
-        const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
-
-        return respData.data.Media
-    }
-
-    async getOverlayInfo(animeId) {
-        var query = `
-            query($id: Int) {
-                Media(id: $id, type: ANIME) {
-                    id
-                    title {
-                        romaji
-                        english
-                        native
-                        userPreferred
-                    }
-                    format
-                    description
-                    season
-                    seasonYear
-                    episodes
-                    bannerImage
-                    isAdult
-                    nextAiringEpisode {
-                        id
-                        airingAt
-                        episode
-                    }
                 }
             }
         `
@@ -453,20 +391,7 @@ module.exports = class AniListAPI extends Requests {
                     hasNextPage
                 }
                 media(genre: "${genre}", sort: TRENDING_DESC, type: ANIME) {
-                    id
-                    title {
-                        romaji
-                        english
-                    }
-                    coverImage {
-                        large
-                        color
-                    }
-                    startDate {
-                        year
-                        month
-                        day
-                    }
+                    ${this.mediaData}
                 }
             } 
         }

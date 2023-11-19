@@ -795,7 +795,7 @@ main .featured .featured-container {
         overflow: hidden;
         font-size: 2.1rem;
         font-weight: 800;
-        line-height: 35px;
+        line-height: 40px;
     }
 
     main .featured .anime-info {
@@ -1257,6 +1257,8 @@ main .featured .featured-img img {
     }
 
 main section {
+    display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 2;
 }
@@ -1314,78 +1316,6 @@ main section .anime-list-wrapper {
         z-index: 2;
     }
 
-        main section .overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: -55px;
-            opacity: 0;
-            height: 300px;
-            aspect-ratio: 3.5 / 4;
-            z-index: 3;
-            background-color: var(--color-2);
-            /* border: 2px solid var(--color-3); */
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-        }
-        
-            main section .overlay img {
-                height: 140px;
-                max-width: 100%;
-                display: block;
-                object-fit: cover;
-                border-radius: var(--border-radius) var(--border-radius) 0 0;
-            }
-
-            main section .overlay .img-wrapper {
-                position: relative;
-            }
-
-            /* for box-shadow */
-            main section .overlay .img-wrapper::after {
-                content: '';
-                display: block;
-                height: 100%;
-                position: absolute;
-                top: 0;
-                width: 100%;
-                box-shadow: inset 0px -40px 20px -15px var(--color-2);
-              }
-
-            main section .overlay .content {
-                width: calc(100% - 30px);
-                height: 160px;
-                padding: 0 15px 10px 15px;
-            }
-
-                main section .overlay .content .title {
-                    color: var(--font-1);
-                    font-size: 1.3rem;
-                    font-weight: 800;
-
-                    display: -webkit-box;
-                    -webkit-line-clamp: 1;
-                    -webkit-box-orient: vertical;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                }
-
-                main section .overlay .content .description {
-                    color: var(--font-3);
-                    font-size: 0.7rem;
-                    font-weight: var(--font-weight);
-
-                    display: -webkit-box;
-                    -webkit-line-clamp: 4;
-                    -webkit-box-orient: vertical;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                }
-            
-            main section .overlay.show-overlay {
-                display: block;
-            }
-
         main section .anime-list .anime-entry {
             position: relative;
             width: 150px;
@@ -1395,17 +1325,17 @@ main section .anime-list-wrapper {
             transition: 0.2s ease-out;
         }
 
-
-        main section .anime-list .anime-entry:hover .overlay {
+        /* main section .anime-list .anime-entry:hover .overlay {
             display: block;
-        }
+        } */
         
         main section .anime-list .anime-entry:not(:last-child) {
             margin-right: 25px;
         }
         
-        /* main section .anime-list .anime-entry:hover:not(.disabled) {
-            transform: scale(1.05);
+        /* main section .anime-list .anime-entry:hover:not(.disabled) .anime-cover{
+            transform: scale(1.20);
+            outline: 2px solid var(--font-1);
         } */
         
         main section .anime-list .anime-entry .content {
@@ -1491,11 +1421,84 @@ main section .anime-list-wrapper {
             font-size: 1rem;
             font-weight: var(--font-weight);
         }
+
+        main section .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: -55px;
+            opacity: 0;
+            height: 300px;
+            aspect-ratio: 3.5 / 4;
+            z-index: 3;
+            background-color: var(--color-2);
+            /* border: 2px solid var(--color-3); */
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+            main section .overlay .ov-img-wrapper {
+                position: relative;
+            }
+        
+            main section .overlay .ov-img-wrapper img {
+                height: 140px;
+                max-width: 100%;
+                display: block;
+                object-fit: cover;
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+            }
+
+            /* for box-shadow */
+            main section .overlay .ov-img-wrapper::after {
+                content: '';
+                display: block;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                width: 100%;
+                box-shadow: inset 0px -40px 20px -15px var(--color-2);
+              }
+
+            main section .overlay .ov-content {
+                width: calc(100% - 30px);
+                height: 160px;
+                padding: 0 15px 10px 15px;
+            }
+
+                main section .overlay .ov-content .ov-title {
+                    color: var(--font-1);
+                    font-size: 1.3rem;
+                    font-weight: 800;
+
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+                main section .overlay .ov-content .ov-description {
+                    color: var(--font-3);
+                    font-size: 0.7rem;
+                    font-weight: var(--font-weight);
+
+                    display: -webkit-box;
+                    -webkit-line-clamp: 4;
+                    -webkit-box-orient: vertical;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            
+            main section .overlay.show-overlay {
+                display: block;
+            }
         
 main#my-list-page h1#your-list-header {
     font-size: 3rem;
 }
 
-/* main#my-list-page .section-container {
-    margin-top: 50px;
-} */
+main#my-list-page .section-container {
+    display: flex;
+    flex-direction: column;
+}

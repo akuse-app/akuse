@@ -88,7 +88,6 @@
   },
   "homepage": "https://github.com/aleganza/akuse#readme",
   "devDependencies": {
-    "dotenv": "^16.3.1",
     "electron": "^25.9.4",
     "electron-builder": "^24.6.4"
   },

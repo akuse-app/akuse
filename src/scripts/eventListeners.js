@@ -192,25 +192,9 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
 
 // scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
-frontend.doDisplayAnimeSectionsScrollingButtons()
+// frontend.doDisplayAnimeSectionsScrollingButtons()
 
 /* --- TRIGGERS --- */
-
-// trigger when anime entry is hovered
-let sections = document.querySelectorAll('section')
-sections.forEach(section => {
-    section.addEventListener('mouseover', (event) => {
-        frontend.triggerAnimeOverlay(event)
-    })
-})
-
-// let overlays = document.querySelectorAll('.overlay')
-// overlays.forEach(overlay => {
-//     console.log(overlay)
-//     overlay.addEventListener('mouseleave', () => {
-//         console.log('quit')
-//     })
-// })
 
 // trigger when featured anime entry is pressed
 let featured_scroller = document.getElementById('featured-scroller')
@@ -218,12 +202,15 @@ featured_scroller.addEventListener('click', (event) => {
     frontend.triggerFeaturedAnime(event)
 })
 
-// trigger when anime entry is pressed
+// trigger when anime entry is pressed/hovered
 let anime_lists = document.querySelectorAll('.anime-list')
 anime_lists.forEach(list => {
     list.addEventListener('click', (event) => {
         frontend.triggerAnimeEntry(event)
     })
+    // list.addEventListener('mouseover', (event) => {
+    //     frontend.triggerAnimeOverlay(event)
+    // })
 })
 
 // trigger when episode is pressed, so generate video link

@@ -5,8 +5,6 @@ const AnimeSaturn = require('../providers/animesaturn')
 const LoadingBar = require('../frontend/loadingBar')
 const Video = require('./video')
 const clientData = require ('../clientData.js')
-const { watch } = require('original-fs')
-const { parse } = require('dotenv')
 
 /**
  * Methods to manipulate the DOM with fetched data
@@ -264,6 +262,9 @@ module.exports = class Frontend {
             let listWidth = anime_section_list.scrollWidth
 
             if(wrapperWidth > listWidth) {
+                console.log(Object.values(anime_sections)[section].id)
+                console.log('nascondo ', wrapperWidth, ' ', listWidth)
+
                 anime_section_scroll_left.classList.add('hide')
                 anime_section_scroll_right.classList.add('hide')
             }
@@ -350,14 +351,14 @@ module.exports = class Frontend {
                 anime_section_wrapper.scrollLeft -= scrollAmount
                 setTimeout(() => {
                     disableButtons()
-                }, 1000)
+                }, 600)
             })
             
             anime_section_scroll_right.addEventListener('click', () => {
                 anime_section_wrapper.scrollLeft += scrollAmount
                 setTimeout(() => {
                     disableButtons()
-                }, 1000)
+                }, 600)
             })
             
             // show
@@ -635,7 +636,6 @@ module.exports = class Frontend {
      */
     displayUserAnimeSection(entries, list, needProgressBar) {
         if(Object.values(entries).length == 0) return -1
-
         
         var anime_list_div = document.getElementById(list)
         anime_list_div.innerHTML = ""
@@ -657,8 +657,8 @@ module.exports = class Frontend {
                     parseInt(entries[key].progress)
                     )
                 }
-                anime_list_div.appendChild(anime_entry_div)
-            })
+            anime_list_div.appendChild(anime_entry_div)
+        })
 
         this.assignZIndexToAnimeEntries(`${list}-section`)
     }
@@ -676,6 +676,7 @@ module.exports = class Frontend {
         
         Object.keys(entries.media).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
+            
             anime_list_div.appendChild(anime_entry_div)
         })
         
@@ -736,13 +737,6 @@ module.exports = class Frontend {
         const cover = animeEntry.coverImage.large
         
         let anime_entry_div = document.createElement('div')
-        let overlay_div = document.createElement('div')
-        let img_wrapper_div = document.createElement('div')
-        let img_div = document.createElement('img')
-        let content_div = document.createElement('div')
-        let title_div = document.createElement('div')
-        let info_div = document.createElement('div')
-        let description_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
         let anime_cover_img = document.createElement('img')
         let anime_title_div = document.createElement('div')
@@ -750,13 +744,7 @@ module.exports = class Frontend {
         let startYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
-        
-        overlay_div.classList.add('overlay')
-        img_wrapper_div.classList.add('img-wrapper')
-        content_div.classList.add('content')
-        title_div.classList.add('title')
-        info_div.classList.add('info')
-        description_div.classList.add('description')
+
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
         anime_title_div.classList.add('anime-title')
@@ -764,7 +752,7 @@ module.exports = class Frontend {
         startYear_div.classList.add('startYear')
         episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
-
+        
         anime_entry_div.id = ('anime-entry-' + animeId)
         anime_title_div.innerHTML = animeName
         startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
@@ -773,13 +761,9 @@ module.exports = class Frontend {
         episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-list-ul"></i>`
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
+        
+        let overlay_div = this.createEntryOverlay(animeEntry)
 
-        img_wrapper_div.appendChild(img_div)
-        content_div.appendChild(title_div)
-        content_div.appendChild(info_div)
-        content_div.appendChild(description_div)
-        overlay_div.appendChild(img_wrapper_div)
-        overlay_div.appendChild(content_div)
         anime_cover_div.appendChild(anime_cover_img)
         anime_entry_content.appendChild(anime_title_div)
         anime_info_div.appendChild(startYear_div)
@@ -793,23 +777,38 @@ module.exports = class Frontend {
         return anime_entry_div
     }
     
-    async displayOverlayEntry(overlay, animeId) {
-        if(animeId == -1) return
-
-        const animeEntry = await this.anilist.getOverlayInfo(animeId)
+    createEntryOverlay(animeEntry) {
+        let overlay_div = document.createElement('div')
+        let img_wrapper_div = document.createElement('div')
+        let img_div = document.createElement('img')
+        let content_div = document.createElement('div')
+        let title_div = document.createElement('div')
+        let info_div = document.createElement('div')
+        let description_div = document.createElement('div')
 
         const banner = animeEntry.bannerImage
         const title = this.getTitle(animeEntry)
         const description = this.parseDescription(animeEntry.description)
-        
-        let img_div = overlay.querySelector('.img-wrapper img')
-        let title_div = overlay.querySelector('.content .title')
-        let info_div = overlay.querySelector('.content .info')
-        let description_div = overlay.querySelector('.content .description')
+
+        overlay_div.classList.add('overlay')
+        img_wrapper_div.classList.add('ov-img-wrapper')
+        content_div.classList.add('ov-content')
+        title_div.classList.add('ov-title')
+        info_div.classList.add('ov-info')
+        description_div.classList.add('ov-description')
 
         img_div.src = banner
         title_div.innerHTML = title
-        description_div.innerHTML = description 
+        description_div.innerHTML = description
+
+        img_wrapper_div.appendChild(img_div)
+        content_div.appendChild(title_div)
+        content_div.appendChild(info_div)
+        content_div.appendChild(description_div)
+        overlay_div.appendChild(img_wrapper_div)
+        overlay_div.appendChild(content_div)
+
+        return overlay_div
     }
 
     /**
@@ -818,17 +817,25 @@ module.exports = class Frontend {
      * @param {*} event 
      */
     triggerAnimeOverlay(event) {
-        let showHideOverlay = (entry) => {
+        let showOrHideOverlay = (entry) => {
+            if(entry.querySelector('.overlay') === null) return
+
             let overlay_div = entry.querySelector('.overlay')
-
-            entry.style.zIndex += (entry.style.zIndex + 1)
-
-            this.displayOverlayEntry(overlay_div, this.getIdFromAnimeEntry(entry))
+            let oldIndex = parseInt(entry.style.zIndex)
+            console.log(oldIndex)
+            oldIndex += 2
+            
+            // entry.style.zIndex = oldIndex
+            
             overlay_div.classList.add('show-overlay')
             overlay_div.classList.add('show-overlay-delay')
 
-            overlay_div.addEventListener('mouseleave', () => {
-                entry.style.zIndex -= 1
+            overlay_div.addEventListener('mouseout', () => {
+                let oldIndex = parseInt(entry.style.zIndex)
+                console.log(oldIndex)
+                oldIndex -= 2
+                
+                // entry.style.zIndex -= oldIndex
 
                 overlay_div.classList.remove('show-overlay')
                 overlay_div.classList.remove('show-overlay-delay')
@@ -838,10 +845,10 @@ module.exports = class Frontend {
         if(!(event.target.classList.contains('anime-entry'))) {
             var entry = event.target.closest('.anime-entry')
             if(entry) {
-                showHideOverlay(entry)
+                showOrHideOverlay(entry)
             }
         } else {
-            showHideOverlay(event.target)
+            // showOrHideOverlay(event.target)
         }
     }
 

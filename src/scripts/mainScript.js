@@ -6,9 +6,6 @@ const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
 const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
-const { TvType } = require('@consumet/extensions')
-const { parse } = require('dotenv')
-
 const store = new Store()
 const frontend = new Frontend()
 const loadingBar = new LoadingBar()
@@ -58,22 +55,31 @@ ipcRenderer.on('message', async (event, msg) => {
  * OAuth is completed, so load the page with all the elements
  * 
  */
-ipcRenderer.on('load-index', async (event) => {
+ipcRenderer.on('load-app', async (event) => {
     // rendering stuff
 
     // filling with anilist data
-    const anilist = new AniListAPI(clientData) // defining it here because its constructor must be created here
-    const viewerId = await anilist.getViewerId()
+    const anilist = new AniListAPI(clientData)
+
+    let logged = store.get('logged')
     
-    const viewerInfo = await anilist.getViewerInfo(viewerId)
-    frontend.displayViewerAvatar(viewerInfo)
-    
+    if(logged) {
+        const viewerId = await anilist.getViewerId()
+        const viewerInfo = await anilist.getViewerInfo(viewerId)
+        frontend.displayViewerAvatar(viewerInfo)
+        
+        const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
+        if(entriesCurrent !== undefined)
+            frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
+    } else {
+        document.querySelector('#user-dropdown-settings .i-wrapper img').style.display = 'none'
+        document.querySelector('#user-dropdown-settings .i-wrapper i').style.display = 'block'
+
+        document.getElementById('current-home-section').style.display = 'none'
+    }
+
     const entriesFeatured = await anilist.getTrendingAnimes()
     frontend.displayFeaturedAnime(entriesFeatured)
-
-    const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
-    if(entriesCurrent !== undefined)
-        frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
 
     const entriesTrending = await anilist.getTrendingAnimes()
     frontend.displayGenreAnimeSection(entriesTrending, 'trending-home')
@@ -96,25 +102,27 @@ ipcRenderer.on('load-index', async (event) => {
     const entriesMusic = await anilist.getAnimesByGenre("Music")
     frontend.displayGenreAnimeSection(entriesMusic, 'music-home')
 
-    const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
-    if(entriesPlanning !== undefined)
-        frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
-
-    const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
-    if(entriesCompleted !== undefined)
-        frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
-
-    const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
-    if(entriesDropped !== undefined)
-        frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
-
-    const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
-    if(entriesPaused !== undefined)
-        frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
-
-    const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
-    if(entriesRepeating !== undefined)
-        frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
+    if(logged) {
+        const entriesPlanning = await anilist.getViewerList(viewerId, 'PLANNING')
+        if(entriesPlanning !== undefined)
+            frontend.displayUserAnimeSection(entriesPlanning, 'planning-my-list', true)
+    
+        const entriesCompleted = await anilist.getViewerList(viewerId, 'COMPLETED')
+        if(entriesCompleted !== undefined)
+            frontend.displayUserAnimeSection(entriesCompleted, 'completed-my-list', true)
+    
+        const entriesDropped = await anilist.getViewerList(viewerId, 'DROPPED')
+        if(entriesDropped !== undefined)
+            frontend.displayUserAnimeSection(entriesDropped, 'dropped-my-list', true)
+    
+        const entriesPaused = await anilist.getViewerList(viewerId, 'PAUSED')
+        if(entriesPaused !== undefined)
+            frontend.displayUserAnimeSection(entriesPaused, 'paused-my-list', true)
+    
+        const entriesRepeating = await anilist.getViewerList(viewerId, 'REPEATING')
+        if(entriesRepeating !== undefined)
+            frontend.displayUserAnimeSection(entriesRepeating, 'repeating-my-list', true)
+    }
 
     setTimeout(() => {
         frontend.doDisplayAnimeSectionsScrollingButtons()
