@@ -80,11 +80,10 @@ module.exports = class AniListAPI extends Requests {
     /**
      * Retrieves the access token for the api
      * 
-     * @param {*} currentUrl 
+     * @param {*} code 
      * @returns access token
      */
-    async getAccessToken(currentUrl) {
-        const code = currentUrl.searchParams.get("code")
+    async getAccessToken(code) {
         const url = "https://anilist.co/api/v2/oauth/token"
         const data = {
             'grant_type': 'authorization_code',

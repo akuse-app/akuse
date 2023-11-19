@@ -348,6 +348,17 @@ aside h1 {
             transition: var(--transition);
         }
 
+        /* toggler for login icon or user avatar */
+        aside ul li#nav-login,
+        aside ul li#nav-user {
+            display: none;
+        }
+
+        aside ul li#nav-login.show-li,
+        aside ul li#nav-user.show-li {
+            display: flex;
+        }
+
         /* aside ul li.bubble::after {
             content: 'Discover';
             position: absolute;
@@ -1261,6 +1272,10 @@ main section {
     flex-direction: column;
     position: relative;
     z-index: 2;
+}
+
+main section.hide-section {
+    display: none;
 }
 
 main section:not(:last-child) {

@@ -10,9 +10,18 @@ const store = new Store()
 const frontend = new Frontend()
 const loadingBar = new LoadingBar()
 
-var bugReportButton = document.getElementById('user-dropdown-bug-report')
+let loginButton= document.getElementById('login-icon')
+loginButton.addEventListener('click', (event) => {
+    ipcRenderer.send('load-login-url')
+})
+
+let bugReportButton = document.getElementById('user-dropdown-bug-report')
 bugReportButton.addEventListener('click', (event) => {
     ipcRenderer.send('load-issues-url')
+})
+
+ipcRenderer.on('console-log', (event, toPrint) => {
+    console.log(toPrint)
 })
 
 ipcRenderer.on('auto-update', async (event) => {
@@ -64,18 +73,23 @@ ipcRenderer.on('load-app', async (event) => {
     let logged = store.get('logged')
     
     if(logged) {
-        const viewerId = await anilist.getViewerId()
+        var viewerId = await anilist.getViewerId()
         const viewerInfo = await anilist.getViewerInfo(viewerId)
+
         frontend.displayViewerAvatar(viewerInfo)
+        document.getElementById('nav-login').classList.remove('show-li')
+        document.getElementById('nav-user').classList.add('show-li')
         
         const entriesCurrent = await anilist.getViewerList(viewerId, 'CURRENT')
         if(entriesCurrent !== undefined)
             frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
-    } else {
-        document.querySelector('#user-dropdown-settings .i-wrapper img').style.display = 'none'
-        document.querySelector('#user-dropdown-settings .i-wrapper i').style.display = 'block'
 
-        document.getElementById('current-home-section').style.display = 'none'
+        document.getElementById('current-home-section').classList.remove('.hide-section')
+    } else {
+        document.getElementById('nav-user').classList.remove('show-li')
+        document.getElementById('nav-login').classList.add('show-li')
+
+        document.getElementById('current-home-section').classList.add('.hide-section')
     }
 
     const entriesFeatured = await anilist.getTrendingAnimes()

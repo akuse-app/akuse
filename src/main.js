@@ -6,18 +6,49 @@ const url = require('url')
 const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
-const server = require('./server.js')
+// const server = require('./server.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
 
 const store = new Store()
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 
-let mainWin
-
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
 autoUpdater.autoRunAppAfterInstall = true
+
+let mainWin
+
+const gotTheLock = app.requestSingleInstanceLock()
+    
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', async (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWin) {
+            if (mainWin.isMinimized()) mainWin.restore()
+            mainWin.focus()
+
+        }
+
+        // logged in
+        let code = commandLine[2].split('?code=')[1]
+
+        const anilist = new AniListAPI(clientData)
+        const token = await anilist.getAccessToken(code)
+
+        mainWin.webContents.send("console-log", token)
+        store.set('access_token', token)
+        store.set('logged', true)
+
+        mainWin.webContents.send('load-app')
+    })
+
+    // Create mainWin, load the rest of the app, etc...
+    app.on('ready', () => {
+    })
+}
 
 const createWindow = () => {
     mainWin  = new BrowserWindow({
@@ -43,17 +74,23 @@ const createWindow = () => {
     })
 
     mainWin.loadFile(__dirname + '/windows/index.html')
+    mainWin.setBackgroundColor('#0c0b0b')
     mainWin.show()
-    mainWin.maximize()
+    // mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
-        // store.set('access_token', token)
-        store.set('logged', false)
-        mainWin.webContents.send('load-app')
+        if(store.get('logged') === true)
+            mainWin.webContents.send('load-app')
+        else
+            store.set('logged', false)
         
         autoUpdater.checkForUpdates()
     })
 }
+
+ipcMain.on('load-login-url', () => {
+    require('electron').shell.openExternal(authUrl)
+})
 
 ipcMain.on('load-issues-url', () => {
     require('electron').shell.openExternal(githubOpenNewIssueUrl)
