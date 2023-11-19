@@ -13,7 +13,6 @@ const store = new Store()
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 
-let authWin
 let mainWin
 
 autoUpdater.autoDownload = false
@@ -21,20 +20,11 @@ autoUpdater.autoInstallOnAppQuit = true
 autoUpdater.autoRunAppAfterInstall = true
 
 const createWindow = () => {
-    authWin  = new BrowserWindow({
-        width: 400,
-        height: 600,
-        minWidth: 400,
-        minHeight: 600,
-        autoHideMenuBar: true,
-        icon: 'assets/img/icon/icon'
-    })
-    
     mainWin  = new BrowserWindow({
         width: 1300,
         height: 850,
-        minWidth: 1280,
-        minHeight: 720,
+        minWidth: 854,
+        minHeight: 480,
         show: false,
         autoHideMenuBar: true,
         // frame: false,
@@ -52,45 +42,16 @@ const createWindow = () => {
         }
     })
 
-    // magari far partire authWin da hidden, poi showare subito oppure chiuderla, checkare anche se chiude app premendo X
-    // if(store.get('access_token')) {
-    //     mainWin.loadFile(__dirname + '/windows/index.html')
-    //     mainWin.show()
-    //     mainWin.maximize()
+    mainWin.loadFile(__dirname + '/windows/index.html')
+    mainWin.show()
+    mainWin.maximize()
+    
+    mainWin.webContents.on('did-finish-load', () => {
+        // store.set('access_token', token)
+        store.set('logged', false)
+        mainWin.webContents.send('load-app')
         
-    //     mainWin.webContents.on('did-finish-load', () => {
-    //         authWin.close()
-    //         mainWin.webContents.send('load-index')
-    //         autoUpdater.checkForUpdates()
-    //     })
-    // } else {
-    //     console.log('Loaded OAuth url on Auth Window')
-    //     authWin.loadURL(authUrl)    
-    // }
-
-    console.log('Loaded OAuth url on Auth Window')
-    authWin.loadURL(authUrl)
-
-    authWin.webContents.on('did-navigate', async (event) => {
-        const currentUrl = new URL(authWin.webContents.getURL())
-        if(currentUrl.searchParams.get("code") !== null) {
-            console.log("Log-in completed!")
-            console.log('Navigated to Main Window')
-            const anilist = new AniListAPI(clientData)
-            const token = await anilist.getAccessToken(currentUrl)
-        
-            mainWin.loadFile(__dirname + '/windows/index.html')
-            mainWin.show()
-            mainWin.maximize()
-            
-            mainWin.webContents.on('did-finish-load', () => {
-                authWin.close()
-                store.set('access_token', token)
-                mainWin.webContents.send('load-index')
-                
-                autoUpdater.checkForUpdates()
-            })
-        }
+        autoUpdater.checkForUpdates()
     })
 }
 
@@ -100,6 +61,7 @@ ipcMain.on('load-issues-url', () => {
 
 app.whenReady().then(() => {
     createWindow()
+    app.setAsDefaultProtocolClient("akuse")
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
