@@ -51,7 +51,7 @@ module.exports = class Frontend {
     }
 
     /**
-     * Toggler for the app apges
+     * Toggler for the app pages
      * 
      * @param {*} divToShow 
      * @param {*} divToHide 

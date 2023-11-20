@@ -824,13 +824,14 @@ main .featured .featured-img img {
 
 .anime-page {
     position: relative;
-    width: 1800px;
-    height: 800px;
-    border-radius: var(--border-radius);
-    color: var(--font-1);
-    background: var(--color-0);
     display: flex;
     flex-direction: column;
+    width: calc(100% - 30px);
+    height: calc(100% - 30px);
+    margin: 15px;
+    color: var(--font-1);
+    background: var(--color-1);
+    border-radius: var(--border-radius);
 }
     .anime-page #page-anime-loader {
         position: absolute;
@@ -1286,10 +1287,8 @@ main section:not(:last-child) {
     }
     
 main section .anime-list-wrapper {
-    padding-bottom: 30px;
-    margin-bottom: -30px;
-    padding-top: 30px;
-    margin-top: -30px;
+    padding: 25px;
+    margin: -25px;
     position: relative;
     overflow-x: hidden;
     overflow-y: visible;
@@ -1316,14 +1315,6 @@ main section .anime-list-wrapper {
             transition: 0.25s ease-out;
             border-radius: var(--border-radius);
         }
-
-        /* main section .anime-list .anime-entry:hover .overlay {
-            display: block;
-        } */
-        
-        /* main section .anime-list .anime-entry:not(:last-child) {
-            margin-right: 25px;
-        } */
         
         main section .anime-list .anime-entry:hover:not(.disabled) {
             transform: scale(1.07);
