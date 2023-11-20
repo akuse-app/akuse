@@ -173,11 +173,18 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
     }
 })
 
-/* ANIME SECTIONS */
+/* --- ANIME SECTIONS --- */
 
 // scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
 // frontend.doDisplayAnimeSectionsScrollingButtons()
+
+/* --- SEARCH PAGE --- */
+
+let search_submit_button = document.getElementById('search-submit')
+search_submit_button.addEventListener('click', () => {
+    frontend.searchAnimeWithFilter()
+})
 
 /* --- TRIGGERS --- */
 
@@ -196,6 +203,14 @@ anime_lists.forEach(list => {
     // list.addEventListener('mouseover', (event) => {
     //     frontend.triggerAnimeOverlay(event)
     // })
+})
+
+// search page
+let search_list = document.querySelectorAll('.entries-container')
+search_list.forEach(list => {
+    list.addEventListener('click', (event) => {
+        frontend.triggerAnimeEntry(event)
+    })
 })
 
 // trigger when episode is pressed, so generate video link

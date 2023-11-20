@@ -81,12 +81,12 @@ ipcRenderer.on('load-app', async (event) => {
         if(entriesCurrent !== undefined)
             frontend.displayUserAnimeSection(entriesCurrent, 'current-home', true)
 
-        document.getElementById('current-home-section').classList.remove('.hide-section')
+        document.getElementById('current-home-section').classList.remove('hide-section')
     } else {
         document.getElementById('nav-user').classList.remove('show-li')
         document.getElementById('nav-login').classList.add('show-li')
 
-        document.getElementById('current-home-section').classList.add('.hide-section')
+        document.getElementById('current-home-section').classList.add('hide-section')
     }
 
     const entriesFeatured = await anilist.getTrendingAnimes()

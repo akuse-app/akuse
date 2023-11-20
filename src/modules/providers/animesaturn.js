@@ -35,12 +35,15 @@ module.exports = class AnimeSaturn {
      */
     async getEpisodeUrl(animeSearch, episode) {
         const animeId = await this.getAnimeId(animeSearch)
+        console.log(animeId)
         if (animeId == -1) {
             return -1
         }
 
         const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
+        console.log(animeEpisodeId)
         const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
+        console.log(data)
 
         return data.sources[1] // [1] is streamtape
     }
@@ -72,6 +75,8 @@ module.exports = class AnimeSaturn {
      */
     async getAnimeEpisodeId(animeId, episode) {
         const data = await this.consumet.fetchAnimeInfo(animeId)
+        console.log(data)
+        console.log(episode)
         return data.episodes[episode-1].id
     }
 }

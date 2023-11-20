@@ -93,8 +93,10 @@ button.circle-button-0.disabled:active {
     opacity: 1;
     transition: all 0.1s ease-out 0.8s;
     visibility: visible;
+    transform: translateX(0px);
 }
 [data-title]:after {
+    transform: translateX(-10px);
     content: attr(data-title);
     background-color: var(--color-2);
     color: var(--font-2);

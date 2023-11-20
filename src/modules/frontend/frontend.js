@@ -971,6 +971,46 @@ module.exports = class Frontend {
         /* document.getElementById('user-name').innerHTML += userInfo.User.name */
     }
 
+    async searchAnimeWithFilter() {
+        let title = document.getElementById('search-page-filter-title').value
+        let genre = document.getElementById('search-page-filter-genre').value
+        let season = document.getElementById('search-page-filter-season').value
+        let year = document.getElementById('search-page-filter-year').value
+        let format = document.getElementById('search-page-filter-format').value
+        let status = document.getElementById('search-page-filter-status').value
+        let sort = document.getElementById('search-page-filter-sort').value
+
+        let args = [
+            title != '' ? title = `search: "${title}"` 
+                        : title = '',
+            genre != '' ? genre = `genre: "${genre}"` 
+                        : genre = '',
+            season != '' ? season = `season: ${season}` 
+                         : season = '',
+            year != '' ? year = `seasonYear: ${year}` 
+                       : year = '',
+            format != '' ? format = `format: ${format}` 
+                         : format = '',
+            status != '' ? status = `status: ${status}` 
+                         : status = '',
+            sort != '' ? sort = `sort: ${sort}`
+                       : sort = '',
+            'type: ANIME'
+        ].filter(item => !(item == ''))
+         .join(', ')
+
+        let entries = await this.anilist.searchFilteredAnime(args)
+        let entries_container_div = document.querySelector('.entries-container')
+        
+        entries_container_div.innerHTML = ''
+
+        Object.keys(entries.media).forEach(key => {
+            var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
+            
+            entries_container_div.appendChild(anime_entry_div)
+        })
+    }
+
     /**
      * Trigger to display the anime modal page opened from an anime section
      * 
@@ -1318,10 +1358,10 @@ module.exports = class Frontend {
         if(!(event.target.classList.contains('episode'))) {
             var entry = event.target.closest('.episode')
             if(entry) {
-                this.video.displayVideo(this.getIdFromAnimeEntry(entry))
+                this.video.displayVideo(this.getIdFromEpisodeEntry(entry))
             }
         } else {
-            this.video.displayVideo(this.getIdFromAnimeEntry(event.target))
+            this.video.displayVideo(this.getIdFromEpisodeEntry(event.target))
         }
     }
 
@@ -1333,6 +1373,14 @@ module.exports = class Frontend {
      */
     getIdFromAnimeEntry = div => div.id.slice(12)
     
+    /**
+     * Returns the episode entry id
+     * 
+     * @param {*} div 
+     * @returns 
+     */
+    getIdFromEpisodeEntry = div => div.id.slice(8)
+
     /**
      * Returns the featured anime id
      * 

@@ -10,6 +10,9 @@
     --color-dark-opacity: rgba(0, 0, 0, 0.8);
     --color-warning: rgb(255, 61, 61);
     --color-success: #45AD67;
+        
+    /* --color-0: #0E0D19;
+    --color-1: #171622; */
     
     --font-1: #FBFBFB;
     --font-2: rgb(210, 210, 210);
@@ -1308,7 +1311,7 @@ main section .anime-list-wrapper {
         z-index: 2;
     }
 
-        main section .anime-list .anime-entry {
+        main .anime-entry {
             position: relative;
             width: 150px;
             height: min-content;
@@ -1318,15 +1321,15 @@ main section .anime-list-wrapper {
             border-radius: var(--border-radius);
         }
         
-        main section .anime-list .anime-entry:hover:not(.disabled) {
+        main .anime-entry:not(.loading):hover {
             transform: scale(1.07);
         }
         
-        main section .anime-list .anime-entry:hover:not(.disabled) .anime-cover {
+        main .anime-entry:not(.loading):hover .anime-cover {
             outline: 3px solid var(--font-1);
         }
         
-        main section .anime-list .anime-entry .content {
+        main .anime-entry .content {
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -1338,7 +1341,7 @@ main section .anime-list-wrapper {
             z-index: 3;
         }
 
-        main section .anime-list .anime-entry .anime-cover {
+        main .anime-entry .anime-cover {
             width: 150px;
             height: 212px;
             position: relative;
@@ -1346,14 +1349,14 @@ main section .anime-list-wrapper {
             border-radius: var(--border-radius);
         }
         
-        main section .anime-list .anime-entry .anime-cover img {
+        main .anime-entry .anime-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: var(--border-radius);
         }
         
-        main section .anime-list .anime-entry.disabled {
+        main .anime-entry.disabled {
             border: 3px dashed var(--color-3);
             color: var(--color-3);
             font-weight: var(--font-weight);
@@ -1361,13 +1364,13 @@ main section .anime-list-wrapper {
             cursor: auto;
         }
 
-        main section .anime-list .anime-entry .anime-cover.disabled {
+        main .anime-entry .anime-cover.disabled {
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        main section .anime-list .anime-entry .anime-cover .anime-cover-shadow {
+        main .anime-entry .anime-cover .anime-cover-shadow {
             position: absolute;
             top: 0;
             left: 0;
@@ -1377,7 +1380,7 @@ main section .anime-list-wrapper {
             border-radius: 0 0 var(--border-radius) var(--border-radius);
         }
         
-        main section .anime-list .anime-entry .anime-title {
+        main .anime-entry .anime-title {
             font-size: 0.9rem;
             color: var(--font-1);
             font-weight: 800;
@@ -1390,23 +1393,23 @@ main section .anime-list-wrapper {
             /* white-space: nowrap; */
         }
         
-        main section .anime-list .anime-entry .anime-info {
+        main .anime-entry .anime-info {
             display: flex;
             font-size: 0.9rem;
             color: var(--font-3);
             font-weight: var(--font-weight);
         }
 
-        main section .anime-list .anime-entry .anime-info .startYear {
+        main .anime-entry .anime-info .startYear {
             width: 50%;
         }
         
-        main section .anime-list .anime-entry .anime-info .episodes {
+        main .anime-entry .anime-info .episodes {
             width: 50%;
             text-align: end;
         }
 
-        main section .anime-list .anime-entry .anime-progress {
+        main .anime-entry .anime-progress {
             color: var(--font-3);
             font-size: 1rem;
             font-weight: var(--font-weight);
@@ -1507,6 +1510,10 @@ main .filters-container {
         color: var(--font-3);
         transition: var(--transition);
     }
+        main .filters-container .filter .filter-divisor {
+            display: flex;
+            gap: 5px;
+        }
 
         main .filters-container .filter:hover,
         main .filters-container .filter:focus {
@@ -1527,18 +1534,54 @@ main .filters-container {
             border-radius: var(--border-radius);
         }
         
-        main .filters-container .filter select {
-            cursor: pointer;
-        }
-
         main .filters-container .filter input {
             width: calc(100% - 20px);
         }
 
+        main .filters-container .filter select {
+            cursor: pointer;
+        }
+
+        
         main .filters-container .filter i {
             margin-right: 5px;
         }
-
+        
         main .filters-container .filter h2 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
         }
+
+main .search-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    main .search-button-wrapper button#search-submit {
+        border: none;
+        outline: none;
+        width: 100px;
+        height: 30px;
+        margin-top: 15px;
+        padding: 0 10px;
+        font-size: 1rem;
+        font-weight: var(--font-weight);
+        border-radius: var(--border-radius);
+        color: var(--color-0);
+        background-color: var(--color-important);
+        cursor: pointer;
+    }
+
+main .entries-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, max-content));
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
+}
+
+    main .entries-container .anime-entry{
+        margin-bottom: 20px;
+    }

@@ -348,6 +348,34 @@ module.exports = class AniListAPI extends Requests {
     }
 
     /**
+     * Gets searched anime with filters
+     * 
+     * @param {*} args 
+     * @returns object with the searched filtered anime
+     */
+    async searchFilteredAnime(args) {
+        var query = `
+        {
+            Page(page: 1, perPage: 50) {
+                pageInfo {
+                    total
+                    currentPage
+                    hasNextPage
+                }
+                media(${args}) {
+                    ${this.mediaData}
+                }
+            } 
+        }
+        `
+
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+
+        return respData.data.Page
+    }
+
+    /**
      * Gets the next anime releases
      * 
      * @returns object with next anime releases

@@ -54,8 +54,8 @@ const createWindow = () => {
     mainWin  = new BrowserWindow({
         width: 1300,
         height: 850,
-        minWidth: 854,
-        minHeight: 480,
+        minWidth: 960,
+        minHeight: 540,
         show: false,
         autoHideMenuBar: true,
         // frame: false,
@@ -79,6 +79,8 @@ const createWindow = () => {
     // mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
+        console.log(store.get('logged'))
+        console.log(store.get('access_token'))
         if(store.get('logged') !== true)
             store.set('logged', false)
 
