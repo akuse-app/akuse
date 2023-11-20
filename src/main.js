@@ -6,7 +6,6 @@ const url = require('url')
 const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const clientData = require ('./modules/clientData.js')
-// const server = require('./server.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
 
 const store = new Store()
@@ -88,6 +87,10 @@ const createWindow = () => {
     })
 }
 
+try {
+    require('electron-reloader')(module)
+} catch (_) {}
+
 ipcMain.on('load-login-url', () => {
     require('electron').shell.openExternal(authUrl)
 })
@@ -128,7 +131,7 @@ ipcMain.on('download-update', () => {
     let pth = autoUpdater.downloadUpdate()
 })
 
-/* APP CLOSING */
+/* CLOSING */
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
