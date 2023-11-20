@@ -69,10 +69,9 @@
     <!-- NAVBAR + MAIN SEARCH BAR -->
     <aside id="nav-main">
         <ul class="upper">
-            <li id="nav-home" class="bubble active" data-title="Home">
+            <li id="nav-home" class="active" data-title="Discover">
                 <div class="i-wrapper">
                     <i class="fa-regular fa-compass"></i>
-                    <!-- <i class="fa-solid fa-house"></i> -->
                 </div>
                 <span>Discover</span>
             </li>
@@ -82,7 +81,7 @@
                 </div>
                 <span>Library</span>
             </li>
-            <li data-title="Search">
+            <li id="nav-search" data-title="Search">
                 <div class="i-wrapper">    
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
@@ -445,23 +444,6 @@
                     </section>
                     <section id="music-home-section">
                         <h1>Music</h1>
-                        <!-- <div class="overlay">
-                            <div class="img-wrapper">
-                                <img src="https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg" alt="no">
-                            </div>
-                            <div class="content">
-                                <div class="title">ONE PIECE</div>
-                                <div class="info">dio porco cane porco</div>
-                                <div class="description">Gold Roger was known as the Pirate King, the strongest and most infamous being to have sailed the Grand Line. The capture and death of Roger by the World Government brought a change throughout the world. His last words before his death revealed the location of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece (which promises an unlimited amount of riches and fame), and quite possibly the most coveted of titles for the person who found it, the title of the Pirate King.
-                                    Enter Monkey D. Luffy, a 17-year-old boy that defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate who ransacks villages for fun, Luffy’s reason for being a pirate is one of pure wonder; the thought of an exciting adventure and meeting new and intriguing people, along with finding One Piece, are his reasons of becoming a pirate. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach One Piece.
-                                    *This includes following special episodes:
-                                    - Chopperman to the Rescue! Protect the TV Station by the Shore! (Episode 336)
-                                    - The Strongest Tag-Team! Luffy and Toriko's Hard Struggle! (Episode 492)
-                                    - Team Formation! Save Chopper (Episode 542)
-                                    - History's Strongest Collaboration vs. Glutton of the Sea (Episode 590)
-                                    - 20th Anniversary! Special Romance Dawn (Episode 907)</div>
-                            </div>
-                        </div> -->
                         <button class="circle-button-0 left"><i class="fa-solid fa-arrow-left"></i></button>
                         <button class="circle-button-0 right"><i class="fa-solid fa-arrow-right"></i></button>
                         <div class="anime-list-wrapper">
@@ -513,6 +495,99 @@
                             <div id="repeating-my-list" class="anime-list"></div>
                         </div>
                     </section>
+                </div>
+            </main>
+            <main id="search-page" style="display: none">
+                <!-- <h1>Search Anime</h1> -->
+                <div class="filters-container">
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-heading"></i>
+                            Title
+                        </h2>
+                        <input type="text" placeholder="Title">
+                    </div>
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-masks-theater"></i>
+                            Genre
+                        </h2>
+                        <select name="" id="">
+                            <option value="" disabled selected>Genre</option>
+                            <option value="">Action</option>
+                            <option value="">Adventure</option>
+                            <option value="">Comedy</option>
+                            <option value="">Drama</option>
+                            <option value="">Ecchi</option>
+                            <option value="">Fantasy</option>
+                            <option value="">Horror</option>
+                            <option value="">Mahou Shoujo</option>
+                            <option value="">Mecha</option>
+                            <option value="">Music</option>
+                            <option value="">Mistery</option>
+                            <option value="">Psychological</option>
+                            <option value="">Romance</option>
+                            <option value="">Sci-Fi</option>
+                            <option value="">Slice of Life</option>
+                            <option value="">Sports</option>
+                            <option value="">Supernatural</option>
+                            <option value="">Thriller</option>
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-leaf"></i>
+                            Season
+                        </h2>
+                        <select name="" id="">
+                            <option value="" disabled selected>Season</option>
+                            <option value="">Winter</option>
+                            <option value="">Spring</option>
+                            <option value="">Summer</option>
+                            <option value="">Fall</option>
+                        </select>
+                        <input type="number" placeholder="Year">
+                    </div>
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-tv"></i>
+                            Format
+                        </h2>
+                        <select name="" id="">
+                            <option value="" disabled selected>Format</option>
+                            <option value="">TV Show</option>
+                            <option value="">Movie</option>
+                            <option value="">TV Short</option>
+                            <option value="">OVA</option>
+                            <option value="">ONA</option>
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-clapperboard"></i>
+                            Status
+                        </h2>
+                        <select name="" id="">
+                            <option value="" disabled selected>Status</option>
+                            <option value="">Airing</option>
+                            <option value="">Finished</option>
+                            <option value="">Not Yet Aired</option>
+                            <option value="">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <h2>
+                            <i class="fa-solid fa-filter"></i>
+                            Sort
+                        </h2>
+                        <select name="" id="">
+                            <option value="" disabled selected>Sort</option>
+                            <option value="">Release Date</option>
+                            <option value="">Score</option>
+                            <option value="">Popularity</option>
+                            <option value="">Trending</option>
+                        </select>
+                    </div>
                 </div>
             </main>
         </div>

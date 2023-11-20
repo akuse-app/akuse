@@ -1,11 +1,8 @@
 'use-strict'
 
-const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
 const Video = require('../modules/frontend/video')
-const clientData = require('../modules/clientData.js')
 
-const anilist = new AniListAPI(clientData)
 const frontend = new Frontend()
 const video = new Video()
 
@@ -21,19 +18,7 @@ frontend.enableSkeletonLoader()
 
 /* --- MAIN PAGES --- */
 
-// toggler
-let homeNav = document.getElementById('nav-home')
-let myListNav = document.getElementById('nav-my-list')
-let homePageMain = document.querySelector('main#home-page')
-let myListPageMain = document.querySelector('main#my-list-page')
-
-homeNav.addEventListener('click', () => {
-    frontend.togglePage(homePageMain, myListPageMain, homeNav, myListNav)
-})
-
-myListNav.addEventListener('click', () => {
-    frontend.togglePage(myListPageMain, homePageMain, myListNav, homeNav)
-})
+frontend.togglePage()
 
 /* --- FEATURED SECTION --- */
 

@@ -87,9 +87,9 @@ const createWindow = () => {
     })
 }
 
-try {
-    require('electron-reloader')(module)
-} catch (_) {}
+// try {
+//     require('electron-reloader')(module)
+// } catch (_) {}
 
 ipcMain.on('load-login-url', () => {
     require('electron').shell.openExternal(authUrl)

@@ -51,20 +51,28 @@ module.exports = class Frontend {
     }
 
     /**
-     * Toggler for the app pages
-     * 
-     * @param {*} divToShow 
-     * @param {*} divToHide 
-     * @param {*} navLiToShow 
-     * @param {*} navLiToHide 
+     * Pages toggler
      */
-    togglePage(divToShow, divToHide, navLiToShow, navLiToHide) {
-        if(divToShow.style.display == 'none') {
-            divToShow.style.display = 'block'
-            divToHide.style.display = 'none'
-            navLiToShow.classList.add('active')
-            navLiToHide.classList.remove('active')
-        }
+    togglePage() {
+        let lis = document.querySelectorAll('aside ul.upper li')
+        let mains = document.querySelectorAll('main')
+        let body_container = document.querySelector('.body-container')
+
+        Object.keys(lis).forEach(i => {
+            Object.values(lis)[i].addEventListener('click', () => {
+                body_container.scrollTop = 0
+                
+                Object.values(lis).forEach(li => {
+                    li.classList.remove('active')
+                })
+                Object.keys(mains).forEach(main => {
+                    Object.values(mains)[main].style.display = 'none'
+                })
+
+                Object.values(lis)[i].classList.add('active')
+                Object.values(mains)[i].style.display = 'block'
+            })
+        })
     }
 
     /**

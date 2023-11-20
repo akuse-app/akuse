@@ -697,6 +697,7 @@ nav {
 .main-container {
     /* width: calc(100% - 50px);
     height: calc(100% - 50px); */
+    min-height: calc(100% - 85px);
     margin: 15px 15px 15px 100px;
     background-color: var(--color-1);
     border-radius: var(--border-radius);
@@ -1213,6 +1214,7 @@ main .featured .featured-img img {
             outline: none;
             border: none;
             background-color: transparent;
+            
         }
         
         .list-editor-page .content .input-container input {
@@ -1490,3 +1492,53 @@ main#my-list-page .section-container {
     display: flex;
     flex-direction: column;
 }
+
+main .filters-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+    main .filters-container .filter {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        flex-basis: 100%;
+        color: var(--font-3);
+        transition: var(--transition);
+    }
+
+        main .filters-container .filter:hover,
+        main .filters-container .filter:focus {
+            color: var(--font-2);
+        }
+
+        main .filters-container .filter input,
+        main .filters-container .filter select {
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 30px;
+            padding: 0 10px;
+            color: var(--font-3);
+            font-size: 1rem;
+            font-weight: var(--font-weight);
+            background-color: var(--color-3);
+            border-radius: var(--border-radius);
+        }
+        
+        main .filters-container .filter select {
+            cursor: pointer;
+        }
+
+        main .filters-container .filter input {
+            width: calc(100% - 20px);
+        }
+
+        main .filters-container .filter i {
+            margin-right: 5px;
+        }
+
+        main .filters-container .filter h2 {
+            font-size: 1.4rem;
+        }
