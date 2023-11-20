@@ -34,6 +34,7 @@ if (!gotTheLock) {
 
         // logged in
         let code = commandLine[2].split('?code=')[1]
+        mainWin.webContents.send("console-log", code)
 
         const anilist = new AniListAPI(clientData)
         const token = await anilist.getAccessToken(code)
@@ -79,11 +80,10 @@ const createWindow = () => {
     // mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
-        if(store.get('logged') === true)
-            mainWin.webContents.send('load-app')
-        else
+        if(store.get('logged') !== true)
             store.set('logged', false)
-        
+
+        mainWin.webContents.send('load-app')
         autoUpdater.checkForUpdates()
     })
 }
