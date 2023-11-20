@@ -65,9 +65,6 @@ ipcRenderer.on('message', async (event, msg) => {
  * 
  */
 ipcRenderer.on('load-app', async (event) => {
-    // rendering stuff
-
-    // filling with anilist data
     const anilist = new AniListAPI(clientData)
 
     let logged = store.get('logged')

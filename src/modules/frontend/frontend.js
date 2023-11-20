@@ -635,10 +635,10 @@ module.exports = class Frontend {
      * @returns -1 if entries is empty
      */
     displayUserAnimeSection(entries, list, needProgressBar) {
-        if(Object.values(entries).length == 0) return -1
-        
         var anime_list_div = document.getElementById(list)
         anime_list_div.innerHTML = ""
+
+        if(Object.values(entries).length == 0) return -1
         
         Object.keys(entries).forEach(key => {
             var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
@@ -660,7 +660,7 @@ module.exports = class Frontend {
             anime_list_div.appendChild(anime_entry_div)
         })
 
-        this.assignZIndexToAnimeEntries(`${list}-section`)
+        // this.assignZIndexToAnimeEntries(`${list}-section`)
     }
     
     /**
@@ -680,7 +680,7 @@ module.exports = class Frontend {
             anime_list_div.appendChild(anime_entry_div)
         })
         
-        this.assignZIndexToAnimeEntries(`${genre}-section`)
+        // this.assignZIndexToAnimeEntries(`${genre}-section`)
     }
     
     /**
@@ -769,7 +769,7 @@ module.exports = class Frontend {
         anime_info_div.appendChild(startYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
-        anime_entry_div.appendChild(overlay_div)
+        // anime_entry_div.appendChild(overlay_div)
         anime_entry_div.appendChild(anime_cover_div)
         anime_entry_div.appendChild(anime_entry_content)
 
