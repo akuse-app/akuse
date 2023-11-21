@@ -1551,19 +1551,43 @@ main .filters-container {
             font-size: 1.3rem;
         }
 
-main .search-button-wrapper {
+main .search-buttons-container {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 25px;
 }
 
-    main .search-button-wrapper button#search-submit {
+    main .search-buttons-container .search-tags {
+        position: absolute;
+        left: 0;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        color: var(--font-3);
+    }
+
+        main .search-buttons-container .search-tags .tags-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        main .search-buttons-container .search-tags .tags-container .tag {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: var(--color-3);
+            border-radius: var(--border-radius);
+            font-weight: var(--font-weight);
+        }
+
+    main .search-buttons-container button#search-submit {
         border: none;
         outline: none;
         width: 100px;
-        height: 30px;
-        margin-top: 15px;
+        height: 35px;
         padding: 0 10px;
         font-size: 1rem;
         font-weight: var(--font-weight);
@@ -1571,6 +1595,27 @@ main .search-button-wrapper {
         color: var(--color-0);
         background-color: var(--color-important);
         cursor: pointer;
+    }
+
+    main .search-buttons-container button#search-clear {
+        border: none;
+        outline: none;
+        position: absolute;
+        right: 0;
+        width: 30px;
+        height: 30px;
+        color: var(--font-3);
+        background-color: var(--color-3);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+    }
+
+    main .search-buttons-container button#search-clear:hover {
+        color: var(--font-2);
+    }
+
+    main .search-buttons-container button#search-clear:active {
+        color: var(--font-3);
     }
 
 main .entries-container {
@@ -1582,6 +1627,6 @@ main .entries-container {
     margin-top: 20px;
 }
 
-    main .entries-container .anime-entry{
+    main .entries-container .anime-entry {
         margin-bottom: 20px;
     }

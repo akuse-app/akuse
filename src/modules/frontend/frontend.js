@@ -980,6 +980,9 @@ module.exports = class Frontend {
         let status = document.getElementById('search-page-filter-status').value
         let sort = document.getElementById('search-page-filter-sort').value
 
+        let tags_container = document.querySelector('main .search-buttons-container .search-tags .tags-container')
+        tags_container.innerHTML = ''
+
         let args = [
             title != '' ? title = `search: "${title}"` 
                         : title = '',
@@ -994,10 +997,20 @@ module.exports = class Frontend {
             status != '' ? status = `status: ${status}` 
                          : status = '',
             sort != '' ? sort = `sort: ${sort}`
-                       : sort = '',
-            'type: ANIME'
+                       : sort = ''
         ].filter(item => !(item == ''))
-         .join(', ')
+
+        console.log(args)
+
+        for(let i=0; i<args.length; i++){
+            let tag = document.createElement('div')
+            tag.classList.add('tag')
+            tag.innerHTML = args[i]
+
+            tags_container.appendChild(tag)
+        }
+
+        args = args.concat('type: ANIME').join(', ')
 
         let entries = await this.anilist.searchFilteredAnime(args)
         let entries_container_div = document.querySelector('.entries-container')

@@ -23,14 +23,6 @@
             </div>
         </div>
     </div>
-    <!-- DOCUMENT CONTROLS -->
-    <!-- <div class="document-controls">
-        <ul>
-            <li id="document-iconify"><i class="fa-regular fa-window-minimize"></i></li>
-            <li id="document-maximize"><i class="fa-regular fa-square"></i></li>
-            <li id="document-quit"><i style="font-size: 1rem" class="fa-solid fa-xmark"></i></li>
-        </ul>
-    </div> -->
     <!-- AUTO UPDATE MODAL PAGE -->
     <div id="auto-update-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
     <div id="auto-update-page" class="modal-page-wrapper fade-in">
@@ -236,9 +228,6 @@
                                         <button id="page-anime-watch-" class="watch">
                                             <i style="margin-right: 5px" class="fa-solid fa-play"></i>
                                         </button>
-                                        <!-- <button id="page-anime-trailer" class="trailer">
-                                            Trailer
-                                        </button> -->
                                         <button id="page-anime-list-editor" class="list-editor"></button>
                                     </div>
                                     <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
@@ -368,12 +357,6 @@
                 </div>
             <video id="video"></video>
         </div>
-        <!-- <nav>
-            <ul>
-                <li id="nav-home" class="active">Home</li>
-                <li id="nav-my-list">Library</li>
-            </ul>
-        </nav> -->
         <!-- MAIN -->
         <div class="main-container">
             <main id="home-page" style="display: block">
@@ -594,9 +577,15 @@
                         </select>
                     </div>
                 </div>
-                <div class="search-button-wrapper">
-                    <button id="search-submit">
-                        Search
+                <div class="search-buttons-container">
+                    <div class="search-tags">
+                        <i class="fa-solid fa-tags"></i>
+                        <div class="tags-container">
+                        </div>
+                    </div>
+                    <button id="search-submit">Search</button>
+                    <button id="search-clear">
+                        <i class="fa-solid fa-trash-can"></i>
                     </button>
                 </div>
                 <div class="entries-container"></div>

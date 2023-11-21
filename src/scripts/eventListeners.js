@@ -186,6 +186,12 @@ search_submit_button.addEventListener('click', () => {
     frontend.searchAnimeWithFilter()
 })
 
+let search_clear_button = document.getElementById('search-clear')
+search_clear_button.addEventListener('click', () => {
+    document.querySelector('main .tags-container').innerHTML = ''
+    document.querySelector('main .entries-container').innerHTML = ''
+})
+
 /* --- TRIGGERS --- */
 
 // trigger when featured anime entry is pressed
