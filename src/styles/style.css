@@ -752,7 +752,7 @@ main .featured-scroller .featured-scroller-wrapper {
 
 main .featured {
     position: relative;
-    width: calc(100% - 100px);
+    width: 100%;
     scroll-snap-align: center;
 }
 

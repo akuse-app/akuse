@@ -740,6 +740,7 @@ module.exports = class Frontend {
         const animeName = this.getTitle(animeEntry)
         const startYear = animeEntry.startDate.year
         const episodes = this.getAvailableEpisodes(animeEntry)
+        const format = animeEntry.format
         const cover = animeEntry.coverImage.large
         
         let anime_entry_div = document.createElement('div')
@@ -763,8 +764,8 @@ module.exports = class Frontend {
         anime_title_div.innerHTML = animeName
         startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
         startYear_div.innerHTML += startYear
-        episodes_div.innerHTML = episodes
-        episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-list-ul"></i>`
+        episodes_div.innerHTML = format
+        episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-tv"></i>`
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
         

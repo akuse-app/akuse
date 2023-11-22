@@ -177,7 +177,6 @@ document.getElementById('anime-page').addEventListener('click', (event) => {
 
 // scrolling buttons
 frontend.enableAnimeSectionsScrollingButtons()
-// frontend.doDisplayAnimeSectionsScrollingButtons()
 
 /* --- SEARCH PAGE --- */
 
