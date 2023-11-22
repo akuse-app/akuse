@@ -50,23 +50,6 @@
     }
 }
 
-/* LOADING BAR */
-
-.loading-bar-animation {
-    animation: loadingBarAnimation var(--animation-transition);
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
-
-@keyframes loadingBarAnimation {
-    0% {
-        width: 0%;
-    }
-    100% {
-        width: 100%;
-    }
-}
-
 /* DOM ELEMENTS */
 
 .fade-in {

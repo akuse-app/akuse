@@ -74,6 +74,10 @@ module.exports = class AniListAPI extends Requests {
                 progress
             }
             siteUrl
+            streamingEpisodes {
+                title
+                thumbnail
+            }
         `
     }
 

@@ -190,6 +190,14 @@ let search_clear_button = document.getElementById('search-clear')
 search_clear_button.addEventListener('click', () => {
     document.querySelector('main .tags-container').innerHTML = ''
     document.querySelector('main .entries-container').innerHTML = ''
+
+    document.getElementById('search-page-filter-title').value = ''
+    document.getElementById('search-page-filter-genre').value = ''
+    document.getElementById('search-page-filter-season').value = ''
+    document.getElementById('search-page-filter-year').value = ''
+    document.getElementById('search-page-filter-format').value = ''
+    document.getElementById('search-page-filter-status').value = ''
+    document.getElementById('search-page-filter-sort').value = ''
 })
 
 /* --- TRIGGERS --- */

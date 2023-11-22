@@ -156,13 +156,9 @@
     <div id="anime-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
     <div id="anime-page" class="modal-page-wrapper fade-in">
         <div class="anime-page">
+            <img id="page-anime-banner">
             <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
             <div>
-                <div id="page-anime-loader" style="display: flex;">
-                    <svg class="ring" viewBox="25 25 50 50" stroke-width="5">
-                        <circle cx="50" cy="50" r="20" />
-                    </svg>
-                </div>
                 <div id="page-anime-content-wrapper" class="content-wrapper" style="display: none">
                     <div class="content">
                         <div class="page-anime-left">
@@ -260,7 +256,7 @@
                     <div id="list-editor-user-list-container" class="input-container">
                         <i class="fa-solid fa-list-ul"></i>
                         <select id="list-editor-user-list">
-                            <option value="" disabled selected>NOT IN LIST</option>
+                            <option value="" disabled selected hidden>NOT IN LIST</option>
                             <option value="CURRENT">CURRENT</option>
                             <option value="PLANNING">PLANNING</option>
                             <option value="COMPLETED">COMPLETED</option>
@@ -496,7 +492,7 @@
                             Genre
                         </h2>
                         <select name="" id="search-page-filter-genre">
-                            <option value="" disabled selected>Genre</option>
+                            <option value="" disabled selected hidden>Genre</option>
                             <option value="Action">Action</option>
                             <option value="Adventure">Adventure</option>
                             <option value="Comedy">Comedy</option>
@@ -524,7 +520,7 @@
                         </h2>
                         <div class="filter-divisor">
                             <select name="" id="search-page-filter-season">
-                                <option value="" disabled selected>Season</option>
+                                <option value="" disabled selected hidden>Season</option>
                                 <option value="WINTER">Winter</option>
                                 <option value="SPRING">Spring</option>
                                 <option value="SUMMER">Summer</option>
@@ -539,7 +535,7 @@
                             Format
                         </h2>
                         <select name="" id="search-page-filter-format">
-                            <option value="" disabled selected>Format</option>
+                            <option value="" disabled selected hidden>Format</option>
                             <option value="TV">TV Show</option>
                             <option value="TV_SHORT">TV Short</option>
                             <option value="MOVIE">Movie</option>
@@ -555,7 +551,7 @@
                             Status
                         </h2>
                         <select name="" id="search-page-filter-status">
-                            <option value="" disabled selected>Status</option>
+                            <option value="" disabled selected hidden>Status</option>
                             <option value="FINISHED">Finished</option>
                             <option value="RELEASING">Releasing</option>
                             <option value="NOT_YET_RELEASED">Not Yet Released</option>
@@ -569,7 +565,7 @@
                             Sort
                         </h2>
                         <select name="" id="search-page-filter-sort">
-                            <option value="" disabled selected>Sort</option>
+                            <option value="" disabled selected hidden>Sort</option>
                             <option value="START_DATE_DESC">Release Date</option>
                             <option value="SCORE_DESC">Score</option>
                             <option value="POPULARITY_DESC">Popularity</option>

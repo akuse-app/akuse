@@ -217,8 +217,6 @@ module.exports = class Frontend {
             document.getElementById(pageModalDiv).style.display = 'none'
             document.getElementById(shadowModalDiv).style.display = 'none'
         }, 400)
-        
-        /* document.getElementsByClassName('body-container')[0].style.overflow = 'auto' */
     }
 
     /**
@@ -1086,6 +1084,7 @@ module.exports = class Frontend {
             list_updater_button.classList.add('in-list')
         }
 
+        document.getElementById('page-anime-banner').src = banner
         document.getElementById('page-anime-title').innerHTML = title
         document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
         document.getElementById('page-anime-format').innerHTML = format
@@ -1142,8 +1141,7 @@ module.exports = class Frontend {
             anime_genres_ul.appendChild(anime_genres_li)
         })
 
-        // hide loader - show content
-        document.getElementById('page-anime-loader').style.display = 'none'
+        // show content
         document.getElementById('page-anime-content-wrapper').style.display = 'flex'
     }
 
@@ -1303,6 +1301,7 @@ module.exports = class Frontend {
         this.hideModalPage('anime-page-shadow-background', 'anime-page')
         
         // clear infos
+        document.getElementById('page-anime-banner').src = ""
         document.getElementById('page-anime-title').innerHTML = ""
         document.getElementById('page-anime-title').classList.remove('anime-page-warn-on')
         document.getElementById('page-anime-title').classList.remove('anime-page-warn-off')
@@ -1329,12 +1328,8 @@ module.exports = class Frontend {
         document.getElementById('page-anime-list-editor').classList.remove('in-list')
         document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
 
-
         // hide content - show loader
         document.getElementById('page-anime-content-wrapper').style.display = 'none'
-        setTimeout(() => {
-            document.getElementById('page-anime-loader').style.display = 'flex'
-        }, 400) // with timeout because a visual bug occurs when the modal page is closing
     }
 
     /**
