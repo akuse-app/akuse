@@ -10,9 +10,6 @@
     --color-dark-opacity: rgba(0, 0, 0, 0.6);
     --color-warning: rgb(255, 61, 61);
     --color-success: #45AD67;
-        
-    /* --color-0: #0E0D19;
-    --color-1: #171622; */
     
     --font-1: #FBFBFB;
     --font-2: rgb(210, 210, 210);
@@ -846,6 +843,7 @@ main .featured .featured-img img {
         left: 0;
         width: 100%;
         object-fit: cover;
+        filter: brightness(0.6);
     }
 
     .anime-page .content-wrapper {

@@ -79,6 +79,8 @@ const createWindow = () => {
     // mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
+        console.log(store.get('logged'))
+        console.log(store.get('access_token'))
         if(store.get('logged') !== true)
             store.set('logged', false)
 
