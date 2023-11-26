@@ -367,6 +367,10 @@ aside h1 {
         aside ul li:hover:not(li.active) {
             color: var(--font-2);
         }
+
+        aside ul li:hover:not(li.active) .i-wrapper {
+            filter: brightness(1.50);
+        }
         
         aside ul li .i-wrapper {
             display: flex;
@@ -376,6 +380,7 @@ aside h1 {
             height: 50px;
             background-color: var(--color-0);
             border-radius: var(--border-radius);
+            transition: var(--transition);
         }
 
         aside ul li .i-wrapper.nav-user {
@@ -933,7 +938,7 @@ main .featured .featured-img img {
         .anime-page .content .right {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 5px;
             width: 35%;
             /* margin-top: 35px; */
         }
@@ -941,6 +946,7 @@ main .featured .featured-img img {
         .anime-page .content  .additional-info {
             font-size: 1rem;
             color: var(--font-1);
+            line-height: 24px;
         }
 
         .anime-page .content  .additional-info span {
@@ -958,27 +964,80 @@ main .featured .featured-img img {
         }
 
         .anime-page .episodes-section .episodes-scroller {
+            padding: 25px;
+            margin: -25px;
             width: 100%;
             overflow: auto;
         }
 
         .anime-page .episodes-section .episodes {
             display: flex;
+            /* flex-direction: column; */
             gap: 20px;
-            width: max-content;
+            width: 100%;
             height: max-content;
         }
         
         .anime-page .episodes-section .episode-entry {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            height: 200px;
+            /* width: calc(100% + 50px); */
             border-radius: var(--border-radius);
+            /* background-color: var(--color-3); */
+            cursor: pointer;
+            transition: var(--transition);
+            background: linear-gradient(1turn, var(--color-0), transparent);
+        }
+        
+        .anime-page .episodes-section .episode-entry:hover {
+            transform: scale(1.04);
         }
 
+        .anime-page .episodes-section .episode-entry:hover img {
+            outline: 3px solid var(--font-1);
+        }
+        
         .anime-page .episodes-section .episode-entry img {
-            width: 450px;
-            height: 200px;
+            height: 100%;
+            aspect-ratio: 1.78 / 1;
             object-fit: cover;
             border-radius: var(--border-radius);
         }
+        
+            .anime-page .episodes-section .episode-entry .episode-content {
+                position: absolute;
+                bottom: 0;
+                display: flex;
+                /* align-items: center;
+                gap: 15px; */
+                flex-direction: column;
+                width: calc(100% - 30px);
+                padding: 150px 15px 5px 15px;
+                border-radius: var(--border-radius);
+                background: linear-gradient(1turn, var(--color-0), transparent);
+            }
+
+            .anime-page .episodes-section .episode-entry .episode-content .title {
+                color: var(--font-1);
+                font-size: 1.4rem;
+                font-weight: var(--font-weight);
+            }
+            
+            .anime-page .episodes-section .episode-entry .episode-content .description {
+                color: var(--font-3);
+                font-size: 1.1rem;
+                font-weight: var(--font-weight);
+                line-height: 28px;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 5;
+                -webkit-box-orient: vertical;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
 
     .anime-page button.exit {
         position: fixed;
@@ -1296,6 +1355,7 @@ main section .anime-list-wrapper {
             color: var(--font-1);
             font-weight: 800;
             min-height: 36px;
+
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;

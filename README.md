@@ -71,7 +71,7 @@ npm start
 
 ## ⚠ How to login in development
 
-In development, the login redirect doesn't work since the app is not packed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance, just distribute the app once (```npm run dist:win``` for Windows, other scripts are in package.json file) and login from there. After that, your app will be authenticated also in development mode.
+In development, the login redirect doesn't work since the app is not packed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance, just distribute the app (```npm run dist:win``` for Windows, other scripts are in package.json file) and login from there once. After that, your app will be authenticated also in development mode.
 
 ## Known Issues
 

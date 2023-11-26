@@ -4,6 +4,7 @@ const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
 const LoadingBar = require('../frontend/loadingBar')
 const Video = require('./video')
+const Requests = require('../requests.js')
 const clientData = require ('../clientData.js')
 
 /**
@@ -21,6 +22,7 @@ module.exports = class Frontend {
         this.cons = new AnimeSaturn()
         this.loadingBar = new LoadingBar()
         this.video = new Video()
+        this.req = new Requests()
         this.months = {
             '1': 'Jan',
             '2': 'Feb',
@@ -813,6 +815,11 @@ module.exports = class Frontend {
         return overlay_div
     }
 
+    /**
+     * Creates the anime page with the passed content
+     * 
+     * @param {*} animeEntry 
+     */
     createAnimePage(animeEntry) {
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
@@ -919,21 +926,38 @@ module.exports = class Frontend {
             episode_entry.classList.add('episode-entry')
 
             let episode_img = document.createElement('img')
+            let episode_content = document.createElement('div')
+            let episode_title = document.createElement('div')
+            let episode_description = document.createElement('div')
             let useThumbnail = false
+
+            episode_content.classList.add('episode-content')
+            episode_title.classList.add('title')
+            episode_description.classList.add('description')
 
             // check if episode thumbnail exists, otherwise use banner
             for(let j in episodesEntries) {
                 if(episodesEntries[j].title.includes(`Episode ${i} `)) {
                     useThumbnail = true
                     episode_img.src = episodesEntries[j].thumbnail
-                    break    
+                    episode_title.innerHTML = episodesEntries[j].title.split(' - ')[0]
+                    episode_description.innerHTML = episodesEntries[j].title.split(' - ')[1]
+                    
+                    break
                 }
             }
 
-            if(useThumbnail === false) episode_img.src = banner 
+            if(useThumbnail === false) {
+                episode_img.src = banner
+                episode_title.innerHTML = `Episode ${i}`
+            }
+
             useThumbnail = false
             
+            episode_content.appendChild(episode_title)
+            episode_content.appendChild(episode_description)
             episode_entry.appendChild(episode_img)
+            episode_entry.appendChild(episode_content)
             episodes_div.appendChild(episode_entry)
         }
 
@@ -996,10 +1020,10 @@ module.exports = class Frontend {
         if(!(event.target.tagName == 'button')) {
             var entry = event.target.closest('button')
             if(entry) {
-                this.displayAnimePage(entry.id.slice(22))
+                this.displayAnimePage(this.getIdFromFeaturedAnime(entry))
             }
         } else {
-            this.displayAnimePage(event.target.id.slice(22))
+            this.displayAnimePage(this.getIdFromFeaturedAnime(event.target))
         }
     }
 
@@ -1174,6 +1198,8 @@ module.exports = class Frontend {
         if(animeId == -1) return
 
         this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+
+        console.log(animeId)
 
         // needed to close anime pages (must be fixed)
         let anime_page_exit_buttons = document.querySelectorAll('.anime-page button[id^="exit-"]')
