@@ -268,8 +268,6 @@ module.exports = class Frontend {
             let listWidth = anime_section_list.scrollWidth
 
             if(wrapperWidth > listWidth) {
-                console.log(Object.values(anime_sections)[section].id)
-                console.log('nascondo ', wrapperWidth, ' ', listWidth)
 
                 anime_section_scroll_left.classList.add('hide')
                 anime_section_scroll_right.classList.add('hide')
@@ -665,8 +663,6 @@ module.exports = class Frontend {
                 }
             anime_list_div.appendChild(anime_entry_div)
         })
-
-        // this.assignZIndexToAnimeEntries(`${list}-section`)
     }
     
     /**
@@ -685,8 +681,6 @@ module.exports = class Frontend {
             
             anime_list_div.appendChild(anime_entry_div)
         })
-        
-        // this.assignZIndexToAnimeEntries(`${genre}-section`)
     }
     
     /**
@@ -770,6 +764,7 @@ module.exports = class Frontend {
         anime_cover_img.alt = 'cover'
         
         let overlay_div = this.createEntryOverlay(animeEntry)
+        this.createAnimePage(animeEntry)
 
         anime_cover_div.appendChild(anime_cover_img)
         anime_entry_content.appendChild(anime_title_div)
@@ -818,6 +813,141 @@ module.exports = class Frontend {
         return overlay_div
     }
 
+    createAnimePage(animeEntry) {
+        const id = animeEntry.id
+        const title = this.getTitle(animeEntry)
+        const status = this.capitalizeFirstLetter(animeEntry.status)
+        const format = animeEntry.format
+        const episodes = this.getAvailableEpisodes(animeEntry)
+        const description = this.parseDescription(animeEntry.description)
+        const banner = animeEntry.bannerImage
+        const season = this.capitalizeFirstLetter(animeEntry.season)
+        const seasonYear = animeEntry.seasonYear
+        const genres = Object.values(animeEntry.genres).join(', ')
+        const synonyms = Object.values(animeEntry.synonyms).join(', ')
+        const episodesEntries = animeEntry.streamingEpisodes
+
+        let anime_pages = document.querySelector('.anime-pages')
+        
+        let modal_page_wrapper = document.createElement('div')
+        let anime_page = document.createElement('div')
+        let exit_button = document.createElement('button')
+        let content_wrapper = document.createElement('div')
+        let banner_wrapper = document.createElement('div')
+        let banner_img = document.createElement('img')
+        let content_div = document.createElement('div')
+        let left_div = document.createElement('div')
+        let title_div = document.createElement('h1')
+        let info_div = document.createElement('ul')
+        let info_1 = document.createElement('li')
+        let info_2 = document.createElement('li')
+        let info_3 = document.createElement('li')
+        let description_div = document.createElement('div')
+        let right_div = document.createElement('div')
+        let attidional_info_1 = document.createElement('p')
+        let attidional_info_2 = document.createElement('p')
+        let attidional_info_3 = document.createElement('p')
+        let additional_info_span = document.createElement('span')
+        let episodes_section = document.createElement('div')
+        let episodes_header = document.createElement('h2')
+        let episodes_scroller = document.createElement('div')
+        let episodes_div = document.createElement('div')
+
+        modal_page_wrapper.id = `anime-page-${id}`
+        modal_page_wrapper.classList.add('modal-page-wrapper')
+        modal_page_wrapper.classList.add('fade-in')
+        anime_page.classList.add('anime-page')
+        exit_button.id = `exit-${id}`
+        exit_button.classList.add('exit')
+        exit_button.innerHTML = `<i class="fa-solid fa-xmark"></i>`
+        content_wrapper.classList.add('content-wrapper')
+        banner_wrapper.classList.add('banner-wrapper')
+        banner_img.classList.add('banner')
+        content_div.classList.add('content')
+        left_div.classList.add('left')
+        title_div.classList.add('title')
+        info_div.classList.add('info')
+        description_div.classList.add('description')
+        right_div.classList.add('right')
+        attidional_info_1.classList.add('additional-info')
+        attidional_info_2.classList.add('additional-info')
+        attidional_info_3.classList.add('additional-info')
+        episodes_section.classList.add('episodes-section')
+        episodes_scroller.classList.add('episodes-scroller')
+        episodes_div.classList.add('episodes')
+
+        banner_img.src = banner
+        title_div.innerHTML = title
+        info_1.innerHTML = status
+        info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-tv"></i>`
+        info_2.innerHTML += format
+        info_3.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-film"></i>`
+        info_3.innerHTML += episodes
+        info_3.innerHTML += ' Episodes'
+        description_div.innerHTML = description
+        
+        additional_info_span.innerHTML = 'Released on: '
+        attidional_info_1.appendChild(additional_info_span)
+        attidional_info_1.innerHTML += season + ' ' + seasonYear
+        additional_info_span.innerHTML = 'Genres: '
+        attidional_info_2.appendChild(additional_info_span)
+        attidional_info_2.innerHTML += genres
+        additional_info_span.innerHTML = 'Other titles: '
+        attidional_info_3.appendChild(additional_info_span)
+        attidional_info_3.innerHTML += synonyms
+
+        episodes_header.innerHTML = 'Episodes'
+
+        banner_wrapper.appendChild(banner_img)
+        info_div.appendChild(info_1)
+        info_div.appendChild(info_2)
+        info_div.appendChild(info_3)
+        left_div.appendChild(title_div)
+        left_div.appendChild(info_div)
+        left_div.appendChild(description_div)
+        right_div.appendChild(attidional_info_1)
+        right_div.appendChild(attidional_info_2)
+        right_div.appendChild(attidional_info_3)
+        content_div.appendChild(left_div)
+        content_div.appendChild(right_div)
+        content_wrapper.appendChild(banner_wrapper)
+        content_wrapper.appendChild(content_div)
+
+        // create episodes entries
+        for(let i=1; i<=episodes; i++) {
+            let episode_entry = document.createElement('div')
+            episode_entry.classList.add('episode-entry')
+
+            let episode_img = document.createElement('img')
+            let useThumbnail = false
+
+            // check if episode thumbnail exists, otherwise use banner
+            for(let j in episodesEntries) {
+                if(episodesEntries[j].title.includes(`Episode ${i} `)) {
+                    useThumbnail = true
+                    episode_img.src = episodesEntries[j].thumbnail
+                    break    
+                }
+            }
+
+            if(useThumbnail === false) episode_img.src = banner 
+            useThumbnail = false
+            
+            episode_entry.appendChild(episode_img)
+            episodes_div.appendChild(episode_entry)
+        }
+
+        episodes_scroller.appendChild(episodes_div)
+        episodes_section.appendChild(episodes_header)
+        episodes_section.appendChild(episodes_scroller)
+        content_wrapper.appendChild(episodes_section)
+        anime_page.appendChild(exit_button)
+        anime_page.appendChild(content_wrapper)
+        modal_page_wrapper.appendChild(anime_page)
+
+        anime_pages.appendChild(modal_page_wrapper)
+    }
+
     /**
      * Trigger to display the anime overlay
      * 
@@ -829,7 +959,6 @@ module.exports = class Frontend {
 
             let overlay_div = entry.querySelector('.overlay')
             let oldIndex = parseInt(entry.style.zIndex)
-            console.log(oldIndex)
             oldIndex += 2
             
             // entry.style.zIndex = oldIndex
@@ -839,7 +968,6 @@ module.exports = class Frontend {
 
             overlay_div.addEventListener('mouseout', () => {
                 let oldIndex = parseInt(entry.style.zIndex)
-                console.log(oldIndex)
                 oldIndex -= 2
                 
                 // entry.style.zIndex -= oldIndex
@@ -999,8 +1127,6 @@ module.exports = class Frontend {
                        : sort = ''
         ].filter(item => !(item == ''))
 
-        console.log(args)
-
         for(let i=0; i<args.length; i++){
             let tag = document.createElement('div')
             tag.classList.add('tag')
@@ -1047,103 +1173,113 @@ module.exports = class Frontend {
    async displayAnimePage(animeId) {
         if(animeId == -1) return
 
-        this.showModalPage('anime-page-shadow-background', 'anime-page')
+        this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+
+        // needed to close anime pages (must be fixed)
+        let anime_page_exit_buttons = document.querySelectorAll('.anime-page button[id^="exit-"]')
+        anime_page_exit_buttons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                this.closeAnimePage(event.target.id == ''
+                                    ? event.target.parentNode.id
+                                    : event.target.id)
+            })
+        })
 
         // get infos
-        const anilist = new AniListAPI(clientData)
-        const animeEntry = await anilist.getAnimeInfo(animeId)
+        // const anilist = new AniListAPI(clientData)
+        // const animeEntry = await anilist.getAnimeInfo(animeId)
 
-        const description = animeEntry.description
-        const status = animeEntry.status
-        const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
-        const cover = animeEntry.coverImage.extraLarge
-        const color = animeEntry.coverImage.color
-        const banner = animeEntry.bannerImage
-        const genres = animeEntry.genres
-        const seasonYear = animeEntry.seasonYear
-        const format = animeEntry.format
-        const duration = animeEntry.duration
-        const meanScore = animeEntry.meanScore
-        const title = this.getTitle(animeEntry)
-        const animeTitles = this.getTitlesAndSynonyms(animeEntry)
-        const episodes = this.getEpisodes(animeEntry)
-        const availableEpisodes = this.getAvailableEpisodes(animeEntry)
-        const userStatus = this.getUserStatus(animeEntry)
-        const score = this.getScore(animeEntry)
-        const progress = this.getProgress(animeEntry)
-        var endDate
-        animeEntry.endDate.year == null
-        ? endDate = '?'
-        : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
+        // const description = animeEntry.description
+        // const status = animeEntry.status
+        // const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
+        // const cover = animeEntry.coverImage.extraLarge
+        // const color = animeEntry.coverImage.color
+        // const banner = animeEntry.bannerImage
+        // const genres = animeEntry.genres
+        // const seasonYear = animeEntry.seasonYear
+        // const format = animeEntry.format
+        // const duration = animeEntry.duration
+        // const meanScore = animeEntry.meanScore
+        // const title = this.getTitle(animeEntry)
+        // const animeTitles = this.getTitlesAndSynonyms(animeEntry)
+        // const episodes = this.getEpisodes(animeEntry)
+        // const availableEpisodes = this.getAvailableEpisodes(animeEntry)
+        // const userStatus = this.getUserStatus(animeEntry)
+        // const score = this.getScore(animeEntry)
+        // const progress = this.getProgress(animeEntry)
+        // var endDate
+        // animeEntry.endDate.year == null
+        // ? endDate = '?'
+        // : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
         
         // display infos
-        var list_updater_button = document.getElementById('page-anime-list-editor')
-        if(animeEntry.mediaListEntry == null) {
-            list_updater_button.innerHTML = '<i class="fa-solid fa-plus"></i>'
-        } else {
-            list_updater_button.innerHTML = '<i class="fa-solid fa-check"></i>'
-            list_updater_button.classList.add('in-list')
-        }
+        // var list_updater_button = document.getElementById('page-anime-list-editor')
+        // if(animeEntry.mediaListEntry == null) {
+        //     list_updater_button.innerHTML = '<i class="fa-solid fa-plus"></i>'
+        // } else {
+        //     list_updater_button.innerHTML = '<i class="fa-solid fa-check"></i>'
+        //     list_updater_button.classList.add('in-list')
+        // }
 
-        document.getElementById('page-anime-banner').src = banner
-        document.getElementById('page-anime-title').innerHTML = title
-        document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
-        document.getElementById('page-anime-format').innerHTML = format
-        document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
-        document.getElementById('page-anime-meanScore').innerHTML =  meanScore
-        document.getElementById('page-anime-description').innerHTML = description
-        this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
-        this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
-        document.getElementById('page-anime-user-status').innerHTML = userStatus
-        document.getElementById('page-anime-status').innerHTML = status
-        document.getElementById('page-anime-startDate').innerHTML = startDate
-        document.getElementById('page-anime-endDate').innerHTML = endDate
-        document.getElementById('page-anime-cover').src = cover
-        document.getElementById('page-anime-id').innerHTML = animeId
-        document.getElementById('page-anime-progress').innerHTML = progress
-        document.getElementById('page-anime-score-number').innerHTML = score
-        document.getElementById('page-anime-episodes').innerHTML = episodes
-        document.getElementById('page-anime-available-episodes').innerHTML = availableEpisodes
+        // document.getElementById('page-anime-banner').src = banner
+        // document.getElementById('page-anime-title').innerHTML = title
+        // document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
+        // document.getElementById('page-anime-format').innerHTML = format
+        // document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
+        // document.getElementById('page-anime-meanScore').innerHTML =  meanScore
+        // document.getElementById('page-anime-description').innerHTML = description
+        // this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
+        // this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
+        // document.getElementById('page-anime-user-status').innerHTML = userStatus
+        // document.getElementById('page-anime-status').innerHTML = status
+        // document.getElementById('page-anime-startDate').innerHTML = startDate
+        // document.getElementById('page-anime-endDate').innerHTML = endDate
+        // document.getElementById('page-anime-cover').src = cover
+        // document.getElementById('page-anime-id').innerHTML = animeId
+        // document.getElementById('page-anime-progress').innerHTML = progress
+        // document.getElementById('page-anime-score-number').innerHTML = score
+        // document.getElementById('page-anime-episodes').innerHTML = episodes
+        // document.getElementById('page-anime-available-episodes').innerHTML = availableEpisodes
         
-        var anime_titles_div = document.getElementById('page-anime-titles')
-        Object.keys(animeTitles).forEach( (key) => {
-            let h2 = document.createElement('h2')
-            h2.innerHTML = animeTitles[key]
-            anime_titles_div.appendChild(h2)
-        })
+        // var anime_titles_div = document.getElementById('page-anime-titles')
+        // Object.keys(animeTitles).forEach( (key) => {
+        //     let h2 = document.createElement('h2')
+        //     h2.innerHTML = animeTitles[key]
+        //     anime_titles_div.appendChild(h2)
+        // })
 
-        var episodes_list_div = document.getElementById('page-anime-episodes-list')
-        for(let i=0; i<availableEpisodes; i++) {
-            let episode_div = this.createEpisode(i, banner)
-            episodes_list_div.appendChild(episode_div)
-        }
+        // var episodes_list_div = document.getElementById('page-anime-episodes-list')
+        // for(let i=0; i<availableEpisodes; i++) {
+        //     let episode_div = this.createEpisode(i, banner)
+        //     episodes_list_div.appendChild(episode_div)
+        // }
         
-        // start watching / resume / rewatch button
-        var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-        progress == episodes
-        ? watch_button.id += 1
-        : watch_button.id += (progress + 1)
-        watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
+        // // start watching / resume / rewatch button
+        // var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
+        // progress == episodes
+        // ? watch_button.id += 1
+        // : watch_button.id += (progress + 1)
+        // watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
 
-        progress == 0
-        ? watch_button.innerHTML += 'Start watching' 
-        : progress == episodes ? watch_button.innerHTML += 'Rewatch' 
-        : watch_button.innerHTML += 'Resume episode ' + (progress+1) 
+        // progress == 0
+        // ? watch_button.innerHTML += 'Start watching' 
+        // : progress == episodes ? watch_button.innerHTML += 'Rewatch' 
+        // : watch_button.innerHTML += 'Resume episode ' + (progress+1) 
 
-        if(availableEpisodes == '?') {
-            watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-ban"></i>'
-            watch_button.innerHTML += 'Not released'
-        }
+        // if(availableEpisodes == '?') {
+        //     watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-ban"></i>'
+        //     watch_button.innerHTML += 'Not released'
+        // }
         
-        var anime_genres_ul = document.getElementById('page-anime-genres')
-        Object.keys(genres).forEach( (key) => {
-            var anime_genres_li = document.createElement('li')
-            anime_genres_li.innerHTML += genres[key]
-            anime_genres_ul.appendChild(anime_genres_li)
-        })
+        // var anime_genres_ul = document.getElementById('page-anime-genres')
+        // Object.keys(genres).forEach( (key) => {
+        //     var anime_genres_li = document.createElement('li')
+        //     anime_genres_li.innerHTML += genres[key]
+        //     anime_genres_ul.appendChild(anime_genres_li)
+        // })
 
         // show content
-        document.getElementById('page-anime-content-wrapper').style.display = 'flex'
+        // document.getElementById('page-anime-content-wrapper').style.display = 'flex'
     }
 
     /**
@@ -1295,42 +1431,12 @@ module.exports = class Frontend {
     }
     
     /**
-     * Closes and clears the anime modal page
+     * Closes anime page
+     * 
+     * @param {*} id 
      */
-    closeAnimePage() {
-        // hide modal page
-        this.hideModalPage('anime-page-shadow-background', 'anime-page')
-        
-        // clear infos
-        document.getElementById('page-anime-banner').src = ""
-        document.getElementById('page-anime-title').innerHTML = ""
-        document.getElementById('page-anime-title').classList.remove('anime-page-warn-on')
-        document.getElementById('page-anime-title').classList.remove('anime-page-warn-off')
-        document.getElementById('page-anime-description').innerHTML = ""
-        document.getElementById('page-anime-cover').src = ""
-        document.getElementById('page-anime-genres').innerHTML = ""
-        document.getElementById('page-anime-episodes-list').innerHTML = ""
-        document.getElementById('page-anime-progress-episodes').innerHTML = ""
-        document.getElementById('page-anime-user-score').innerHTML = ""
-        document.getElementById('page-anime-user-status').innerHTML = ""
-        document.getElementById('page-anime-status').innerHTML = ""
-        document.getElementById('page-anime-startDate').innerHTML = ""
-        document.getElementById('page-anime-endDate').innerHTML = ""
-        document.getElementById('page-anime-titles').innerHTML = ""
-        document.getElementById('page-anime-id').innerHTML = ""
-        document.getElementById('page-anime-progress').innerHTML = ""
-        document.getElementById('page-anime-episodes').innerHTML = ""
-        document.getElementById('page-anime-available-episodes').innerHTML = ""
-        document.getElementById('page-anime-score-number').innerHTML = ""
-        document.getElementById('page-anime-seasonYear').innerHTML = ""
-        document.getElementById('page-anime-format').innerHTML = ""
-        document.getElementById('page-anime-duration').innerHTML = ""
-        document.getElementById('page-anime-meanScore').innerHTML = ""
-        document.getElementById('page-anime-list-editor').classList.remove('in-list')
-        document.querySelector(`button[id^="page-anime-watch-"]`).id = 'page-anime-watch-'
-
-        // hide content - show loader
-        document.getElementById('page-anime-content-wrapper').style.display = 'none'
+    closeAnimePage(id) {
+        this.hideModalPage('anime-page-shadow-background', `anime-page-${id.slice(5)}`)
     }
 
     /**

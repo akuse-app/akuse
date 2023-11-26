@@ -137,5 +137,6 @@ ipcRenderer.on('load-app', async (event) => {
 
     setTimeout(() => {
         frontend.doDisplayAnimeSectionsScrollingButtons()
+        
     }, 1000)
 })

@@ -152,92 +152,48 @@
             </div>
         </div>
     </div>
-    <!-- ANIME MODAL PAGE -->
-    <div id="anime-page-shadow-background" class="modal-page-shadow-background fade-in"></div>
-    <div id="anime-page" class="modal-page-wrapper fade-in">
-        <div class="anime-page">
-            <img id="page-anime-banner">
-            <button id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
-            <div>
-                <div id="page-anime-content-wrapper" class="content-wrapper" style="display: none">
+    <!-- ANIME MODAL PAGES -->
+    <div id="anime-page-shadow-background" class="modal-page-shadow-background"></div>
+    <div class="anime-pages">
+        <div id="anime-page" class="modal-page-wrapper">
+            <div class="anime-page">
+                <button class="exit" id="exit"><i class="fa-solid fa-circle-xmark"></i></button>
+                <div class="content-wrapper"> <!-- id="page-anime-content-wrapper"  -->
+                    <div class="banner-wrapper">
+                        <img class="banner" src="https://s4.anilist.co/file/anilistcdn/media/anime/banner/163329-SLDIMqtukB7B.jpg">
+                    </div>
                     <div class="content">
-                        <div class="page-anime-left">
-                            <img id="page-anime-cover" src="/assets/img/cover.png" alt="">
-                            <div class="anime-episodes">
-                                <h4>Your progress</h4>
-                                <div id="page-anime-progress-episodes"></div>
-                            </div>
-                            <div class="anime-user-score">
-                                <h4>Your score</h4>
-                                <div id="page-anime-user-score"></div>
-                            </div>
-                            <div class="anime-user-status">
-                                <h4>Your list status</h4>
-                                <h3 id="page-anime-user-status"></h3>
-                            </div>
-                            <div class="anime-status">
-                                <h4>Anime status</h4>
-                                <h3 id="page-anime-status"></h3>
-                            </div>
-                            <div class="anime-startDate">
-                                <h4>Start Date</h4>
-                                <h3 id="page-anime-startDate"></h3>
-                            </div>
-                            <div class="anime-endDate">
-                                <h4>End Date</h4>
-                                <h3 id="page-anime-endDate"></h3>
-                            </div>
-                            <!-- store useful data -->
-                            <div style="display: none;" id="page-anime-titles"></div>
-                            <div style="display: none;" id="page-anime-id"></div>
-                            <div style="display: none;" id="page-anime-progress"></div>
-                            <div style="display: none;" id="page-anime-score-number"></div>
-                            <div style="display: none;" id="page-anime-available-episodes"></div>
+                        <div class="left">
+                            <h1 class="title">Bellissimo anime</h1>
+                            <ul class="info">
+                                <li>Roba</li>
+                                <li>Roba</li>
+                                <li>Roba</li>
+                            </ul>
+                            <div class="description">roba roba roba roba roba roba roba roba raob raob roba roba roba roba roba roba roba raobroba roba roba raob roba roba roba raob</div>
+                            <div class="description">roba roba roba roba roba roba roba roba raob raob roba roba roba roba roba roba roba raobroba roba roba raob roba roba roba raob</div>
+                            <div class="description">roba roba roba roba roba roba roba roba raob raob roba roba roba roba roba roba roba raobroba roba roba raob roba roba roba raob</div>
+                            <div class="description">roba roba roba roba roba roba roba roba raob raob roba roba roba roba roba roba roba raobroba roba roba raob roba roba roba raob</div>
                         </div>
-                        <div class="page-anime-right-scroller">
-                            <div class="page-anime-right">
-                                <div id="page-anime-info-section">
-                                    <div class="anime-title">
-                                        <h2 id="page-anime-title">
-                                        </h2>
-                                    </div>
-                                    <div id="page-anime-infos" class="anime-infos">
-                                        <div class="anime-infos-child">
-                                            <i class="fa-regular fa-calendar-plus"></i> <span id="page-anime-seasonYear"></span>
-                                        </div>
-                                        <div class="anime-infos-child">
-                                            <i class="fa-solid fa-list-ul"></i> <span id="page-anime-episodes"></span>
-                                        </div>
-                                        <div class="anime-infos-child">
-                                            <i class="fa-solid fa-tv"></i> <span id="page-anime-format"></span> 
-                                        </div>
-                                        <div class="anime-infos-child">
-                                            <i class="fa-regular fa-clock"></i> <span id="page-anime-duration"></span> 
-                                        </div>
-                                        <div class="anime-infos-child">
-                                            <i class="fa-regular fa-star"></i> <span id="page-anime-meanScore"></span>
-                                        </div>
-                                    </div>
-                                    <ul id="page-anime-genres" class="anime-genres">
-                                    </ul>
-                                    <div id="page-anime-user-stats" class="user-stats">
-                                        <button id="page-anime-watch-" class="watch">
-                                            <i style="margin-right: 5px" class="fa-solid fa-play"></i>
-                                        </button>
-                                        <button id="page-anime-list-editor" class="list-editor"></button>
-                                    </div>
-                                    <div id="page-anime-description" class="anime-description">Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto.
-                                        Shunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way.
-                                    </div>
-                                </div>
-                                <div id="page-anime-watch-section">
-                                    <div class="episodes-list-header">
-                                        <h1>Episodes</h1>
-                                    </div>
-                                    <div class="episodes-list-wrapper">
-                                        <div id="page-anime-episodes-list" class="episodes-list"></div>
-                                    </div>
-                                </div>
+                        <div class="right">
+                            <p class="additional-info">
+                                <span>Released on: </span> Fall 2023
+                            </p>
+                            <p class="additional-info">
+                                <span>Genres: </span>Azione, Violenza, Fantasy, Horror, Cupo, Romance
+                            </p>
+                            <p class="additional-info">
+                                <span>Other titles: </span>Azione, Violenza, Fantasy, Horror, Cupo, Romance
+                            </p>
+                        </div>
+                    </div>
+                    <div class="episodes-section">
+                        <h2>Episodes</h2>
+                        <div class="episodes-scroller">
+                            <div class="episodes">
+                                <div class="episode-entry"></div>
+                                <div class="episode-entry"></div>
+                                <div class="episode-entry"></div>
                             </div>
                         </div>
                     </div>

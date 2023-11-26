@@ -29,10 +29,10 @@ frontend.enableFeaturedSectionScrollingButtons()
 // pressing esc closes the modal pages
 document.addEventListener('keydown', (event) => {
     if(event.code === 'Escape') {
-        if(frontend.isAnimePageDisplayed()
-           && !frontend.isListEditorDisplayed()) {
-            frontend.closeAnimePage()
-        }
+        // if(frontend.isAnimePageDisplayed()
+        //    && !frontend.isListEditorDisplayed()) {
+        //     frontend.closeAnimePage()
+        // }
 
         if(frontend.isListEditorDisplayed()) {
             frontend.closeListEditorPage()
@@ -91,12 +91,12 @@ anilistItem.addEventListener('click', () => {
 /* --- LIST-EDITOR MODAL PAGE --- */
 
 // open
-let settings_button = document.getElementById('page-anime-list-editor')
-settings_button.addEventListener('click', () => {
-    frontend.displayListEditorPage()
-    frontend.showListEditorInputValue('progress')
-    frontend.showListEditorInputValue('score')
-})
+// let settings_button = document.getElementById('page-anime-list-editor')
+// settings_button.addEventListener('click', () => {
+//     frontend.displayListEditorPage()
+//     frontend.showListEditorInputValue('progress')
+//     frontend.showListEditorInputValue('score')
+// })
 
 // close
 let list_editor_page_exit_button = document.querySelector('.list-editor-page #exit')
@@ -156,22 +156,16 @@ list_editor_score.addEventListener('input', () => {
 /* --- ANIME MODAL PAGE--- */
 
 // start watching/resume
-let watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-watch_button.addEventListener('click', () => {
-    video.displayVideo(watch_button.id.slice(17))
-})
+// let watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
+// watch_button.addEventListener('click', () => {
+//     video.displayVideo(watch_button.id.slice(17))
+// })
 
-// close
-let anime_page_exit_button = document.querySelector('.anime-page #exit')
-anime_page_exit_button.addEventListener('click', () => {
-    frontend.closeAnimePage()
-})
-
-document.getElementById('anime-page').addEventListener('click', (event) => {
-    if(event.target.id === 'anime-page') {
-        frontend.closeAnimePage()
-    }
-})
+// document.getElementById('anime-page').addEventListener('click', (event) => {
+//     if(event.target.id === 'anime-page') {
+//         frontend.closeAnimePage()
+//     }
+// })
 
 /* --- ANIME SECTIONS --- */
 
@@ -227,7 +221,7 @@ search_list.forEach(list => {
 })
 
 // trigger when episode is pressed, so generate video link
-let episode_list = document.getElementById('page-anime-episodes-list')
-episode_list.addEventListener('click', (event) => {
-    frontend.triggerEpisode(event)
-})
+// let episode_list = document.getElementById('page-anime-episodes-list')
+// episode_list.addEventListener('click', (event) => {
+//     frontend.triggerEpisode(event)
+// })
