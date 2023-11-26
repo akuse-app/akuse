@@ -35,7 +35,7 @@ git clone https://github.com/akuse-app/Akuse.git
 ```
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
-As Redirect I, you can insert http://localhost:9009/logged and it should work.
+As Redirect I, you can insert akuse://index and it should work.
 Now go inside the src/modules folder and create a clientData.js file with a structure like this:
 
 ```
@@ -50,7 +50,7 @@ module.exports = {
 # Example:
 module.exports = {
     clientId: 12345,
-    redirectUri: "http://localhost:9009/logged",
+    redirectUri: "akuse://index",
     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
 }
 ```
