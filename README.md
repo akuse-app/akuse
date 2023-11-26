@@ -35,7 +35,7 @@ git clone https://github.com/akuse-app/Akuse.git
 ```
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
-As Redirect I, you can insert akuse://index and it should work.
+As Redirect Uri, you can insert akuse://index and it should work.
 Now go inside the src/modules folder and create a clientData.js file with a structure like this:
 
 ```
@@ -46,6 +46,8 @@ module.exports = {
 }
 ```
 
+Fill it with the data retrieved from the creation of your AniList API Client.
+
 ```bash
 # Example:
 module.exports = {
@@ -54,8 +56,6 @@ module.exports = {
     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
 }
 ```
-
-Fill it with the data retrieved from the creation of your AniList API Client.
 
 Next, install its dependencies (make sure npm is installed on your machine):
 
@@ -73,7 +73,6 @@ npm start
 
 - Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
 - All anime are subbed, but some may be dubbed.
-- "Delete" button in List Editor doesn't work (can't figure out why).
 
 ## Disclaimer
 
