@@ -983,10 +983,8 @@ main .featured .featured-img img {
             display: flex;
             flex-direction: column;
             gap: 25px;
-            height: 200px;
-            /* width: calc(100% + 50px); */
+            height: 175px;
             border-radius: var(--border-radius);
-            /* background-color: var(--color-3); */
             cursor: pointer;
             transition: var(--transition);
             background: linear-gradient(1turn, var(--color-0), transparent);

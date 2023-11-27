@@ -833,9 +833,14 @@ module.exports = class Frontend {
         const genres = Object.values(animeEntry.genres).join(', ')
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
         const episodesEntries = animeEntry.streamingEpisodes
+        let animeTitles = this.getTitlesAndSynonyms(animeEntry)
 
         let anime_pages = document.querySelector('.anime-pages')
         
+        let pers_data = document.createElement('ul')
+        pers_data.classList.add('persdata-anime-titles')
+        let pers_data_1 = document.createElement('li')
+
         let modal_page_wrapper = document.createElement('div')
         let anime_page = document.createElement('div')
         let exit_button = document.createElement('button')
@@ -929,11 +934,13 @@ module.exports = class Frontend {
             let episode_content = document.createElement('div')
             let episode_title = document.createElement('div')
             let episode_description = document.createElement('div')
-            let useThumbnail = false
-
+            
+            episode_entry.id = `episode-${id}-${i}` // pattern: episode-animeid-episodenumber
             episode_content.classList.add('episode-content')
             episode_title.classList.add('title')
             episode_description.classList.add('description')
+            
+            let useThumbnail = false
 
             // check if episode thumbnail exists, otherwise use banner
             for(let j in episodesEntries) {
@@ -1199,9 +1206,7 @@ module.exports = class Frontend {
 
         this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
 
-        console.log(animeId)
-
-        // needed to close anime pages (must be fixed)
+        // close anime pages (must be fixed)
         let anime_page_exit_buttons = document.querySelectorAll('.anime-page button[id^="exit-"]')
         anime_page_exit_buttons.forEach(button => {
             button.addEventListener('click', (event) => {
@@ -1211,101 +1216,7 @@ module.exports = class Frontend {
             })
         })
 
-        // get infos
-        // const anilist = new AniListAPI(clientData)
-        // const animeEntry = await anilist.getAnimeInfo(animeId)
-
-        // const description = animeEntry.description
-        // const status = animeEntry.status
-        // const startDate = this.months[animeEntry.startDate.month] + " " + animeEntry.startDate.day + ", "  + animeEntry.startDate.year
-        // const cover = animeEntry.coverImage.extraLarge
-        // const color = animeEntry.coverImage.color
-        // const banner = animeEntry.bannerImage
-        // const genres = animeEntry.genres
-        // const seasonYear = animeEntry.seasonYear
-        // const format = animeEntry.format
-        // const duration = animeEntry.duration
-        // const meanScore = animeEntry.meanScore
-        // const title = this.getTitle(animeEntry)
-        // const animeTitles = this.getTitlesAndSynonyms(animeEntry)
-        // const episodes = this.getEpisodes(animeEntry)
-        // const availableEpisodes = this.getAvailableEpisodes(animeEntry)
-        // const userStatus = this.getUserStatus(animeEntry)
-        // const score = this.getScore(animeEntry)
-        // const progress = this.getProgress(animeEntry)
-        // var endDate
-        // animeEntry.endDate.year == null
-        // ? endDate = '?'
-        // : endDate = this.months[animeEntry.endDate.month] + " " + animeEntry.endDate.day + ", "  + animeEntry.endDate.year
-        
-        // display infos
-        // var list_updater_button = document.getElementById('page-anime-list-editor')
-        // if(animeEntry.mediaListEntry == null) {
-        //     list_updater_button.innerHTML = '<i class="fa-solid fa-plus"></i>'
-        // } else {
-        //     list_updater_button.innerHTML = '<i class="fa-solid fa-check"></i>'
-        //     list_updater_button.classList.add('in-list')
-        // }
-
-        // document.getElementById('page-anime-banner').src = banner
-        // document.getElementById('page-anime-title').innerHTML = title
-        // document.getElementById('page-anime-seasonYear').innerHTML = seasonYear
-        // document.getElementById('page-anime-format').innerHTML = format
-        // document.getElementById('page-anime-duration').innerHTML = (duration + ' Min/Ep')
-        // document.getElementById('page-anime-meanScore').innerHTML =  meanScore
-        // document.getElementById('page-anime-description').innerHTML = description
-        // this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
-        // this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
-        // document.getElementById('page-anime-user-status').innerHTML = userStatus
-        // document.getElementById('page-anime-status').innerHTML = status
-        // document.getElementById('page-anime-startDate').innerHTML = startDate
-        // document.getElementById('page-anime-endDate').innerHTML = endDate
-        // document.getElementById('page-anime-cover').src = cover
-        // document.getElementById('page-anime-id').innerHTML = animeId
-        // document.getElementById('page-anime-progress').innerHTML = progress
-        // document.getElementById('page-anime-score-number').innerHTML = score
-        // document.getElementById('page-anime-episodes').innerHTML = episodes
-        // document.getElementById('page-anime-available-episodes').innerHTML = availableEpisodes
-        
-        // var anime_titles_div = document.getElementById('page-anime-titles')
-        // Object.keys(animeTitles).forEach( (key) => {
-        //     let h2 = document.createElement('h2')
-        //     h2.innerHTML = animeTitles[key]
-        //     anime_titles_div.appendChild(h2)
-        // })
-
-        // var episodes_list_div = document.getElementById('page-anime-episodes-list')
-        // for(let i=0; i<availableEpisodes; i++) {
-        //     let episode_div = this.createEpisode(i, banner)
-        //     episodes_list_div.appendChild(episode_div)
-        // }
-        
-        // // start watching / resume / rewatch button
-        // var watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-        // progress == episodes
-        // ? watch_button.id += 1
-        // : watch_button.id += (progress + 1)
-        // watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-play"></i>'
-
-        // progress == 0
-        // ? watch_button.innerHTML += 'Start watching' 
-        // : progress == episodes ? watch_button.innerHTML += 'Rewatch' 
-        // : watch_button.innerHTML += 'Resume episode ' + (progress+1) 
-
-        // if(availableEpisodes == '?') {
-        //     watch_button.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-ban"></i>'
-        //     watch_button.innerHTML += 'Not released'
-        // }
-        
-        // var anime_genres_ul = document.getElementById('page-anime-genres')
-        // Object.keys(genres).forEach( (key) => {
-        //     var anime_genres_li = document.createElement('li')
-        //     anime_genres_li.innerHTML += genres[key]
-        //     anime_genres_ul.appendChild(anime_genres_li)
-        // })
-
-        // show content
-        // document.getElementById('page-anime-content-wrapper').style.display = 'flex'
+        // let anime_page = document.getElementById(`anime-page-${animeId}`)
     }
 
     /**
@@ -1463,31 +1374,6 @@ module.exports = class Frontend {
      */
     closeAnimePage(id) {
         this.hideModalPage('anime-page-shadow-background', `anime-page-${id.slice(5)}`)
-    }
-
-    /**
-     * Creates the episode div, provided with unique id
-     * 
-     * @param {*} episodeNumber
-     * @param {*} banner
-     * @returns episode div DOM element
-     */
-    createEpisode(episodeNumber, banner) {
-        var episode_div = document.createElement('div')
-        var episode_content_div = document.createElement('div')
-        var h3 = document.createElement('h3')
-
-        episode_div.classList.add('episode')
-        episode_div.id = 'episode-' + (episodeNumber+1)
-        episode_div.style.backgroundImage = `url(${banner})`
-        episode_content_div.classList.add('content')
-        h3.innerHTML = 'Episode ' + (episodeNumber+1)
-        
-        episode_div.classList.add('show')
-        episode_content_div.appendChild(h3)
-        episode_div.appendChild(episode_content_div)
-
-        return episode_div
     }
 
     /**
