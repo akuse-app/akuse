@@ -171,3 +171,28 @@ button.circle-button-0.disabled:active {
     min-width: 1rem;
     min-height: 1rem;
 }
+
+/* SEPARATOR */
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: var(--font-weight);
+}
+    
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px dashed var(--font-4);
+}
+    
+.separator:not(:empty)::before {
+    margin-right: .25em;
+}
+    
+.separator:not(:empty)::after {
+    margin-left: .25em;
+}

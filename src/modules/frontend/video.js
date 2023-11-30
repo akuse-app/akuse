@@ -49,12 +49,14 @@ module.exports = class Video {
     /**
      * Get the anime titles (title and synonyms) from modal anime page div
      * 
-     * @returns anime titles
+     * @param {*} animeId 
+     * @returns 
      */
-    getAnimeTitles() {
+    getAnimeTitles(animeId) {
+        console.log(animeId)
         let animeTitles = []
-        let anime_titles_div = document.querySelectorAll('#page-anime-titles h2')
-        
+        let anime_titles_div = document.querySelectorAll(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-titles p`)
+
         Object.keys(anime_titles_div).forEach( (key) => {
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', ''))
@@ -70,15 +72,18 @@ module.exports = class Video {
      */
     async displayVideo(episode) {
         const cons = this.getSourceFlagObject()
-        const title = document.getElementById('page-anime-title').innerHTML
-        const animeTitles = this.getAnimeTitles()
+        const animeId = episode.split('-')[1]
+        const episodeId = episode.split('-')[2]
+        // const title = document.getElementById('page-anime-title').innerHTML
+        const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
+        const animeTitles = this.getAnimeTitles(animeId)
 
         console.log('titles: ' + animeTitles)
         console.log('playground: ')
 
         let i = 0
         do {
-            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episode)
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episodeId)
 
             videoSource != -1
             ? console.log(animeTitles[i] + ' -> ' + videoSource.url)
@@ -89,12 +94,12 @@ module.exports = class Video {
 
         if(videoSource !== -1) {
             this.videoTitle.innerHTML = title
-            this.videoEpisode.innerHTML = ('Episode ' + episode)
+            this.videoEpisode.innerHTML = ('Episode ' + episodeId)
 
             this.putSource(videoSource.url, videoSource.isM3U8)
             this.videoElement.play()
         } else {
-            this.animePageWarn(document.getElementById('page-anime-title'))
+            // this.animePageWarn(document.getElementById('page-anime-title'))
         }
     }
 

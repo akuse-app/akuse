@@ -843,6 +843,10 @@ main .featured .featured-img img {
     overflow-y: scroll;
 }
 
+    .anime-page .persistent-data {
+        display: none;
+    }
+
     .anime-page .content-wrapper {
         position: relative;
         display: flex;
@@ -905,7 +909,7 @@ main .featured .featured-img img {
             /* font-size: 2.6vw; */
             font-size: 2.8rem;
             font-weight: 800;
-            margin-bottom: 3px;
+            margin-bottom: 10px;
         }
         
         .anime-page ul.info {
@@ -957,10 +961,9 @@ main .featured .featured-img img {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            border-top: 1px dashed var(--font-4);
             width: calc(100% - 50px);
             margin: 0 25px;
-            padding: 25px 0;
+            /* padding: 25px 0; */
         }
 
         .anime-page .episodes-section .episodes-scroller {
@@ -1019,6 +1022,7 @@ main .featured .featured-img img {
             }
 
             .anime-page .episodes-section .episode-entry .episode-content .title {
+                margin-bottom: 0;
                 color: var(--font-1);
                 font-size: 1.4rem;
                 font-weight: var(--font-weight);

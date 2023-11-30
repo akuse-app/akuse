@@ -833,15 +833,14 @@ module.exports = class Frontend {
         const genres = Object.values(animeEntry.genres).join(', ')
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
         const episodesEntries = animeEntry.streamingEpisodes
-        let animeTitles = this.getTitlesAndSynonyms(animeEntry)
+        const animeTitles = this.getTitlesAndSynonyms(animeEntry)
 
         let anime_pages = document.querySelector('.anime-pages')
         
         let pers_data = document.createElement('ul')
-        pers_data.classList.add('persdata-anime-titles')
         let pers_data_1 = document.createElement('li')
-
         let modal_page_wrapper = document.createElement('div')
+        let separator = document.createElement('div')
         let anime_page = document.createElement('div')
         let exit_button = document.createElement('button')
         let content_wrapper = document.createElement('div')
@@ -861,13 +860,15 @@ module.exports = class Frontend {
         let attidional_info_3 = document.createElement('p')
         let additional_info_span = document.createElement('span')
         let episodes_section = document.createElement('div')
-        let episodes_header = document.createElement('h2')
         let episodes_scroller = document.createElement('div')
         let episodes_div = document.createElement('div')
 
         modal_page_wrapper.id = `anime-page-${id}`
+        pers_data.classList.add('persistent-data')
+        pers_data_1.classList.add('persdata-anime-titles')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
+        separator.classList.add('separator')
         anime_page.classList.add('anime-page')
         exit_button.id = `exit-${id}`
         exit_button.classList.add('exit')
@@ -887,6 +888,12 @@ module.exports = class Frontend {
         episodes_section.classList.add('episodes-section')
         episodes_scroller.classList.add('episodes-scroller')
         episodes_div.classList.add('episodes')
+
+        Object.keys(animeTitles).forEach(title => {
+            let anime_title_div = document.createElement('p')
+            anime_title_div.innerHTML = Object.values(animeTitles)[title]
+            pers_data_1.appendChild(anime_title_div)
+        })
 
         banner_img.src = banner
         title_div.innerHTML = title
@@ -908,8 +915,6 @@ module.exports = class Frontend {
         attidional_info_3.appendChild(additional_info_span)
         attidional_info_3.innerHTML += synonyms
 
-        episodes_header.innerHTML = 'Episodes'
-
         banner_wrapper.appendChild(banner_img)
         info_div.appendChild(info_1)
         info_div.appendChild(info_2)
@@ -917,6 +922,8 @@ module.exports = class Frontend {
         left_div.appendChild(title_div)
         left_div.appendChild(info_div)
         left_div.appendChild(description_div)
+        separator.innerHTML = 'Episodes'
+        left_div.appendChild(separator)
         right_div.appendChild(attidional_info_1)
         right_div.appendChild(attidional_info_2)
         right_div.appendChild(attidional_info_3)
@@ -969,9 +976,11 @@ module.exports = class Frontend {
         }
 
         episodes_scroller.appendChild(episodes_div)
-        episodes_section.appendChild(episodes_header)
+        episodes_section.appendChild(separator)
         episodes_section.appendChild(episodes_scroller)
         content_wrapper.appendChild(episodes_section)
+        pers_data.appendChild(pers_data_1)
+        anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
         modal_page_wrapper.appendChild(anime_page)
@@ -1216,6 +1225,17 @@ module.exports = class Frontend {
             })
         })
 
+        // trigger video when click episode entry
+        let episodes = document.getElementsByClassName('episodes')
+        Object.keys(episodes).forEach(episode => {
+            let episode_section = Object.values(episodes)[episode]
+        
+            episode_section.addEventListener('click', (event) => {
+                this.triggerEpisode(event)
+                // console.log('episodes')
+            })
+        })
+
         // let anime_page = document.getElementById(`anime-page-${animeId}`)
     }
 
@@ -1382,13 +1402,15 @@ module.exports = class Frontend {
      * @param {*} event 
      */
     triggerEpisode(event) {
-        if(!(event.target.classList.contains('episode'))) {
-            var entry = event.target.closest('.episode')
+        if(!(event.target.classList.contains('episode-entry'))) {
+            var entry = event.target.closest('.episode-entry')
             if(entry) {
-                this.video.displayVideo(this.getIdFromEpisodeEntry(entry))
+                this.video.displayVideo(entry.id)
+                console.log(entry.id)
             }
         } else {
-            this.video.displayVideo(this.getIdFromEpisodeEntry(event.target))
+            this.video.displayVideo(event.target.id)
+            console.log(event.target.id)
         }
     }
 
@@ -1503,13 +1525,17 @@ module.exports = class Frontend {
      * @param {*} description 
      * @returns parsed description
      */
-    parseDescription = description => description.replace('<br>', '')
-
+    parseDescription = description => description == null 
+                                      ? ""
+                                      : description.replace('<br>', '')
+ 
     /**
      * Capitalizes the first letter of a string
      * 
      * @param {*} string 
      * @returns parsed string
      */
-    capitalizeFirstLetter = string => string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1)
+    capitalizeFirstLetter = string => string == null
+                                      ? ""
+                                      : string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1)
 }
