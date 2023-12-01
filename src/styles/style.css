@@ -843,6 +843,10 @@ main .featured .featured-img img {
     overflow-y: scroll;
 }
 
+    #persistent-data-common {
+        display: none;
+    }
+
     .anime-page .persistent-data {
         display: none;
     }
@@ -975,9 +979,8 @@ main .featured .featured-img img {
 
         .anime-page .episodes-section .episodes {
             display: flex;
-            /* flex-direction: column; */
             gap: 20px;
-            width: 100%;
+            width: max-content;
             height: max-content;
         }
         
@@ -1024,18 +1027,18 @@ main .featured .featured-img img {
             .anime-page .episodes-section .episode-entry .episode-content .title {
                 margin-bottom: 0;
                 color: var(--font-1);
-                font-size: 1.4rem;
+                font-size: 1.2rem;
                 font-weight: var(--font-weight);
             }
             
             .anime-page .episodes-section .episode-entry .episode-content .description {
                 color: var(--font-3);
-                font-size: 1.1rem;
+                font-size: 1rem;
                 font-weight: var(--font-weight);
                 line-height: 28px;
 
                 display: -webkit-box;
-                -webkit-line-clamp: 5;
+                -webkit-line-clamp: 1;
                 -webkit-box-orient: vertical;
                 text-overflow: ellipsis;
                 overflow: hidden;

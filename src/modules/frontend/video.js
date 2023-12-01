@@ -52,10 +52,9 @@ module.exports = class Video {
      * @param {*} animeId 
      * @returns 
      */
-    getAnimeTitles(animeId) {
-        console.log(animeId)
+    getAnimeTitles() {
         let animeTitles = []
-        let anime_titles_div = document.querySelectorAll(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-titles p`)
+        let anime_titles_div = document.querySelectorAll(`#persistent-data-common .persdata-anime-titles p`)
 
         Object.keys(anime_titles_div).forEach( (key) => {
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
@@ -76,7 +75,7 @@ module.exports = class Video {
         const episodeId = episode.split('-')[2]
         // const title = document.getElementById('page-anime-title').innerHTML
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
-        const animeTitles = this.getAnimeTitles(animeId)
+        const animeTitles = this.getAnimeTitles()
 
         console.log('titles: ' + animeTitles)
         console.log('playground: ')
@@ -107,7 +106,6 @@ module.exports = class Video {
      * Updates the anime progress (if enabled in settings)
      */
     async updateAnimeProgress() {
-        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
         const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
 
         if(this.store.get('update_progress')) {
@@ -121,13 +119,15 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
+        // const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+
         if(!(this.canUpdateEpisode())) {
             console.warn('This is the last episode, You can\'t go any further!')
             return
         }
 
         const cons = this.getSourceFlagObject()
-        var animeTitles = this.getAnimeTitles()
+        let animeTitles = this.getAnimeTitles()
 
         let i = 0
         do {
@@ -146,7 +146,8 @@ module.exports = class Video {
      * @returns -1 if you are watching the last episode
      */
     canUpdateEpisode() {
-        const episodes = parseInt(document.getElementById('page-anime-available-episodes').innerHTML)
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+        const episodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`))
         if(this.getEpisodeIdFromTitle() !== episodes) {
             return true
         }

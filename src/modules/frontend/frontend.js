@@ -828,6 +828,7 @@ module.exports = class Frontend {
         const episodes = this.getAvailableEpisodes(animeEntry)
         const description = this.parseDescription(animeEntry.description)
         const banner = animeEntry.bannerImage
+        const trailerUrl = this.getTrailerUrl(animeEntry)
         const season = this.capitalizeFirstLetter(animeEntry.season)
         const seasonYear = animeEntry.seasonYear
         const genres = Object.values(animeEntry.genres).join(', ')
@@ -839,6 +840,8 @@ module.exports = class Frontend {
         
         let pers_data = document.createElement('ul')
         let pers_data_1 = document.createElement('li')
+        let pers_data_2 = document.createElement('li')
+        let pers_data_3 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
         let separator = document.createElement('div')
         let anime_page = document.createElement('div')
@@ -846,6 +849,7 @@ module.exports = class Frontend {
         let content_wrapper = document.createElement('div')
         let banner_wrapper = document.createElement('div')
         let banner_img = document.createElement('img')
+        let banner_video = document.createElement('iframe')
         let content_div = document.createElement('div')
         let left_div = document.createElement('div')
         let title_div = document.createElement('h1')
@@ -866,6 +870,8 @@ module.exports = class Frontend {
         modal_page_wrapper.id = `anime-page-${id}`
         pers_data.classList.add('persistent-data')
         pers_data_1.classList.add('persdata-anime-titles')
+        pers_data_2.classList.add('persdata-anime-id')
+        pers_data_3.classList.add('persdata-anime-available-episodes')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
         separator.classList.add('separator')
@@ -876,6 +882,7 @@ module.exports = class Frontend {
         content_wrapper.classList.add('content-wrapper')
         banner_wrapper.classList.add('banner-wrapper')
         banner_img.classList.add('banner')
+        banner_video.classList.add('banner')
         content_div.classList.add('content')
         left_div.classList.add('left')
         title_div.classList.add('title')
@@ -895,7 +902,10 @@ module.exports = class Frontend {
             pers_data_1.appendChild(anime_title_div)
         })
 
+        pers_data_2.innerHTML = id
+        pers_data_3.innerHTML = episodes
         banner_img.src = banner
+        banner_video.src = trailerUrl
         title_div.innerHTML = title
         info_1.innerHTML = status
         info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-tv"></i>`
@@ -915,7 +925,12 @@ module.exports = class Frontend {
         attidional_info_3.appendChild(additional_info_span)
         attidional_info_3.innerHTML += synonyms
 
+        // trailerUrl == ''
+        //     ? banner_wrapper.appendChild(banner_img)
+        //     : banner_wrapper.appendChild(banner_video)
+
         banner_wrapper.appendChild(banner_img)
+
         info_div.appendChild(info_1)
         info_div.appendChild(info_2)
         info_div.appendChild(info_3)
@@ -980,6 +995,8 @@ module.exports = class Frontend {
         episodes_section.appendChild(episodes_scroller)
         content_wrapper.appendChild(episodes_section)
         pers_data.appendChild(pers_data_1)
+        pers_data.appendChild(pers_data_2)
+        pers_data.appendChild(pers_data_3)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1215,7 +1232,12 @@ module.exports = class Frontend {
 
         this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
 
-        // close anime pages (must be fixed)
+        // storing anime persistend data
+        let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
+        let pers_data_common = document.getElementById('persistent-data-common')
+        pers_data_common.innerHTML = pers_data.innerHTML
+
+        // close anime pages
         let anime_page_exit_buttons = document.querySelectorAll('.anime-page button[id^="exit-"]')
         anime_page_exit_buttons.forEach(button => {
             button.addEventListener('click', (event) => {
@@ -1235,8 +1257,6 @@ module.exports = class Frontend {
                 // console.log('episodes')
             })
         })
-
-        // let anime_page = document.getElementById(`anime-page-${animeId}`)
     }
 
     /**
@@ -1406,11 +1426,9 @@ module.exports = class Frontend {
             var entry = event.target.closest('.episode-entry')
             if(entry) {
                 this.video.displayVideo(entry.id)
-                console.log(entry.id)
             }
         } else {
             this.video.displayVideo(event.target.id)
-            console.log(event.target.id)
         }
     }
 
@@ -1518,6 +1536,18 @@ module.exports = class Frontend {
     getProgress = animeEntry => animeEntry.mediaListEntry == null
                                 ? "" 
                                 : animeEntry.mediaListEntry.progress
+
+    /**
+     * Gets the trailer url
+     * 
+     * @param {*} animeEntry 
+     * @returns 
+     */
+    getTrailerUrl = animeEntry => animeEntry.trailer == null
+                                  ? ""
+                                  : animeEntry.trailer.site == 'youtube'
+                                    ? `https://www.youtube.com/embed/watch?v=${animeEntry.trailer.id}`
+                                    : ""
 
     /**
      * Removes unwanted spaces/new lines from anime description
