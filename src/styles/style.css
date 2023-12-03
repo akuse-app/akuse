@@ -923,7 +923,7 @@ main .featured .featured-img img {
             gap: 25px;
             margin-bottom: 25px;
             padding-left: 0;
-            color: var(--font-2);
+            color: var(--font-3);
             font-size: 1.1rem;
             font-weight: 500;
         }
@@ -933,7 +933,7 @@ main .featured .featured-img img {
             }
         
         .anime-page .description {
-            color: var(--font-3);
+            color: var(--font-2);
             /* font-weight: var(--font-weight); */
             word-spacing: 1.5px;
             line-height: 20px;
@@ -955,7 +955,7 @@ main .featured .featured-img img {
 
         .anime-page .content  .additional-info {
             font-size: 1rem;
-            color: var(--font-1);
+            color: var(--font-2);
             line-height: 24px;
         }
 

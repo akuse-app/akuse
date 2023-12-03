@@ -829,8 +829,8 @@ module.exports = class Frontend {
 
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
-        const status = this.getAnimeStatusName(animeEntry.status)
-        const format = animeEntry.format
+        const status = this.getParsedStatus(animeEntry.status)
+        const format = this.getParsedFormat(animeEntry.format)
         const episodes = this.getEpisodes(animeEntry)
         const availableEpisodes = this.getAvailableEpisodes(animeEntry)
         const description = this.parseDescription(animeEntry.description)
@@ -843,6 +843,7 @@ module.exports = class Frontend {
         const episodesEntries = animeEntry.streamingEpisodes
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
         const meanScore = animeEntry.meanScore
+        const duration = animeEntry.duration
 
         let anime_pages = document.querySelector('.anime-pages')
         
@@ -916,34 +917,45 @@ module.exports = class Frontend {
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
-        // info_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-clapperboard"></i>`
-        info_1.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-circle-dot"></i>`
-        info_1.innerHTML += status
         
         switch(status) {
             case 'Finished':
-                info_1.style.color = colorSuccess
+                info_1.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-circle-check"></i>`
                 break
             case 'Releasing':
-                    info_1.style.color = colorInfo
-                    break
+                info_1.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-circle-dot"></i>`
+                info_1.style.color = colorSuccess
+                break
             case 'Unreleased':
+                info_1.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-clock"></i>`
+                info_1.style.color = colorAlert
+                break
             case 'Cancelled':
             case 'Discontinued':
+                info_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-ban"></i>`
                 info_1.style.color = colorWarning
                 break
         }
 
+        info_1.innerHTML += status
+
         info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-tv"></i>`
         info_2.innerHTML += format
-        info_3.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-film"></i>`
-        info_3.innerHTML += availableEpisodes
-        
-        if(status === 'Releasing') {
-            info_3.innerHTML += ` / ${episodes}`
+
+        if(format === 'Movie') {
+            info_3.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-stopwatch"></i>`
+            info_3.innerHTML += `${duration} Minutes`
+        } else {
+            info_3.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-film"></i>`
+            info_3.innerHTML += availableEpisodes
+            
+            if(status === 'Releasing') {
+                info_3.innerHTML += ` / ${episodes}`
+            }
+
+            info_3.innerHTML += ' Episodes'
         }
         
-        info_3.innerHTML += ' Episodes'
         info_4.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-star"></i>`
         info_4.innerHTML += `${meanScore}%`
         info_4.style.color = colorAlert
@@ -1595,12 +1607,12 @@ module.exports = class Frontend {
                                       : description.replace('<br>', '')
 
     /**
-     * Parses anime status into human-readable name
+     * Parses anime status into better human-readable name
      * 
      * @param {*} status 
      * @returns 
      */
-    getAnimeStatusName = status => {
+    getParsedStatus = status => {
         switch(status) {
             case 'FINISHED':
                 return 'Finished'
@@ -1612,6 +1624,25 @@ module.exports = class Frontend {
                 return 'Cancelled'
             case 'HIATUS':
                 return 'Discontinued'
+        }
+    }
+
+    getParsedFormat = format => {
+        switch(format) {
+            case 'TV':
+                return 'TV Show'
+            case 'TV_SHORT':
+                return 'TV Short'
+            case 'MOVIE':
+                return 'Movie'
+            case 'SPECIAL':
+                return 'Special'
+            case 'OVA':
+                return 'OVA'
+            case 'ONA':
+                return 'ONA'
+            case 'MUSIC':
+                return 'Music'
         }
     }
  
