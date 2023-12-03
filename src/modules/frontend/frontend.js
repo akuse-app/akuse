@@ -821,11 +821,18 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      */
     createAnimePage(animeEntry) {
+        let style = getComputedStyle(document.body)
+        const colorSuccess = style.getPropertyValue('--color-success')
+        const colorAlert = style.getPropertyValue('--color-alert')
+        const colorWarning = style.getPropertyValue('--color-warning')
+        const colorInfo = style.getPropertyValue('--color-info')
+
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
-        const status = this.capitalizeFirstLetter(animeEntry.status)
+        const status = this.getAnimeStatusName(animeEntry.status)
         const format = animeEntry.format
-        const episodes = this.getAvailableEpisodes(animeEntry)
+        const episodes = this.getEpisodes(animeEntry)
+        const availableEpisodes = this.getAvailableEpisodes(animeEntry)
         const description = this.parseDescription(animeEntry.description)
         const banner = animeEntry.bannerImage
         const trailerUrl = this.getTrailerUrl(animeEntry)
@@ -835,6 +842,7 @@ module.exports = class Frontend {
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
         const episodesEntries = animeEntry.streamingEpisodes
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
+        const meanScore = animeEntry.meanScore
 
         let anime_pages = document.querySelector('.anime-pages')
         
@@ -857,6 +865,7 @@ module.exports = class Frontend {
         let info_1 = document.createElement('li')
         let info_2 = document.createElement('li')
         let info_3 = document.createElement('li')
+        let info_4 = document.createElement('li')
         let description_div = document.createElement('div')
         let right_div = document.createElement('div')
         let attidional_info_1 = document.createElement('p')
@@ -903,16 +912,41 @@ module.exports = class Frontend {
         })
 
         pers_data_2.innerHTML = id
-        pers_data_3.innerHTML = episodes
+        pers_data_3.innerHTML = availableEpisodes
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
-        info_1.innerHTML = status
+        // info_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-clapperboard"></i>`
+        info_1.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-circle-dot"></i>`
+        info_1.innerHTML += status
+        
+        switch(status) {
+            case 'Finished':
+                info_1.style.color = colorSuccess
+                break
+            case 'Releasing':
+                    info_1.style.color = colorInfo
+                    break
+            case 'Unreleased':
+            case 'Cancelled':
+            case 'Discontinued':
+                info_1.style.color = colorWarning
+                break
+        }
+
         info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-tv"></i>`
         info_2.innerHTML += format
         info_3.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-film"></i>`
-        info_3.innerHTML += episodes
+        info_3.innerHTML += availableEpisodes
+        
+        if(status === 'Releasing') {
+            info_3.innerHTML += ` / ${episodes}`
+        }
+        
         info_3.innerHTML += ' Episodes'
+        info_4.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-star"></i>`
+        info_4.innerHTML += `${meanScore}%`
+        info_4.style.color = colorAlert
         description_div.innerHTML = description
         
         additional_info_span.innerHTML = 'Released on: '
@@ -931,6 +965,7 @@ module.exports = class Frontend {
 
         banner_wrapper.appendChild(banner_img)
 
+        info_div.appendChild(info_4)
         info_div.appendChild(info_1)
         info_div.appendChild(info_2)
         info_div.appendChild(info_3)
@@ -948,7 +983,7 @@ module.exports = class Frontend {
         content_wrapper.appendChild(content_div)
 
         // create episodes entries
-        for(let i=1; i<=episodes; i++) {
+        for(let i=1; i<=availableEpisodes; i++) {
             let episode_entry = document.createElement('div')
             episode_entry.classList.add('episode-entry')
 
@@ -1238,17 +1273,15 @@ module.exports = class Frontend {
         pers_data_common.innerHTML = pers_data.innerHTML
 
         // close anime pages
-        let anime_page_exit_buttons = document.querySelectorAll('.anime-page button[id^="exit-"]')
-        anime_page_exit_buttons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                this.closeAnimePage(event.target.id == ''
-                                    ? event.target.parentNode.id
-                                    : event.target.id)
-            })
+        let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
+        anime_page_exit_button.addEventListener('click', (event) => {
+            this.closeAnimePage(event.target.id == ''
+                                ? event.target.parentNode.id
+                                : event.target.id)
         })
 
         // trigger video when click episode entry
-        let episodes = document.getElementsByClassName('episodes')
+        let episodes = document.querySelectorAll(`#anime-page-${animeId} .anime-page .episodes`)
         Object.keys(episodes).forEach(episode => {
             let episode_section = Object.values(episodes)[episode]
         
@@ -1490,9 +1523,9 @@ module.exports = class Frontend {
      * @returns episodes number
      */
     getEpisodes = animeEntry => animeEntry.episodes == null
-                                ? (animeEntry.nextAiringEpisode == null
+                                ? animeEntry.nextAiringEpisode == null
                                     ? '?'
-                                    : animeEntry.nextAiringEpisode.episode - 1)
+                                    : animeEntry.nextAiringEpisode.episode - 1
                                 : animeEntry.episodes
 
     /**
@@ -1502,10 +1535,12 @@ module.exports = class Frontend {
      * @returns available episodes number
      */
     getAvailableEpisodes = animeEntry => animeEntry.nextAiringEpisode == null
-                                         ? (animeEntry.episodes == null)
+                                         ? animeEntry.episodes == null
                                             ? '?'
                                             : animeEntry.episodes
                                          : animeEntry.nextAiringEpisode.episode - 1
+
+    
 
     /**
      * Gets the anime user status
@@ -1558,6 +1593,27 @@ module.exports = class Frontend {
     parseDescription = description => description == null 
                                       ? ""
                                       : description.replace('<br>', '')
+
+    /**
+     * Parses anime status into human-readable name
+     * 
+     * @param {*} status 
+     * @returns 
+     */
+    getAnimeStatusName = status => {
+        switch(status) {
+            case 'FINISHED':
+                return 'Finished'
+            case 'RELEASING':
+                return 'Releasing'
+            case 'NOT_YET_RELEASED':
+                return 'Unreleased'
+            case 'CANCELLED':
+                return 'Cancelled'
+            case 'HIATUS':
+                return 'Discontinued'
+        }
+    }
  
     /**
      * Capitalizes the first letter of a string

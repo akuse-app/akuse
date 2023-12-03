@@ -8,8 +8,10 @@
     --color-4: #383434;
     --color-important: #ff6b6b;
     --color-dark-opacity: rgba(0, 0, 0, 0.6);
-    --color-warning: rgb(255, 61, 61);
+    --color-warning: #FF5454;
+    --color-alert: #E5A639;
     --color-success: #45AD67;
+    --color-info: #3FA0D0;
     
     --font-1: #FBFBFB;
     --font-2: rgb(197, 197, 197);
@@ -922,7 +924,7 @@ main .featured .featured-img img {
             margin-bottom: 25px;
             padding-left: 0;
             color: var(--font-2);
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 500;
         }
 

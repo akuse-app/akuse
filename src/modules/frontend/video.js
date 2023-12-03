@@ -77,7 +77,7 @@ module.exports = class Video {
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
         const animeTitles = this.getAnimeTitles()
 
-        console.log('titles: ' + animeTitles)
+        // console.log('titles: ' + animeTitles)
         console.log('playground: ')
 
         let i = 0

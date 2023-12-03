@@ -59,6 +59,7 @@ module.exports = class AniListAPI extends Requests {
             bannerImage
             genres
             synonyms
+            averageScore
             meanScore
             popularity
             favourites
