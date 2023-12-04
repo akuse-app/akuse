@@ -3,8 +3,6 @@
 const Store = require('electron-store')
 const Requests = require ('../requests.js')
 
-const store = new Store()
-
 /**
  * Authentication and queries with AniList API
  * 
@@ -18,6 +16,7 @@ module.exports = class AniListAPI extends Requests {
      */
     constructor(clientData) {
         super()
+        this.store = new Store()
         this.clientData = clientData
         this.pages = 15
         this.method = 'POST'
@@ -111,7 +110,6 @@ module.exports = class AniListAPI extends Requests {
     /**
      * Gets the anilist viewer (user) id
      * 
-     * @param {*} token 
      * @returns viewer id
      */
     async getViewerId() {
@@ -124,7 +122,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -138,7 +136,6 @@ module.exports = class AniListAPI extends Requests {
     /**
      * Gets the viewer (user) info
      * 
-     * @param {*} token 
      * @param {*} viewerId 
      * @returns object with viewer info
      */
@@ -156,7 +153,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -174,7 +171,6 @@ module.exports = class AniListAPI extends Requests {
     /**
      * Gets a viewer list (current, completed...)
      * 
-     * @param {*} token 
      * @param {*} viewerId 
      * @param {*} status 
      * @returns object with anime entries
@@ -200,7 +196,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -210,10 +206,13 @@ module.exports = class AniListAPI extends Requests {
         }
 
         const options = this.getOptions(query, variables)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
-        if(Object.keys(respData.data.MediaListCollection.lists).length !== 0) {
+        try {
+            const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
             return respData.data.MediaListCollection.lists[0].entries
+        } catch (error) {
+            console.log(`${status} not fetched`)
+            console.log(error)
         }
     }
 
@@ -232,7 +231,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -261,7 +260,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -275,13 +274,16 @@ module.exports = class AniListAPI extends Requests {
 
         return respData.data.Media
     }
-
+    
     /**
      * Gets the current trending animes on anilist
+     * pass viewerId to make an authenticated request
      * 
+     * @param {*} viewerId
      * @returns object with trending animes
      */
-    async getTrendingAnimes() {
+    async getTrendingAnimes(viewerId) {
+        // not logged query
         var query = `
         {
             Page(page: 1, perPage: ${this.pages}) {
@@ -297,18 +299,37 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
-        const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+        if(viewerId) {
+            var headers = {
+                'Authorization': 'Bearer ' + this.store.get('access_token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        } else {
+            var headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+        
+        console.log('Headers')
+        console.log(headers)
+        console.log('\n\n')
 
+        const options = this.getOptions(query)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
+        console.log(respData.data.Page)
         return respData.data.Page
     }
 
     /**
      * Gets the current most popular animes on anilist
+     * pass viewerId to make an authenticated request
      * 
+     * @param {*} viewerId
      * @returns object with most popular animes
      */
-    async getMostPopularAnimes() {
+    async getMostPopularAnimes(viewerId) {
         var query = `
         {
             Page(page: 1, perPage: ${this.pages}) {
@@ -324,8 +345,21 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
+        if(viewerId) {
+            var headers = {
+                'Authorization': 'Bearer ' + this.store.get('access_token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        } else {
+            var headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+
         const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Page
     }
@@ -414,11 +448,13 @@ module.exports = class AniListAPI extends Requests {
 
     /**
      * Gets the current trending animes filtered by a genre
+     * pass viewerId to make an authenticated request
      * 
      * @param {*} genre 
+     * @param {*} viewerId 
      * @returns object with animes entries filtered by genre
      */
-    async getAnimesByGenre(genre) {
+    async getAnimesByGenre(genre, viewerId) {
         var query = `
         {
             Page(page: 1, perPage: ${this.pages}) {
@@ -434,8 +470,21 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
+        if(viewerId) {
+            var headers = {
+                'Authorization': 'Bearer ' + this.store.get('access_token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        } else {
+            var headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+
         const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Page
     }
@@ -482,7 +531,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -498,11 +547,12 @@ module.exports = class AniListAPI extends Requests {
         await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
     
+    // NOT WORKING
     async deleteAnimeFromList(id) {
         var query = "mutation($id:Int){DeleteMediaListEntry(id:$id){deleted}}"
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -532,7 +582,7 @@ module.exports = class AniListAPI extends Requests {
         `
 
         var headers = {
-            'Authorization': 'Bearer ' + store.get('access_token'),
+            'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }

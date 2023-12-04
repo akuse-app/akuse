@@ -1,5 +1,6 @@
 'use-strict'
 
+const Store = require('electron-store')
 const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
 const LoadingBar = require('../frontend/loadingBar')
@@ -18,6 +19,7 @@ module.exports = class Frontend {
      * @constructor
      */
     constructor() {
+        this.store = new Store()
         this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
         this.loadingBar = new LoadingBar()
@@ -144,9 +146,6 @@ module.exports = class Frontend {
         featured_div.classList.add('featured')
         featured_div.classList.add('loading')
         featured_container_div.classList.add('featured-container')
-        // featured_left_div.classList.add('featured-left')
-        // featured_shadow_div.classList.add('featured-shadow')
-        // featured_right_div.classList.add('featured-right')
         content_div.classList.add('content')
         content_div.classList.add('show')
         anime_title_div.classList.add('anime-title')
@@ -429,24 +428,29 @@ module.exports = class Frontend {
     /**
      * Displays the list editor modal page
      */
-    displayListEditorPage() {
+    displayListEditorPage(animeId) {
         // display current infos (if present)
-        const status = document.getElementById('page-anime-user-status').innerHTML
-        const progress = document.getElementById('page-anime-progress').innerHTML
-        const score = document.getElementById('page-anime-score-number').innerHTML
-        const availableEpisodes = document.getElementById('page-anime-available-episodes').innerHTML
+        const status = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-user-status`).innerHTML
+        const progress = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-user-progress`).innerHTML)
+        const score = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-user-score`).innerHTML)
+        const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`).innerHTML)
           
-        status == 'NOT IN LIST'
+        console.log('status', status)
+        console.log('progress', progress)
+        console.log('score', score)
+        console.log('availableEpisodes', availableEpisodes)
+
+        status == ""
         ? document.getElementById('list-editor-user-list').value = ""
         : document.getElementById('list-editor-user-list').value = status
         
-        progress == ""
+        progress == 0
         ? document.getElementById('list-editor-progress').value = ""
         : document.getElementById('list-editor-progress').value = progress
 
         document.getElementById('list-editor-progress').setAttribute('max', availableEpisodes)
         
-        score == ""
+        score == -1
         ? document.getElementById('list-editor-score').value = ""
         : document.getElementById('list-editor-score').value = score
 
@@ -456,6 +460,11 @@ module.exports = class Frontend {
 
         document.querySelector('#list-editor-score-limit .value').innerHTML = score
         document.querySelector('#list-editor-score-limit .limit').innerHTML = 10
+
+        // console.log('\n\n')
+        // console.log(document.getElementById('list-editor-user-list').value)
+        // console.log(document.getElementById('list-editor-progress').value)
+        // console.log(document.getElementById('list-editor-score').value)
 
         this.showModalPage('list-editor-page-shadow-background', 'list-editor-page')
     }
@@ -644,27 +653,32 @@ module.exports = class Frontend {
         var anime_list_div = document.getElementById(list)
         anime_list_div.innerHTML = ""
 
-        if(Object.values(entries).length == 0) return -1
+        // if(Object.values(entries).length == 0) return -1
         
-        Object.keys(entries).forEach(key => {
-            var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
-            
-            if(needProgressBar) {
-                // append a shadow layer to the card
-                let anime_cover_div = anime_entry_div.getElementsByClassName('anime-cover')[0]
-                let anime_cover_shadow = document.createElement('div')
-                anime_cover_shadow.classList.add('anime-cover-shadow')
-                anime_cover_div.appendChild(anime_cover_shadow)
+        try {
+            Object.keys(entries).forEach(key => {
+                var anime_entry_div = this.createAnimeSectionEntry(entries[key].media)
                 
-                // append the progress bar to the card
-                this.appendProgressBar(
-                    anime_entry_div.getElementsByClassName('anime-cover')[0],
-                    parseInt(this.getEpisodes(entries[key].media)),
-                    parseInt(entries[key].progress)
-                    )
-                }
-            anime_list_div.appendChild(anime_entry_div)
-        })
+                if(needProgressBar) {
+                    // append a shadow layer to the card
+                    let anime_cover_div = anime_entry_div.getElementsByClassName('anime-cover')[0]
+                    let anime_cover_shadow = document.createElement('div')
+                    anime_cover_shadow.classList.add('anime-cover-shadow')
+                    anime_cover_div.appendChild(anime_cover_shadow)
+                    
+                    // append the progress bar to the card
+                    this.appendProgressBar(
+                        anime_entry_div.getElementsByClassName('anime-cover')[0],
+                        parseInt(this.getEpisodes(entries[key].media)),
+                        parseInt(entries[key].progress)
+                        )
+                    }
+                anime_list_div.appendChild(anime_entry_div)
+            })
+        } catch (error) {
+            console.log(`${list} not loaded`)
+            console.log(error)
+        }
     }
     
     /**
@@ -674,15 +688,17 @@ module.exports = class Frontend {
      * @param {*} genre
      */
     displayGenreAnimeSection(entries, genre) {
-        
         var anime_list_div = document.getElementById(genre)
         anime_list_div.innerHTML = ""
         
-        Object.keys(entries.media).forEach(key => {
-            var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
-            
-            anime_list_div.appendChild(anime_entry_div)
-        })
+        try {
+            Object.keys(entries.media).forEach(key => {
+                var anime_entry_div = this.createAnimeSectionEntry(Object.values(entries.media)[key])
+                anime_list_div.appendChild(anime_entry_div)
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
     
     /**
@@ -736,7 +752,7 @@ module.exports = class Frontend {
         const animeName = this.getTitle(animeEntry)
         const startYear = animeEntry.startDate.year
         const episodes = this.getAvailableEpisodes(animeEntry)
-        const format = animeEntry.format
+        const format = this.getParsedFormat(animeEntry.format)
         const cover = animeEntry.coverImage.large
         
         let anime_entry_div = document.createElement('div')
@@ -821,12 +837,52 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      */
     createAnimePage(animeEntry) {
+        // functions
+        let appendWatchButtons = () => {
+            let watch_buttons = document.createElement('div')
+            let watch_buttons_1 = document.createElement('button')
+            let watch_buttons_2 = document.createElement('button')
+
+            watch_buttons.classList.add('watch-buttons')
+            watch_buttons_1.classList.add('main-button-0')
+            
+            if(progress == 0) {
+                watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+                watch_buttons_1.innerHTML += `Start watching`
+                watch_buttons_1.id = `watch-${id}-${1}`
+            } else if(progress == episodes) {
+                watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
+                watch_buttons_1.innerHTML += `Watch again`
+                watch_buttons_1.id = `watch-${id}-${1}`
+            } else {
+                watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+                watch_buttons_1.innerHTML += `Resume from ep. ${progress + 1}`
+                watch_buttons_1.id = `watch-${id}-${progress + 1}`
+            }
+
+            watch_buttons_2.classList.add('main-button-0')
+
+            if(userStatus == "") {
+                watch_buttons_2.classList.add('not-in-list')
+                watch_buttons_2.innerHTML = `<i class="fa-regular fa-bookmark"></i>`
+            } else {
+                watch_buttons_2.classList.add('in-list')
+                watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
+            }
+
+            watch_buttons.appendChild(watch_buttons_1)
+            watch_buttons.appendChild(watch_buttons_2)
+            banner_wrapper.appendChild(watch_buttons)
+        }
+
+        // colors
         let style = getComputedStyle(document.body)
         const colorSuccess = style.getPropertyValue('--color-success')
         const colorAlert = style.getPropertyValue('--color-alert')
         const colorWarning = style.getPropertyValue('--color-warning')
         const colorInfo = style.getPropertyValue('--color-info')
 
+        // anilist data
         const id = animeEntry.id
         const title = this.getTitle(animeEntry)
         const status = this.getParsedStatus(animeEntry.status)
@@ -844,13 +900,20 @@ module.exports = class Frontend {
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
         const meanScore = animeEntry.meanScore
         const duration = animeEntry.duration
+        const progress = this.getProgress(animeEntry)
+        const userStatus = this.getUserStatus(animeEntry)
+        const score = this.getScore(animeEntry)
 
+        // dom elements
         let anime_pages = document.querySelector('.anime-pages')
         
         let pers_data = document.createElement('ul')
         let pers_data_1 = document.createElement('li')
         let pers_data_2 = document.createElement('li')
         let pers_data_3 = document.createElement('li')
+        let pers_data_4 = document.createElement('li')
+        let pers_data_5 = document.createElement('li')
+        let pers_data_6 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
         let separator = document.createElement('div')
         let anime_page = document.createElement('div')
@@ -877,11 +940,15 @@ module.exports = class Frontend {
         let episodes_scroller = document.createElement('div')
         let episodes_div = document.createElement('div')
 
+        // classes, ids, innerHTMLs, src...
         modal_page_wrapper.id = `anime-page-${id}`
         pers_data.classList.add('persistent-data')
         pers_data_1.classList.add('persdata-anime-titles')
         pers_data_2.classList.add('persdata-anime-id')
         pers_data_3.classList.add('persdata-anime-available-episodes')
+        pers_data_4.classList.add('persdata-anime-user-status')
+        pers_data_5.classList.add('persdata-anime-user-progress')
+        pers_data_6.classList.add('persdata-anime-user-score')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
         separator.classList.add('separator')
@@ -914,6 +981,9 @@ module.exports = class Frontend {
 
         pers_data_2.innerHTML = id
         pers_data_3.innerHTML = availableEpisodes
+        pers_data_4.innerHTML = userStatus
+        pers_data_5.innerHTML = progress
+        pers_data_6.innerHTML = score
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
@@ -975,7 +1045,12 @@ module.exports = class Frontend {
         //     ? banner_wrapper.appendChild(banner_img)
         //     : banner_wrapper.appendChild(banner_video)
 
+        // appending
         banner_wrapper.appendChild(banner_img)
+        
+        if(this.store.get('logged')) {
+            appendWatchButtons()
+        }
 
         info_div.appendChild(info_4)
         info_div.appendChild(info_1)
@@ -1044,6 +1119,9 @@ module.exports = class Frontend {
         pers_data.appendChild(pers_data_1)
         pers_data.appendChild(pers_data_2)
         pers_data.appendChild(pers_data_3)
+        pers_data.appendChild(pers_data_4)
+        pers_data.appendChild(pers_data_5)
+        pers_data.appendChild(pers_data_6)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1114,18 +1192,22 @@ module.exports = class Frontend {
      */
     displayFeaturedAnime(entries) {
         var featured_scroller_wrapper_div = document.getElementsByClassName('featured-scroller-wrapper')[0]
+        featured_scroller_wrapper_div.innerHTML = ''
         var width = 0
 
-        featured_scroller_wrapper_div.innerHTML = ''
-        entries.media.forEach(key => {
-            var featured_div = this.createAnimeFeaturedEntry(key)
-            if(featured_div != -1) {
-                featured_scroller_wrapper_div.appendChild(featured_div)
-                width += 100
-            }
-        })
-
-        featured_scroller_wrapper_div.style.width = (width + '%')
+        try {
+            entries.media.forEach(key => {
+                var featured_div = this.createAnimeFeaturedEntry(key)
+                if(featured_div != -1) {
+                    featured_scroller_wrapper_div.appendChild(featured_div)
+                    width += 100
+                }
+            })
+    
+            featured_scroller_wrapper_div.style.width = (width + '%')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     /**
@@ -1284,12 +1366,16 @@ module.exports = class Frontend {
         let pers_data_common = document.getElementById('persistent-data-common')
         pers_data_common.innerHTML = pers_data.innerHTML
 
-        // close anime pages
+        // close anime page
         let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
         anime_page_exit_button.addEventListener('click', (event) => {
-            this.closeAnimePage(event.target.id == ''
-                                ? event.target.parentNode.id
-                                : event.target.id)
+            this.closeAnimePage()
+        })
+        
+        document.getElementById(`anime-page-${animeId}`).addEventListener('click', (event) => {
+            if(!(event.target.closest(`#anime-page-${animeId} .anime-page .content-wrapper`))) {
+                this.closeAnimePage()
+            }
         })
 
         // trigger video when click episode entry
@@ -1299,8 +1385,21 @@ module.exports = class Frontend {
         
             episode_section.addEventListener('click', (event) => {
                 this.triggerEpisode(event)
-                // console.log('episodes')
             })
+        })
+
+        // trigger video when click watch buttons
+        let watch_button_1 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).firstChild
+        watch_button_1.addEventListener('click', () => {
+            this.video.displayVideo(watch_button_1.id)
+        })
+
+        // list editor
+        let watch_button_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
+        watch_button_2.addEventListener('click', () => {
+            this.displayListEditorPage(animeId)
+            this.showListEditorInputValue('progress')
+            this.showListEditorInputValue('score')
         })
     }
 
@@ -1310,7 +1409,8 @@ module.exports = class Frontend {
      * @returns true if the anime page is displayed, false otherwise
      */
     isAnimePageDisplayed() {
-        return document.getElementById('anime-page').style.display == 'flex'
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+        return document.getElementById(`anime-page-${animeId}`).style.display == 'flex'
     }
 
     /**
@@ -1457,8 +1557,10 @@ module.exports = class Frontend {
      * 
      * @param {*} id 
      */
-    closeAnimePage(id) {
-        this.hideModalPage('anime-page-shadow-background', `anime-page-${id.slice(5)}`)
+    closeAnimePage() {
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+
+        this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
     }
 
     /**
@@ -1561,7 +1663,7 @@ module.exports = class Frontend {
      * @returns user status
      */
     getUserStatus = animeEntry => animeEntry.mediaListEntry == null
-                                  ? 'NOT IN LIST'
+                                  ? ""
                                   : animeEntry.mediaListEntry.status
 
     /**
@@ -1571,7 +1673,7 @@ module.exports = class Frontend {
      * @returns anime score
      */
     getScore = animeEntry => animeEntry.mediaListEntry == null
-                             ? ""
+                             ? -1
                              : animeEntry.mediaListEntry.score
 
     /**
@@ -1581,7 +1683,7 @@ module.exports = class Frontend {
      * @returns anime progress
      */
     getProgress = animeEntry => animeEntry.mediaListEntry == null
-                                ? "" 
+                                ? 0 
                                 : animeEntry.mediaListEntry.progress
 
     /**

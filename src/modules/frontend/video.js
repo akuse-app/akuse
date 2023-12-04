@@ -59,6 +59,9 @@ module.exports = class Video {
         Object.keys(anime_titles_div).forEach( (key) => {
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
             animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', ''))
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Part ', ''))
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Part ', ''))
+            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Dr.', 'Dr. ')) // Dr. STONE New World Part 2 - IT
         })
 
         return animeTitles
@@ -77,7 +80,7 @@ module.exports = class Video {
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
         const animeTitles = this.getAnimeTitles()
 
-        // console.log('titles: ' + animeTitles)
+        console.log('titles: ' + animeTitles)
         console.log('playground: ')
 
         let i = 0

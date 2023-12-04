@@ -187,7 +187,7 @@ img {
     width: 400px;
     height: 600px;
     border-radius: var(--border-radius);
-    background: var(--color-0);
+    background: var(--color-1);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -452,7 +452,7 @@ nav {
     width: 1000px;
     height: 600px;
     border-radius: var(--border-radius);
-    background: var(--color-0);
+    background: var(--color-1);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -560,10 +560,15 @@ nav {
         border: none;
         outline: none;
         transition: var(--transition);
+        z-index: 50;
     }
 
     .settings-page button#exit:hover {
         color: var(--color-important);
+    }
+
+    .settings-page button#exit:active {
+        filter: brightness(0.90);
     }
 
 .search-main-bar {
@@ -853,6 +858,44 @@ main .featured .featured-img img {
         display: none;
     }
 
+    .anime-page .watch-buttons {
+        position: absolute;
+        bottom: 40px;
+        left: 25px;
+        display: flex;
+        gap: 10px;
+    }
+
+        .anime-page .watch-buttons button {
+            height: 50px;
+        }
+
+        .anime-page .watch-buttons button:nth-child(1) {
+            background-color: var(--font-1);
+        }
+
+        .anime-page .watch-buttons button:nth-child(2) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            padding: 0;
+            border-radius: 100px;
+            font-size: 1.4rem;
+        }
+
+        .anime-page .watch-buttons button:nth-child(2).not-in-list {
+            background-color: var(--color-dark-opacity);
+            color: var(--font-2);
+            border: 2px solid var(--font-3);
+        }
+
+        .anime-page .watch-buttons button:nth-child(2).in-list {
+            background-color: var(--font-1);
+            color: var(--color-1);
+            border: 2px solid transparent;
+        }
+
     .anime-page .content-wrapper {
         position: relative;
         display: flex;
@@ -1090,8 +1133,7 @@ main .featured .featured-img img {
 .list-editor-page {
     position: relative;
     border-radius: var(--border-radius);
-    background: var(--color-2);
-    background: var(--color-0);
+    background: var(--color-1);
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -1208,22 +1250,27 @@ main .featured .featured-img img {
         }
 
     .list-editor-page button#exit {
-    position: absolute;
-    top: -25px;
-    right: -25px;
-    margin: 10px;
-    color: var(--font-1);
-    font-size: 2rem;
-    font-weight: var(--font-weight);
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    transition: var(--transition);
+        position: absolute;
+        top: -25px;
+        right: -25px;
+        margin: 10px;
+        color: var(--font-1);
+        font-size: 2rem;
+        font-weight: var(--font-weight);
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        transition: var(--transition);
+        z-index: 50;
     }
 
     .list-editor-page button#exit:hover {
-    color: var(--color-important);
+        color: var(--color-important);
+    }
+
+    .list-editor-page button#exit:active {
+        filter: brightness(0.90);
     }
 
 main section {
@@ -1379,11 +1426,11 @@ main section .anime-list-wrapper {
         }
 
         main .anime-entry .anime-info .startYear {
-            width: 50%;
+            width: 75%;
         }
         
         main .anime-entry .anime-info .episodes {
-            width: 50%;
+            width: 100%;
             text-align: end;
         }
 
@@ -1420,7 +1467,7 @@ main section .anime-list-wrapper {
                 border-radius: var(--border-radius) var(--border-radius) 0 0;
             }
 
-            /* for box-shadow */
+            /* for shadow */
             main section .overlay .ov-img-wrapper::after {
                 content: '';
                 display: block;
@@ -1428,7 +1475,7 @@ main section .anime-list-wrapper {
                 position: absolute;
                 top: 0;
                 width: 100%;
-                box-shadow: inset 0px -40px 20px -15px var(--color-2);
+                box-shadow: inset 0px -40px 25px -15px var(--color-2);
               }
 
             main section .overlay .ov-content {

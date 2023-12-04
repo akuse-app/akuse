@@ -26,13 +26,13 @@ frontend.enableFeaturedSectionScrollingButtons()
 
 /* --- MODAL PAGES --- */
 
-// pressing esc closes the modal pages
+// pressing esc closes modal pages
 document.addEventListener('keydown', (event) => {
     if(event.code === 'Escape') {
-        // if(frontend.isAnimePageDisplayed()
-        //    && !frontend.isListEditorDisplayed()) {
-        //     frontend.closeAnimePage()
-        // }
+        if(frontend.isAnimePageDisplayed()
+           && !frontend.isListEditorDisplayed()) {
+            frontend.closeAnimePage()
+        }
 
         if(frontend.isListEditorDisplayed()) {
             frontend.closeListEditorPage()
@@ -46,9 +46,9 @@ document.addEventListener('keydown', (event) => {
 
 /* --- SETTINGS MODAL PAGE --- */
 
-// open settings modal page
-let settingsButton = document.getElementById('user-dropdown-settings')
-settingsButton.addEventListener('click', () => {
+// open
+let settings_button = document.getElementById('user-dropdown-settings')
+settings_button.addEventListener('click', () => {
     frontend.displaySettingsPage()
 })
 
@@ -88,15 +88,7 @@ anilistItem.addEventListener('click', () => {
     }
 })
 
-/* --- LIST-EDITOR MODAL PAGE --- */
-
-// open
-// let settings_button = document.getElementById('page-anime-list-editor')
-// settings_button.addEventListener('click', () => {
-//     frontend.displayListEditorPage()
-//     frontend.showListEditorInputValue('progress')
-//     frontend.showListEditorInputValue('score')
-// })
+/* --- LIST-EDITOR MODAL PAGE (currently disabled) --- */
 
 // close
 let list_editor_page_exit_button = document.querySelector('.list-editor-page #exit')
@@ -161,12 +153,6 @@ list_editor_score.addEventListener('input', () => {
 //     video.displayVideo(watch_button.id.slice(17))
 // })
 
-// document.getElementById('anime-page').addEventListener('click', (event) => {
-//     if(event.target.id === 'anime-page') {
-//         frontend.closeAnimePage()
-//     }
-// })
-
 /* --- ANIME SECTIONS --- */
 
 // scrolling buttons
@@ -219,9 +205,3 @@ search_list.forEach(list => {
         frontend.triggerAnimeEntry(event)
     })
 })
-
-// trigger when episode is pressed, so generate video link
-// let episode_list = document.getElementById('page-anime-episodes-list')
-// episode_list.addEventListener('click', (event) => {
-//     frontend.triggerEpisode(event)
-// })

@@ -2,7 +2,6 @@
 
 const Consumet = require('@consumet/extensions')
 
-
 /**
  * Methods to fetch anime video sources and data using Consumet library 
  * 
@@ -30,7 +29,7 @@ module.exports = class Gogoanime {
         if (animeId == -1) {
             return -1
         }
-        
+
         const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
         const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
 
@@ -69,7 +68,6 @@ module.exports = class Gogoanime {
         const data = await this.consumet.search(animeSearch)
         
         if (data.results.length !== 0) {
-            console.log('---' + animeSearch + ' ' + data.results[0].title + '---')
             return data.results[0].id
         } else {
             return -1

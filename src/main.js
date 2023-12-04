@@ -54,8 +54,8 @@ const createWindow = () => {
     mainWin  = new BrowserWindow({
         width: 1300,
         height: 850,
-        minWidth: 960,
-        minHeight: 540,
+        minWidth: 1280,
+        minHeight: 720,
         show: false,
         autoHideMenuBar: true,
         // frame: false,
