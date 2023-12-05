@@ -434,25 +434,29 @@ module.exports = class Frontend {
         const progress = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-user-progress`).innerHTML)
         const score = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-user-score`).innerHTML)
         const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`).innerHTML)
-          
-        console.log('status', status)
-        console.log('progress', progress)
-        console.log('score', score)
-        console.log('availableEpisodes', availableEpisodes)
+        
+        // console.log('--- DATA ---')
+        // console.log('status', status)
+        // console.log('progress', progress)
+        // console.log('score', score)
 
         status == ""
         ? document.getElementById('list-editor-user-list').value = ""
         : document.getElementById('list-editor-user-list').value = status
         
-        progress == 0
-        ? document.getElementById('list-editor-progress').value = ""
-        : document.getElementById('list-editor-progress').value = progress
-
         document.getElementById('list-editor-progress').setAttribute('max', availableEpisodes)
+        progress == 0
+        ? document.getElementById('list-editor-progress').value = 0
+        : document.getElementById('list-editor-progress').value = progress
         
         score == -1
-        ? document.getElementById('list-editor-score').value = ""
+        ? document.getElementById('list-editor-score').value = 0
         : document.getElementById('list-editor-score').value = score
+
+        // console.log('--- CHANGED DATA ---')
+        // console.log('status', document.getElementById('list-editor-user-list').value)
+        // console.log('progress', document.getElementById('list-editor-progress').value)
+        // console.log('score', document.getElementById('list-editor-score').value)
 
         // display the limit of episodes (/24, /12...) and score (/10)
         document.querySelector('#list-editor-progress-limit .value').innerHTML = progress
@@ -1437,7 +1441,7 @@ module.exports = class Frontend {
      * @returns if some form inputs are incorrect
      */
     listEditor() {
-        const availableEpisodes = parseInt(document.getElementById('page-anime-available-episodes').innerHTML)
+        const availableEpisodes = parseInt(document.querySelector(`#persistent-data-common .persdata-anime-available-episodes`).innerHTML)
         let warn = 0
         
         let userList = document.getElementById('list-editor-user-list')
@@ -1471,7 +1475,7 @@ module.exports = class Frontend {
         
         if(warn) return
         
-        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
         console.log(animeId + ' ' + 
                     userList.value + ' ' + 
                     userScore.value*10 + ' ' + 
@@ -1504,7 +1508,7 @@ module.exports = class Frontend {
      * Closes the list editor modal page
      */
     listEditorDelete() {
-        const animeId = parseInt(document.getElementById('page-anime-id').innerHTML)
+        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
         this.anilist.deleteAnimeFromList(animeId)
 
         this.closeListEditorPage()
@@ -1514,7 +1518,7 @@ module.exports = class Frontend {
      * When the list editor is used, update elements on anime page
      */
     async updateAnimePageElements() {
-        const animeId = document.getElementById('page-anime-id').innerHTML
+        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
         
         const anilist = new AniListAPI(clientData)
         const animeEntry = await anilist.getAnimeInfo(animeId)

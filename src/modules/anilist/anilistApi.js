@@ -311,14 +311,9 @@ module.exports = class AniListAPI extends Requests {
                 'Accept': 'application/json'
             }
         }
-        
-        console.log('Headers')
-        console.log(headers)
-        console.log('\n\n')
 
         const options = this.getOptions(query)
         const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
-        console.log(respData.data.Page)
         return respData.data.Page
     }
 

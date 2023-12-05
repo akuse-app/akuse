@@ -108,13 +108,13 @@ list_editor_button.addEventListener('click', () => {
     frontend.listEditor()
 
     // after using the list editor, update anime modal page and anime entries lists
-    setTimeout(() => {
-        frontend.updateAnimePageElements()
+    // setTimeout(() => {
+    //     frontend.updateAnimePageElements()
 
-        setTimeout(() => {
-            frontend.updateAnimeEntries()
-        }, 500)
-    }, 500)
+    //     setTimeout(() => {
+    //         frontend.updateAnimeEntries()
+    //     }, 500)
+    // }, 500)
 })
 
 // delete
