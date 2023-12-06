@@ -1,7 +1,7 @@
 'use strict'
 
 const Store = require('electron-store')
-const Requests = require ('../requests.js')
+const Requests = require('../requests.js')
 
 /**
  * Authentication and queries with AniList API
@@ -106,7 +106,7 @@ module.exports = class AniListAPI extends Requests {
 
         return respData.access_token
     }
-    
+
     /**
      * Gets the anilist viewer (user) id
      * 
@@ -178,7 +178,7 @@ module.exports = class AniListAPI extends Requests {
     async getViewerList(viewerId, status) {
         var query = `
             query($userId : Int) {
-                MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME) {
+                MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME_DESC) {
                     lists {
                         isCustomList
                         name
@@ -274,7 +274,7 @@ module.exports = class AniListAPI extends Requests {
 
         return respData.data.Media
     }
-    
+
     /**
      * Gets the current trending animes on anilist
      * pass viewerId to make an authenticated request
@@ -299,7 +299,7 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
-        if(viewerId) {
+        if (viewerId) {
             var headers = {
                 'Authorization': 'Bearer ' + this.store.get('access_token'),
                 'Content-Type': 'application/json',
@@ -340,7 +340,7 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
-        if(viewerId) {
+        if (viewerId) {
             var headers = {
                 'Authorization': 'Bearer ' + this.store.get('access_token'),
                 'Content-Type': 'application/json',
@@ -465,7 +465,7 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
-        if(viewerId) {
+        if (viewerId) {
             var headers = {
                 'Authorization': 'Bearer ' + this.store.get('access_token'),
                 'Content-Type': 'application/json',
@@ -515,7 +515,7 @@ module.exports = class AniListAPI extends Requests {
     }
 
     /* MUTATIONS */
-    
+
     async updateAnimeFromList(mediaId, status, scoreRaw, progress) {
         var query = `
             mutation($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
@@ -537,25 +537,32 @@ module.exports = class AniListAPI extends Requests {
             "scoreRaw": scoreRaw,
             "progress": progress
         }
-        
+
         const options = this.getOptions(query, variables)
         await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
-    
+
     // NOT WORKING
     async deleteAnimeFromList(id) {
-        var query = "mutation($id:Int){DeleteMediaListEntry(id:$id){deleted}}"
+        var query = `
+            mutation($id: Int){
+                DeleteMediaListEntry(id: $id){
+                    deleted
+                }
+            }
+        `
 
         var headers = {
             'Authorization': 'Bearer ' + this.store.get('access_token'),
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
-        
+        console.log(id)
+        console.log(typeof id)
         var variables = {
             "id": id
         }
-        
+
         const options = this.getOptions(query, variables)
         await this.makeRequest(this.method, this.graphQLUrl, headers, options)
     }
@@ -581,15 +588,15 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
-        
+
         var variables = {
             "mediaId": mediaId,
             "progress": progress
         }
-        
+
         const options = this.getOptions(query, variables)
         await this.makeRequest(this.method, this.graphQLUrl, headers, options)
-        
+
         console.log(`Progress updated (${progress})`)
     }
 }

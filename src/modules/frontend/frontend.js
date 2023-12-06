@@ -752,12 +752,16 @@ module.exports = class Frontend {
      * @returns anime entry DOM element
      */
     createAnimeSectionEntry(animeEntry) {
+        let style = getComputedStyle(document.body)
+        const colorSuccess = style.getPropertyValue('--color-success')
+
         const animeId = animeEntry.id
         const animeName = this.getTitle(animeEntry)
         const startYear = animeEntry.startDate.year
         const episodes = this.getAvailableEpisodes(animeEntry)
         const format = this.getParsedFormat(animeEntry.format)
         const cover = animeEntry.coverImage.large
+        const status = animeEntry.status
         
         let anime_entry_div = document.createElement('div')
         let anime_cover_div = document.createElement('div')
@@ -767,7 +771,7 @@ module.exports = class Frontend {
         let startYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
-
+        
         anime_entry_div.classList.add('anime-entry')
         anime_cover_div.classList.add('anime-cover')
         anime_title_div.classList.add('anime-title')
@@ -777,7 +781,18 @@ module.exports = class Frontend {
         anime_entry_content.classList.add('content')
         
         anime_entry_div.id = ('anime-entry-' + animeId)
-        anime_title_div.innerHTML = animeName
+        
+        if(status === 'RELEASING') {
+            let span_div = document.createElement('span')
+            span_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-circle-dot"></i>'
+            span_div.style.color = colorSuccess
+            
+            anime_title_div.appendChild(span_div)
+            anime_title_div.innerHTML += animeName
+        } else {
+            anime_title_div.innerHTML = animeName
+        }
+        
         startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
         startYear_div.innerHTML += startYear
         episodes_div.innerHTML = format
@@ -918,6 +933,7 @@ module.exports = class Frontend {
         let pers_data_4 = document.createElement('li')
         let pers_data_5 = document.createElement('li')
         let pers_data_6 = document.createElement('li')
+        let pers_data_7 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
         let separator = document.createElement('div')
         let anime_page = document.createElement('div')
@@ -953,6 +969,7 @@ module.exports = class Frontend {
         pers_data_4.classList.add('persdata-anime-user-status')
         pers_data_5.classList.add('persdata-anime-user-progress')
         pers_data_6.classList.add('persdata-anime-user-score')
+        pers_data_7.classList.add('persdata-anime-episodes')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
         separator.classList.add('separator')
@@ -988,6 +1005,7 @@ module.exports = class Frontend {
         pers_data_4.innerHTML = userStatus
         pers_data_5.innerHTML = progress
         pers_data_6.innerHTML = score
+        pers_data_7.innerHTML = episodes
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
@@ -1050,6 +1068,7 @@ module.exports = class Frontend {
         //     : banner_wrapper.appendChild(banner_video)
 
         // appending
+        if(banner == null) banner_img.style.display = 'none'
         banner_wrapper.appendChild(banner_img)
         
         if(this.store.get('logged')) {
@@ -1126,6 +1145,7 @@ module.exports = class Frontend {
         pers_data.appendChild(pers_data_4)
         pers_data.appendChild(pers_data_5)
         pers_data.appendChild(pers_data_6)
+        pers_data.appendChild(pers_data_7)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1440,7 +1460,7 @@ module.exports = class Frontend {
      * 
      * @returns if some form inputs are incorrect
      */
-    listEditor() {
+    listEditorSave() {
         const availableEpisodes = parseInt(document.querySelector(`#persistent-data-common .persdata-anime-available-episodes`).innerHTML)
         let warn = 0
         
@@ -1485,8 +1505,89 @@ module.exports = class Frontend {
                                          userList.value,
                                          userScore.value*10,
                                          userProgress.value)
+
+        this.updateDataAfterListEditor(parseInt(animeId), 
+                                       userList.value, 
+                                       parseInt(userScore.value), 
+                                       parseInt(userProgress.value))
             
         this.closeListEditorPage()
+    }
+
+    /**
+     * Update the data visible by the user after executing list editor
+     * 
+     * @param {*} animeId 
+     * @param {*} userList 
+     * @param {*} userScore 
+     * @param {*} userProgress 
+     */
+    updateDataAfterListEditor(animeId, userList, userScore, userProgress) {
+        let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
+        let pers_data_common = document.getElementById('persistent-data-common')
+
+        // persistent data
+        pers_data.querySelector('.persdata-anime-user-status').innerHTML = userList
+        pers_data.querySelector('.persdata-anime-user-progress').innerHTML = userProgress
+        pers_data.querySelector('.persdata-anime-user-score').innerHTML = userScore
+
+        pers_data_common.innerHTML = pers_data.innerHTML
+
+        // watch buttons
+        let watch_buttons_1 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).firstChild
+        let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
+        let episodes = parseInt(pers_data.querySelector('.persdata-anime-episodes').innerHTML)
+        
+        if(userProgress == 0) {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+            watch_buttons_1.innerHTML += `Start watching`
+            watch_buttons_1.id = `watch-${animeId}-${1}`
+        } else if(userProgress == episodes) {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
+            watch_buttons_1.innerHTML += `Watch again`
+            watch_buttons_1.id = `watch-${animeId}-${1}`
+        } else {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+            watch_buttons_1.innerHTML += `Resume from ep. ${userProgress + 1}`
+            watch_buttons_1.id = `watch-${animeId}-${userProgress + 1}`
+        }
+
+        // TODO watch buttons 2
+
+        // anime sections
+        var entryId
+
+        switch(userList) {
+            case 'CURRENT':
+                entryId = 'current-home'
+                break
+            case 'PLANNING':
+                entryId = 'planning-my-list'
+                break
+            case 'COMPLETED':
+                entryId = 'completed-my-list'
+                break
+            case 'DROPPED':
+                entryId = 'dropped-my-list'
+                break
+            case 'PAUSED':
+                entryId = 'paused-my-list'
+                break
+            case 'REPEATING':
+                entryId = 'repeating-my-list'
+                break
+        }
+
+        let anime_section_div = document.querySelector(`#${entryId}`)
+        let anime_entry_div = document.querySelector(`#anime-entry-${animeId}`)
+        if(anime_entry_div) {
+            console.log(anime_section_div)
+            console.log(anime_entry_div)
+            console.log(`c'è`)
+            anime_section_div.prepend(anime_entry_div)
+        } else {
+            console.log(`NON c'è`)
+        }
     }
         
     /**
@@ -1512,48 +1613,6 @@ module.exports = class Frontend {
         this.anilist.deleteAnimeFromList(animeId)
 
         this.closeListEditorPage()
-    }
-
-    /**
-     * When the list editor is used, update elements on anime page
-     */
-    async updateAnimePageElements() {
-        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
-        
-        const anilist = new AniListAPI(clientData)
-        const animeEntry = await anilist.getAnimeInfo(animeId)
-        
-        const episodes = this.getEpisodes(animeEntry)
-        const userStatus = this.getUserStatus(animeEntry)
-        const score = this.getScore(animeEntry)
-        const progress = this.getProgress(animeEntry)
-        
-        document.getElementById('page-anime-progress-episodes').innerHTML = ""
-        document.getElementById('page-anime-user-score').innerHTML = ""
-        this.appendProgressBar(document.getElementById('page-anime-progress-episodes'), episodes, progress)
-        this.appendScoreStars(document.getElementById('page-anime-user-score'), score)
-        document.getElementById('page-anime-user-status').innerHTML = userStatus
-        document.getElementById('page-anime-progress').innerHTML = progress
-        document.getElementById('page-anime-score-number').innerHTML = score
-    }
-    
-    /**
-     * When the list editor is used, update elements on anime entries lists
-     */
-    async updateAnimeEntries() {
-        const viewerId = await this.anilist.getViewerId()
-        const animeStatus = document.getElementById('page-anime-user-status').innerHTML
-        const entries = await this.anilist.getViewerList(viewerId, animeStatus)
-        
-        let my_list_div = `${animeStatus.toLowerCase()}-my-list`
-        
-        // reset and update lists
-        document.getElementById(my_list_div).innerHTML = ""
-        this.displayUserAnimeSection(entries, my_list_div, true)
-        
-        document.getElementById('current-home').innerHTML = ""
-        const entriesCurrent = await this.anilist.getViewerList(viewerId, 'CURRENT')
-        this.displayUserAnimeSection(entriesCurrent, 'current-home', true)
     }
     
     /**

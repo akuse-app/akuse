@@ -103,24 +103,16 @@ document.getElementById('list-editor-page').addEventListener('click', (event) =>
 })
 
 // save
-let list_editor_button = document.getElementById('list-editor-save')
-list_editor_button.addEventListener('click', () => {
-    frontend.listEditor()
-
-    // after using the list editor, update anime modal page and anime entries lists
-    // setTimeout(() => {
-    //     frontend.updateAnimePageElements()
-
-    //     setTimeout(() => {
-    //         frontend.updateAnimeEntries()
-    //     }, 500)
-    // }, 500)
+let list_editor_save_button = document.getElementById('list-editor-save')
+list_editor_save_button.addEventListener('click', () => {
+    frontend.listEditorSave()
 })
 
 // delete
-list_editor_button.addEventListener('click', () => {
+let list_editor_delete_button = document.getElementById('list-editor-delete')
+list_editor_delete_button.addEventListener('click', () => {
     // not working due to an unusual bug
-    /* frontend.listEditorDelete() */
+    // frontend.listEditorDelete()
 })
 
 // inputs

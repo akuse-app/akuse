@@ -39,9 +39,9 @@ module.exports = class Requests {
             url: url,
             headers: headers,
             data: options
-        }).catch((error) => {
-            throw new Error('err')
         })
+
+        console.log(response)
 
         return response.data
     }
