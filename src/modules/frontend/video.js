@@ -109,6 +109,7 @@ module.exports = class Video {
      * Updates the anime progress (if enabled in settings)
      */
     async updateAnimeProgress() {
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
         const progress = parseInt(document.getElementById('video-episode').innerHTML.slice(8))
 
         if(this.store.get('update_progress')) {
@@ -122,8 +123,6 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
-        // const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
-
         if(!(this.canUpdateEpisode())) {
             console.warn('This is the last episode, You can\'t go any further!')
             return

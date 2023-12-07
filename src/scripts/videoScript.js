@@ -150,6 +150,7 @@ skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
 skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
 nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
+    updated = 0
 })
 volumeBtn.addEventListener("click", () => {
     if(speedOptions.classList.contains('show-options')) 
@@ -170,7 +171,9 @@ mainVideo.addEventListener('timeupdate', () => {
        && updated === 0) {
         updated = 1
         video.updateAnimeProgress()
+        console.log('update')
     }
+    console.log(mainVideo.currentTime * 100 / mainVideo.duration)
 })
 
 document.addEventListener("keydown", (event) => {
