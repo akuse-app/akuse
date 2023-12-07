@@ -16,7 +16,7 @@
     --font-1: #FBFBFB;
     --font-2: rgb(197, 197, 197);
     --font-3: rgb(142, 142, 142);
-    --font-4: rgb(87, 87, 87);
+    /* --font-4: rgb(87, 87, 87); */
     --font-3-transparent: rgba(168, 168, 168, 0.5);
     
     --font-weight: 600;
@@ -498,12 +498,12 @@ nav {
             
             .settings-page .content .left ul li.active {
                 color: var(--font-1);
-                background-color: var(--color-2);
+                background-color: var(--color-3);
             }
 
             .settings-page .content .left ul li:hover {
                 color: var(--font-1);
-                background-color: var(--color-2);
+                background-color: var(--color-3);
             }
         
         .settings-page .content .right {
@@ -518,7 +518,7 @@ nav {
                 align-items: center;
                 padding: 10px 20px;
                 color: var(--font-1);
-                background-color: var(--color-2);
+                background-color: var(--color-3);
                 margin-bottom: 15px;
                 border-radius: var(--border-radius);
             }

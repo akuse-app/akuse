@@ -1,7 +1,9 @@
 'use-strict'
 
+const Store = require('electron-store')
 const Frontend = require('../modules/frontend/frontend')
 
+const store = new Store()
 const frontend = new Frontend()
 
 /* --- AUTO-UPDATE --- */
@@ -85,6 +87,12 @@ anilistItem.addEventListener('click', () => {
         anilistRightElement.style.display = 'block'
     }
 })
+
+// disable toggler if not logged in
+if(!store.get('logged')) {
+    document.getElementById('update-progress-checkbox').setAttribute('disabled', '')
+    document.getElementById('update-progress-checkbox-slider').classList.add('disabled')
+}
 
 /* --- LIST-EDITOR MODAL PAGE (currently disabled) --- */
 
