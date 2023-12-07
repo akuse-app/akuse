@@ -16,6 +16,12 @@ document.getElementById('auto-update-later').addEventListener('click', () => {
 
 frontend.enableSkeletonLoader()
 
+/* --- SIDE BAR --- */
+
+if(!store.get('logged')) {
+    document.getElementById('nav-my-list').style.display = 'none'
+}
+
 /* --- MAIN PAGES --- */
 
 frontend.togglePage()

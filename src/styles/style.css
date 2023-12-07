@@ -294,7 +294,7 @@ img {
                 filter: brightness(0.70);
             }
 
-/* SIDE asideBAR */
+/* SIDE BAR */
 
 aside {
     position: fixed;
@@ -318,7 +318,6 @@ aside .big-logo {
 
     aside .big-logo img {
         width: 100%;
-        /* max-width: 50%; */
     }
 
 aside h1 {
@@ -1012,12 +1011,11 @@ main .featured .featured-img img {
             gap: 15px;
             width: calc(100% - 50px);
             margin: 0 25px;
-            /* padding: 25px 0; */
         }
 
         .anime-page .episodes-section .episodes-scroller {
             padding: 25px;
-            margin: -25px;
+            margin: -25px -25px 0 -25px;
             width: 100%;
             overflow: auto;
         }
@@ -1060,8 +1058,6 @@ main .featured .featured-img img {
                 position: absolute;
                 bottom: 0;
                 display: flex;
-                /* align-items: center;
-                gap: 15px; */
                 flex-direction: column;
                 width: calc(100% - 30px);
                 padding: 150px 15px 5px 15px;
@@ -1096,7 +1092,6 @@ main .featured .featured-img img {
         margin: 10px;
         color: var(--font-2);
         font-size: 2rem;
-        /* font-weight: var(--font-weight); */
         cursor: pointer;
         background-color: transparent;
         border: none;
@@ -1122,7 +1117,6 @@ main .featured .featured-img img {
     #page-anime-progress-episodes .progress-bar {
         background-color: var(--font-1);
     }
-
 
 /* ADD ANIME TO LIST MODAL PAGE */
 
@@ -1246,7 +1240,6 @@ main .featured .featured-img img {
         #list-editor-progress-limit,
         #list-editor-score-limit {
             display: none;
-            /* margin-left: auto; */
         }
 
     .list-editor-page button#exit {
@@ -1415,7 +1408,6 @@ main section .anime-list-wrapper {
             -webkit-box-orient: vertical;
             text-overflow: ellipsis;
             overflow: hidden;
-            /* white-space: nowrap; */
         }
 
             main .anime-entry .anime-title span {
@@ -1455,7 +1447,6 @@ main section .anime-list-wrapper {
             aspect-ratio: 3.5 / 4;
             z-index: 3;
             background-color: var(--color-2);
-            /* border: 2px solid var(--color-3); */
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
         }
