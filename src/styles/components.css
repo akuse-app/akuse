@@ -187,7 +187,7 @@ button.circle-button-0.disabled:active {
 .separator::after {
     content: '';
     flex: 1;
-    border-bottom: 1px dashed var(--font-4);
+    border-bottom: 1px dashed var(--font-3);
 }
 
 .separator:not(:empty)::before {

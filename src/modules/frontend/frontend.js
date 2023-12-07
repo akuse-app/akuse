@@ -593,7 +593,7 @@ module.exports = class Frontend {
         infos_div.appendChild(h2)
 
         var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-tv"></i>'
+        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-display"></i>'
         var span = document.createElement('span')
         span.innerHTML = format
         h2.appendChild(span)
@@ -793,7 +793,7 @@ module.exports = class Frontend {
         startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
         startYear_div.innerHTML += startYear
         episodes_div.innerHTML = format
-        episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-tv"></i>`
+        episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-display"></i>`
         anime_cover_img.src = cover
         anime_cover_img.alt = 'cover'
         
@@ -893,6 +893,7 @@ module.exports = class Frontend {
 
         // colors
         let style = getComputedStyle(document.body)
+        const colorImportant = style.getPropertyValue('--color-important')
         const colorSuccess = style.getPropertyValue('--color-success')
         const colorAlert = style.getPropertyValue('--color-alert')
         const colorWarning = style.getPropertyValue('--color-warning')
@@ -947,6 +948,7 @@ module.exports = class Frontend {
         let info_2 = document.createElement('li')
         let info_3 = document.createElement('li')
         let info_4 = document.createElement('li')
+        let info_5 = document.createElement('li')
         let description_div = document.createElement('div')
         let right_div = document.createElement('div')
         let attidional_info_1 = document.createElement('p')
@@ -1031,7 +1033,7 @@ module.exports = class Frontend {
 
         info_1.innerHTML += status
 
-        info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-tv"></i>`
+        info_2.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-display"></i>`
         info_2.innerHTML += format
 
         if(format === 'Movie') {
@@ -1051,6 +1053,11 @@ module.exports = class Frontend {
         info_4.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-star"></i>`
         info_4.innerHTML += `${meanScore}%`
         info_4.style.color = colorAlert
+        
+        info_5.innerHTML = '<i style="margin-right: 7px" class="fa-solid fa-circle-exclamation"></i>'
+        info_5.innerHTML += 'Adults'
+        info_5.style.color = colorImportant
+
         description_div.innerHTML = description
         
         additional_info_span.innerHTML = 'Released on: '
@@ -1076,6 +1083,7 @@ module.exports = class Frontend {
             appendWatchButtons()
         }
 
+        if(animeEntry.isAdult) info_div.appendChild(info_5)
         info_div.appendChild(info_4)
         info_div.appendChild(info_1)
         info_div.appendChild(info_2)
