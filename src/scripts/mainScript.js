@@ -4,20 +4,23 @@ const { ipcRenderer } = require('electron')
 const Store = require('electron-store')
 const AniListAPI = require('../modules/anilist/anilistApi')
 const Frontend = require('../modules/frontend/frontend')
-const LoadingBar = require('../modules/frontend/loadingBar')
 const clientData = require('../modules/clientData.js')
 
 const store = new Store()
 const frontend = new Frontend()
-const loadingBar = new LoadingBar()
 
 let loginButton= document.getElementById('login-icon')
-loginButton.addEventListener('click', (event) => {
+loginButton.addEventListener('click', () => {
     ipcRenderer.send('load-login-url')
 })
 
+let logoutButton= document.getElementById('user-icon')
+logoutButton.addEventListener('click', () => {
+    ipcRenderer.send('logout')
+})
+
 let bugReportButton = document.getElementById('user-dropdown-bug-report')
-bugReportButton.addEventListener('click', (event) => {
+bugReportButton.addEventListener('click', () => {
     ipcRenderer.send('load-issues-url')
 })
 

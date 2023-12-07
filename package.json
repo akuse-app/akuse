@@ -90,7 +90,8 @@
   "devDependencies": {
     "electron": "^25.9.7",
     "electron-builder": "^24.9.1",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "plyr": "^3.7.8"
   },
   "dependencies": {
     "@consumet/extensions": "github:consumet/consumet.ts",

@@ -3,7 +3,6 @@
 const Store = require('electron-store')
 const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
-const LoadingBar = require('../frontend/loadingBar')
 const Video = require('./video')
 const Requests = require('../requests.js')
 const clientData = require ('../clientData.js')
@@ -22,7 +21,6 @@ module.exports = class Frontend {
         this.store = new Store()
         this.anilist = new AniListAPI()
         this.cons = new AnimeSaturn()
-        this.loadingBar = new LoadingBar()
         this.video = new Video()
         this.req = new Requests()
         this.months = {
@@ -785,7 +783,6 @@ module.exports = class Frontend {
         if(status === 'RELEASING') {
             let span_div = document.createElement('span')
             span_div.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-circle-dot"></i>'
-            span_div.style.color = colorSuccess
             
             anime_title_div.appendChild(span_div)
             anime_title_div.innerHTML += animeName
@@ -981,6 +978,9 @@ module.exports = class Frontend {
         banner_wrapper.classList.add('banner-wrapper')
         banner_img.classList.add('banner')
         banner_video.classList.add('banner')
+        banner_video.setAttribute('loading', 'lazy')
+        banner_video.setAttribute('frameBorder', 0)
+        // banner_video.setAttribute('autoplay', '')
         content_div.classList.add('content')
         left_div.classList.add('left')
         title_div.classList.add('title')
@@ -1062,12 +1062,13 @@ module.exports = class Frontend {
         additional_info_span.innerHTML = 'Other titles: '
         attidional_info_3.appendChild(additional_info_span)
         attidional_info_3.innerHTML += synonyms
+        
+        // appending
 
         // trailerUrl == ''
         //     ? banner_wrapper.appendChild(banner_img)
         //     : banner_wrapper.appendChild(banner_video)
 
-        // appending
         if(banner == null) banner_img.style.display = 'none'
         banner_wrapper.appendChild(banner_img)
         
@@ -1384,6 +1385,9 @@ module.exports = class Frontend {
         if(animeId == -1) return
 
         this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+        
+        // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
+        // trailer_iframe.src += '?autoplay=1&controls=0'
 
         // storing anime persistend data
         let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
@@ -1553,40 +1557,36 @@ module.exports = class Frontend {
         }
 
         // TODO watch buttons 2
+        watch_buttons_2.classList.remove('not-in-list')
+        watch_buttons_2.classList.add('in-list')
+        watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
 
         // anime sections
-        var entryId
-
         switch(userList) {
             case 'CURRENT':
-                entryId = 'current-home'
+                var entryId = 'current-home'
                 break
             case 'PLANNING':
-                entryId = 'planning-my-list'
+                var entryId = 'planning-my-list'
                 break
             case 'COMPLETED':
-                entryId = 'completed-my-list'
+                var entryId = 'completed-my-list'
                 break
             case 'DROPPED':
-                entryId = 'dropped-my-list'
+                var entryId = 'dropped-my-list'
                 break
             case 'PAUSED':
-                entryId = 'paused-my-list'
+                var entryId = 'paused-my-list'
                 break
             case 'REPEATING':
-                entryId = 'repeating-my-list'
+                var entryId = 'repeating-my-list'
                 break
         }
 
         let anime_section_div = document.querySelector(`#${entryId}`)
         let anime_entry_div = document.querySelector(`#anime-entry-${animeId}`)
         if(anime_entry_div) {
-            console.log(anime_section_div)
-            console.log(anime_entry_div)
-            console.log(`c'è`)
             anime_section_div.prepend(anime_entry_div)
-        } else {
-            console.log(`NON c'è`)
         }
     }
         
@@ -1623,6 +1623,8 @@ module.exports = class Frontend {
     closeAnimePage() {
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
 
+        // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
+        // trailer_iframe.src = ''
         this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
     }
 
@@ -1758,7 +1760,7 @@ module.exports = class Frontend {
     getTrailerUrl = animeEntry => animeEntry.trailer == null
                                   ? ""
                                   : animeEntry.trailer.site == 'youtube'
-                                    ? `https://www.youtube.com/embed/watch?v=${animeEntry.trailer.id}`
+                                    ? `https://www.youtube.com/embed/${animeEntry.trailer.id}`
                                     : ""
 
     /**

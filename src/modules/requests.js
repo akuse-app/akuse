@@ -41,7 +41,7 @@ module.exports = class Requests {
             data: options
         })
 
-        console.log(response)
+        // console.log(response)
 
         return response.data
     }

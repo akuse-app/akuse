@@ -557,8 +557,7 @@ module.exports = class AniListAPI extends Requests {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
-        console.log(id)
-        console.log(typeof id)
+        
         var variables = {
             "id": id
         }

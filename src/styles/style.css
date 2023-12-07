@@ -1417,6 +1417,11 @@ main section .anime-list-wrapper {
             overflow: hidden;
             /* white-space: nowrap; */
         }
+
+            main .anime-entry .anime-title span {
+                font-size: 0.8rem;
+                color: var(--color-success);
+            }
         
         main .anime-entry .anime-info {
             display: flex;

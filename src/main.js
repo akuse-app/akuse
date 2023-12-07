@@ -42,7 +42,11 @@ if (!gotTheLock) {
         store.set('access_token', token)
         store.set('logged', true)
 
-        mainWin.webContents.send('load-app')
+        console.log('Logged In! Relaunching app...')
+
+        app.relaunch()
+        app.exit()
+        // mainWin.webContents.send('load-app')
     })
 
     // Create mainWin, load the rest of the app, etc...
@@ -76,7 +80,7 @@ const createWindow = () => {
     mainWin.loadFile(__dirname + '/windows/index.html')
     mainWin.setBackgroundColor('#0c0b0b')
     mainWin.show()
-    // mainWin.maximize()
+    mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
         console.log(store.get('logged'))
@@ -89,12 +93,18 @@ const createWindow = () => {
     })
 }
 
-// try {
-//     require('electron-reloader')(module)
-// } catch (_) {}
-
 ipcMain.on('load-login-url', () => {
     require('electron').shell.openExternal(authUrl)
+})
+
+ipcMain.on('logout', () => {
+    store.set('logged', false)
+    store.clear('access_token')
+
+    console.log('Logged Out! Relaunching app...')
+
+    app.relaunch()
+    app.exit()
 })
 
 ipcMain.on('load-issues-url', () => {

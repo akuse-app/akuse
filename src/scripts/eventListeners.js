@@ -1,10 +1,8 @@
 'use-strict'
 
 const Frontend = require('../modules/frontend/frontend')
-const Video = require('../modules/frontend/video')
 
 const frontend = new Frontend()
-const video = new Video()
 
 /* --- AUTO-UPDATE --- */
 
