@@ -20,11 +20,7 @@
     </a>
 </p>
 
-## Upcoming design (new)
 <img title="img" alt="img" src="https://i.imgur.com/0HAvUCA.png">
-
-## Current design (old)
-<img title="img" alt="img" src="https://i.imgur.com/2qxWL2Z.png">
 
 ## Running locally for development
 
