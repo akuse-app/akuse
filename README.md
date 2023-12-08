@@ -20,7 +20,7 @@
     </a>
 </p>
 
-<img title="img" alt="img" src="https://i.imgur.com/0HAvUCA.png">
+<img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
 
 ## Running locally for development
 
