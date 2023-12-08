@@ -1528,6 +1528,7 @@ main#my-list-page .section-container {
 }
 
 main .filters-container {
+    position: relative;
     display: flex;
     width: 100%;
     gap: 20px;
@@ -1541,6 +1542,7 @@ main .filters-container {
         color: var(--font-3);
         transition: var(--transition);
     }
+
         main .filters-container .filter .filter-divisor {
             display: flex;
             gap: 5px;
@@ -1632,11 +1634,12 @@ main .search-buttons-container {
         cursor: pointer;
     }
 
-    main .search-buttons-container button#search-clear {
+    main button#search-clear {
         border: none;
         outline: none;
         position: absolute;
         right: 0;
+        bottom: 0;
         width: 30px;
         height: 30px;
         color: var(--font-3);
@@ -1645,11 +1648,11 @@ main .search-buttons-container {
         cursor: pointer;
     }
 
-    main .search-buttons-container button#search-clear:hover {
+    main button#search-clear:hover {
         color: var(--font-2);
     }
 
-    main .search-buttons-container button#search-clear:active {
+    main button#search-clear:active {
         color: var(--font-3);
     }
 

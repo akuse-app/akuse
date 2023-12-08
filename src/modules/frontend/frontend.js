@@ -1328,11 +1328,12 @@ module.exports = class Frontend {
         let season = document.getElementById('search-page-filter-season').value
         let year = document.getElementById('search-page-filter-year').value
         let format = document.getElementById('search-page-filter-format').value
-        let status = document.getElementById('search-page-filter-status').value
+        // let status = document.getElementById('search-page-filter-status').value
+        let status = ''
         let sort = document.getElementById('search-page-filter-sort').value
 
-        let tags_container = document.querySelector('main .search-buttons-container .search-tags .tags-container')
-        tags_container.innerHTML = ''
+        // let tags_container = document.querySelector('main .search-buttons-container .search-tags .tags-container')
+        // tags_container.innerHTML = ''
 
         let args = [
             title != '' ? title = `search: "${title}"` 
@@ -1356,7 +1357,7 @@ module.exports = class Frontend {
             tag.classList.add('tag')
             tag.innerHTML = args[i]
 
-            tags_container.appendChild(tag)
+            // tags_container.appendChild(tag)
         }
 
         args = args.concat('type: ANIME').join(', ')

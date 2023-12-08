@@ -473,7 +473,7 @@
                             <i class="fa-solid fa-heading"></i>
                             Title
                         </h2>
-                        <input type="text" id="search-page-filter-title" placeholder="Title">
+                        <input type="text" id="search-page-filter-title" placeholder="Search...">
                     </div>
                     <div class="filter">
                         <h2>
@@ -481,7 +481,7 @@
                             Genre
                         </h2>
                         <select name="" id="search-page-filter-genre">
-                            <option value="" disabled selected hidden>Genre</option>
+                            <option value="" disabled selected hidden>Any</option>
                             <option value="Action">Action</option>
                             <option value="Adventure">Adventure</option>
                             <option value="Comedy">Comedy</option>
@@ -509,7 +509,7 @@
                         </h2>
                         <div class="filter-divisor">
                             <select name="" id="search-page-filter-season">
-                                <option value="" disabled selected hidden>Season</option>
+                                <option value="" disabled selected hidden>Any</option>
                                 <option value="WINTER">Winter</option>
                                 <option value="SPRING">Spring</option>
                                 <option value="SUMMER">Summer</option>
@@ -524,7 +524,7 @@
                             Format
                         </h2>
                         <select name="" id="search-page-filter-format">
-                            <option value="" disabled selected hidden>Format</option>
+                            <option value="" disabled selected hidden>Any</option>
                             <option value="TV">TV Show</option>
                             <option value="TV_SHORT">TV Short</option>
                             <option value="MOVIE">Movie</option>
@@ -534,44 +534,44 @@
                             <option value="MUSIC">Music</option>
                         </select>
                     </div>
-                    <div class="filter">
+                    <!-- <div class="filter">
                         <h2>
                             <i class="fa-solid fa-clapperboard"></i>
                             Status
                         </h2>
                         <select name="" id="search-page-filter-status">
-                            <option value="" disabled selected hidden>Status</option>
+                            <option value="" disabled selected hidden>Any</option>
                             <option value="FINISHED">Finished</option>
                             <option value="RELEASING">Releasing</option>
                             <option value="NOT_YET_RELEASED">Unreleased</option>
                             <option value="CANCELLED">Cancelled</option>
                             <option value="HIATUS">Discontinued</option>
                         </select>
-                    </div>
-                    <div class="filter">
+                    </div> -->
+                    <div style="margin-right: 45px;" class="filter">
                         <h2>
                             <i class="fa-solid fa-filter"></i>
                             Sort
                         </h2>
                         <select name="" id="search-page-filter-sort">
-                            <option value="" disabled selected hidden>Sort</option>
+                            <option value="" disabled selected hidden>Any</option>
                             <option value="START_DATE_DESC">Release Date</option>
                             <option value="SCORE_DESC">Score</option>
                             <option value="POPULARITY_DESC">Popularity</option>
                             <option value="TRENDING_DESC">Trending</option>
                         </select>
                     </div>
-                </div>
-                <div class="search-buttons-container">
-                    <div class="search-tags">
-                        <i class="fa-solid fa-tags"></i>
-                        <div class="tags-container">
-                        </div>
-                    </div>
-                    <button id="search-submit">Search</button>
                     <button id="search-clear">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
+                </div>
+                <div class="search-buttons-container">
+                    <!-- <div class="search-tags">
+                        <i class="fa-solid fa-tags"></i>
+                        <div class="tags-container">
+                        </div>
+                    </div> -->
+                    <button id="search-submit">Search</button>
                 </div>
                 <div class="entries-container"></div>
             </main>
