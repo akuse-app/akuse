@@ -124,7 +124,7 @@ list_editor_save_button.addEventListener('click', () => {
 let list_editor_delete_button = document.getElementById('list-editor-delete')
 list_editor_delete_button.addEventListener('click', () => {
     // not working due to an unusual bug
-    // frontend.listEditorDelete()
+    frontend.listEditorDelete()
 })
 
 // inputs

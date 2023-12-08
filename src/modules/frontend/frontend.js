@@ -920,6 +920,7 @@ module.exports = class Frontend {
         const progress = this.getProgress(animeEntry)
         const userStatus = this.getUserStatus(animeEntry)
         const score = this.getScore(animeEntry)
+        const mediaListId = this.getMediaListId(animeEntry)
 
         // dom elements
         let anime_pages = document.querySelector('.anime-pages')
@@ -932,6 +933,7 @@ module.exports = class Frontend {
         let pers_data_5 = document.createElement('li')
         let pers_data_6 = document.createElement('li')
         let pers_data_7 = document.createElement('li')
+        let pers_data_8 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
         let separator = document.createElement('div')
         let anime_page = document.createElement('div')
@@ -969,6 +971,7 @@ module.exports = class Frontend {
         pers_data_5.classList.add('persdata-anime-user-progress')
         pers_data_6.classList.add('persdata-anime-user-score')
         pers_data_7.classList.add('persdata-anime-episodes')
+        pers_data_8.classList.add('persdata-anime-media-list-id')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
         separator.classList.add('separator')
@@ -1008,6 +1011,7 @@ module.exports = class Frontend {
         pers_data_5.innerHTML = progress
         pers_data_6.innerHTML = score
         pers_data_7.innerHTML = episodes
+        pers_data_8.innerHTML = mediaListId
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
@@ -1155,6 +1159,7 @@ module.exports = class Frontend {
         pers_data.appendChild(pers_data_5)
         pers_data.appendChild(pers_data_6)
         pers_data.appendChild(pers_data_7)
+        pers_data.appendChild(pers_data_8)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1617,9 +1622,9 @@ module.exports = class Frontend {
      * Closes the list editor modal page
      */
     listEditorDelete() {
-        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
-        this.anilist.deleteAnimeFromList(animeId)
-
+        const mediaListId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-media-list-id').innerHTML)
+        
+        this.anilist.deleteAnimeFromList(mediaListId)
         this.closeListEditorPage()
     }
     
@@ -1758,6 +1763,10 @@ module.exports = class Frontend {
     getProgress = animeEntry => animeEntry.mediaListEntry == null
                                 ? 0 
                                 : animeEntry.mediaListEntry.progress
+
+    getMediaListId = animeEntry => animeEntry.mediaListEntry == null
+                                   ? -1
+                                   : animeEntry.mediaListEntry.id
 
     /**
      * Gets the trailer url

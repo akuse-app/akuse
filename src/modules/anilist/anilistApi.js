@@ -69,6 +69,8 @@ module.exports = class AniListAPI extends Requests {
                 episode
             }
             mediaListEntry {
+                id
+                mediaId
                 status
                 score(format:POINT_10)
                 progress
