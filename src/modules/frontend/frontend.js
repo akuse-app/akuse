@@ -38,19 +38,6 @@ module.exports = class Frontend {
             '12': 'Dec'
         }
     }
-    
-    /**
-     * Removes the loading div when the document has finished loading
-     * @deprecated
-     */
-    removeLoadingPage() {
-        document.getElementById('loading-page').classList.add('loading-page-animation')
-        setTimeout(() => {
-            document.getElementById('loading-page').style.display = 'none'
-        }, 1000)
-        /* document.getElementById('loading-page').style.opacity = 0
-        document.getElementById('loading-page').style.display = 'none' */
-    }
 
     /**
      * Pages toggler
@@ -626,23 +613,6 @@ module.exports = class Frontend {
 
         return entry_div
     }
-    
-    /**
-     * Trigger to display the anime modal page opened from the main search section
-     * 
-     * @param {*} event
-     * @deprecated
-     */
-    triggerMainSearchAnime(event) {
-        if(!(event.target.classList.contains('search-entry'))) {
-            var entry = event.target.closest('.search-entry')
-            if(entry) {
-                this.displayAnimePage(entry.id.slice(19))
-            }
-        } else {
-            this.displayAnimePage(event.target.id.slice(19))
-        }
-    }
 
     /**
      * Displays an anime section (with anime entries from viewer lists)
@@ -870,9 +840,14 @@ module.exports = class Frontend {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
                 watch_buttons_1.innerHTML += `Watch again`
                 watch_buttons_1.id = `watch-${id}-${1}`
+            } else if(progress == availableEpisodes) {
+                watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-hourglass"></i>`
+                watch_buttons_1.innerHTML += `Ep. ${progress + 1} releasing in ${timeUntilAiring.days}d ${timeUntilAiring.hours}h`
+                watch_buttons_1.classList.add('disabled')
+                watch_buttons_1.setAttribute('disabled', '')
             } else {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
-                watch_buttons_1.innerHTML += `Resume from ep. ${progress + 1}`
+                watch_buttons_1.innerHTML += `Resume from Ep. ${progress + 1}`
                 watch_buttons_1.id = `watch-${id}-${progress + 1}`
             }
 
@@ -921,6 +896,7 @@ module.exports = class Frontend {
         const userStatus = this.getUserStatus(animeEntry)
         const score = this.getScore(animeEntry)
         const mediaListId = this.getMediaListId(animeEntry)
+        const timeUntilAiring = this.getTimeUntilAiring(animeEntry)
 
         // dom elements
         let anime_pages = document.querySelector('.anime-pages')
@@ -1297,6 +1273,7 @@ module.exports = class Frontend {
         featured_img.src = banner
         
         anime_info_div.appendChild(anime_year_div)
+        anime_info_div.innerHTML += '•'
         anime_info_div.appendChild(anime_episodes_div)
         content_div.appendChild(anime_info_div)
         content_div.appendChild(anime_title_div)
@@ -1379,7 +1356,7 @@ module.exports = class Frontend {
      * 
      * @param {*} event 
      */
-    triggerAnimeEntry(event) {
+    triggerAnimeModal(event) {
         if(!(event.target.classList.contains('anime-entry'))) {
             var entry = event.target.closest('.anime-entry')
             if(entry) {
@@ -1570,7 +1547,7 @@ module.exports = class Frontend {
             watch_buttons_1.id = `watch-${animeId}-${userProgress + 1}`
         }
 
-        // TODO watch buttons 2
+        // watch buttons 2
         watch_buttons_2.classList.remove('not-in-list')
         watch_buttons_2.classList.add('in-list')
         watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
@@ -1624,8 +1601,15 @@ module.exports = class Frontend {
      */
     listEditorDelete() {
         const mediaListId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-media-list-id').innerHTML)
+        const animeId = parseInt(document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML)
+        let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
         
         this.anilist.deleteAnimeFromList(mediaListId)
+
+        watch_buttons_2.classList.remove('in-list')
+        watch_buttons_2.classList.add('not-in-list')
+        watch_buttons_2.innerHTML = `<i class="fa-regular fa-bookmark"></i>`
+
         this.closeListEditorPage()
     }
     
@@ -1764,6 +1748,29 @@ module.exports = class Frontend {
     getProgress = animeEntry => animeEntry.mediaListEntry == null
                                 ? 0 
                                 : animeEntry.mediaListEntry.progress
+
+    getTimeUntilAiring = animeEntry => {
+        if(animeEntry.nextAiringEpisode == null) return -1
+
+        let seconds = parseInt(animeEntry.nextAiringEpisode.timeUntilAiring)
+        let days = Math.floor(seconds / (3600*24))
+
+        seconds -= days*3600*24
+        let hours = Math.floor(seconds / 3600)
+        
+        seconds -= hours*3600
+        let minutes = Math.floor(seconds / 60)
+
+        seconds -= minutes*60
+
+        return {
+            'days': days,
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        }
+        
+    }
 
     getMediaListId = animeEntry => animeEntry.mediaListEntry == null
                                    ? -1

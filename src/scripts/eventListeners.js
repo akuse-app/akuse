@@ -149,14 +149,6 @@ list_editor_score.addEventListener('input', () => {
     document.querySelector('#list-editor-score-limit .value').innerHTML = list_editor_score.value
 })
 
-/* --- ANIME MODAL PAGE--- */
-
-// start watching/resume
-// let watch_button = document.querySelector(`button[id^="page-anime-watch-"]`)
-// watch_button.addEventListener('click', () => {
-//     video.displayVideo(watch_button.id.slice(17))
-// })
-
 /* --- ANIME SECTIONS --- */
 
 // scrolling buttons
@@ -173,7 +165,6 @@ let search_clear_button = document.getElementById('search-clear')
 search_clear_button.addEventListener('click', () => {
     document.querySelector('main .tags-container').innerHTML = ''
     document.querySelector('main .entries-container').innerHTML = ''
-
     document.getElementById('search-page-filter-title').value = ''
     document.getElementById('search-page-filter-genre').value = ''
     document.getElementById('search-page-filter-season').value = ''
@@ -195,7 +186,7 @@ featured_scroller.addEventListener('click', (event) => {
 let anime_lists = document.querySelectorAll('.anime-list')
 anime_lists.forEach(list => {
     list.addEventListener('click', (event) => {
-        frontend.triggerAnimeEntry(event)
+        frontend.triggerAnimeModal(event)
     })
     // list.addEventListener('mouseover', (event) => {
     //     frontend.triggerAnimeOverlay(event)
@@ -206,6 +197,6 @@ anime_lists.forEach(list => {
 let search_list = document.querySelectorAll('.entries-container')
 search_list.forEach(list => {
     list.addEventListener('click', (event) => {
-        frontend.triggerAnimeEntry(event)
+        frontend.triggerAnimeModal(event)
     })
 })

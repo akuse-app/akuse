@@ -65,7 +65,7 @@ module.exports = class AniListAPI extends Requests {
             isAdult
             nextAiringEpisode {
                 id
-                airingAt
+                timeUntilAiring
                 episode
             }
             mediaListEntry {

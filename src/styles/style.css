@@ -812,9 +812,10 @@ main .featured .featured-container {
 
     main .featured .anime-info {
         display: flex;
-        gap: 20px;
+        gap: 5px;
     }
 
+    
     main .featured .anime-info,
     main .featured .anime-genres {
         font-size: 0.8rem;
@@ -881,6 +882,13 @@ main .featured .featured-img img {
 
         .anime-page .watch-buttons button:nth-child(1) {
             background-color: var(--font-1);
+        }
+
+        .anime-page .watch-buttons button:nth-child(1).disabled,
+        .anime-page .watch-buttons button:nth-child(1).disabled:hover,
+        .anime-page .watch-buttons button:nth-child(1).disabled:active {
+            cursor: auto;
+            filter: brightness(0.60);
         }
 
         .anime-page .watch-buttons button:nth-child(2) {
