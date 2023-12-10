@@ -1,6 +1,8 @@
 /* 
     Some anime are difficult to pull automatically, so the 
     correct titles for those (I hope rare) exceptions are written here.
+
+    AnimeId - AnimeCustomTitle
 */
 
 module.exports = {
@@ -9,5 +11,6 @@ module.exports = {
         "150672": `"Oshi No Ko"`
     },
     "IT": {
+        "162670": `Dr. Stone 3 Part 2`
     }
 }
