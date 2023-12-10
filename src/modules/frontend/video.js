@@ -5,6 +5,7 @@ const Store = require('electron-store')
 const Gogoanime = require('../providers/gogoanime')
 const AnimeSaturn = require('../providers/animesaturn')
 const AniListAPI = require('../anilist/anilistApi')
+const animeCustomTitles = require('../animeCustomTitles')
 
 /**
  * Methods for video playing and functionalities
@@ -56,12 +57,18 @@ module.exports = class Video {
         let animeTitles = []
         let anime_titles_div = document.querySelectorAll(`#persistent-data-common .persdata-anime-titles p`)
 
-        Object.keys(anime_titles_div).forEach( (key) => {
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML)
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', ''))
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Part ', ''))
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Part ', ''))
-            animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Dr.', 'Dr. ')) // Dr. STONE New World Part 2 - IT
+        Object.keys(anime_titles_div).forEach(key => {
+            let title = Object.values(anime_titles_div)[key].innerHTML
+
+            animeTitles.push(title)
+            
+            if(title.includes('Season ')) 
+                animeTitles.push(title.replace('Season ', ''))
+            if(title.includes('Season ') && title.includes('Part ')) 
+                animeTitles.push(title.replace('Season ', '').replace('Part ', ''))
+            if(title.includes('Part ')) 
+                animeTitles.push(title.replace('Part ', ''))
+            // animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Dr.', 'Dr. ')) // Dr. STONE New World Part 2 - IT
         })
 
         return animeTitles
@@ -76,12 +83,14 @@ module.exports = class Video {
         const cons = this.getSourceFlagObject()
         const animeId = episode.split('-')[1]
         const episodeId = episode.split('-')[2]
-        // const title = document.getElementById('page-anime-title').innerHTML
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
         const animeTitles = this.getAnimeTitles()
+        const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
+        // const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`).innerHTML)
 
-        console.log('titles: ' + animeTitles)
-        console.log('playground: ')
+        console.log('Searching for source...')
+
+        if(customTitle !== undefined) animeTitles.unshift(customTitle)
 
         let i = 0
         do {
@@ -100,8 +109,6 @@ module.exports = class Video {
 
             this.putSource(videoSource.url, videoSource.isM3U8)
             this.videoElement.play()
-        } else {
-            // this.animePageWarn(document.getElementById('page-anime-title'))
         }
     }
 
