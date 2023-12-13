@@ -481,36 +481,6 @@ module.exports = class Frontend {
     }
 
     /**
-     * Clears the div with the searched animes in main search bar
-     */
-    clearSearchedAnimes() {
-        document.getElementById('main-search-list').innerHTML = ''
-    }
-
-    /**
-     * Opens the main search bar
-     */
-    openMainSearchBar() {
-        var searchMainDiv = document.getElementById('main-search-list-container')
-        var searchMainInput = document.getElementById('search-main-input')
-
-        searchMainDiv.style.display = 'flex'
-        searchMainInput.focus()
-    }
-
-    /**
-     * Closes the main search bar
-     */
-    closeMainSearchBar() {
-        var searchMainDiv = document.getElementById('main-search-list-container')
-        var searchMainInput = document.getElementById('search-main-input')
-
-        searchMainDiv.style.display = 'none'
-        searchMainInput.value = ''
-        this.clearSearchedAnimes()
-    }
-
-    /**
      * Displays an anime section (with anime entries from viewer lists)
      * 
      * @param {*} entries 
@@ -536,9 +506,9 @@ module.exports = class Frontend {
                     
                     // append the progress bar to the card
                     this.appendProgressBar(
-                        anime_entry_div.getElementsByClassName('anime-cover')[0],
-                        parseInt(this.getEpisodes(entries[key].media)),
-                        parseInt(entries[key].progress)
+                            anime_entry_div.getElementsByClassName('anime-cover')[0],
+                            this.getEpisodes(entries[key].media),
+                            entries[key].progress
                         )
                     }
                 anime_list_div.appendChild(anime_entry_div)
@@ -577,7 +547,11 @@ module.exports = class Frontend {
      * @param {*} progress 
      */
     appendProgressBar(div, episodes, progress) {
-        var progressWidth = 100 * progress / episodes
+        var progressWidth
+
+        if(episodes != '?') progressWidth = 100 * progress / episodes
+        else progressWidth = 0
+
         let bar_div = document.createElement('div')
         let progress_bar_div = document.createElement('div')
         
