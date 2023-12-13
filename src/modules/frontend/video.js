@@ -80,6 +80,8 @@ module.exports = class Video {
      * @param {*} episode 
      */
     async displayVideo(episode) {
+        this.container.style.display = 'block'
+
         const cons = this.getSourceFlagObject()
         const animeId = episode.split('-')[1]
         const episodeId = episode.split('-')[2]
@@ -109,6 +111,8 @@ module.exports = class Video {
 
             this.putSource(videoSource.url, videoSource.isM3U8)
             this.videoElement.play()
+        } else {
+            this.container.style.display = 'none'
         }
     }
 
@@ -185,14 +189,14 @@ module.exports = class Video {
             if(Hls.isSupported()) {
                 hls.loadSource(url)
                 hls.attachMedia(this.videoElement)
-                this.container.style.display = 'block'
+                // this.container.style.display = 'block'
             } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
                 this.videoElement.src = url
-                this.container.style.display = 'block'
+                // this.container.style.display = 'block'
             }
         } else {
             this.videoElement.src = url
-            this.container.style.display = 'block'
+            // this.container.style.display = 'block'
         }
     }
 

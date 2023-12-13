@@ -5,6 +5,8 @@ const video = new Video()
 
 const container = document.querySelector(".container"),
 mainVideo = document.getElementById("video"),
+videoTitle = document.getElementById('video-title'),
+videoEpisode = document.getElementById('video-episode'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
 exitBtn = document.querySelector('.exit-video i')
@@ -112,6 +114,10 @@ fullScreenBtn.addEventListener("click", () => {
 exitBtn.addEventListener("click", () => {
     updated = 0
     mainVideo.pause()
+    mainVideo.currentTime = 0
+    mainVideo.removeAttribute('src')
+    videoTitle.innerHTML = ''
+    videoEpisode.innerHTML = ''
     container.style.display = 'none'
     if(document.fullscreenEnabled) {
         document.exitFullscreen()

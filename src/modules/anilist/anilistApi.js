@@ -366,7 +366,7 @@ module.exports = class AniListAPI extends Requests {
      * 
      * @returns object with next anime releases
      */
-    async nextAnimeReleases() {
+    async nextAnimeReleases(viewerId) {
         var query = `
         {
             Page(page: 1, perPage: ${this.pages}) {
@@ -382,8 +382,21 @@ module.exports = class AniListAPI extends Requests {
         }
         `
 
+        if (viewerId) {
+            var headers = {
+                'Authorization': 'Bearer ' + this.store.get('access_token'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        } else {
+            var headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }
+
         const options = this.getOptions(query)
-        const respData = await this.makeRequest(this.method, this.graphQLUrl, this.headers, options)
+        const respData = await this.makeRequest(this.method, this.graphQLUrl, headers, options)
 
         return respData.data.Page
     }
