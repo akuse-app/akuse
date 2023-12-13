@@ -842,7 +842,7 @@ module.exports = class Frontend {
                 watch_buttons_1.id = `watch-${id}-${1}`
             } else if(progress == availableEpisodes) {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-hourglass"></i>`
-                watch_buttons_1.innerHTML += `Ep. ${progress + 1} releasing in ${timeUntilAiring.days}d ${timeUntilAiring.hours}h`
+                watch_buttons_1.innerHTML += `${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`
                 watch_buttons_1.classList.add('disabled')
                 watch_buttons_1.setAttribute('disabled', '')
             } else {
