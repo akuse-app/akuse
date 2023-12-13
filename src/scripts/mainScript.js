@@ -90,20 +90,21 @@ ipcRenderer.on('load-app', async (event) => {
     }
 
 
-    let authFlag = logged === true
+    let viewerIdFlag = logged === true
                    ? viewerId
                    : undefined
 
     // discover lists
-    let featuredEntries = await anilist.getTrendingAnimes(authFlag)
+    let featuredEntries = await anilist.getTrendingAnimes(viewerIdFlag)
     frontend.displayFeaturedAnime(featuredEntries)
     frontend.displayGenreAnimeSection(featuredEntries, 'trending-home')
-    frontend.displayGenreAnimeSection(await anilist.getMostPopularAnimes(authFlag), 'most-popular-home')
-    frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Adventure", authFlag), 'adventure-home') 
-    frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Comedy", authFlag), 'comedy-home') 
-    frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Fantasy", authFlag), 'fantasy-home')
-    frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Horror", authFlag), 'horror-home') 
-    frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Music", authFlag), 'music-home')
+    frontend.displayGenreAnimeSection(await anilist.getMostPopularAnimes(viewerIdFlag), 'most-popular-home')
+    frontend.displayGenreAnimeSection(await anilist.nextAnimeReleases(viewerIdFlag), 'next-releases-home')
+    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Adventure", viewerIdFlag), 'adventure-home') 
+    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Comedy", viewerIdFlag), 'comedy-home') 
+    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Fantasy", viewerIdFlag), 'fantasy-home')
+    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Horror", viewerIdFlag), 'horror-home') 
+    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Music", viewerIdFlag), 'music-home')
 
     // user lists
     if(logged) {
