@@ -1440,7 +1440,7 @@ main section .anime-list-wrapper {
             font-weight: var(--font-weight);
         }
 
-        main .anime-entry .anime-info .startYear {
+        main .anime-entry .anime-info .seasonYear {
             width: 75%;
         }
         

@@ -115,7 +115,8 @@ exitBtn.addEventListener("click", () => {
     updated = 0
     mainVideo.pause()
     mainVideo.currentTime = 0
-    mainVideo.removeAttribute('src')
+    // mainVideo.removeAttribute('src')
+    mainVideo.src = null
     videoTitle.innerHTML = ''
     videoEpisode.innerHTML = ''
     container.style.display = 'none'

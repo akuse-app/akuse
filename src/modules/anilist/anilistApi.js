@@ -18,7 +18,7 @@ module.exports = class AniListAPI extends Requests {
         super()
         this.store = new Store()
         this.clientData = clientData
-        this.pages = 15
+        this.pages = 20
         this.method = 'POST'
         this.graphQLUrl = 'https://graphql.anilist.co'
         this.headers = {

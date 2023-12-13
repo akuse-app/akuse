@@ -479,30 +479,6 @@ module.exports = class Frontend {
     closeListEditorPage() {
         this.hideModalPage('list-editor-page-shadow-background', 'list-editor-page')
     }
- 
-    /**
-     * Displays a div with the searched animes
-     * 
-     * @param {*} animeEntries 
-     */
-    displaySearchedAnimes(animeEntries) {
-        this.clearSearchedAnimes()
-
-        var anime_list_div = document.getElementById('main-search-list')
-        var anime_entry_div
-
-        var scroller = document.createElement('div')
-        scroller.classList.add('scroller')
-
-        Object.keys(animeEntries).forEach(key => {
-            anime_entry_div = this.createSearchAnimeEntry(animeEntries[key])
-            anime_entry_div.classList.add('show')
-            
-            anime_list_div.appendChild(anime_entry_div)
-        })
-
-        scroller.appendChild(anime_entry_div)
-    }
 
     /**
      * Clears the div with the searched animes in main search bar
@@ -532,86 +508,6 @@ module.exports = class Frontend {
         searchMainDiv.style.display = 'none'
         searchMainInput.value = ''
         this.clearSearchedAnimes()
-    }
-
-    /**
-     * Creates the div for the anime entry
-     * 
-     * @param {*} animeEntry 
-     * @returns anime entry DOM element
-     */
-    createSearchAnimeEntry(animeEntry) {
-        const animeId = animeEntry.id
-        const cover = animeEntry.coverImage.large
-        const seasonYear = animeEntry.seasonYear
-        const format = animeEntry.format
-        const duration = animeEntry.duration
-        const meanScore = animeEntry.meanScore
-        const description = animeEntry.description
-        const title = this.getTitle(animeEntry)
-        const episodes = this.getEpisodes(animeEntry)
-
-        var cover_div = document.createElement('img')
-        var content_div = document.createElement('div')
-        var title_h1 = document.createElement('h1')
-        var infos_div = document.createElement('div')
-        var entry_div = document.createElement('div')
-        
-        cover_div.src = cover
-        content_div.classList.add('content')
-        title_h1.classList.add('title')
-        title_h1.innerHTML = title
-        infos_div.classList.add('infos')
-        entry_div.classList.add('search-entry')
-        entry_div.id = ('search-anime-entry-' + animeId)
-
-        var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-calendar-plus"></i>'
-        var span = document.createElement('span')
-        span.innerHTML = seasonYear
-        h2.appendChild(span)
-        infos_div.appendChild(h2)
-            
-        var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-list-ul"></i>'
-        var span = document.createElement('span')
-        span.innerHTML = episodes
-        h2.appendChild(span)
-        infos_div.appendChild(h2)
-
-        var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-solid fa-display"></i>'
-        var span = document.createElement('span')
-        span.innerHTML = format
-        h2.appendChild(span)
-        infos_div.appendChild(h2)
-
-        var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-clock"></i>'
-        var span = document.createElement('span')
-        span.innerHTML = (duration + ' Min/Ep')
-        h2.appendChild(span)
-        infos_div.appendChild(h2)
-
-        var h2 = document.createElement('h2')
-        h2.innerHTML = '<i style="margin-right: 5px" class="fa-regular fa-star"></i>'
-        var span = document.createElement('span')
-        span.innerHTML = meanScore
-        h2.appendChild(span)
-        infos_div.appendChild(h2)
-
-        var description_div = document.createElement('div')
-        description_div.classList.add('description')
-        description_div.innerHTML = description
-
-
-        content_div.appendChild(title_h1)
-        content_div.appendChild(infos_div)
-        content_div.appendChild(description_div)        
-        entry_div.appendChild(cover_div)
-        entry_div.appendChild(content_div)
-
-        return entry_div
     }
 
     /**
@@ -720,13 +616,9 @@ module.exports = class Frontend {
      * @returns anime entry DOM element
      */
     createAnimeSectionEntry(animeEntry) {
-        let style = getComputedStyle(document.body)
-        const colorSuccess = style.getPropertyValue('--color-success')
-
         const animeId = animeEntry.id
         const animeName = this.getTitle(animeEntry)
-        const startYear = animeEntry.startDate.year
-        const episodes = this.getAvailableEpisodes(animeEntry)
+        const seasonYear = this.getParsedSeasonYear(animeEntry)
         const format = this.getParsedFormat(animeEntry.format)
         const cover = animeEntry.coverImage.large
         const status = animeEntry.status
@@ -736,7 +628,7 @@ module.exports = class Frontend {
         let anime_cover_img = document.createElement('img')
         let anime_title_div = document.createElement('div')
         let anime_info_div = document.createElement('div')
-        let startYear_div = document.createElement('div')
+        let seasonYear_div = document.createElement('div')
         let episodes_div = document.createElement('div')
         let anime_entry_content = document.createElement('div')
         
@@ -744,7 +636,7 @@ module.exports = class Frontend {
         anime_cover_div.classList.add('anime-cover')
         anime_title_div.classList.add('anime-title')
         anime_info_div.classList.add('anime-info')
-        startYear_div.classList.add('startYear')
+        seasonYear_div.classList.add('seasonYear')
         episodes_div.classList.add('episodes')
         anime_entry_content.classList.add('content')
         
@@ -760,8 +652,8 @@ module.exports = class Frontend {
             anime_title_div.innerHTML = animeName
         }
         
-        startYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
-        startYear_div.innerHTML += startYear
+        seasonYear_div.innerHTML = `<i style="margin-right: 5px" class="fa-regular fa-calendar"></i>`
+        seasonYear_div.innerHTML += seasonYear
         episodes_div.innerHTML = format
         episodes_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-display"></i>`
         anime_cover_img.src = cover
@@ -772,7 +664,7 @@ module.exports = class Frontend {
 
         anime_cover_div.appendChild(anime_cover_img)
         anime_entry_content.appendChild(anime_title_div)
-        anime_info_div.appendChild(startYear_div)
+        anime_info_div.appendChild(seasonYear_div)
         anime_info_div.appendChild(episodes_div)
         anime_entry_content.appendChild(anime_info_div)
         // anime_entry_div.appendChild(overlay_div)
@@ -885,12 +777,12 @@ module.exports = class Frontend {
         const banner = animeEntry.bannerImage
         const trailerUrl = this.getTrailerUrl(animeEntry)
         const season = this.capitalizeFirstLetter(animeEntry.season)
-        const seasonYear = animeEntry.seasonYear
+        const seasonYear = this.getParsedSeasonYear(animeEntry)
         const genres = Object.values(animeEntry.genres).join(', ')
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
         const episodesEntries = animeEntry.streamingEpisodes
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
-        const meanScore = animeEntry.meanScore
+        const meanScore = this.getMeanScore(animeEntry)
         const duration = animeEntry.duration
         const progress = this.getProgress(animeEntry)
         const userStatus = this.getUserStatus(animeEntry)
@@ -1238,7 +1130,7 @@ module.exports = class Frontend {
         const title = this.getTitle(animeEntry)
         const episodes = this.getEpisodes(animeEntry)
         const season = this.capitalizeFirstLetter(animeEntry.season)
-        const seasonYear = animeEntry.seasonYear
+        const seasonYear = this.getParsedSeasonYear(animeEntry)
         const description = this.parseDescription(animeEntry.description)
 
         var featured_div = document.createElement('div')
@@ -1299,6 +1191,9 @@ module.exports = class Frontend {
         /* document.getElementById('user-name').innerHTML += userInfo.User.name */
     }
 
+    /**
+     * Searchs for anime with filters
+     */
     async searchAnimeWithFilter() {
         let title = document.getElementById('search-page-filter-title').value
         let genre = document.getElementById('search-page-filter-genre').value
@@ -1727,6 +1622,10 @@ module.exports = class Frontend {
                                      ? 0
                                      : animeEntry.nextAiringEpisode.episode - 1
 
+    getMeanScore = animeEntry => animeEntry.meanScore == null
+                                 ? '?'
+                                 : animeEntry.meanScore
+
     /**
      * Gets the anime user status
      * 
@@ -1807,7 +1706,7 @@ module.exports = class Frontend {
                                       : description.replace('<br>', '')
 
     /**
-     * Parses anime status into better human-readable name
+     * Parses anime status into a better human-readable name
      * 
      * @param {*} status 
      * @returns 
@@ -1827,6 +1726,12 @@ module.exports = class Frontend {
         }
     }
 
+    /**
+     * Parses anime format into a better human-readable name
+     * 
+     * @param {*} status 
+     * @returns 
+     */
     getParsedFormat = format => {
         switch(format) {
             case 'TV':
@@ -1843,8 +1748,20 @@ module.exports = class Frontend {
                 return 'ONA'
             case 'MUSIC':
                 return 'Music'
+            default:
+                return '?'
         }
     }
+
+    /**
+     * Return '?' if there is no season year
+     * 
+     * @param {*} animeEntry 
+     * @returns 
+     */
+    getParsedSeasonYear = animeEntry => animeEntry.seasonYear == null
+                                        ? '?'
+                                        : animeEntry.seasonYear
  
     /**
      * Capitalizes the first letter of a string
