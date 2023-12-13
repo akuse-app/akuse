@@ -872,7 +872,6 @@ module.exports = class Frontend {
         const colorSuccess = style.getPropertyValue('--color-success')
         const colorAlert = style.getPropertyValue('--color-alert')
         const colorWarning = style.getPropertyValue('--color-warning')
-        const colorInfo = style.getPropertyValue('--color-info')
 
         // anilist data
         const id = animeEntry.id
@@ -881,6 +880,7 @@ module.exports = class Frontend {
         const format = this.getParsedFormat(animeEntry.format)
         const episodes = this.getEpisodes(animeEntry)
         const availableEpisodes = this.getAvailableEpisodes(animeEntry)
+        const airedEpisodes = this.getAiredEpisodes(animeEntry)
         const description = this.parseDescription(animeEntry.description)
         const banner = animeEntry.bannerImage
         const trailerUrl = this.getTrailerUrl(animeEntry)
@@ -1082,7 +1082,7 @@ module.exports = class Frontend {
         content_wrapper.appendChild(content_div)
 
         // create episodes entries
-        for(let i=1; i<=availableEpisodes; i++) {
+        for(let i=1; i<=airedEpisodes; i++) {
             let episode_entry = document.createElement('div')
             episode_entry.classList.add('episode-entry')
 
@@ -1717,7 +1717,15 @@ module.exports = class Frontend {
                                             : animeEntry.episodes
                                          : animeEntry.nextAiringEpisode.episode - 1
 
-    
+    /**
+     * Gets the anime aired episodes number
+     * 
+     * @param {*} animeEntry 
+     * @returns available episodes number
+     */
+    getAiredEpisodes = animeEntry => animeEntry.nextAiringEpisode == null 
+                                     ? 0
+                                     : animeEntry.nextAiringEpisode.episode - 1
 
     /**
      * Gets the anime user status
