@@ -5,7 +5,6 @@ const AniListAPI = require ('../anilist/anilistApi')
 const AnimeSaturn = require('../providers/animesaturn')
 const Video = require('./video')
 const Requests = require('../requests.js')
-const clientData = require ('../clientData.js')
 
 /**
  * Methods to manipulate the DOM with fetched data
@@ -23,6 +22,7 @@ module.exports = class Frontend {
         this.cons = new AnimeSaturn()
         this.video = new Video()
         this.req = new Requests()
+        this.episodesInfourl = 'https://api.ani.zip/mappings?anilist_id='
         this.months = {
             '1': 'Jan',
             '2': 'Feb',
@@ -727,7 +727,7 @@ module.exports = class Frontend {
                 watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
             }
 
-            if(status == 'Unreleased' || status == 'Cancelled') watch_buttons_1.style.display = 'none'
+            if(this.isAnimeNotAvailable(animeEntry)) watch_buttons_1.style.display = 'none'
             watch_buttons.appendChild(watch_buttons_1)
             watch_buttons.appendChild(watch_buttons_2)
             banner_wrapper.appendChild(watch_buttons)
@@ -747,7 +747,6 @@ module.exports = class Frontend {
         const format = this.getParsedFormat(animeEntry.format)
         const episodes = this.getEpisodes(animeEntry)
         const availableEpisodes = this.getAvailableEpisodes(animeEntry)
-        const airedEpisodes = this.getAiredEpisodes(animeEntry)
         const description = this.parseDescription(animeEntry.description)
         const banner = animeEntry.bannerImage
         const trailerUrl = this.getTrailerUrl(animeEntry)
@@ -949,7 +948,7 @@ module.exports = class Frontend {
         content_wrapper.appendChild(content_div)
 
         // create episodes entries
-        for(let i=1; i<=airedEpisodes; i++) {
+        for(let i=1; i<=availableEpisodes; i++) {
             let episode_entry = document.createElement('div')
             episode_entry.classList.add('episode-entry')
 
@@ -993,7 +992,7 @@ module.exports = class Frontend {
 
         episodes_scroller.appendChild(episodes_div)
         episodes_section.appendChild(separator)
-        episodes_section.appendChild(episodes_scroller)
+        if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
         content_wrapper.appendChild(episodes_section)
         pers_data.appendChild(pers_data_1)
         pers_data.appendChild(pers_data_2)
@@ -1250,10 +1249,15 @@ module.exports = class Frontend {
         // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
         // trailer_iframe.src += '?autoplay=1&controls=0'
 
+        console.log(await this.req.makeRequest("GET", `${this.episodesInfourl}${animeId}`, ))
+
         // storing anime persistend data
         let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
         let pers_data_common = document.getElementById('persistent-data-common')
         pers_data_common.innerHTML = pers_data.innerHTML
+
+        // display episodes with data
+        this.displayEpisodes(animeId)
 
         // close anime page
         let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
@@ -1290,6 +1294,10 @@ module.exports = class Frontend {
             this.showListEditorInputValue('progress')
             this.showListEditorInputValue('score')
         })
+    }
+
+    displayEpisodes(animeId) {
+        
     }
 
     /**
@@ -1588,15 +1596,11 @@ module.exports = class Frontend {
                                          : animeEntry.nextAiringEpisode.episode - 1
 
     /**
-     * Gets the anime aired episodes number
+     * Gets an anime mean score
      * 
      * @param {*} animeEntry 
-     * @returns available episodes number
+     * @returns anime mean score
      */
-    getAiredEpisodes = animeEntry => animeEntry.nextAiringEpisode == null 
-                                     ? 0
-                                     : animeEntry.nextAiringEpisode.episode - 1
-
     getMeanScore = animeEntry => animeEntry.meanScore == null
                                  ? '?'
                                  : animeEntry.meanScore
@@ -1631,6 +1635,22 @@ module.exports = class Frontend {
                                 ? 0 
                                 : animeEntry.mediaListEntry.progress
 
+    /**
+     * Returns whether an anime is available or not
+     * 
+     * @param {*} animeEntry 
+     * @returns 
+     */
+    isAnimeNotAvailable = animeEntry => this.getParsedStatus(animeEntry.status) == 'Unreleased' || this.getParsedStatus(animeEntry.status) == 'Cancelled'
+                                        ? true
+                                        : false
+
+    /**
+     * Returns an object containing how much time remains before the next episode airs
+     * 
+     * @param {*} animeEntry 
+     * @returns 
+     */
     getTimeUntilAiring = animeEntry => {
         if(animeEntry.nextAiringEpisode == null) return -1
 
@@ -1653,7 +1673,7 @@ module.exports = class Frontend {
         }
         
     }
-
+    
     getMediaListId = animeEntry => animeEntry.mediaListEntry == null
                                    ? -1
                                    : animeEntry.mediaListEntry.id

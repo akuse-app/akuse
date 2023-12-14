@@ -33,7 +33,7 @@ module.exports = class Requests {
      * @returns object with the fetched data
      * @throws error if the request was not successful
      */
-    async makeRequest(method, url, headers, options) {
+    async makeRequest(method, url, headers = {}, options = {}) {
         const response = await axios({
             method: method,
             url: url,
