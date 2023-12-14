@@ -727,6 +727,7 @@ module.exports = class Frontend {
                 watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
             }
 
+            if(status == 'Unreleased' || status == 'Cancelled') watch_buttons_1.style.display = 'none'
             watch_buttons.appendChild(watch_buttons_1)
             watch_buttons.appendChild(watch_buttons_2)
             banner_wrapper.appendChild(watch_buttons)
