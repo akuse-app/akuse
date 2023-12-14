@@ -690,6 +690,55 @@ module.exports = class Frontend {
      */
     createAnimePage(animeEntry) {
         // functions
+        let displayEpisodes = animeId => {
+            let episodes_section = document.createElement('div')
+            let episodes_scroller = document.createElement('div')
+            let episodes_div = document.createElement('div')
+            let separator_div = document.createElement('div')
+    
+            episodes_section.classList.add('episodes-section')
+            episodes_scroller.classList.add('episodes-scroller')
+            episodes_div.classList.add('episodes')
+            separator_div.classList.add('separator')
+            separator_div.innerHTML = 'Episodes'
+    
+            // create episodes entries
+            for(let i=1; i<=episodes; i++) {
+                let episode_entry = document.createElement('div')
+                episode_entry.classList.add('episode-entry')
+    
+                // const img = episodesEntries.episodes[i].image
+                // const title = episodesEntries.episodes[i].title.en
+                // const description = episodesEntries.episodes[i].summary
+    
+                let episode_img = document.createElement('img')
+                let episode_content = document.createElement('div')
+                let episode_title = document.createElement('div')
+                let episode_description = document.createElement('div')
+                
+                episode_entry.id = `episode-${id}-${i}` // pattern: episode-animeid-episodenumber
+                episode_content.classList.add('episode-content')
+                episode_title.classList.add('title')
+                episode_description.classList.add('description')
+    
+                episode_img.src = banner
+                episode_title.innerHTML = `Episode ${i}`
+                episode_description.innerHTML = ''
+                
+                episode_content.appendChild(episode_title)
+                episode_content.appendChild(episode_description)
+                if(banner !== null) episode_entry.appendChild(episode_img)
+                episode_entry.appendChild(episode_content)
+                episodes_div.appendChild(episode_entry)
+            }
+    
+            episodes_scroller.appendChild(episodes_div)
+            episodes_section.appendChild(separator_div)
+            // if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
+            episodes_section.appendChild(episodes_scroller)
+            content_wrapper.appendChild(episodes_section)
+        }
+        
         let appendWatchButtons = () => {
             let watch_buttons = document.createElement('div')
             let watch_buttons_1 = document.createElement('button')
@@ -754,7 +803,7 @@ module.exports = class Frontend {
         const seasonYear = this.getParsedSeasonYear(animeEntry)
         const genres = Object.values(animeEntry.genres).join(', ')
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
-        const episodesEntries = animeEntry.streamingEpisodes
+        // const episodesEntries = animeEntry.streamingEpisodes
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
         const meanScore = this.getMeanScore(animeEntry)
         const duration = animeEntry.duration
@@ -776,8 +825,8 @@ module.exports = class Frontend {
         let pers_data_6 = document.createElement('li')
         let pers_data_7 = document.createElement('li')
         let pers_data_8 = document.createElement('li')
+        let pers_data_9 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
-        let separator = document.createElement('div')
         let anime_page = document.createElement('div')
         let exit_button = document.createElement('button')
         let content_wrapper = document.createElement('div')
@@ -799,9 +848,6 @@ module.exports = class Frontend {
         let attidional_info_2 = document.createElement('p')
         let attidional_info_3 = document.createElement('p')
         let additional_info_span = document.createElement('span')
-        let episodes_section = document.createElement('div')
-        let episodes_scroller = document.createElement('div')
-        let episodes_div = document.createElement('div')
 
         // classes, ids, innerHTMLs, src...
         modal_page_wrapper.id = `anime-page-${id}`
@@ -814,9 +860,9 @@ module.exports = class Frontend {
         pers_data_6.classList.add('persdata-anime-user-score')
         pers_data_7.classList.add('persdata-anime-episodes')
         pers_data_8.classList.add('persdata-anime-media-list-id')
+        pers_data_9.classList.add('persdata-anime-are-episodes-loaded')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
-        separator.classList.add('separator')
         anime_page.classList.add('anime-page')
         exit_button.id = `exit-${id}`
         exit_button.classList.add('exit')
@@ -837,9 +883,6 @@ module.exports = class Frontend {
         attidional_info_1.classList.add('additional-info')
         attidional_info_2.classList.add('additional-info')
         attidional_info_3.classList.add('additional-info')
-        episodes_section.classList.add('episodes-section')
-        episodes_scroller.classList.add('episodes-scroller')
-        episodes_div.classList.add('episodes')
 
         Object.keys(animeTitles).forEach(title => {
             let anime_title_div = document.createElement('p')
@@ -854,6 +897,7 @@ module.exports = class Frontend {
         pers_data_6.innerHTML = score
         pers_data_7.innerHTML = episodes
         pers_data_8.innerHTML = mediaListId
+        pers_data_9.innerHTML = 0
         banner_img.src = banner
         banner_video.src = trailerUrl
         title_div.innerHTML = title
@@ -937,8 +981,6 @@ module.exports = class Frontend {
         left_div.appendChild(title_div)
         left_div.appendChild(info_div)
         left_div.appendChild(description_div)
-        separator.innerHTML = 'Episodes'
-        left_div.appendChild(separator)
         right_div.appendChild(attidional_info_1)
         right_div.appendChild(attidional_info_2)
         right_div.appendChild(attidional_info_3)
@@ -946,54 +988,8 @@ module.exports = class Frontend {
         content_div.appendChild(right_div)
         content_wrapper.appendChild(banner_wrapper)
         content_wrapper.appendChild(content_div)
+        displayEpisodes()
 
-        // create episodes entries
-        for(let i=1; i<=availableEpisodes; i++) {
-            let episode_entry = document.createElement('div')
-            episode_entry.classList.add('episode-entry')
-
-            let episode_img = document.createElement('img')
-            let episode_content = document.createElement('div')
-            let episode_title = document.createElement('div')
-            let episode_description = document.createElement('div')
-            
-            episode_entry.id = `episode-${id}-${i}` // pattern: episode-animeid-episodenumber
-            episode_content.classList.add('episode-content')
-            episode_title.classList.add('title')
-            episode_description.classList.add('description')
-            
-            let useThumbnail = false
-
-            // check if episode thumbnail exists, otherwise use banner
-            for(let j in episodesEntries) {
-                if(episodesEntries[j].title.includes(`Episode ${i} `)) {
-                    useThumbnail = true
-                    episode_img.src = episodesEntries[j].thumbnail
-                    episode_title.innerHTML = episodesEntries[j].title.split(' - ')[0]
-                    episode_description.innerHTML = episodesEntries[j].title.split(' - ')[1]
-                    
-                    break
-                }
-            }
-
-            if(useThumbnail === false) {
-                episode_img.src = banner
-                episode_title.innerHTML = `Episode ${i}`
-            }
-
-            useThumbnail = false
-            
-            episode_content.appendChild(episode_title)
-            episode_content.appendChild(episode_description)
-            episode_entry.appendChild(episode_img)
-            episode_entry.appendChild(episode_content)
-            episodes_div.appendChild(episode_entry)
-        }
-
-        episodes_scroller.appendChild(episodes_div)
-        episodes_section.appendChild(separator)
-        if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
-        content_wrapper.appendChild(episodes_section)
         pers_data.appendChild(pers_data_1)
         pers_data.appendChild(pers_data_2)
         pers_data.appendChild(pers_data_3)
@@ -1002,6 +998,7 @@ module.exports = class Frontend {
         pers_data.appendChild(pers_data_6)
         pers_data.appendChild(pers_data_7)
         pers_data.appendChild(pers_data_8)
+        pers_data.appendChild(pers_data_9)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1248,16 +1245,14 @@ module.exports = class Frontend {
         
         // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
         // trailer_iframe.src += '?autoplay=1&controls=0'
-
-        console.log(await this.req.makeRequest("GET", `${this.episodesInfourl}${animeId}`, ))
-
+        
         // storing anime persistend data
         let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
         let pers_data_common = document.getElementById('persistent-data-common')
         pers_data_common.innerHTML = pers_data.innerHTML
-
+        
         // display episodes with data
-        this.displayEpisodes(animeId)
+        await this.displayEpisodesData(animeId)
 
         // close anime page
         let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
@@ -1296,8 +1291,29 @@ module.exports = class Frontend {
         })
     }
 
-    displayEpisodes(animeId) {
-        
+    async displayEpisodesData(animeId) {
+        let areEpisodesLoaded = document.querySelector(`#anime-page-${animeId} .persdata-anime-are-episodes-loaded`)
+        if(areEpisodesLoaded.innerHTML == 1) return
+        areEpisodesLoaded.innerHTML = 1
+
+        try {
+            const episodesEntries = await this.req.makeRequest("GET", `${this.episodesInfourl}${animeId}`, )
+            let episode_entries_div = document.querySelectorAll(`#anime-page-${animeId} .episode-entry`)
+    
+            for(let i=0; i<Object.keys(episode_entries_div).length; i++) {
+                let entry = episode_entries_div[i]
+                let episodeData = episodesEntries.episodes[(parseInt(i)+1)]
+
+                if(episodeData.title.en !== undefined)
+                    entry.querySelector('.title').innerHTML = episodeData.title.en
+                if(episodeData.summary !== undefined)
+                    entry.querySelector('.description').innerHTML = episodeData.summary
+                if(episodeData.image !== undefined)
+                    entry.querySelector('img').src = episodeData.image
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     /**

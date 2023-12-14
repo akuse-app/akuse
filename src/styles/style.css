@@ -1051,6 +1051,7 @@ main .featured .featured-img img {
             flex-direction: column;
             gap: 25px;
             height: 175px;
+            aspect-ratio: 1.78 / 1;
             border-radius: var(--border-radius);
             cursor: pointer;
             transition: var(--transition);
@@ -1060,7 +1061,7 @@ main .featured .featured-img img {
         .anime-page .episodes-section .episode-entry:hover {
             transform: scale(1.04);
         }
-
+        
         .anime-page .episodes-section .episode-entry:hover img {
             outline: 3px solid var(--font-1);
         }
