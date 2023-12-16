@@ -4,6 +4,7 @@ const Video = require('../modules/frontend/video')
 const video = new Video()
 
 const container = document.querySelector(".container"),
+shadowControls = document.getElementsByClassName('shadow-controls')[0],
 mainVideo = document.getElementById("video"),
 videoTitle = document.getElementById('video-title'),
 videoEpisode = document.getElementById('video-episode'),
@@ -29,14 +30,16 @@ const hideControls = () => {
     /* if(mainVideo.paused) return */
     timer = setTimeout(() => {
         container.classList.remove("show-controls")
+        shadowControls.classList.remove('show-cursor')
     }, 1500)
 }
 
 hideControls()
 container.addEventListener("mousemove", () => {
     container.classList.add("show-controls")
+    shadowControls.classList.add('show-cursor')
     clearTimeout(timer)
-    hideControls()   
+    hideControls()
 })
 
 const formatTime = time => {
@@ -138,12 +141,12 @@ mainVideo.addEventListener('dblclick', (event) => {
     toggleFullScreen()
 })
 
-document.getElementsByClassName('shadow-controls')[0].addEventListener("click", (event) => {
+shadowControls.addEventListener("click", (event) => {
     if(event.target !== event.currentTarget) return;
     mainVideo.paused ? mainVideo.play() : mainVideo.pause()
 })
 
-document.getElementsByClassName('shadow-controls')[0].addEventListener('dblclick', (event) => {
+shadowControls.addEventListener('dblclick', (event) => {
     if(event.target !== event.currentTarget) return;
     toggleFullScreen()
 })

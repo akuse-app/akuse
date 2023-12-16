@@ -18,7 +18,7 @@
     --font-3: rgb(142, 142, 142);
     /* --font-4: rgb(87, 87, 87); */
     --font-3-transparent: rgba(168, 168, 168, 0.5);
-    
+
     --font-weight: 600;
     --border-radius: 8px;
     --transition: 0.2s ease-out;
@@ -1047,7 +1047,7 @@ main .featured .featured-img img {
             display: flex;
             gap: 25px;
             height: 175px;
-            padding: 25px;
+            padding: 15px;
             aspect-ratio: 1.78 / 1;
             border-radius: var(--border-radius);
             cursor: pointer;

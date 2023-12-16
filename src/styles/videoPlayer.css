@@ -1,9 +1,5 @@
 :root {
-    --color-text-1: #F2F4F6;
-    --color-text-2: #C1C3C5;
-    --color-text-3: #ffffff56;
-    --color-icon: #CECECE;
-    --color-icon-hover: #F2F4F6;
+    --color-transparency: #c5c5c556;
 }
 
 #video {
@@ -45,7 +41,7 @@
 }
 
 .container button {
-    color: var(--color-icon);
+    color: var(--font-2);
     background-color: transparent;
     border: none;
     outline: none;
@@ -55,7 +51,7 @@
 }
 
 .container button:hover {
-    color: var(--color-icon-hover);
+    color: var(--font-1);
 }
 
 .video-timeline {
@@ -72,11 +68,13 @@
 .video-timeline .progress-area{
     height: 5px;
     position: relative;
-    background: var(--color-text-3);
+    background: var(--color-transparency);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
 }
 
 .progress-area:hover {
-    height: 9px;
+    height: 7px;
     transform: translateY(-2px);
 }
 
@@ -124,10 +122,14 @@
     height: 100%;
     position: absolute;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     box-shadow: inset 0px 300px 400px -100px #000000;
     transition: 0.3s;
-    cursor: pointer;
+    cursor: none;
+}
+
+.shadow-controls.show-cursor {
+    cursor: auto;
 }
 
 .container.show-controls .up-controls,
@@ -188,15 +190,15 @@
 }
 
 .up-controls .info .title {
-    color: var(--color-text);
+    color: var(--font-1);
     font-weight: 500;
-    font-size: 3rem;
+    font-size: 2.6rem;
 }
 
 .up-controls .info .episode {
     font-weight: 400;
-    color: var(--color-text);
-    font-size: 2rem;
+    color: var(--font-3);
+    font-size: 1.6rem;
 }
 
 .up-controls .volume-content .volume-options {
@@ -210,7 +212,7 @@
 }
 
 .up-controls .volume-content .volume-options input[type = 'range'] {
-    accent-color: var(--color-text-1);
+    accent-color: var(--font-1);
 }
 
 .up-controls .volume-content .volume-options.show-options {
@@ -252,7 +254,7 @@
 
 .up-controls .playback-content .speed-options li {
     font-size: 1.2rem;
-    color: var(--color-icon);
+    color: var(--font-2);
     padding: 5px;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -264,7 +266,7 @@
 
 .up-controls .playback-content .speed-options li:hover,
 .up-controls .playback-content .speed-options li.active {
-    color: var(--color-icon-hover);
+    color: var(--font-1);
     background-color: #424242;
 }
 
@@ -276,12 +278,12 @@
 }
 
 .mid-controls button {
-    color: var(--color-text-3);
-    font-size: 6rem;
+    color: var(--color-transparency);
+    font-size: 5rem;
 }
 
 .mid-controls button:hover {
-    color: var(--color-text-1);
+    color: var(--font-1);
 }
 
 .bottom-controls .bottom {
@@ -292,12 +294,12 @@
 .bottom-controls .bottom .next {
     font-size: 1.4rem;
     font-weight: 400;
-    color: var(--color-icon)
+    color: var(--font-2)
 }
 
 .bottom-controls .bottom .previous:hover,
 .bottom-controls .bottom .next:hover {
-    color: var(--color-icon-hover);
+    color: var(--font-1);
 }
 
 /* .bottom-controls .bottom .previous {
@@ -313,15 +315,15 @@
 }
 
 .bottom-controls .bottom .video-timer {
-    color: var(--color-text-3);
+    color: var(--color-transparency);
     font-size: 1.4rem;
 }
 
 .bottom-controls .bottom .video-timer .current-time {
-    color: var(--color-text-1);
+    color: var(--font-1);
 }
 
 .bottom-controls .bottom .video-timer .current-time,
 .bottom-controls .bottom .video-timer .video-duration {
-    width: 65px;
+    font-family: sans-serif;
 }
