@@ -24,18 +24,27 @@ module.exports = class Frontend {
         this.req = new Requests()
         this.episodesInfourl = 'https://api.ani.zip/mappings?anilist_id='
         this.months = {
-            '1': 'Jan',
-            '2': 'Feb',
-            '3': 'Mar',
-            '4': 'Apr',
+            '1': 'January',
+            '2': 'February',
+            '3': 'March',
+            '4': 'April',
             '5': 'May',
-            '6': 'Jun',
-            '7': 'Jul',
-            '8': 'Aug',
-            '9': 'Sep',
-            '10': 'Oct',
-            '11': 'Nov',
-            '12': 'Dec'
+            '6': 'June',
+            '7': 'July',
+            '8': 'August',
+            '9': 'Septempber',
+            '01': 'January',
+            '02': 'February',
+            '03': 'March',
+            '04': 'April',
+            '05': 'May',
+            '06': 'June',
+            '07': 'July',
+            '08': 'August',
+            '09': 'Septempber',
+            '10': 'October',
+            '11': 'November',
+            '12': 'December'
         }
     }
 
@@ -707,18 +716,16 @@ module.exports = class Frontend {
                 let episode_entry = document.createElement('div')
                 episode_entry.classList.add('episode-entry')
     
-                // const img = episodesEntries.episodes[i].image
-                // const title = episodesEntries.episodes[i].title.en
-                // const description = episodesEntries.episodes[i].summary
-    
                 let episode_img = document.createElement('img')
                 let episode_content = document.createElement('div')
                 let episode_title = document.createElement('div')
+                let episode_info = document.createElement('div')
                 let episode_description = document.createElement('div')
                 
                 episode_entry.id = `episode-${id}-${i}` // pattern: episode-animeid-episodenumber
                 episode_content.classList.add('episode-content')
                 episode_title.classList.add('title')
+                episode_info.classList.add('info')
                 episode_description.classList.add('description')
     
                 episode_img.src = banner
@@ -726,6 +733,7 @@ module.exports = class Frontend {
                 episode_description.innerHTML = ''
                 
                 episode_content.appendChild(episode_title)
+                episode_content.appendChild(episode_info)
                 episode_content.appendChild(episode_description)
                 if(banner !== null) episode_entry.appendChild(episode_img)
                 episode_entry.appendChild(episode_content)
@@ -803,7 +811,6 @@ module.exports = class Frontend {
         const seasonYear = this.getParsedSeasonYear(animeEntry)
         const genres = Object.values(animeEntry.genres).join(', ')
         const synonyms = Object.values(animeEntry.synonyms).join(', ')
-        // const episodesEntries = animeEntry.streamingEpisodes
         const animeTitles = this.getTitlesAndSynonyms(animeEntry)
         const meanScore = this.getMeanScore(animeEntry)
         const duration = animeEntry.duration
@@ -1292,6 +1299,8 @@ module.exports = class Frontend {
     }
 
     async displayEpisodesData(animeId) {
+        let parseAirdate = airdate => `${airdate.split('-')[2]} ${this.months[airdate.split('-')[1]]} ${airdate.split('-')[0]}`
+
         let areEpisodesLoaded = document.querySelector(`#anime-page-${animeId} .persdata-anime-are-episodes-loaded`)
         if(areEpisodesLoaded.innerHTML == 1) return
         areEpisodesLoaded.innerHTML = 1
@@ -1304,8 +1313,24 @@ module.exports = class Frontend {
                 let entry = episode_entries_div[i]
                 let episodeData = episodesEntries.episodes[(parseInt(i)+1)]
 
-                if(episodeData.title.en !== undefined)
+                if(episodeData.title.en !== undefined) {
                     entry.querySelector('.title').innerHTML = episodeData.title.en
+                    let span = document.createElement('span')
+                    span.innerHTML = `Ep. ${parseInt(i)+1} - `
+                    entry.querySelector('.title').prepend(span)
+                }
+                if(episodeData.airdate !== undefined) {
+                    let span = document.createElement('span')
+                    span.innerHTML = `<i style="margin-right: 7px" class="fa-regular fa-calendar"></i>`
+                    span.innerHTML += parseAirdate(episodeData.airdate)
+                    entry.querySelector('.info').appendChild(span)
+                }
+                if(episodeData['length'] !== undefined) {
+                    let span = document.createElement('span')
+                    span.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-stopwatch"></i>`
+                    span.innerHTML += `${episodeData['length']}min`
+                    entry.querySelector('.info').appendChild(span)
+                }
                 if(episodeData.summary !== undefined)
                     entry.querySelector('.description').innerHTML = episodeData.summary
                 if(episodeData.image !== undefined)
