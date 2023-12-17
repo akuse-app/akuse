@@ -62,7 +62,7 @@
 }
 
 .video-timer .separator{
-    margin: 0 5px;
+    margin: 0;
 }
 
 .video-timeline .progress-area{
@@ -315,7 +315,7 @@
 }
 
 .bottom-controls .bottom .video-timer {
-    color: var(--color-transparency);
+    color: var(--font-3);
     font-size: 1.4rem;
 }
 
