@@ -86,7 +86,7 @@ module.exports = class Video {
         const animeId = episode.split('-')[1]
         const episodeId = episode.split('-')[2]
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
-        const episodeTitle = document.querySelector(`#anime-page-${animeId} .episode-entry#${episode} .title`).innerHTML
+        const episodeTitle = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .title`).innerHTML
         const animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
 
