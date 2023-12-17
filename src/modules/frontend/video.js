@@ -54,7 +54,7 @@ module.exports = class Video {
      * @param {*} animeId 
      * @returns 
      */
-    getAnimeTitles() {
+    getParsedAnimeTitles() {
         let animeTitles = []
         let anime_titles_div = document.querySelectorAll(`#persistent-data-common .persdata-anime-titles p`)
 
@@ -69,7 +69,6 @@ module.exports = class Video {
                 animeTitles.push(title.replace('Season ', '').replace('Part ', ''))
             if(title.includes('Part ')) 
                 animeTitles.push(title.replace('Part ', ''))
-            // animeTitles.push(Object.values(anime_titles_div)[key].innerHTML.replace('Season ', '').replace('Dr.', 'Dr. ')) // Dr. STONE New World Part 2 - IT
         })
 
         return animeTitles
@@ -88,14 +87,14 @@ module.exports = class Video {
         const episodeId = episode.split('-')[2]
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
         const episodeTitle = document.querySelector(`#anime-page-${animeId} .episode-entry#${episode} .title`).innerHTML
-        const animeTitles = this.getAnimeTitles()
+        const animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
-        // const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`).innerHTML)
 
         console.log('Looking for sources...')
 
         if(customTitle !== undefined) animeTitles.unshift(customTitle)
 
+        // at do-while end videoSource will be -1 if nothing is found, otherwise the episode source
         let i = 0
         do {
             var videoSource = await cons.getEpisodeUrl(animeTitles[i], episodeId)
@@ -107,6 +106,7 @@ module.exports = class Video {
             i++
         } while(videoSource === -1 && i < animeTitles.length)
 
+        // play episode if source is found, otherwise hide video player
         if(videoSource !== -1) {
             this.videoTitle.innerHTML = title
             this.videoEpisode.innerHTML = episodeId
@@ -137,13 +137,13 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
-        if(!(this.canUpdateEpisode())) {
+        if(!this.canUpdateEpisode()) {
             console.warn('This is the last episode, You can\'t go any further!')
             return
         }
 
         const cons = this.getSourceFlagObject()
-        let animeTitles = this.getAnimeTitles()
+        let animeTitles = this.getParsedAnimeTitles()
 
         let i = 0
         do {
@@ -185,51 +185,11 @@ module.exports = class Video {
             if(Hls.isSupported()) {
                 hls.loadSource(url)
                 hls.attachMedia(this.videoElement)
-                // this.container.style.display = 'block'
             } else if (this.videoElement.canPlayType('application/vnd.apple.mpegurl')) {
                 this.videoElement.src = url
-                // this.container.style.display = 'block'
             }
         } else {
             this.videoElement.src = url
-            // this.container.style.display = 'block'
         }
     }
-
-    /**
-     * Puts fullscreen and plays the video
-     * @deprecated
-     */
-    fullscreenAndPlay(video) {
-        const fullScreenBtn = container.querySelector(".fullscreen i")
-
-        // toggle video fullscreen
-        this.container.classList.toggle("fullscreen");
-        if(document.fullscreenElement) {
-            fullScreenBtn.classList.replace("fa-compress", "fa-expand");
-            return document.exitFullscreen();
-        }
-        fullScreenBtn.classList.replace("fa-expand", "fa-compress");
-        this.container.requestFullscreen();
-
-        video.play()
-    }
-
-    /**
-     * Highlights anime title to warn something
-     * 
-     * @param {*} div 
-     */
-    animePageWarn(div) {
-        div.classList.remove('anime-page-warn-off')
-        div.classList.add('anime-page-warn-on')
-        
-        setTimeout(() => {
-            div.classList.remove('anime-page-warn-on')
-            div.classList.add('anime-page-warn-off')
-        }, 400)
-    }
-
-    // Ep. 7 - Episode Title => 7
-    parseVideoEpisodeTitle = () => this.videoEpisode.querySelector('span').innerHTML.split(' - ')[0].slice(4)
 }

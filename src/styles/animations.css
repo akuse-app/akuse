@@ -213,33 +213,3 @@
         border: 2px solid var(--font-3);
     }
 }
-
-.anime-page-warn-on {
-    animation: animePageWarnAnimationOn 0s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
-
-@keyframes animePageWarnAnimationOn {
-    0% {
-        color: var(--font-1);
-    }
-    100% {
-        color: var(--color-warning);
-    }
-}
-
-.anime-page-warn-off {
-    animation: animePageWarnAnimationOff var(--animation-transition);
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-}
-
-@keyframes animePageWarnAnimationOff {
-    0% {
-        color: var(--color-warning);
-    }
-    100% {
-        color: var(--font-1);
-    }
-}
