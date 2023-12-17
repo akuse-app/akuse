@@ -953,7 +953,7 @@ main .featured .featured-img img {
             display: flex;
             gap: 50px;
             width: calc(100% - 50px);
-            padding: 0 25px 25px 25px;
+            margin: 0 25px 25px 25px;
             border-radius: var(--border-radius);
         }
 
@@ -1040,7 +1040,7 @@ main .featured .featured-img img {
         .anime-page .episodes-section .episodes-options {
             display: flex;
             width: calc(100% - 30px);
-            margin: 0 15px 15px 15px;
+            margin: 0 15px 10px 15px;
         }
 
             .anime-page .episodes-section .episodes-options h2 {

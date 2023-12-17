@@ -785,7 +785,7 @@ module.exports = class Frontend {
                 }
             }
             
-            episodes_scroller.appendChild(episodes_div)
+            if(episodes_div) episodes_scroller.appendChild(episodes_div)
             
             // episodes_section.appendChild(separator_div)
             if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
