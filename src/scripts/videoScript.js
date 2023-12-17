@@ -7,7 +7,7 @@ const container = document.querySelector(".container"),
 shadowControls = document.getElementsByClassName('shadow-controls')[0],
 mainVideo = document.getElementById("video"),
 videoTitle = document.getElementById('video-title'),
-videoEpisode = document.getElementById('video-episode'),
+videoEpisodeTitle = document.getElementById('video-episode-title'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
 exitBtn = document.querySelector('.exit-video i')
@@ -121,7 +121,7 @@ exitBtn.addEventListener("click", () => {
     // mainVideo.removeAttribute('src')
     mainVideo.src = null
     videoTitle.innerHTML = ''
-    videoEpisode.innerHTML = ''
+    videoEpisodeTitle.innerHTML = ''
     container.style.display = 'none'
     if(document.fullscreenEnabled) {
         document.exitFullscreen()
