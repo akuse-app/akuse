@@ -12,6 +12,7 @@ module.exports = {
     },
     "IT": {
         "162670": `Dr. Stone 3 Part 2`,
-        "21778": `Così parlò Kishibe Rohan`
+        "21778": `Così parlò Kishibe Rohan`,
+        "104578": `L'attacco dei Giganti 3 Parte 2`
     }
 }

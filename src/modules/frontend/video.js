@@ -143,7 +143,11 @@ module.exports = class Video {
         }
 
         const cons = this.getSourceFlagObject()
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
         let animeTitles = this.getParsedAnimeTitles()
+        const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
+
+        if(customTitle !== undefined) animeTitles.unshift(customTitle)
 
         let i = 0
         do {
@@ -151,7 +155,6 @@ module.exports = class Video {
             i++
         } while(videoSource === -1 && i < animeTitles.length)
 
-        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
