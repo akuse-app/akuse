@@ -700,22 +700,61 @@ module.exports = class Frontend {
     createAnimePage(animeEntry) {
         // functions
         let displayEpisodes = animeId => {
+            // create a select element to switch episode pages
+            let createSelectEpisodes = () => {
+                let select = document.createElement('select')
+                select.id = `select-episodes-page-${id}`
+
+                // create section options
+                for(let i=0; i<nPages; i++) {
+                    let from = episodesPerPage*i + 1
+                    let to = episodesPerPage*(i+1)
+                    let option = document.createElement('option')
+
+                    option.value = `${i+1}`
+                    episodes > to
+                    ? option.innerHTML = `${from} - ${to}`
+                    : option.innerHTML = `${from} - ${episodes}`
+
+                    select.appendChild(option)
+                }
+
+                return select
+            }
+
             let episodes_section = document.createElement('div')
             let episodes_scroller = document.createElement('div')
-            let episodes_div = document.createElement('div')
-            let separator_div = document.createElement('div')
-    
+            let episodes_options = document.createElement('div')
+            let header = document.createElement('h2')
+            let select = createSelectEpisodes()
+            // let separator_div = document.createElement('div')
+            
             episodes_section.classList.add('episodes-section')
             episodes_scroller.classList.add('episodes-scroller')
-            episodes_div.classList.add('episodes')
-            separator_div.classList.add('separator')
-            separator_div.innerHTML = 'Episodes'
+            episodes_options.classList.add('episodes-options')
+            header.innerHTML = 'Episodes'
+            // separator_div.classList.add('separator')
+            // separator_div.innerHTML = 'Episodes'
+            
+            episodes_options.appendChild(header)
+            if(episodes > episodesPerPage) episodes_options.appendChild(select)
+            episodes_scroller.appendChild(episodes_options)
+
+            let createEpisodesPage = (i) => {
+                let episodes_div = document.createElement('div')
+                episodes_div.id = `episodes-${parseInt(i / episodesPerPage) + 1}`
+                episodes_div.classList.add('episodes')
+
+                return episodes_div
+            }
     
             // create episodes entries
             for(let i=1; i<=episodes; i++) {
+                if(i === 1) {
+                    var episodes_div = createEpisodesPage(1)
+                    episodes_div.classList.add('show')
+                } 
                 let episode_entry = document.createElement('div')
-                episode_entry.classList.add('episode-entry')
-    
                 let episode_img = document.createElement('img')
                 let episode_content = document.createElement('div')
                 let episode_title = document.createElement('div')
@@ -723,11 +762,11 @@ module.exports = class Frontend {
                 let episode_description = document.createElement('div')
                 
                 episode_entry.id = `episode-${id}-${i}` // pattern: episode-animeid-episodenumber
+                episode_entry.classList.add('episode-entry')
                 episode_content.classList.add('episode-content')
                 episode_title.classList.add('title')
                 episode_info.classList.add('info')
                 episode_description.classList.add('description')
-    
                 episode_img.src = banner
                 episode_img.alt = 'No image available'
                 episode_title.innerHTML = `Episode ${i}`
@@ -739,12 +778,17 @@ module.exports = class Frontend {
                 episode_entry.appendChild(episode_img)
                 episode_entry.appendChild(episode_content)
                 episodes_div.appendChild(episode_entry)
+
+                if(i % episodesPerPage == 0) {
+                    episodes_scroller.appendChild(episodes_div)
+                    var episodes_div = createEpisodesPage(i)
+                }
             }
-    
+            
             episodes_scroller.appendChild(episodes_div)
-            episodes_section.appendChild(separator_div)
+            
+            // episodes_section.appendChild(separator_div)
             if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
-            // episodes_section.appendChild(episodes_scroller)
             content_wrapper.appendChild(episodes_section)
         }
         
@@ -820,6 +864,9 @@ module.exports = class Frontend {
         const score = this.getScore(animeEntry)
         const mediaListId = this.getMediaListId(animeEntry)
         const timeUntilAiring = this.getTimeUntilAiring(animeEntry)
+
+        const episodesPerPage = 30
+        const nPages = parseInt(episodes/episodesPerPage) + 1
 
         // dom elements
         let anime_pages = document.querySelector('.anime-pages')
@@ -1274,6 +1321,12 @@ module.exports = class Frontend {
             }
         })
 
+        // episodes pages switch
+        let episodesPageSelect = document.querySelector(`#anime-page-${animeId} .episodes-options select`)
+        episodesPageSelect.addEventListener('change', () => {
+            this.changeEpisodesPage(animeId, episodesPageSelect.value)
+        })
+
         // trigger video when click episode entry
         let episodes = document.querySelectorAll(`#anime-page-${animeId} .anime-page .episodes`)
         Object.keys(episodes).forEach(episode => {
@@ -1297,6 +1350,14 @@ module.exports = class Frontend {
             this.showListEditorInputValue('progress')
             this.showListEditorInputValue('score')
         })
+    }
+
+    changeEpisodesPage(animeId, page) {
+        let episodes_to_hide = document.querySelector(`#anime-page-${animeId} .anime-page .episodes.show`)
+        let episodes_to_show = document.querySelectorAll(`#anime-page-${animeId} .anime-page .episodes`)[page-1]
+        
+        episodes_to_hide.classList.remove('show')
+        episodes_to_show.classList.add('show')
     }
 
     async displayEpisodesData(animeId) {

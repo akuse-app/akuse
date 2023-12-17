@@ -69,6 +69,8 @@ module.exports = class Video {
                 animeTitles.push(title.replace('Season ', '').replace('Part ', ''))
             if(title.includes('Part ')) 
                 animeTitles.push(title.replace('Part ', ''))
+            if(title.includes(':')) 
+                animeTitles.push(title.replace(':', ''))
         })
 
         return animeTitles

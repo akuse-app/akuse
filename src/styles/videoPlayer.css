@@ -70,7 +70,6 @@
     position: relative;
     background: var(--color-transparency);
     border-radius: var(--border-radius);
-    transition: var(--transition);
 }
 
 .progress-area:hover {
