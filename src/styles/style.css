@@ -920,7 +920,7 @@ main .featured .featured-img img {
         gap: 15px;
         width: 1150px;
         height: max-content;
-        margin-top: 25px;
+        margin: 25px 0;
         background: var(--color-1);
         border-radius: var(--border-radius);
     }
@@ -1032,8 +1032,9 @@ main .featured .featured-img img {
         }
 
         .anime-page .episodes-section .episodes-scroller {
-            width: 100%;
             overflow: auto;
+            width: 100%;
+            margin-bottom: 25px;
         }
 
         .anime-page .episodes-section .episodes {
@@ -1055,17 +1056,19 @@ main .featured .featured-img img {
         }
         
         .anime-page .episodes-section .episode-entry:hover {
-            background-color: var(--color-2);
+            background-color: var(--color-3);
         }
         
-        .anime-page .episodes-section .episode-entry:hover img {
+        /* .anime-page .episodes-section .episode-entry:hover img {
             filter: brightness(0.7);
-        }
+        } */
         
         .anime-page .episodes-section .episode-entry img {
+            min-width: 311.5px;
             height: 100%;
             aspect-ratio: 1.78 / 1;
             object-fit: cover;
+            background-color: var(--color-0);
             border-radius: var(--border-radius);
             transition: var(--transition);
         }

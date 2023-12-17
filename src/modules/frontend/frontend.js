@@ -729,21 +729,22 @@ module.exports = class Frontend {
                 episode_description.classList.add('description')
     
                 episode_img.src = banner
+                episode_img.alt = 'No image available'
                 episode_title.innerHTML = `Episode ${i}`
                 episode_description.innerHTML = ''
                 
                 episode_content.appendChild(episode_title)
                 episode_content.appendChild(episode_info)
                 episode_content.appendChild(episode_description)
-                if(banner !== null) episode_entry.appendChild(episode_img)
+                episode_entry.appendChild(episode_img)
                 episode_entry.appendChild(episode_content)
                 episodes_div.appendChild(episode_entry)
             }
     
             episodes_scroller.appendChild(episodes_div)
             episodes_section.appendChild(separator_div)
-            // if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
-            episodes_section.appendChild(episodes_scroller)
+            if(!this.isAnimeNotAvailable(animeEntry)) episodes_section.appendChild(episodes_scroller)
+            // episodes_section.appendChild(episodes_scroller)
             content_wrapper.appendChild(episodes_section)
         }
         
