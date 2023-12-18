@@ -1522,17 +1522,18 @@ module.exports = class Frontend {
         let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
         let pers_data_common = document.getElementById('persistent-data-common')
 
-        // persistent data
+        // refresh persistent data
         pers_data.querySelector('.persdata-anime-user-status').innerHTML = userList
         pers_data.querySelector('.persdata-anime-user-progress').innerHTML = userProgress
         pers_data.querySelector('.persdata-anime-user-score').innerHTML = userScore
-
+        
         pers_data_common.innerHTML = pers_data.innerHTML
 
         // watch buttons
         let watch_buttons_1 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).firstChild
         let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
         let episodes = parseInt(pers_data.querySelector('.persdata-anime-episodes').innerHTML)
+        let availableEpisodes = parseInt(pers_data.querySelector('.persdata-anime-available-episodes').innerHTML)
         
         if(userProgress == 0) {
             watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
@@ -1542,7 +1543,7 @@ module.exports = class Frontend {
             watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
             watch_buttons_1.innerHTML += `Watch again`
             watch_buttons_1.id = `watch-${animeId}-${1}`
-        } else {
+        } else if (userProgress != availableEpisodes){
             watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
             watch_buttons_1.innerHTML += `Resume from ep. ${userProgress + 1}`
             watch_buttons_1.id = `watch-${animeId}-${userProgress + 1}`
@@ -1897,10 +1898,5 @@ module.exports = class Frontend {
      * @param {*} div 
      * @returns 
      */
-    isEllipsisActive = div => {
-        console.log(div.scrollHeight)
-        console.log(div.clientHeight)
-
-        return div.scrollHeight > div.clientHeight;
-    }
+    isEllipsisActive = div => div.scrollHeight > div.clientHeight
 }
