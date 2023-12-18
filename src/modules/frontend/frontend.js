@@ -881,6 +881,7 @@ module.exports = class Frontend {
         let pers_data_7 = document.createElement('li')
         let pers_data_8 = document.createElement('li')
         let pers_data_9 = document.createElement('li')
+        let pers_data_10 = document.createElement('li')
         let modal_page_wrapper = document.createElement('div')
         let anime_page = document.createElement('div')
         let exit_button = document.createElement('button')
@@ -898,6 +899,7 @@ module.exports = class Frontend {
         let info_4 = document.createElement('li')
         let info_5 = document.createElement('li')
         let description_div = document.createElement('div')
+        let show_more_description_div = document.createElement('span')
         let right_div = document.createElement('div')
         let attidional_info_1 = document.createElement('p')
         let attidional_info_2 = document.createElement('p')
@@ -934,6 +936,9 @@ module.exports = class Frontend {
         title_div.classList.add('title')
         info_div.classList.add('info')
         description_div.classList.add('description')
+        description_div.classList.add('cropped')
+        show_more_description_div.classList.add('show-more')
+        show_more_description_div.classList.add('show-element')
         right_div.classList.add('right')
         attidional_info_1.classList.add('additional-info')
         attidional_info_2.classList.add('additional-info')
@@ -1004,6 +1009,8 @@ module.exports = class Frontend {
         info_5.style.color = colorImportant
 
         description_div.innerHTML = description
+        show_more_description_div.innerHTML = `Show more`
+        show_more_description_div.innerHTML += `<i style="margin-left: 5px" class="fa-solid fa-angle-down"></i>`
         
         additional_info_span.innerHTML = 'Released on: '
         attidional_info_1.appendChild(additional_info_span)
@@ -1036,6 +1043,7 @@ module.exports = class Frontend {
         left_div.appendChild(title_div)
         left_div.appendChild(info_div)
         left_div.appendChild(description_div)
+        left_div.appendChild(show_more_description_div)
         right_div.appendChild(attidional_info_1)
         right_div.appendChild(attidional_info_2)
         right_div.appendChild(attidional_info_3)
@@ -1297,6 +1305,17 @@ module.exports = class Frontend {
         if(animeId == -1) return
 
         this.showModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+
+        // show more description trigger
+        let show_more_description_div = document.querySelector(`#anime-page-${animeId} .show-more`)
+        let description_div = document.querySelector(`#anime-page-${animeId} .left .description`)
+
+        if(!this.isEllipsisActive(description_div)) show_more_description_div.classList.remove('show-element')
+
+        show_more_description_div.addEventListener('click', () => {
+            description_div.classList.remove('cropped')
+            show_more_description_div.classList.remove('show-element')
+        })
         
         // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
         // trailer_iframe.src += '?autoplay=1&controls=0'
@@ -1309,12 +1328,13 @@ module.exports = class Frontend {
         // display episodes with data
         await this.displayEpisodesData(animeId)
 
-        // close anime page
+        // close anime page from button
         let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
         anime_page_exit_button.addEventListener('click', (event) => {
             this.closeAnimePage()
         })
         
+        // close anime page from clicking outside
         document.getElementById(`anime-page-${animeId}`).addEventListener('click', (event) => {
             if(!(event.target.closest(`#anime-page-${animeId} .anime-page .content-wrapper`))) {
                 this.closeAnimePage()
@@ -1322,9 +1342,9 @@ module.exports = class Frontend {
         })
 
         // episodes pages switch
-        let episodesPageSelect = document.querySelector(`#anime-page-${animeId} .episodes-options select`)
-        episodesPageSelect.addEventListener('change', () => {
-            this.changeEpisodesPage(animeId, episodesPageSelect.value)
+        let episodes_page_select = document.querySelector(`#anime-page-${animeId} .episodes-options select`)
+        episodes_page_select?.addEventListener('change', () => {
+            this.changeEpisodesPage(animeId, episodes_page_select.value)
         })
 
         // trigger video when click episode entry
@@ -1586,7 +1606,7 @@ module.exports = class Frontend {
         let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
         
         this.anilist.deleteAnimeFromList(mediaListId)
-
+        
         watch_buttons_2.classList.remove('in-list')
         watch_buttons_2.classList.add('not-in-list')
         watch_buttons_2.innerHTML = `<i class="fa-regular fa-bookmark"></i>`
@@ -1870,4 +1890,17 @@ module.exports = class Frontend {
     capitalizeFirstLetter = string => string == null
                                       ? ""
                                       : string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1)
+
+    /**
+     * Returns whether a div is cropped (with -webkit-line-clamp) or not 
+     * 
+     * @param {*} div 
+     * @returns 
+     */
+    isEllipsisActive = div => {
+        console.log(div.scrollHeight)
+        console.log(div.clientHeight)
+
+        return div.scrollHeight > div.clientHeight;
+    }
 }

@@ -994,16 +994,37 @@ main .featured .featured-img img {
         
         .anime-page .description {
             color: var(--font-2);
-            /* font-weight: var(--font-weight); */
             word-spacing: 1.5px;
             line-height: 22px;
 
             display: -webkit-box;
-            -webkit-line-clamp: 6;
             -webkit-box-orient: vertical;
             text-overflow: ellipsis;
             overflow: hidden;
         }
+
+            /* this way cropped text can go back to normal by togglin .cropped */
+            .anime-page .description.cropped {
+                -webkit-line-clamp: 8;
+            }
+
+        .anime-page .show-more {
+            display: none;
+            color: var(--font-3);
+            font-weight: var(--font-weight);
+            margin: auto;
+            margin-top: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+            .anime-page .show-more.show-element {
+                display: block;
+            }
+
+            .anime-page .show-more:hover {
+                color: var(--font-2);
+            }
 
         .anime-page .content .right {
             display: flex;
