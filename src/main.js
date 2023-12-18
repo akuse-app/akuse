@@ -61,7 +61,7 @@ const createWindow = () => {
         minHeight: 720,
         show: false,
         autoHideMenuBar: true,
-        // titleBarStyle: 'hidden',
+        titleBarStyle: 'hidden',
         titleBarOverlay: {
             color: '#17191c',
             symbolColor: '#eee',
@@ -70,8 +70,7 @@ const createWindow = () => {
         icon: 'assets/img/icon/icon.png',
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false,
-            preload: path.join(__dirname, 'preload.js')
+            contextIsolation: false
         }
     })
 
