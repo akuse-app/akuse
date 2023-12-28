@@ -1,107 +1,111 @@
 {
-  "name": "akuse-beta",
-  "version": "0.3.2",
-  "description": "Anime streaming client for PC",
-  "main": "src/main.js",
-  "scripts": {
-    "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist:win": "electron-builder --win",
-    "dist:mac": "electron-builder --mac",
-    "dist:linux": "electron-builder --linux",
-    "dist:all": "electron-builder -mwl"
-  },
-  "repository": "https://github.com/akuse-app/Akuse",
-  "publish": {
-    "provider": "github",
-    "releaseType": "release"
-  },
-  "build": {
-    "appId": "com.electron.akuse",
-    "productName": "Akuse",
-    "copyright": "Copyright © 2023 Alessio Ganzarolli",
-    "mac": {
-      "target": "dmg",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": true,
-      "extendInfo": {
-        "NSAppleEventsUsageDescription": "Let me use Apple Events.",
-        "NSCameraUsageDescription": "Let me use the camera.",
-        "NSScreenCaptureDescription": "Let me take screenshots."
-      }
+    "name": "akuse-beta",
+    "version": "0.3.2",
+    "description": "Anime streaming client for PC",
+    "main": "src/main.js",
+    "scripts": {
+        "start": "electron .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder",
+        "dist:win": "electron-builder --win",
+        "dist:mac": "electron-builder --mac",
+        "dist:linux": "electron-builder --linux",
+        "dist:all": "electron-builder -mwl"
     },
-    "dmg": {
-      "iconSize": 100,
-      "contents": [
-        {
-          "x": 255,
-          "y": 85,
-          "type": "file"
+    "repository": "https://github.com/akuse-app/Akuse",
+    "publish": {
+        "provider": "github",
+        "releaseType": "release"
+    },
+    "build": {
+        "appId": "com.electron.akuse",
+        "productName": "Akuse",
+        "copyright": "Copyright © 2023 Alessio Ganzarolli",
+        "mac": {
+            "target": "dmg",
+            "hardenedRuntime": true,
+            "gatekeeperAssess": true,
+            "extendInfo": {
+                "NSAppleEventsUsageDescription": "Let me use Apple Events.",
+                "NSCameraUsageDescription": "Let me use the camera.",
+                "NSScreenCaptureDescription": "Let me take screenshots."
+            }
         },
-        {
-          "x": 253,
-          "y": 325,
-          "type": "link",
-          "path": "/Applications"
+        "dmg": {
+            "iconSize": 100,
+            "contents": [
+                {
+                    "x": 255,
+                    "y": 85,
+                    "type": "file"
+                },
+                {
+                    "x": 253,
+                    "y": 325,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ],
+            "window": {
+                "width": 500,
+                "height": 500
+            }
+        },
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "icon": "assets/img/icon/icon.ico"
+        },
+        "nsis": {
+            "deleteAppDataOnUninstall": true,
+            "oneClick": false,
+            "perMachine": true,
+            "allowElevation": true,
+            "allowToChangeInstallationDirectory": true,
+            "license": "LICENSE"
+        },
+        "linux": {
+            "artifactName": "${os}-${name}-${version}.${ext}",
+            "category": "AudioVideo;Video",
+            "description": "Simple and easy to use anime streaming desktop app without ads.",
+            "desktop": {
+                "Name": "Akuse",
+                "Comment": "Simple and easy to use anime streaming desktop app without ads.",
+                "Keywords": "anime",
+                "Type": "Application",
+                "MimeType": "x-scheme-handler/akuse;"
+            },
+            "target": [
+                {
+                    "arch": "x64",
+                    "target": "AppImage"
+                },
+                {
+                    "arch": "x64",
+                    "target": "deb"
+                }
+            ]
         }
-      ],
-      "window": {
-        "width": 500,
-        "height": 500
-      }
     },
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "assets/img/icon/icon.ico"
+    "author": "aleganza <ganzarolli.alessio@gmail.com>",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/aleganza/akuse/issues"
     },
-    "nsis": {
-      "deleteAppDataOnUninstall": true,
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "license": "LICENSE"
+    "homepage": "https://github.com/aleganza/akuse#readme",
+    "devDependencies": {
+        "electron": "^25.9.8",
+        "electron-builder": "^24.9.1",
+        "electron-reloader": "^1.2.3"
     },
-    "linux": {
-      "desktop": {
-        "StartupNotify": "false",
-        "Encoding": "UTF-8",
-        "MimeType": "x-scheme-handler/akuse",
-        "exec": "akuse %U"
-      },
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "mimeTypes": [
-        "x-scheme-handler/akuse"
-      ]
-    },
-    "deb": {
-      "priority": "optional"
+    "dependencies": {
+        "@consumet/extensions": "github:consumet/consumet.ts",
+        "axios": "^1.6.2",
+        "electron-squirrel-startup": "^1.0.0",
+        "electron-store": "^8.1.0",
+        "electron-updater": "^6.1.7",
+        "hls.js": "^1.4.13"
     }
-  },
-  "author": "aleganza <ganzarolli.alessio@gmail.com>",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/aleganza/akuse/issues"
-  },
-  "homepage": "https://github.com/aleganza/akuse#readme",
-  "devDependencies": {
-    "electron": "^25.9.8",
-    "electron-builder": "^24.9.1",
-    "electron-reloader": "^1.2.3"
-  },
-  "dependencies": {
-    "@consumet/extensions": "github:consumet/consumet.ts",
-    "axios": "^1.6.2",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.7",
-    "hls.js": "^1.4.13"
-  }
 }
