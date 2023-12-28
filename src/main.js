@@ -5,6 +5,7 @@ const path = require('path')
 const url = require('url')
 const Store = require('electron-store')
 const AniListAPI = require ('./modules/anilist/anilistApi.js')
+const ProtocolUtils = require('./protocolUtils.js')
 const clientData = require ('./modules/clientData.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
 
@@ -112,7 +113,21 @@ ipcMain.on('load-issues-url', () => {
 
 app.whenReady().then(() => {
     createWindow()
-    app.setAsDefaultProtocolClient("akuse")
+    // app.setAsDefaultProtocolClient("akuse")
+
+    ProtocolUtils.setDefaultProtocolClient(app);
+
+    switch (process.platform) {
+        case 'darwin':
+            ProtocolUtils.setProtocolHandlerOSX(app);
+            break;
+        case 'linux':
+        case 'win32':
+            ProtocolUtils.setProtocolHandlerWindowsLinux(app);
+            break;
+        default:
+            throw new Error('Process platform is undefined');
+    }
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
