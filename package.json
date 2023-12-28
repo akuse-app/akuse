@@ -85,7 +85,7 @@
       "priority": "optional"
     }
   },
-  "author": "aleganza",
+  "author": "aleganza <ganzarolli.alessio@gmail.com>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/aleganza/akuse/issues"
