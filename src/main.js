@@ -76,12 +76,14 @@ const createWindow = () => {
 
     mainWin.loadFile(__dirname + '/windows/index.html')
     mainWin.setBackgroundColor('#0c0b0b')
-    mainWin.show()
-    mainWin.maximize()
     
     mainWin.webContents.on('did-finish-load', () => {
-        console.log(store.get('logged'))
-        console.log(store.get('access_token'))
+        // console.log(store.get('logged'))
+        // console.log(store.get('access_token'))
+
+        mainWin.show()
+        mainWin.maximize()
+        
         if(store.get('logged') !== true)
             store.set('logged', false)
 
