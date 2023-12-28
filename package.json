@@ -70,11 +70,15 @@
       "desktop": {
         "StartupNotify": "false",
         "Encoding": "UTF-8",
-        "MimeType": "x-scheme-handler/deeplink"
+        "MimeType": "x-scheme-handler/akuse",
+        "exec": "akuse %U"
       },
       "target": [
         "AppImage",
         "deb"
+      ],
+      "mimeTypes": [
+        "x-scheme-handler/akuse"
       ]
     },
     "deb": {
