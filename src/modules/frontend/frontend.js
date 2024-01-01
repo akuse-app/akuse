@@ -1626,6 +1626,10 @@ module.exports = class Frontend {
         // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
         // trailer_iframe.src = ''
         this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+        // setTimeout(() => {
+        //     document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop = 0
+        //     console.log('up')
+        // }, 400)
     }
 
     /**

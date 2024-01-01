@@ -2,7 +2,6 @@
 
 const Consumet = require('@consumet/extensions')
 
-
 /**
  * Methods to fetch anime video sources and data using Consumet library 
  * 
