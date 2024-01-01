@@ -22,7 +22,7 @@
 
 <img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
 
-## Running locally for development
+## ⚙️ Running locally for development
 
 Start cloning Akuse:
 
@@ -69,12 +69,12 @@ npm start
 
 In development, the Log-In redirect doesn't work since the app is not packed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance, just distribute the app (```npm run dist:win``` for Windows, other scripts are in package.json file) and Log-In from there once. After that, your app will be authenticated also in development mode.
 
-## Known Issues
+## 🐛 Known Issues
 
 - Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
 - All anime are subbed, but some may be dubbed.
 
-## Disclaimer
+## 📢 Disclaimer
 
 - Akuse helps users find anime by simply scraping links from various websites.
 - Akuse or its developers do not host the content found on Akuse. All images and anime information found in the app are retrieved from AniList public API.
@@ -83,6 +83,6 @@ In development, the Log-In redirect doesn't work since the app is not packed and
 - By using this app, you agree that the app developer is not responsible for the content within the app. Nevertheless, they may or may not come from legitimate sources.
 - For internet violations, please contact the source website. The developer is not legally responsible.
 
-## License
+## 📜 License
 
 Licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
