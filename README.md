@@ -20,6 +20,8 @@
     </a>
 </p>
 
+<p align="center">DUBBED ANIME SOON</p>
+
 <img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
 
 ## ⚙️ Running locally for development
