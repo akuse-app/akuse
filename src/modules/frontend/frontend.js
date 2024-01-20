@@ -1430,7 +1430,7 @@ module.exports = class Frontend {
      */
     isAnimePageDisplayed() {
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
-        return document.getElementById(`anime-page-${animeId}`).style.display == 'flex'
+        return document.getElementById(`anime-page-${animeId}`)?.style.display == 'flex'
     }
 
     /**
@@ -1439,7 +1439,7 @@ module.exports = class Frontend {
      * @returns true if the list editor page is displayed, false otherwise
      */
     isListEditorDisplayed() {
-        return document.getElementById('list-editor-page').style.display == 'flex'
+        return document.getElementById('list-editor-page')?.style.display == 'flex'
     }
 
     /**
@@ -1448,7 +1448,16 @@ module.exports = class Frontend {
      * @returns true if the settings page is displayed, false otherwise
      */
     isSettingsPageDisplayed() {
-        return document.getElementById('settings-page').style.display == 'flex'
+        return document.getElementById('settings-page')?.style.display == 'flex'
+    }
+
+    /**
+     * Return if the video page is displayed or not
+     * 
+     * @returns true if the video page is displayed, false otherwise
+     */
+    isVideoPageDisplayed() {
+        return document.querySelector('.container')?.style.display == 'block'
     }
     
     /**

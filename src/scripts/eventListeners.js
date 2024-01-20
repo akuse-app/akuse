@@ -35,18 +35,7 @@ frontend.enableFeaturedSectionScrollingButtons()
 // pressing esc closes modal pages
 document.addEventListener('keydown', (event) => {
     if(event.code === 'Escape') {
-        if(frontend.isAnimePageDisplayed()
-           && !frontend.isListEditorDisplayed()) {
-            frontend.closeAnimePage()
-        }
-
-        if(frontend.isListEditorDisplayed()) {
-            frontend.closeListEditorPage()
-        }
-
-        if(frontend.isSettingsPageDisplayed()) {
-            frontend.closeSettingsPage()
-        }
+        clearModalPages();
     }
 })
 
@@ -199,4 +188,36 @@ search_list.forEach(list => {
     list.addEventListener('click', (event) => {
         frontend.triggerAnimeModal(event)
     })
+})
+
+/* --- NAVIGATION --- */
+function clearModalPages() {
+    if(frontend.isAnimePageDisplayed() && !frontend.isListEditorDisplayed()) {
+        frontend.closeAnimePage()
+    }
+
+    if(frontend.isListEditorDisplayed()) {
+        frontend.closeListEditorPage()
+    }
+
+    if(frontend.isSettingsPageDisplayed()) {
+        frontend.closeSettingsPage()
+    }
+}
+
+document.addEventListener('keydown', (event) => {
+    if (!frontend.isVideoPageDisplayed()) {
+        switch(event.key) {
+            case '1': {
+                clearModalPages();
+                document.getElementById('nav-home').click();
+                break
+            }
+            case '2': {
+                clearModalPages();
+                document.getElementById('nav-search').click();
+                break
+            }
+        }
+    }
 })
