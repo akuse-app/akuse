@@ -110,6 +110,7 @@ button.circle-button-0.disabled:active {
     border-radius: 8px;
     z-index: 99999;
     visibility: hidden;
+    white-space: nowrap;
 }
 
 [data-title] {
