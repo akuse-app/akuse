@@ -865,6 +865,9 @@ module.exports = class Frontend {
         const mediaListId = this.getMediaListId(animeEntry)
         const timeUntilAiring = this.getTimeUntilAiring(animeEntry)
 
+        // if this anime page already exists, do not create a useless clone of it
+        if(document.getElementById(`anime-page-${id}`)) return
+
         const episodesPerPage = 30
         const nPages = parseInt(episodes/episodesPerPage) + 1
 
