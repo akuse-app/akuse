@@ -1333,7 +1333,7 @@ module.exports = class Frontend {
 
         // close anime page from button
         let anime_page_exit_button = document.querySelector(`#anime-page-${animeId} .anime-page button[id^="exit-"]`)
-        anime_page_exit_button.addEventListener('click', (event) => {
+        anime_page_exit_button.addEventListener('click', () => {
             this.closeAnimePage()
         })
         
@@ -1636,16 +1636,15 @@ module.exports = class Frontend {
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
         
         if(animeId) {
+            // WIP: trailers in anime page
             // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
             // trailer_iframe.src = ''
 
             this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
-
+            
+            // WIP: scrollTop 0 when closing an anime page
             // setTimeout(() => {
-            //     console.log(document.querySelector(`#anime-page-${animeId} .anime-page`))
-            //     console.log(document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop)
-            //     document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop = 0
-            //     console.log('up')
+            //     document.querySelector(`#anime-page-${animeId} .content-wrapper`).scrollTop = 0
             // }, 400)
         }
     }
