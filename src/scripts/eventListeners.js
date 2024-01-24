@@ -215,6 +215,11 @@ document.addEventListener('keydown', (event) => {
             }
             case '2': {
                 clearModalPages();
+                document.getElementById('nav-my-list').click();
+                break
+            }
+            case '3': {
+                clearModalPages();
                 document.getElementById('nav-search').click();
                 break
             }
