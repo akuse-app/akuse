@@ -1631,14 +1631,20 @@ module.exports = class Frontend {
      */
     closeAnimePage() {
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+        
+        if(animeId) {
+            // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
+            // trailer_iframe.src = ''
 
-        // let trailer_iframe = document.querySelector(`#anime-page-${animeId} iframe`)
-        // trailer_iframe.src = ''
-        this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
-        // setTimeout(() => {
-        //     document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop = 0
-        //     console.log('up')
-        // }, 400)
+            this.hideModalPage('anime-page-shadow-background', `anime-page-${animeId}`)
+
+            // setTimeout(() => {
+            //     console.log(document.querySelector(`#anime-page-${animeId} .anime-page`))
+            //     console.log(document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop)
+            //     document.querySelector(`#anime-page-${animeId} .anime-page`).scrollTop = 0
+            //     console.log('up')
+            // }, 400)
+        }
     }
 
     /**
