@@ -184,7 +184,7 @@ mainVideo.addEventListener('timeupdate', () => {
     }
 })
 
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", async (event) => {
     if (event.isComposing || event.keyCode === 229) {
         return
     }
@@ -218,6 +218,21 @@ document.addEventListener("keydown", (event) => {
                 break
             }
         }
+        switch(event.key) {
+            case 'f': {
+                toggleFullScreen()
+                break
+            }
+            case 'm': {
+                toggleMute()
+                break
+            }
+            case 'n': {
+                await video.nextEpisode()
+                updated = 0
+                break
+            }
+        }
     }
 })
 
@@ -238,4 +253,20 @@ function toggleFullScreen() {
     container.classList.toggle("fullscreen")
     fullScreenBtn.classList.replace("fa-expand", "fa-compress")
     container.requestFullscreen()
+}
+
+function toggleMute() {
+    if (videoIsDisplayed) {
+        if(mainVideo.volume == 0) {
+            mainVideo.volume = volumeBtn.dataset.volume;
+            volumeSlider.value = volumeBtn.dataset.volume;
+            volumeBtn.setAttribute('data-volume', 0)
+            return volumeBtn.classList.replace("fa-volume-xmark", "fa-volume-high")
+        } else {
+            volumeBtn.setAttribute('data-volume', mainVideo.volume)
+            mainVideo.volume = 0;
+            volumeSlider.value = 0;
+            return volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
+        }
+    }
 }
