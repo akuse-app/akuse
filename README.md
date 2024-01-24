@@ -71,6 +71,23 @@ npm start
 
 In development, the Log-In redirect doesn't work since the app is not packed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance, just distribute the app (```npm run dist:win``` for Windows, other scripts are in package.json file) and Log-In from there once. After that, your app will be authenticated also in development mode.
 
+## ⌨ Shortcuts
+
+- Pages
+    - 1: go to Discover page
+    - 2: go to Library page
+    - 3: go to Search page
+- Video player
+    - Space: play/pause video
+    - Left arrow: fast rewind (5s)
+    - Right arrow: fast forward (5s)
+    - Upper arrow: increase volume
+    - Lower arrow: decrease volume
+    - F11: fullscreen toggler
+    - F: fullscreen toggler
+    - M: mute/unmute video
+    - N: play next episode
+
 ## 🐛 Known Issues
 
 - Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
