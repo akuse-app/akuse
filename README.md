@@ -93,6 +93,15 @@ In development, the Log-In redirect doesn't work since the app is not packed and
 - Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
 - All anime are subbed, but some may be dubbed.
 
+## 🌟 Contributors
+
+[![](https://contrib.rocks/image?repo=akuse-app/akuse)](https://github.com/akuse-app/akuse/graphs/contributors)
+
+## 🙌 Credits
+
+- [Consumet API](https://github.com/consumet/consumet.ts): used to fetch episodes links
+- [This API](https://api.ani.zip/mappings?anilist_id=21): used to fetch episodes info and thumbnails
+
 ## 📢 Disclaimer
 
 - Akuse helps users find anime by simply scraping links from various websites.
