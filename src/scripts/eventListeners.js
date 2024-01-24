@@ -35,7 +35,7 @@ frontend.enableFeaturedSectionScrollingButtons()
 // pressing esc closes modal pages
 document.addEventListener('keydown', (event) => {
     if(event.code === 'Escape') {
-        clearModalPages();
+        clearModalPages('Escape');
     }
 })
 
@@ -191,8 +191,9 @@ search_list.forEach(list => {
 })
 
 /* --- NAVIGATION --- */
-function clearModalPages() {
-    if(frontend.isAnimePageDisplayed() && !frontend.isListEditorDisplayed()) {
+function clearModalPages(key = '') {
+    if((frontend.isAnimePageDisplayed() && !frontend.isListEditorDisplayed())
+        || key != 'Escape') {
         frontend.closeAnimePage()
     }
 
@@ -209,17 +210,17 @@ document.addEventListener('keydown', (event) => {
     if (!frontend.isVideoPageDisplayed()) {
         switch(event.key) {
             case '1': {
-                clearModalPages();
+                clearModalPages('1');
                 document.getElementById('nav-home').click();
                 break
             }
             case '2': {
-                clearModalPages();
+                clearModalPages('2');
                 document.getElementById('nav-my-list').click();
                 break
             }
             case '3': {
-                clearModalPages();
+                clearModalPages('3');
                 document.getElementById('nav-search').click();
                 break
             }
