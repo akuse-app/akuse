@@ -35,12 +35,41 @@ const hideControls = () => {
 }
 
 hideControls()
+
+// pause info
+var pauseTimer
+const showPauseInfo = () => {
+    clearTimeout(pauseTimer)
+    
+    pauseTimer = setTimeout(() => {
+        if(mainVideo.paused && mainVideo.currentTime != 0) {
+            container.classList.add('show-pause-info')
+        }
+    }, 7500)
+}
+
+const hidePauseInfo = () => {
+    container.classList.remove('show-pause-info')
+}
+
+mainVideo.addEventListener('pause', () => {
+    container.addEventListener("mousemove", (event) => {
+        showPauseInfo()
+    });
+})
+
+mainVideo.addEventListener('pause', () => {
+    showPauseInfo()
+})
+
 container.addEventListener("mousemove", () => {
     container.classList.add("show-controls")
     shadowControls.classList.add('show-cursor')
     clearTimeout(timer)
     hideControls()
+    hidePauseInfo()
 })
+
 
 const formatTime = time => {
     let seconds = Math.floor(time % 60),
@@ -118,7 +147,6 @@ exitBtn.addEventListener("click", () => {
     updated = 0
     mainVideo.pause()
     mainVideo.currentTime = 0
-    // mainVideo.removeAttribute('src')
     mainVideo.src = null
     videoTitle.innerHTML = ''
     videoEpisodeTitle.innerHTML = ''

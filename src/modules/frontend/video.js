@@ -28,6 +28,9 @@ module.exports = class Video {
         this.videoTitle = document.getElementById('video-title')
         this.videoEpisodeTitle = document.getElementById('video-episode-title')
         this.videoEpisode = document.getElementById('video-episode')
+        this.pauseInfoAnimeTitle = document.getElementById('pause-info-anime-title')
+        this.pauseInfoEpisodeTitle = document.getElementById('pause-info-episode-title')
+        this.pauseInfoEpisodeDescription = document.getElementById('pause-info-episode-description')
     }
 
     /**
@@ -90,6 +93,7 @@ module.exports = class Video {
         const episodeId = episode.split('-')[2]
         const title = document.querySelector(`#anime-page-${animeId} .content-wrapper .content .left h1.title`).innerHTML
         const episodeTitle = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .title`).innerHTML
+        const episodeDescription = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .description`).innerHTML
         const animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
 
@@ -112,8 +116,11 @@ module.exports = class Video {
         // play episode if source is found, otherwise hide video player
         if(videoSource !== -1) {
             this.videoTitle.innerHTML = title
+            this.pauseInfoAnimeTitle.innerHTML = title
             this.videoEpisode.innerHTML = episodeId
             this.videoEpisodeTitle.innerHTML = episodeTitle
+            this.pauseInfoEpisodeTitle.innerHTML = episodeTitle
+            this.pauseInfoEpisodeDescription.innerHTML = episodeDescription
 
             this.putSource(videoSource.url, videoSource.isM3U8)
             this.videoElement.play()

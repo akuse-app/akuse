@@ -131,6 +131,54 @@
     cursor: auto;
 }
 
+.pause-info {
+    display: none;
+}
+
+.pause-info .content {
+    margin: 0 200px;
+    width: calc(100% - 400px);
+}
+
+.pause-info .you-are-watching {
+    color: var(--font-2);
+    font-weight: 400;
+    font-size: 1.4rem;
+}
+
+.pause-info #pause-info-anime-title {
+    color: var(--font-1);
+    font-size: 3.4rem;
+    margin-bottom: 20px;
+}
+
+.pause-info #pause-info-episode-title {
+    color: var(--font-1);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.pause-info #pause-info-episode-description {
+    color: var(--font-2);
+    font-weight: 400;
+    font-size: 1.2rem;
+}
+
+.container.show-pause-info .pause-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-dark-opacity);
+    z-index: 896;
+    /* opacity: 1; */
+    transition: 0.3s;
+}
+
 .container.show-controls .up-controls,
 .container.show-controls .mid-controls,
 .container.show-controls .bottom-controls,
