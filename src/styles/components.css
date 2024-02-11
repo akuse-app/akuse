@@ -1,4 +1,4 @@
-/* MAIN BUTTON */
+/* MAIN BUTTON 0 */
 
 button.main-button-0 {
     font-size: 1.1rem;
@@ -12,15 +12,15 @@ button.main-button-0 {
     border: none;
     outline: none;
     cursor: pointer;
-    transition: var(--transition);
+    /* transition: var(--transition); */
 }
 
 button.main-button-0:hover {
-    filter: brightness(0.70);
+    filter: brightness(0.90);
 }
 
 button.main-button-0:active {
-    filter: brightness(0.60);
+    filter: brightness(0.80);
 }
 
 /* CIRCLE BUTTON */

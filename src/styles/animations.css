@@ -6,12 +6,12 @@
 /* LOADING PAGE */
 
 .loading-page-animation {
-    animation: loadingPageAnimation 1s ease-out;
+    animation: loadingPage 1s ease-out;
     animation-iteration-count: 1;
     animation-fill-mode: forwards; 
 }
 
-@keyframes loadingPageAnimation {
+@keyframes loadingPage {
     0% {
         opacity: 1;
     }
@@ -21,12 +21,12 @@
 }
 
 .loading-page-init-bar-animation {
-    animation: loadingPageInitBarAnimation var(--animation-transition);
+    animation: loadingPageInitBar var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes loadingPageInitBarAnimation {
+@keyframes loadingPageInitBar {
     0% {
         width: 0%;
     }
@@ -36,12 +36,12 @@
 }
 
 .loading-page-bar-animation {
-    animation: loadingPageBarAnimation var(--animation-transition);
+    animation: loadingPageBar var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes loadingPageBarAnimation {
+@keyframes loadingPageBar {
     0% {
         width: 30%;
     }
@@ -57,12 +57,12 @@
 }
 
 .show-opacity {
-    animation: showOpacityAnimation var(--half-animation-transition);
+    animation: showOpacity var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes showOpacityAnimation {
+@keyframes showOpacity {
     0% {
         opacity: 0;
     }
@@ -72,12 +72,12 @@
 }
 
 .hide-opacity {
-    animation: hideOpacityAnimation var(--half-animation-transition);
+    animation: hideOpacity var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes hideOpacityAnimation {
+@keyframes hideOpacity {
     0% {
         opacity: 1;
     }
@@ -87,11 +87,11 @@
 }
 
 .show {
-    animation: showAnimation var(--animation-transition);
+    animation: show var(--animation-transition);
     animation-iteration-count: 1;
 }
 
-@keyframes showAnimation {
+@keyframes show {
     0% {
         opacity: 0;
         transform: translateY(10px);
@@ -103,13 +103,13 @@
 }
 
 .show-overlay-delay {
-    animation: showOverlayDelayAnimation var(--half-animation-transition);
+    animation: showOverlayDelay var(--half-animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     /* animation-delay: 0.5s; */
 }
 
-@keyframes showOverlayDelayAnimation {
+@keyframes showOverlayDelay {
     0% {
         opacity: 0;
         transform: scale(0.9);
@@ -121,12 +121,12 @@
 }
 
 .show-page {
-    animation: showPageAnimation var(--animation-transition);
+    animation: showPage var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes showPageAnimation {
+@keyframes showPage {
     0% {
         opacity: 0;
         transform: translateY(30px);
@@ -138,12 +138,12 @@
 }
 
 .hide-page {
-    animation: hidePageAnimation var(--animation-transition);
+    animation: hidePage var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes hidePageAnimation {
+@keyframes hidePage {
     0% {
         opacity: 1;
         transform: translateY(0);
@@ -155,12 +155,12 @@
 }
 
 .show-page-shadow-background {
-    animation: showPageShadowBackgroundAnimation var(--animation-transition);
+    animation: showPageShadowBackground var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes showPageShadowBackgroundAnimation {
+@keyframes showPageShadowBackground {
     0% {
         opacity: 0;
     }
@@ -170,12 +170,12 @@
 }
 
 .hide-page-shadow-background {
-    animation: hidePageShadowBackgroundAnimation var(--animation-transition);
+    animation: hidePageShadowBackground var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes hidePageShadowBackgroundAnimation {
+@keyframes hidePageShadowBackground {
     0% {
         opacity: 1;
     }
@@ -185,12 +185,12 @@
 }
 
 .user-list-warn-on {
-    animation: userListWarnAnimationOn 0s;
+    animation: userListWarnOn 0s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes userListWarnAnimationOn {
+@keyframes userListWarnOn {
     0% {
         border: 2px solid var(--font-3);
     }
@@ -200,12 +200,12 @@
 }
 
 .user-list-warn-off {
-    animation: userListWarnAnimationOff var(--animation-transition);
+    animation: userListWarnOff var(--animation-transition);
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
 }
 
-@keyframes userListWarnAnimationOff {
+@keyframes userListWarnOff {
     0% {
         border: 2px solid var(--color-warning);
     }

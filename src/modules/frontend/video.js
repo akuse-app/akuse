@@ -21,6 +21,7 @@ module.exports = class Video {
         this.store = new Store()
         this.anilist = new AniListAPI()
 
+        this.body = document.querySelector('body')
         this.container = document.querySelector(".container")
         this.videoElement = document.getElementById('video')
         this.videoSource = this.videoElement.src

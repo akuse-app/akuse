@@ -636,10 +636,6 @@ nav {
             font-weight: var(--font-weight);
         }
 
-            .search-main-bar .input-container input:focus {
-                
-            }
-
             .search-main-bar .input-container input::placeholder {
                 color: var(--font-3);
             }
@@ -901,17 +897,32 @@ main .featured .featured-img img {
             font-size: 1.4rem;
         }
 
-        .anime-page .watch-buttons button:nth-child(2).not-in-list {
+        .anime-page .watch-buttons button:nth-child(2).not-in-list,
+        .anime-page .watch-buttons button:nth-child(2).in-list {
             background-color: var(--color-dark-opacity);
-            color: var(--font-2);
+            color: var(--font-1);
             border: 2px solid var(--font-3);
+            transition: none;
         }
 
-        .anime-page .watch-buttons button:nth-child(2).in-list {
+        .anime-page .watch-buttons button:nth-child(2).not-in-list:hover,
+        .anime-page .watch-buttons button:nth-child(2).in-list:hover {
+            filter: brightness(1);
+            border: 2px solid var(--font-1);
+        }
+
+        .anime-page .watch-buttons button:nth-child(2).not-in-list:active,
+        .anime-page .watch-buttons button:nth-child(2).in-list:active {
+            filter: brightness(1);
+            border: 2px solid var(--font-1);
+            background-color: var(--font-3);
+        }
+
+        /* .anime-page .watch-buttons button:nth-child(2).in-list {
             background-color: var(--font-1);
             color: var(--color-1);
             border: 2px solid transparent;
-        }
+        } */
 
     .anime-page .content-wrapper {
         position: relative;
@@ -1101,10 +1112,13 @@ main .featured .featured-img img {
             aspect-ratio: 1.78 / 1;
             border-radius: var(--border-radius);
             cursor: pointer;
-            transition: var(--transition);
         }
         
         .anime-page .episodes-section .episode-entry:hover {
+            background-color: var(--color-2);
+        }
+
+        .anime-page .episodes-section .episode-entry:active {
             background-color: var(--color-3);
         }
         
