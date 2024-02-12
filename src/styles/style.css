@@ -113,7 +113,7 @@ img {
     padding: 2px 7px;
     display: inline-block;
     transition: var(--transition);
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .document-controls ul li:hover {
@@ -288,7 +288,7 @@ img {
                 font-size: 1.2rem;
                 font-weight: var(--font-weight);
                 border-radius: var(--border-radius);
-                cursor: pointer;
+                /* cursor: pointer; */
                 transition: var(--transition);
             }
 
@@ -354,10 +354,10 @@ aside h1 {
             align-items: center;
             gap: 10px;
             color: var(--font-3);
-            cursor: pointer;
+            /* cursor: pointer; */
             font-weight: var(--font-weight);
             display: flex;
-            transition: var(--transition);
+            /* transition: var(--transition); */
         }
 
         /* toggler for login icon or user avatar */
@@ -376,11 +376,12 @@ aside h1 {
         }
 
         aside ul li:hover:not(li.active) {
-            color: var(--font-2);
+            /* color: var(--font-2); */
+            filter: brightness(1.50);
         }
 
         aside ul li:hover:not(li.active) .i-wrapper {
-            filter: brightness(1.50);
+            /* background-color: var(--color-3); */
         }
         
         aside ul li .i-wrapper {
@@ -391,7 +392,7 @@ aside h1 {
             height: 50px;
             background-color: var(--color-0);
             border-radius: var(--border-radius);
-            transition: var(--transition);
+            /* transition: var(--transition); */
         }
 
         aside ul li .i-wrapper.nav-user {
@@ -500,7 +501,7 @@ nav {
                 font-size: 1.1rem;
                 padding: 10px;
                 margin-bottom: 10px;
-                cursor: pointer;
+                /* cursor: pointer; */
                 border-radius: var(--border-radius);
                 transition: var(--transition);
             }
@@ -564,7 +565,7 @@ nav {
         color: var(--font-1);
         font-size: 2rem;
         font-weight: var(--font-weight);
-        cursor: pointer;
+        /* cursor: pointer; */
         background-color: transparent;
         border: none;
         outline: none;
@@ -662,7 +663,7 @@ nav {
         padding: 5px;
         border: 2px solid transparent;
         border-radius: var(--border-radius);
-        cursor: pointer;
+        /* cursor: pointer; */
         transition: var(--transition);
     }
 
@@ -1025,7 +1026,7 @@ main .featured .featured-img img {
             font-weight: var(--font-weight);
             margin: auto;
             margin-top: 5px;
-            cursor: pointer;
+            /* cursor: pointer; */
             transition: var(--transition);
         }
 
@@ -1090,7 +1091,7 @@ main .featured .featured-img img {
                 background-color: var(--color-3);
                 border-right: 8px solid transparent;
                 border-radius: var(--border-radius);
-                cursor: pointer;
+                /* cursor: pointer; */
             }
 
         .anime-page .episodes-section .episodes {
@@ -1111,7 +1112,7 @@ main .featured .featured-img img {
             padding: 15px;
             aspect-ratio: 1.78 / 1;
             border-radius: var(--border-radius);
-            cursor: pointer;
+            /* cursor: pointer; */
         }
         
         .anime-page .episodes-section .episode-entry:hover {
@@ -1182,7 +1183,7 @@ main .featured .featured-img img {
         margin: 10px;
         color: var(--font-2);
         font-size: 2rem;
-        cursor: pointer;
+        /* cursor: pointer; */
         background-color: transparent;
         border: none;
         outline: none;
@@ -1300,7 +1301,7 @@ main .featured .featured-img img {
             font-size: 1.2rem;
             font-weight: var(--font-weight);
             border-radius: var(--border-radius);
-            cursor: pointer;
+            /* cursor: pointer; */
             transition: var(--transition);
         }
     
@@ -1340,7 +1341,7 @@ main .featured .featured-img img {
         color: var(--font-1);
         font-size: 2rem;
         font-weight: var(--font-weight);
-        cursor: pointer;
+        /* cursor: pointer; */
         background-color: transparent;
         border: none;
         outline: none;
@@ -1656,7 +1657,7 @@ main .filters-container {
         }
         
         main .filters-container .filter select {
-            cursor: pointer;
+            /* cursor: pointer; */
             color: var(--font-3);
         }
         
@@ -1711,7 +1712,7 @@ main .search-buttons-container {
         border-radius: var(--border-radius);
         color: var(--color-0);
         background-color: var(--color-important);
-        cursor: pointer;
+        /* cursor: pointer; */
     }
 
     main button#search-clear {
@@ -1725,7 +1726,7 @@ main .search-buttons-container {
         color: var(--font-3);
         background-color: var(--color-3);
         border-radius: var(--border-radius);
-        cursor: pointer;
+        /* cursor: pointer; */
     }
 
     main button#search-clear:hover {

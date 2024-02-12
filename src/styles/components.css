@@ -11,7 +11,7 @@ button.main-button-0 {
     border-radius: var(--border-radius);
     border: none;
     outline: none;
-    cursor: pointer;
+    /* cursor: pointer; */
     /* transition: var(--transition); */
 }
 
@@ -36,7 +36,7 @@ button.circle-button-0 {
     outline: none;
     background-color: var(--color-1);
     border-radius: 100px;
-    cursor: pointer;
+    /* cursor: pointer; */
     transition: var(--transition);
 }
 
@@ -221,7 +221,7 @@ button.circle-button-0.disabled:active {
 /* The slider */
 .slider {
     position: absolute;
-    cursor: pointer;
+    /* cursor: pointer; */
     top: 0;
     left: 0;
     right: 0;
