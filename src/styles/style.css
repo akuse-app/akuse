@@ -6,6 +6,7 @@
     --color-2: #201e1e;
     --color-3: #292626;
     --color-4: #383434;
+    --color-5: #464141;
     --color-important: #ff6b6b;
     --color-dark-opacity: rgba(0, 0, 0, 0.6);
     --color-warning: #FF5454;
@@ -43,7 +44,7 @@
     transition: var(--transition);
 }
 
-::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:active {
     background-color: var(--color-4);
 }
 
@@ -520,6 +521,10 @@ nav {
             width: 80%;
             height: 100%;
             padding-left: 30px;
+        }
+
+        .settings-page .content .right > * {
+            margin-bottom: 20px;
         }
         
             .settings-page .content .right .toggler {
@@ -1085,6 +1090,7 @@ main .featured .featured-img img {
                 border: none;
                 margin-left: auto;
                 padding: 6px 0px 6px 8px;
+                font-family: sans-serif;
                 font-size: 1rem;
                 font-weight: var(--font-weight);
                 color: var(--font-2);
@@ -1092,6 +1098,10 @@ main .featured .featured-img img {
                 border-right: 8px solid transparent;
                 border-radius: var(--border-radius);
                 /* cursor: pointer; */
+            }
+
+            .anime-page .episodes-section .episodes-options select option {
+                font-family: sans-serif;
             }
 
         .anime-page .episodes-section .episodes {

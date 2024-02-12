@@ -698,8 +698,13 @@ module.exports = class Frontend {
      * @param {*} animeEntry 
      */
     createAnimePage(animeEntry) {
-        // functions
+        // display episodes
         let displayEpisodes = animeId => {
+            // episode 27/165 -> 027/165
+            let padEpisodeNumber = (episode) => {
+                return String(episode).padStart(String(episodes).length, '\xa0');
+            }
+
             // create a select element to switch episode pages
             let createSelectEpisodes = () => {
                 let select = document.createElement('select')
@@ -707,8 +712,8 @@ module.exports = class Frontend {
 
                 // create section options
                 for(let i=0; i<nPages; i++) {
-                    let from = episodesPerPage*i + 1
-                    let to = episodesPerPage*(i+1)
+                    let from = padEpisodeNumber(episodesPerPage*i + 1)
+                    let to = padEpisodeNumber(episodesPerPage*(i+1))
                     let option = document.createElement('option')
 
                     option.value = `${i+1}`
