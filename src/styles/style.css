@@ -1122,7 +1122,7 @@ main .featured .featured-img img {
             padding: 15px;
             aspect-ratio: 1.78 / 1;
             border-radius: var(--border-radius);
-            /* cursor: pointer; */
+            cursor: pointer;
         }
         
         .anime-page .episodes-section .episode-entry:hover {
