@@ -90,8 +90,8 @@ In development, the Log-In redirect doesn't work since the app is not packed and
 
 ## 🐛 Known Issues
 
-- Some anime don't work because of different names as compared to AniList: Feel free to open a new issue if you find some of them so they can be fixed.
-- All anime are subbed, but some may be dubbed.
+- If Log-In doesn't work, make sure you have set a default browser.
+- Some anime may don't work because of different names as compared to AniList: feel free to open a new issue if you find some of them so they can be fixed.
 
 ## 🌟 Contributors
 
