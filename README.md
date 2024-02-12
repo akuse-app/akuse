@@ -4,6 +4,7 @@
 </p>
 
 <p align="center">Simple and easy to use anime streaming desktop app without ads.</p>
+<p align="center">Both dub and sub supported!</p>
 
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
@@ -19,8 +20,6 @@
         <img style="width:250px" alt="buymeacoffee" src="https://i.imgur.com/fxJ4BNq.png">
     </a>
 </p>
-
-<p align="center">DUBBED ANIME SOON</p>
 
 <img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
 
