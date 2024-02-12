@@ -24,11 +24,9 @@ module.exports = class Gogoanime {
      * @returns episode object (url + isM3U8 flag) searching for best quality in decrescent order (1080p -> 720p -> default)
      * @returns -1 if could not get the animeId or the animeEpisodeId
      */
-    async getEpisodeUrl(animeSearch, episode) {
-        const animeId = await this.getAnimeId(animeSearch)
-        if (animeId == -1) {
-            return -1
-        }
+    async getEpisodeUrl(animeSearch, episode, dubbed) {
+        const animeId = await this.getAnimeId(dubbed ? `${animeSearch} (Dub)` : animeSearch)
+        if (animeId == -1) return -1
 
         const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
         if(animeEpisodeId === undefined) return -1

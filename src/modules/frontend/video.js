@@ -104,7 +104,7 @@ module.exports = class Video {
         // at do-while end videoSource will be -1 if nothing is found, otherwise the episode source
         let i = 0
         do {
-            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episodeId)
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episodeId, this.store.get('dubbed'))
 
             videoSource != -1
             ? console.log(`%c ${animeTitles[i]} -> ${videoSource.url}`, `color: #45AD67`)
@@ -161,10 +161,9 @@ module.exports = class Video {
 
         let i = 0
         do {
-            var videoSource = await cons.getEpisodeUrl(animeTitles[i], parseInt(this.videoEpisode.innerHTML) + 1)
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], parseInt(this.videoEpisode.innerHTML) + 1, this.store.get('dubbed'))
             i++
         } while(videoSource === -1 && i < animeTitles.length)
-
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()

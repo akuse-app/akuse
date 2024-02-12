@@ -23,6 +23,8 @@ Object.keys(sourceFlagRadios).forEach(radio => {
 })
 
 // CHECKBOXES
+
+// update-progress
 if(!(store.has('update_progress'))) {
     store.set('update_progress', false)
 }
@@ -30,11 +32,28 @@ if(!(store.has('update_progress'))) {
 var updateProgressCheckbox = document.getElementById('update-progress-checkbox')
 
 store.get('update_progress') == true
-? updateProgressCheckbox.checked = true
-: updateProgressCheckbox.checked = false
+    ? updateProgressCheckbox.checked = true
+    : updateProgressCheckbox.checked = false
 
 updateProgressCheckbox.addEventListener('click', (event) => {
     updateProgressCheckbox.checked == true
-    ? store.set('update_progress', true)
-    : store.set('update_progress', false)
+        ? store.set('update_progress', true)
+        : store.set('update_progress', false)
+})
+
+// dubbed
+if(!(store.has('dubbed'))) {
+    store.set('dubbed', false)
+}
+
+var dubbedCheckbox = document.getElementById('dubbed-checkbox')
+
+store.get('dubbed') == true
+    ? dubbedCheckbox.checked = true
+    : dubbedCheckbox.checked = false
+
+dubbedCheckbox.addEventListener('click', (event) => {
+    dubbedCheckbox.checked == true
+        ? store.set('dubbed', true)
+        : store.set('dubbed', false)
 })

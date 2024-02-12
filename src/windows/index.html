@@ -116,12 +116,13 @@
                 <div class="content">
                     <div class="left">
                         <ul>
-                            <li id="source-item" class="active">Source</li>
-                            <li id="anilist-item">AniList</li>
+                            <li id="source-item" class="active">Streaming</li>
+                            <!-- <li id="source-item" class="active">Source</li> -->
+                            <!-- <li id="anilist-item">AniList</li> -->
                         </ul>
                     </div>
                     <div class="right">
-                        <div id="source-right-element" class="right-element"  style="display: block">
+                        <div id="source-right-element" class="right-element" style="display: block">
                             <form>
                                 <p>Select the language in which you want to watch the episodes</p>
                                 <div class="form-element">
@@ -138,12 +139,21 @@
                                 </div>
                             </form>
                         </div>
-                        <div id="anilist-right-element" class="right-element" style="display: none">
+                        <div class="right-element"><!--  id="anilist-right-element" style="display: none" -->
                             <div class="toggler">
                                 <p>Update progress automatically</p>
                                 <label class="switch">
                                     <input type="checkbox" id="update-progress-checkbox">
                                     <span id="update-progress-checkbox-slider" class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="right-element">
+                            <div class="toggler">
+                                <p>Watch dubbed</p>
+                                <label class="switch">
+                                    <input type="checkbox" id="dubbed-checkbox">
+                                    <span id="dubbed-checkbox-slider" class="slider round"></span>
                                 </label>
                             </div>
                         </div>

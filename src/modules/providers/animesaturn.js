@@ -24,8 +24,8 @@ module.exports = class AnimeSaturn {
      * @returns episode object (url + isM3U8 flag) in streamtape quality
      * @returns -1 if could not get the animeId or the animeEpisodeId
      */
-    async getEpisodeUrl(animeSearch, episode) {
-        const animeId = await this.getAnimeId(animeSearch)
+    async getEpisodeUrl(animeSearch, episode, dubbed) {
+        const animeId = await this.getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch)
         if (animeId == -1) return -1
 
         const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)

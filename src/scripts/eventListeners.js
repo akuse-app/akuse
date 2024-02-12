@@ -60,28 +60,28 @@ document.getElementById('settings-page').addEventListener('click', (event) => {
 })
 
 // toggler
-let sourceItem = document.getElementById('source-item')
-let anilistItem = document.getElementById('anilist-item')
-let sourceRightElement = document.getElementById('source-right-element')
-let anilistRightElement = document.getElementById('anilist-right-element')
+// let sourceItem = document.getElementById('source-item')
+// let anilistItem = document.getElementById('anilist-item')
+// let sourceRightElement = document.getElementById('source-right-element')
+// let anilistRightElement = document.getElementById('anilist-right-element')
 
-sourceItem.addEventListener('click', () => {
-    if(sourceRightElement.style.display == 'none') {
-        sourceItem.classList.toggle('active')
-        anilistItem.classList.toggle('active')
-        anilistRightElement.style.display = 'none'
-        sourceRightElement.style.display = 'block'
-    }
-})
+// sourceItem.addEventListener('click', () => {
+//     if(sourceRightElement.style.display == 'none') {
+//         sourceItem.classList.toggle('active')
+//         anilistItem.classList.toggle('active')
+//         anilistRightElement.style.display = 'none'
+//         sourceRightElement.style.display = 'block'
+//     }
+// })
 
-anilistItem.addEventListener('click', () => {
-    if(anilistRightElement.style.display == 'none') {
-        anilistItem.classList.toggle('active')
-        sourceItem.classList.toggle('active')
-        sourceRightElement.style.display = 'none'
-        anilistRightElement.style.display = 'block'
-    }
-})
+// anilistItem.addEventListener('click', () => {
+//     if(anilistRightElement.style.display == 'none') {
+//         anilistItem.classList.toggle('active')
+//         sourceItem.classList.toggle('active')
+//         sourceRightElement.style.display = 'none'
+//         anilistRightElement.style.display = 'block'
+//     }
+// })
 
 // disable toggler if not logged in
 if(!store.get('logged')) {
