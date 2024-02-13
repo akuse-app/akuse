@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">Simple and easy to use anime streaming desktop app without ads.</p>
-<p align="center">Both dub and sub supported!</p>
+<p align="center" ><i>Both dub and sub supported!</i></p>
 
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
