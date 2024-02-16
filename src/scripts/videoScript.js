@@ -10,7 +10,7 @@ videoTitle = document.getElementById('video-title'),
 videoEpisodeTitle = document.getElementById('video-episode-title'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
-exitBtn = document.querySelector('.exit-video i')
+exitBtn = document.querySelector('.exit-video')
 volumeBtn = container.querySelector(".volume i"),
 volumeSlider = container.querySelector(".right input"),
 currentVidTime = container.querySelector(".current-time"),
@@ -106,8 +106,8 @@ mainVideo.addEventListener("timeupdate", e => {
     currentVidTime.innerText = formatTime(currentTime)
 })
 
-mainVideo.addEventListener("loadeddata", () => {
-    videoDuration.innerText = formatTime(mainVideo.duration)
+mainVideo.addEventListener("timeupdate", () => {
+    videoDuration.innerText = formatTime(mainVideo.duration - mainVideo.currentTime)
 })
 
 const draggableProgressBar = e => {

@@ -1,5 +1,5 @@
 :root {
-    --color-transparency: #ffffff56;
+    --color-transparency: #ffffff6c;
 }
 
 #video {
@@ -45,20 +45,24 @@
     background-color: transparent;
     border: none;
     outline: none;
-    cursor: pointer;
-    font-size: 2rem;
+    font-size: 2.4rem;
     transition: 0.1s ease-out;
 }
 
-.container button:hover {
+.container button i {
+    cursor: pointer;
+}
+
+.container button i:hover {
     color: var(--font-1);
 }
 
 .video-timeline {
-    height: 5px;
+    display: flex;
+    align-items: center;
+    height: 20px;
     width: 100%;
     cursor: pointer;
-    margin-bottom: 15px;
 }
 
 .video-timer .separator{
@@ -66,15 +70,16 @@
 }
 
 .video-timeline .progress-area{
+    width: 100%;
     height: 5px;
     position: relative;
     background: var(--color-transparency);
     border-radius: var(--border-radius);
+    transition: 0.1s;
 }
 
-.progress-area:hover {
+.video-timeline:hover .progress-area {
     height: 7px;
-    transform: translateY(-2px);
 }
 
 .progress-area span{
@@ -93,14 +98,15 @@
     position: relative;
     margin: 0;
     background: var(--color-important);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
 .video-progress-bar::before{
     content: "";
-    right: 0;
+    right: -10px;
     top: 50%;
-    height: 20px;
-    width: 20px;
+    width: 15px;
+    height: 15px;
     position: absolute;
     border-radius: 50%;
     background: var(--color-important);
@@ -122,7 +128,8 @@
     position: absolute;
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: inset 0px 300px 400px -100px #000000;
+    background-color: var(--color-dark-opacity);
+    /* box-shadow: inset 0px 300px 400px -100px #000000; */
     transition: 0.3s;
     cursor: none;
 }
@@ -142,19 +149,21 @@
 
 .pause-info .you-are-watching {
     color: var(--font-2);
-    font-weight: 400;
     font-size: 1.4rem;
+    font-weight: 400;
 }
 
 .pause-info #pause-info-anime-title {
     color: var(--font-1);
     font-size: 3.4rem;
+    font-weight: 500;
     margin-bottom: 20px;
 }
 
 .pause-info #pause-info-episode-title {
     color: var(--font-1);
     font-size: 1.8rem;
+    font-weight: 500;
     margin-bottom: 10px;
 }
 
@@ -169,13 +178,11 @@
     top: 0;
     left: 0;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
     width: 100%;
     height: 100%;
     background-color: var(--color-dark-opacity);
     z-index: 896;
-    /* opacity: 1; */
     transition: 0.3s;
 }
 
@@ -192,7 +199,6 @@
 .mid-controls,
 .bottom-controls {
     width: calc(100% - 80px);
-    /* height: calc(100% - 80px); */
     opacity: 0;
     display: flex;
     position: absolute;
@@ -213,8 +219,19 @@
 }
 
 .bottom-controls {
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
     bottom: 0;
+}
+
+.up-controls .left {
+    position: absolute;
+    left: 0;
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 .up-controls .center {
@@ -226,26 +243,40 @@
     right: 0;
     margin-top: 10px;
     display: flex;
-    gap: 20px;
+    gap: 30px;
     align-items: center;
 }
+
 .up-controls .info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    cursor: pointer;
+}
+
+.up-controls .info:hover {
+    filter: brightness(0.80);
+}
+
+.up-controls .info:active {
+    filter: brightness(0.70);
 }
 
 .up-controls .info .title {
+    color: var(--font-2);
+    /* color: var(--color-transparency); */
+    font-weight: var(--font-weight);
+    font-size: 1.6rem;
+}
+
+.up-controls .info .back,
+.up-controls .info .episode {
     color: var(--font-1);
-    font-weight: 500;
-    font-size: 2.6rem;
+    font-weight: var(--font-weight);
+    font-size: 2.4rem;
 }
 
 .up-controls .info .episode {
-    font-weight: 400;
-    color: var(--font-3);
-    font-size: 1.6rem;
+    margin-left: 10px;
 }
 
 .up-controls .volume-content .volume-options {
@@ -329,48 +360,13 @@
     font-size: 5rem;
 }
 
-.mid-controls button:hover {
+.mid-controls button i:hover {
     color: var(--font-1);
 }
 
-.bottom-controls .bottom {
-    display: flex;
-}
-
-.bottom-controls .bottom .previous,
-.bottom-controls .bottom .next {
+.bottom-controls .current-time,
+.bottom-controls .video-duration {
+    color: var(--font-1);
     font-size: 1.4rem;
-    font-weight: 400;
-    color: var(--font-2)
-}
-
-.bottom-controls .bottom .previous:hover,
-.bottom-controls .bottom .next:hover {
-    color: var(--font-1);
-}
-
-/* .bottom-controls .bottom .previous {
-    border-right: 1px solid var(--font-3);
-}
-
-.bottom-controls .bottom .next {
-    border-left: 1px solid var(--font-3);
-}
- */
-.bottom-controls .bottom button {
-    margin-left: auto;
-}
-
-.bottom-controls .bottom .video-timer {
-    color: var(--font-3);
-    font-size: 1.4rem;
-}
-
-.bottom-controls .bottom .video-timer .current-time {
-    color: var(--font-1);
-}
-
-.bottom-controls .bottom .video-timer .current-time,
-.bottom-controls .bottom .video-timer .video-duration {
     font-family: sans-serif;
 }

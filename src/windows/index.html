@@ -300,19 +300,29 @@
                 <div class="pause-info">
                     <div class="content">
                         <h1 class="you-are-watching">You are watching</h1>
-                        <h1 id="pause-info-anime-title">Suits</h1>
-                        <h1 id="pause-info-episode-title">episodio molto bello</h1>
-                        <h1 id="pause-info-episode-description">sesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso analesesso anale</h1>
+                        <h1 id="pause-info-anime-title"></h1>
+                        <h1 id="pause-info-episode-title"></h1>
+                        <h1 id="pause-info-episode-description"></h1>
                     </div>
                 </div>
                 <div class="shadow-controls">
                     <div class="up-controls">
+                        <div class="left">
+                            <div class="info exit-video">
+                                <span id="video-title" class="title"></span>
+                                <span class="back">
+                                    <i class="fa-solid fa-angle-left"></i>
+                                    <span id="video-episode-title" class="episode"></span>
+                                </span>
+                                <span style="display: none;" id="video-episode"></span>
+                            </div>
+                        </div>
                         <div class="center">
-                            <div class="info">
+                            <!-- <div class="info">
                                 <span id="video-title" class="title"></span>
                                 <span id="video-episode-title" class="episode"></span>
                                 <span style="display: none;" id="video-episode"></span>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="right">
                             <div class="volume-content">
@@ -332,7 +342,8 @@
                                 </ul>
                             </div>
                             <button class="fullscreen"><i class="fa-solid fa-expand"></i></button>
-                            <button class="exit-video"><i class="fa-solid fa-xmark"></i></button>
+                            <!-- <button class="exit-video"><i class="fa-solid fa-xmark"></i></button> -->
+                            <button class="next"><i class="fa-solid fa-forward-step"></i></button>
                         </div>
                     </div>
                     <div class="mid-controls">
@@ -343,21 +354,14 @@
                         <button class="skip-forward"><i class="fa-solid fa-rotate-right"></i></button>
                     </div>
                     <div class="bottom-controls">
+                        <p class="current-time">00:00</p>
                         <div class="video-timeline">
                             <div class="progress-area">
                                 <span>00:00</span>
                                 <div class="video-progress-bar"></div>
                             </div>
                         </div>
-                        <div class="bottom">
-                            <div class="video-timer">
-                                <p class="current-time">00:00</p>
-                                <p class="separator">/</p>
-                                <p class="video-duration">00:00</p>
-                            </div>
-                            <!-- <button class="previous">< Previous Episode</button> -->
-                            <button class="next">Next Episode ></button>
-                        </div>
+                        <p class="video-duration">00:00</p>
                     </div>
                 </div>
             <video id="video"></video>
