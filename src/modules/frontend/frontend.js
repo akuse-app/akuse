@@ -514,11 +514,11 @@ module.exports = class Frontend {
                     anime_cover_div.appendChild(anime_cover_shadow)
                     
                     // append the progress bar to the card
-                    this.appendProgressBar(
-                            anime_entry_div.getElementsByClassName('anime-cover')[0],
-                            this.getEpisodes(entries[key].media),
-                            entries[key].progress
-                        )
+                    // this.appendProgressBar(
+                    //         anime_entry_div.getElementsByClassName('anime-cover')[0],
+                    //         this.getEpisodes(entries[key].media),
+                    //         entries[key].progress
+                    //     )
                     }
                 anime_list_div.appendChild(anime_entry_div)
             })
