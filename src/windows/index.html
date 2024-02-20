@@ -296,74 +296,86 @@
     </div>
     <div class="body-container">
         <!-- VIDEO -->
-        <div class="container show-controls">
-                <div class="pause-info">
-                    <div class="content">
-                        <h1 class="you-are-watching">You are watching</h1>
-                        <h1 id="pause-info-anime-title"></h1>
-                        <h1 id="pause-info-episode-title"></h1>
-                        <h1 id="pause-info-episode-description"></h1>
-                    </div>
+        <div class="container">
+            <div class="pause-info">
+                <div class="content">
+                    <h1 class="you-are-watching">You are watching</h1>
+                    <h1 id="pause-info-anime-title"></h1>
+                    <h1 id="pause-info-episode-title"></h1>
+                    <h1 id="pause-info-episode-description"></h1>
                 </div>
-                <div class="shadow-controls">
-                    <div class="up-controls">
-                        <div class="left">
-                            <div class="info exit-video">
-                                <span id="video-title" class="title"></span>
-                                <span class="back">
-                                    <i class="fa-solid fa-angle-left"></i>
-                                    <span id="video-episode-title" class="episode"></span>
-                                </span>
-                                <span style="display: none;" id="video-episode"></span>
-                            </div>
-                        </div>
-                        <div class="center">
-                            <!-- <div class="info">
-                                <span id="video-title" class="title"></span>
+            </div>
+            <div class="shadow-controls">
+                <div class="up-controls">
+                    <div class="left">
+                        <div class="info exit-video">
+                            <span id="video-title" class="title"></span>
+                            <span class="back">
+                                <i class="fa-solid fa-angle-left"></i>
                                 <span id="video-episode-title" class="episode"></span>
-                                <span style="display: none;" id="video-episode"></span>
-                            </div> -->
+                            </span>
+                            <span style="display: none;" id="video-episode"></span>
                         </div>
-                        <div class="right">
-                            <div class="volume-content">
-                                <button class="volume"><i class="fa-solid fa-volume-high"></i></button>
-                                <div class="volume-options">
+                    </div>
+                    <div class="center">
+                        <!-- <div class="info">
+                            <span id="video-title" class="title"></span>
+                            <span id="video-episode-title" class="episode"></span>
+                            <span style="display: none;" id="video-episode"></span>
+                        </div> -->
+                    </div>
+                    <div class="right">
+                        <div class="settings-content">
+                            <button class="settings"><i class="fa-solid fa-gear"></i></button>
+                            <div class="settings-options">
+                                <li class="volume">
+                                    <span>
+                                        <i class="fa-solid fa-volume-high" style="margin-right: 5px;"></i>
+                                        Volume
+                                    </span>
                                     <input type="range" min="0" max="1" step="any">
-                                </div>
-                            </div>
-                            <div class="playback-content">
-                                <button class="playback-speed"><i class="fa-regular fa-clock"></i></button>
-                                <ul class="speed-options">
-                                    <li data-speed="2">2x</li>
-                                    <li data-speed="1.5">1.5x</li>
-                                    <li data-speed="1" class="active">Normal</li>
-                                    <li data-speed="0.75">0.75x</li>
-                                    <li data-speed="0.5">0.5x</li>
-                                </ul>
-                            </div>
-                            <button class="fullscreen"><i class="fa-solid fa-expand"></i></button>
-                            <!-- <button class="exit-video"><i class="fa-solid fa-xmark"></i></button> -->
-                            <button class="next"><i class="fa-solid fa-forward-step"></i></button>
-                        </div>
-                    </div>
-                    <div class="mid-controls">
-                        <button class="skip-backward"><i class="fa-solid fa-rotate-left"></i></button>
-                        <div class="play-pause-center">
-                            <button class="play-pause"><i class="fas fa-play"></i></button>
-                        </div>
-                        <button class="skip-forward"><i class="fa-solid fa-rotate-right"></i></button>
-                    </div>
-                    <div class="bottom-controls">
-                        <p class="current-time">00:00</p>
-                        <div class="video-timeline">
-                            <div class="progress-area">
-                                <span>00:00</span>
-                                <div class="video-progress-bar"></div>
+                                </li>
+                                <li class="playback">
+                                    <span>
+                                        <i class="fa-regular fa-clock" style="margin-right: 5px;"></i>
+                                        Playback Speed
+                                    </span>
+                                    <select class="main-select-0">
+                                        <option value="0.25">0.25</option>
+                                        <option value="0.50">0.50</option>
+                                        <option value="0.75">0.75</option>
+                                        <option value="1">Normal</option>
+                                        <option value="1.25">1.25</option>
+                                        <option value="1.50">1.50</option>
+                                        <option value="1.75">1.75</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </li>
                             </div>
                         </div>
-                        <p class="video-duration">00:00</p>
+                        <button class="fullscreen"><i class="fa-solid fa-expand"></i></button>
+                        <!-- <button class="exit-video"><i class="fa-solid fa-xmark"></i></button> -->
+                        <button class="next"><i class="fa-solid fa-forward-step"></i></button>
                     </div>
                 </div>
+                <div class="mid-controls">
+                    <button class="skip-backward"><i class="fa-solid fa-rotate-left"></i></button>
+                    <div class="play-pause-center">
+                        <button class="play-pause"><i class="fas fa-play"></i></button>
+                    </div>
+                    <button class="skip-forward"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+                <div class="bottom-controls">
+                    <p class="current-time">00:00</p>
+                    <div class="video-timeline">
+                        <div class="progress-area">
+                            <span>00:00</span>
+                            <div class="video-progress-bar"></div>
+                        </div>
+                    </div>
+                    <p class="video-duration">00:00</p>
+                </div>
+            </div>
             <video id="video"></video>
         </div>
         <!-- MAIN -->

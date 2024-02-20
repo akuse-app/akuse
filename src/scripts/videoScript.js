@@ -1,7 +1,9 @@
 'use-strict'
 
 const Video = require('../modules/frontend/video')
+const Store = require('electron-store')
 const video = new Video()
+const store = new Store()
 
 const container = document.querySelector(".container"),
 shadowControls = document.getElementsByClassName('shadow-controls')[0],
@@ -10,28 +12,62 @@ videoTitle = document.getElementById('video-title'),
 videoEpisodeTitle = document.getElementById('video-episode-title'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
-exitBtn = document.querySelector('.exit-video')
-volumeBtn = container.querySelector(".volume i"),
-volumeSlider = container.querySelector(".right input"),
 currentVidTime = container.querySelector(".current-time"),
 videoDuration = container.querySelector(".video-duration"),
 skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
 playPauseBtn = container.querySelector(".play-pause i"),
 nextEpisodeBtn = container.querySelector(".next")
+exitBtn = document.querySelector('.exit-video')
+volumeBtn = container.querySelector(".volume i"),
 speedBtn = container.querySelector(".playback-speed i"),
-volumeOptions = container.querySelector(".volume-options"),
-speedOptions = container.querySelector(".speed-options"),
+settingsBtn = container.querySelector(".settings i"),
+settingsOptions = container.querySelector(".settings-options"),
+volumeRange = container.querySelector(".volume input"),
+playbackSelect = container.querySelector(".playback select"),
 fullScreenBtn = container.querySelector(".fullscreen i")
-let timer
-let updated = 0 /* for update anime progress automatically */
 
+let timer
+let updated = 0 /* to update anime progress automatically */
+
+const setVolume = value => {
+    mainVideo.volume = value;
+    volumeRange.value = value;
+    store.set('video-volume', value)
+}
+
+const getVolume = () => store.get('video-volume')
+
+const setPlayback = value => {
+    mainVideo.playbackRate = value
+    playbackSelect.value = value
+    store.set('video-playback', value)
+}
+
+const getPlayback = () => store.get('video-playback')
+
+// stored data load
+getVolume()
+    ? setVolume(parseFloat(store.get('video-volume')))
+    : setVolume(0.5)
+
+if(getVolume() == 0) {
+    volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
+}
+
+getPlayback()
+    ? setPlayback(store.get('video-playback'))
+    : setPlayback(1)
+
+// controls
 const hideControls = () => {
-    /* if(mainVideo.paused) return */
+    if(settingsOptions.classList.contains("show-options")) 
+        return
+
     timer = setTimeout(() => {
         container.classList.remove("show-controls")
         shadowControls.classList.remove('show-cursor')
-    }, 1500)
+    }, 2000)
 }
 
 hideControls()
@@ -40,6 +76,9 @@ hideControls()
 var pauseTimer
 const showPauseInfo = () => {
     clearTimeout(pauseTimer)
+
+    if(settingsOptions.classList.contains("show-options")) 
+        return
     
     pauseTimer = setTimeout(() => {
         if(mainVideo.paused && mainVideo.currentTime != 0) {
@@ -70,7 +109,6 @@ container.addEventListener("mousemove", () => {
     hidePauseInfo()
 })
 
-
 const formatTime = time => {
     let seconds = Math.floor(time % 60),
     minutes = Math.floor(time / 60) % 60,
@@ -96,13 +134,14 @@ videoTimeline.addEventListener("mousemove", e => {
 
 videoTimeline.addEventListener("click", e => {
     let timelineWidth = videoTimeline.clientWidth
-    mainVideo.currentTime = (e.offsetX / timelineWidth) * mainVideo.duration
+    let currentTime = (e.offsetX / timelineWidth) * mainVideo.duration
+    progressBar.style.width = `${(currentTime / mainVideo.duration) * 100}%`
+    mainVideo.currentTime = currentTime
 })
 
 mainVideo.addEventListener("timeupdate", e => {
     let {currentTime, duration} = e.target
-    let percent = (currentTime / duration) * 100
-    progressBar.style.width = `${percent}%`
+    progressBar.style.width = `${(currentTime / duration) * 100}%`
     currentVidTime.innerText = formatTime(currentTime)
 })
 
@@ -117,26 +156,17 @@ const draggableProgressBar = e => {
     currentVidTime.innerText = formatTime(mainVideo.currentTime)
 }
 
-volumeSlider.addEventListener("input", e => {
-    mainVideo.volume = e.target.value
+volumeRange.addEventListener("input", e => {
+    setVolume(e.target.value)
+
     if(e.target.value == 0) {
         return volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
     }
     volumeBtn.classList.replace("fa-volume-xmark", "fa-volume-high")
 })
 
-speedOptions.querySelectorAll("li").forEach(option => {
-    option.addEventListener("click", () => {
-        mainVideo.playbackRate = option.dataset.speed
-        speedOptions.querySelector(".active").classList.remove("active")
-        option.classList.add("active")
-    })
-})
-
-document.addEventListener("click", e => {
-    if(e.target.tagName !== "SPAN" || e.target.className !== "material-symbols-rounded") {
-        speedOptions.classList.remove("show")
-    }
+playbackSelect.addEventListener('change', () => {
+    setPlayback(playbackSelect.value)
 })
 
 fullScreenBtn.addEventListener("click", () => {
@@ -157,10 +187,22 @@ exitBtn.addEventListener("click", () => {
     }
 })
 
+mainVideo.addEventListener('play', () => {
+    setPlayback(getPlayback())
+})
+
 mainVideo.addEventListener("click", (event) => {
     if (event.target !== this)
         return
     mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+})
+
+container.addEventListener("click", (event) => {
+    // do not hide if press settings icon or settings options
+    if (event.target == settingsBtn) return
+    if (event.target.closest('.settings-options')) return
+
+    settingsOptions.classList.remove('show-options')
 })
 
 // fullscreen when double click
@@ -190,17 +232,9 @@ nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
     updated = 0
 })
-volumeBtn.addEventListener("click", () => {
-    if(speedOptions.classList.contains('show-options')) 
-        speedOptions.classList.toggle("show-options")
-    
-    volumeOptions.classList.toggle("show-options")
-})
-speedBtn.addEventListener("click", () => {
-    if(volumeOptions.classList.contains('show-options')) 
-        volumeOptions.classList.toggle("show-options")
 
-    speedOptions.classList.toggle("show-options")
+settingsBtn.addEventListener("click", () => {
+    settingsOptions.classList.toggle("show-options")
 })
 
 /* trigger auto updating episode when the user reaches the 80% of the anime */
@@ -228,8 +262,10 @@ document.addEventListener("keydown", async (event) => {
                 break
             }
             case 'ArrowUp': {
-                mainVideo.volume += 0.1
-                volumeSlider.value = mainVideo.volume
+                // mainVideo.volume += 0.1
+                // volumeRange.value = mainVideo.volume
+
+                setVolume(getVolume() + 0.1)
                 break
             }
             case 'ArrowRight': {
@@ -237,8 +273,10 @@ document.addEventListener("keydown", async (event) => {
                 break
             }
             case 'ArrowDown': {
-                mainVideo.volume -= 0.1
-                volumeSlider.value = mainVideo.volume
+                // mainVideo.volume -= 0.1
+                // volumeRange.value = mainVideo.volume
+
+                setVolume(getVolume() - 0.1)
                 break
             }
             case 'F11': {
@@ -284,17 +322,18 @@ function toggleFullScreen() {
 }
 
 function toggleMute() {
-    if (videoIsDisplayed) {
-        if(mainVideo.volume == 0) {
-            mainVideo.volume = volumeBtn.dataset.volume;
-            volumeSlider.value = volumeBtn.dataset.volume;
-            volumeBtn.setAttribute('data-volume', 0)
-            return volumeBtn.classList.replace("fa-volume-xmark", "fa-volume-high")
-        } else {
-            volumeBtn.setAttribute('data-volume', mainVideo.volume)
-            mainVideo.volume = 0;
-            volumeSlider.value = 0;
-            return volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
-        }
+    if(mainVideo.volume == 0 && videoIsDisplayed) {
+        // mainVideo.volume = volumeBtn.dataset.volume;
+        // volumeRange.value = volumeBtn.dataset.volume;
+        setVolume(volumeBtn.dataset.volume)
+        volumeBtn.setAttribute('data-volume', 0)
+        return volumeBtn.classList.replace("fa-volume-xmark", "fa-volume-high")
+    } else {
+        volumeBtn.setAttribute('data-volume', mainVideo.volume)
+        // mainVideo.volume = 0;
+        // volumeRange.value = 0;
+        setVolume(0)
+        return volumeBtn.classList.replace("fa-volume-high", "fa-volume-xmark")
     }
+    
 }

@@ -708,6 +708,7 @@ module.exports = class Frontend {
             // create a select element to switch episode pages
             let createSelectEpisodes = () => {
                 let select = document.createElement('select')
+                select.classList.add('main-select-0')
                 select.id = `select-episodes-page-${id}`
 
                 // create section options

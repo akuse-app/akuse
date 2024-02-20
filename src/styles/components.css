@@ -6,13 +6,11 @@ button.main-button-0 {
     color: var(--color-1);
     background-color: var(--color-important);
     width: max-content;
-    padding: 10px 24px;
+    padding: 10px 24px; 
     margin-top: 10px;
     border-radius: var(--border-radius);
     border: none;
     outline: none;
-    /* cursor: pointer; */
-    /* transition: var(--transition); */
 }
 
 button.main-button-0:hover {
@@ -21,6 +19,19 @@ button.main-button-0:hover {
 
 button.main-button-0:active {
     filter: brightness(0.80);
+}
+
+/* SELECT */
+select.main-select-0 {
+    outline: none;
+    border: none;
+    padding: 6px 0px 6px 8px;
+    font-size: 1rem;
+    font-weight: var(--font-weight);
+    color: var(--font-2);
+    background-color: var(--color-3);
+    border-right: 8px solid transparent;
+    border-radius: var(--border-radius);
 }
 
 /* CIRCLE BUTTON */

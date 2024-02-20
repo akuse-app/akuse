@@ -1086,18 +1086,8 @@ main .featured .featured-img img {
             }
 
             .anime-page .episodes-section .episodes-options select {
-                outline: none;
-                border: none;
                 margin-left: auto;
-                padding: 6px 0px 6px 8px;
                 font-family: sans-serif;
-                font-size: 1rem;
-                font-weight: var(--font-weight);
-                color: var(--font-2);
-                background-color: var(--color-3);
-                border-right: 8px solid transparent;
-                border-radius: var(--border-radius);
-                /* cursor: pointer; */
             }
 
             .anime-page .episodes-section .episodes-options select option {

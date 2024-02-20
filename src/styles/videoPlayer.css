@@ -45,7 +45,7 @@
     background-color: transparent;
     border: none;
     outline: none;
-    font-size: 2.4rem;
+    font-size: 2rem;
     transition: 0.1s ease-out;
 }
 
@@ -71,11 +71,11 @@
 
 .video-timeline .progress-area{
     width: 100%;
-    height: 5px;
+    height: 3px;
     position: relative;
     background: var(--color-transparency);
     border-radius: var(--border-radius);
-    transition: 0.1s;
+    /* transition: 0.1s; */
 }
 
 .video-timeline:hover .progress-area {
@@ -127,8 +127,7 @@
     height: 100%;
     position: absolute;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    background-color: var(--color-dark-opacity);
+    background-color: rgba(0, 0, 0, 0.4);
     /* box-shadow: inset 0px 300px 400px -100px #000000; */
     transition: 0.3s;
     cursor: none;
@@ -265,87 +264,73 @@
     color: var(--font-2);
     /* color: var(--color-transparency); */
     font-weight: var(--font-weight);
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 
 .up-controls .info .back,
 .up-controls .info .episode {
     color: var(--font-1);
     font-weight: var(--font-weight);
-    font-size: 2.4rem;
+    font-size: 2.2rem;
 }
 
 .up-controls .info .episode {
     margin-left: 10px;
 }
 
-.up-controls .volume-content .volume-options {
+.up-controls .settings-content .settings-options {
     display: none;
     opacity: 0;
-    width: 129px;
-    height: 16px;
+    width: 400px;
+    /* height: 250px; */
     position: absolute;
     top: 60px;
-    right: 130px;
+    right: 0;
 }
 
-.up-controls .volume-content .volume-options input[type = 'range'] {
+.up-controls .settings-content .settings-options input[type = 'range'] {
     accent-color: var(--font-1);
 }
 
-.up-controls .volume-content .volume-options.show-options {
-    display: block;
-    opacity: 1;
-    list-style: none;
-    overflow: hidden;
-    border-radius: var(--border-radius);
-    pointer-events: none;
-    background-color: #222222;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: opacity 0.13s ease;
-    pointer-events: auto;
-    padding: 10px;
-}
-
-.up-controls .playback-content .speed-options {
-    display: none;
-    opacity: 0;
-    width: 95px;
-    position: absolute;
-    top: 60px;
-    right: 80px;
-}
-
-.up-controls .playback-content .speed-options.show-options {
-    display: block;
-    opacity: 1;
-    list-style: none;
-    overflow: hidden;
-    border-radius: var(--border-radius);
-    pointer-events: none;
-    background-color: #222222;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: opacity 0.13s ease;
-    pointer-events: auto;
-    padding: 10px;
-}
-
-.up-controls .playback-content .speed-options li {
+.up-controls .settings-content .settings-options li {
+    /* width: calc(100% - 30px); */
+    display: flex;
+    align-items: center;
     font-size: 1.2rem;
+    padding: 15px;
     color: var(--font-2);
-    padding: 5px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
 }
 
-.up-controls .playback-content .speed-options li:not(:first-child):not(:last-child) {
-    margin: 5px 0;
+.up-controls .settings-content .settings-options li i {
+    width: 30px;
 }
 
-.up-controls .playback-content .speed-options li:hover,
-.up-controls .playback-content .speed-options li.active {
+.up-controls .settings-content .settings-options li input ,
+.up-controls .settings-content .settings-options li select {
+    position: absolute;
+    right: 15px;
+}
+
+.up-controls .settings-content .settings-options li select {
+    background-color: var(--color-2);
+}
+
+.up-controls .settings-content .settings-options li:hover {
     color: var(--font-1);
-    background-color: #424242;
+    background-color: var(--color-4);
+}
+
+.up-controls .settings-content .settings-options.show-options {
+    display: block;
+    opacity: 0.9;
+    list-style: none;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    pointer-events: none;
+    background-color: var(--color-2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.13s ease;
+    pointer-events: auto;
 }
 
 .mid-controls .play-pause-center {
@@ -357,7 +342,7 @@
 
 .mid-controls button {
     color: var(--color-transparency);
-    font-size: 5rem;
+    font-size: 4.6rem;
 }
 
 .mid-controls button i:hover {
