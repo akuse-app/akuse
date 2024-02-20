@@ -209,18 +209,18 @@ function clearModalPages(key = '') {
 document.addEventListener('keydown', (event) => {
     if (!frontend.isVideoPageDisplayed()) {
         switch(event.key) {
-            case '1': {
-                clearModalPages('1');
+            case 'F1': {
+                clearModalPages('F1');
                 document.getElementById('nav-home').click();
                 break
             }
-            case '2': {
-                clearModalPages('2');
+            case 'F2': {
+                clearModalPages('F2');
                 document.getElementById('nav-my-list').click();
                 break
             }
-            case '3': {
-                clearModalPages('3');
+            case 'F3': {
+                clearModalPages('F3');
                 document.getElementById('nav-search').click();
                 break
             }
