@@ -6,10 +6,10 @@ const video = new Video()
 const store = new Store()
 
 const container = document.querySelector(".container"),
-shadowControls = document.getElementsByClassName('shadow-controls')[0],
-mainVideo = document.getElementById("video"),
-videoTitle = document.getElementById('video-title'),
-videoEpisodeTitle = document.getElementById('video-episode-title'),
+shadowControls = container.getElementsByClassName('shadow-controls')[0],
+mainVideo = container.getElementById("video"),
+videoTitle = container.getElementById('video-title'),
+videoEpisodeTitle = container.getElementById('video-episode-title'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
 currentVidTime = container.querySelector(".current-time"),
@@ -18,37 +18,42 @@ skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
 playPauseBtn = container.querySelector(".play-pause i"),
 nextEpisodeBtn = container.querySelector(".next")
-exitBtn = document.querySelector('.exit-video')
+exitBtn = container.querySelector('.exit-video')
 volumeBtn = container.querySelector(".volume i"),
 speedBtn = container.querySelector(".playback-speed i"),
 settingsBtn = container.querySelector(".settings i"),
 settingsOptions = container.querySelector(".settings-options"),
 volumeRange = container.querySelector(".volume input"),
 playbackSelect = container.querySelector(".playback select"),
-fullScreenBtn = container.querySelector(".fullscreen i")
+fullScreenBtn = container.querySelector(".fullscreen i"),
+// dynamic settings options
+dynamicSettingsLanguage = container.getElementById('dynamic-settings-language'),
+dynamicSettingsDubbed = container.getElementById('dynamic-settings-dubbed'),
+dynamicSettingsUpdateProgress = container.getElementById('dynamic-settings-update-progress')
 
+// variables
 let timer
 let updated = 0 /* to update anime progress automatically */
 
 const setVolume = value => {
     mainVideo.volume = value;
     volumeRange.value = value;
-    store.set('video-volume', value)
+    store.set('video_volume', value)
 }
 
-const getVolume = () => store.get('video-volume')
+const getVolume = () => store.get('video_volume')
 
 const setPlayback = value => {
     mainVideo.playbackRate = value
     playbackSelect.value = value
-    store.set('video-playback', value)
+    store.set('video_playback', value)
 }
 
-const getPlayback = () => store.get('video-playback')
+const getPlayback = () => store.get('video_playback')
 
 // stored data load
 getVolume()
-    ? setVolume(parseFloat(store.get('video-volume')))
+    ? setVolume(parseFloat(store.get('video_volume')))
     : setVolume(0.5)
 
 if(getVolume() == 0) {
@@ -56,7 +61,7 @@ if(getVolume() == 0) {
 }
 
 getPlayback()
-    ? setPlayback(store.get('video-playback'))
+    ? setPlayback(store.get('video_playback'))
     : setPlayback(1)
 
 // controls
@@ -71,6 +76,13 @@ const hideControls = () => {
 }
 
 hideControls()
+
+// dynamic settings options
+// dynamicSettingsDubbed.addEventListener('change', () => {
+//     dubbedCheckbox.checked == true
+//         ? store.set('dubbed', true)
+//         : store.set('dubbed', false)
+// })
 
 // pause info
 var pauseTimer

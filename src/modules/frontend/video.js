@@ -28,9 +28,16 @@ module.exports = class Video {
         this.videoTitle = document.getElementById('video-title')
         this.videoEpisodeTitle = document.getElementById('video-episode-title')
         this.videoEpisode = document.getElementById('video-episode')
+
+        // pause info
         this.pauseInfoAnimeTitle = document.getElementById('pause-info-anime-title')
         this.pauseInfoEpisodeTitle = document.getElementById('pause-info-episode-title')
         this.pauseInfoEpisodeDescription = document.getElementById('pause-info-episode-description')
+
+        // dynamic settings options
+        this.dynamicSettingsLanguage = document.getElementById('dynamic-settings-language')
+        this.dynamicSettingsDubbed = document.getElementById('dynamic-settings-dubbed')
+        this.dynamicSettingsUpdateProgress = document.getElementById('dynamic-settings-update-progress')
     }
 
     /**
@@ -79,6 +86,21 @@ module.exports = class Video {
 
         return animeTitles
     }
+
+    /**
+     * Loads dynamic settings options
+     */
+    displayDynamicSettingsOptions() {
+        this.dynamicSettingsLanguage.value = this.store.get('source_flag')
+
+        this.store.get('dubbed') == true
+            ? this.dynamicSettingsDubbed.checked = true
+            : this.dynamicSettingsDubbed.checked = false
+
+        this.store.get('update_progress')
+            ? this.dynamicSettingsUpdateProgress.checked = true
+            : this.dynamicSettingsUpdateProgress.checked = false
+    }
     
     /**
      * Displays and plays the episode video
@@ -115,6 +137,8 @@ module.exports = class Video {
 
         // play episode if source is found, otherwise hide video player
         if(videoSource !== -1) {
+            this.displayDynamicSettingsOptions()
+
             this.videoTitle.innerHTML = title
             this.pauseInfoAnimeTitle.innerHTML = title
             this.videoEpisode.innerHTML = episodeId

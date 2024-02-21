@@ -345,7 +345,7 @@
                                         Quality
                                     </span>
                                     <select class="main-select-0">
-                                        <option disabled>Soon</option>
+                                        <option selected>Soon</option>
                                     </select>
                                 </li>
                                 <li class="volume">
@@ -377,8 +377,8 @@
                                         Update progress
                                     </span>
                                     <label class="switch">
-                                        <input type="checkbox" id="">
-                                        <span id="" class="slider round"></span>
+                                        <input type="checkbox" id="dynamic-settings-update-progress">
+                                        <span id="dynamic-settings-update-progress-slider" class="slider round"></span>
                                     </label>
                                 </li>
                                 <li class="dub">
@@ -387,8 +387,8 @@
                                         Dub
                                     </span>
                                     <label class="switch">
-                                        <input type="checkbox" id="">
-                                        <span id="" class="slider round"></span>
+                                        <input type="checkbox" id="dynamic-settings-dubbed">
+                                        <span class="slider round"></span>
                                     </label>
                                 </li>
                                 <li class="language">
@@ -396,6 +396,10 @@
                                         <i class="fa-solid fa-language"></i>
                                         Language
                                     </span>
+                                    <select id="dynamic-settings-language" class="main-select-0">
+                                        <option value="US">English</option>
+                                        <option value="IT">Italian</option>
+                                    </select>
                                 </li>
                             </div>
                         </div>
