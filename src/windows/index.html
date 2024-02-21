@@ -122,7 +122,7 @@
                         </ul>
                     </div>
                     <div class="right">
-                        <div id="source-right-element" class="right-element" style="display: block">
+                        <!-- <div id="source-right-element" class="right-element" style="display: block">
                             <form>
                                 <p>Select the language in which you want to watch the episodes</p>
                                 <div class="form-element">
@@ -138,6 +138,17 @@
                                     </label><br>
                                 </div>
                             </form>
+                        </div> -->
+                        <div id="source-right-element" class="right-element" style="display: block">
+                            <div class="toggler">
+                                <p>Select the language in which you want to watch the episodes</p>
+                                <label>
+                                    <select id="language-select" class="main-select-0">
+                                        <option value="US">English</option>
+                                        <option value="IT">Italian</option>
+                                    </select>
+                                </label>
+                            </div>
                         </div>
                         <div class="right-element"><!--  id="anilist-right-element" style="display: none" -->
                             <div class="toggler">
@@ -328,17 +339,26 @@
                         <div class="settings-content">
                             <button class="settings"><i class="fa-solid fa-gear"></i></button>
                             <div class="settings-options">
+                                <li class="quality">
+                                    <span>
+                                        <i class="fa-solid fa-video"></i>
+                                        Quality
+                                    </span>
+                                    <select class="main-select-0">
+                                        <option disabled>Soon</option>
+                                    </select>
+                                </li>
                                 <li class="volume">
                                     <span>
-                                        <i class="fa-solid fa-volume-high" style="margin-right: 5px;"></i>
+                                        <i class="fa-solid fa-volume-high"></i>
                                         Volume
                                     </span>
                                     <input type="range" min="0" max="1" step="any">
                                 </li>
                                 <li class="playback">
                                     <span>
-                                        <i class="fa-regular fa-clock" style="margin-right: 5px;"></i>
-                                        Playback Speed
+                                        <i class="fa-regular fa-clock"></i>
+                                        Speed
                                     </span>
                                     <select class="main-select-0">
                                         <option value="0.25">0.25</option>
@@ -350,6 +370,32 @@
                                         <option value="1.75">1.75</option>
                                         <option value="2">2</option>
                                     </select>
+                                </li>
+                                <li class="update-progress">
+                                    <span>
+                                        <i class="fa-solid fa-spinner"></i>
+                                        Update progress
+                                    </span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="">
+                                        <span id="" class="slider round"></span>
+                                    </label>
+                                </li>
+                                <li class="dub">
+                                    <span>
+                                        <i class="fa-solid fa-headphones"></i>
+                                        Dub
+                                    </span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="">
+                                        <span id="" class="slider round"></span>
+                                    </label>
+                                </li>
+                                <li class="language">
+                                    <span>
+                                        <i class="fa-solid fa-language"></i>
+                                        Language
+                                    </span>
                                 </li>
                             </div>
                         </div>

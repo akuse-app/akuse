@@ -306,7 +306,8 @@
 }
 
 .up-controls .settings-content .settings-options li input ,
-.up-controls .settings-content .settings-options li select {
+.up-controls .settings-content .settings-options li select,
+.up-controls .settings-content .settings-options li label {
     position: absolute;
     right: 15px;
 }
@@ -322,7 +323,7 @@
 
 .up-controls .settings-content .settings-options.show-options {
     display: block;
-    opacity: 0.9;
+    opacity: 0.85;
     list-style: none;
     overflow: hidden;
     border-radius: var(--border-radius);
