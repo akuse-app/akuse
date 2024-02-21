@@ -7,19 +7,35 @@ const store = new Store()
 const defaultFlag = 'US'
 
 // FLAGS
+// if(!(store.has('source_flag'))) {
+//     store.set('source_flag', `${defaultFlag}`)
+//     document.querySelector(`input[value="${defaultFlag}"]`).checked = true
+// } else {
+//     document.querySelector(`input[value="${store.get('source_flag')}"]`).checked = true
+// }
+
+// var sourceFlagRadios = document.querySelectorAll('input[name="flag"]')
+
+// Object.keys(sourceFlagRadios).forEach(radio => {
+//     Object.values(sourceFlagRadios)[radio].addEventListener('click', (event) => {
+//         store.set('source_flag', document.querySelector('input[name="flag"]:checked').value) // US, IT...
+//     })
+// })
+
+// SELECT
+
+// language
+const language_select = document.getElementById('language-select')
+
 if(!(store.has('source_flag'))) {
-    store.set('source_flag', `${defaultFlag}`)
-    document.querySelector(`input[value="${defaultFlag}"]`).checked = true
+    store.set('source_flag', defaultFlag)
+    language_select.value = defaultFlag
 } else {
-    document.querySelector(`input[value="${store.get('source_flag')}"]`).checked = true
+    language_select.value = store.get('source_flag')
 }
 
-var sourceFlagRadios = document.querySelectorAll('input[name="flag"]')
-
-Object.keys(sourceFlagRadios).forEach(radio => {
-    Object.values(sourceFlagRadios)[radio].addEventListener('click', (event) => {
-        store.set('source_flag', document.querySelector('input[name="flag"]:checked').value) // US, IT...
-    })
+language_select.addEventListener('change', () => {
+    store.set('source_flag', language_select.value)
 })
 
 // CHECKBOXES
