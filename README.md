@@ -73,9 +73,9 @@ In development, the Log-In redirect doesn't work since the app is not packed and
 ## ⌨ Shortcuts
 
 - Pages
-    - 1: go to Discover page
-    - 2: go to Library page
-    - 3: go to Search page
+    - F1: go to Discover page
+    - F2: go to Library page
+    - F3: go to Search page
 - Video player
     - Space: play/pause video
     - Left arrow: fast rewind (5s)
