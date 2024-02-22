@@ -25,17 +25,17 @@ const defaultFlag = 'US'
 // SELECT
 
 // language
-const language_select = document.getElementById('language-select')
+const languageSelect = document.getElementById('language-select')
 
 if(!(store.has('source_flag'))) {
     store.set('source_flag', defaultFlag)
-    language_select.value = defaultFlag
+    languageSelect.value = defaultFlag
 } else {
-    language_select.value = store.get('source_flag')
+    languageSelect.value = store.get('source_flag')
 }
 
-language_select.addEventListener('change', () => {
-    store.set('source_flag', language_select.value)
+languageSelect.addEventListener('change', () => {
+    store.set('source_flag', languageSelect.value)
 })
 
 // CHECKBOXES
@@ -45,7 +45,7 @@ if(!(store.has('update_progress'))) {
     store.set('update_progress', false)
 }
 
-var updateProgressCheckbox = document.getElementById('update-progress-checkbox')
+const updateProgressCheckbox = document.getElementById('update-progress-checkbox')
 
 store.get('update_progress') == true
     ? updateProgressCheckbox.checked = true
@@ -62,7 +62,7 @@ if(!(store.has('dubbed'))) {
     store.set('dubbed', false)
 }
 
-var dubbedCheckbox = document.getElementById('dubbed-checkbox')
+const dubbedCheckbox = document.getElementById('dubbed-checkbox')
 
 store.get('dubbed') == true
     ? dubbedCheckbox.checked = true

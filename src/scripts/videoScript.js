@@ -5,11 +5,11 @@ const Store = require('electron-store')
 const video = new Video()
 const store = new Store()
 
-const container = document.querySelector(".container"),
-shadowControls = container.getElementsByClassName('shadow-controls')[0],
-mainVideo = container.getElementById("video"),
-videoTitle = container.getElementById('video-title'),
-videoEpisodeTitle = container.getElementById('video-episode-title'),
+const container = document.querySelector(".container")
+const shadowControls = container.getElementsByClassName('shadow-controls')[0],
+mainVideo = document.getElementById("video"),
+videoTitle = document.getElementById('video-title'),
+videoEpisodeTitle = document.getElementById('video-episode-title'),
 videoTimeline = container.querySelector(".video-timeline"),
 progressBar = container.querySelector(".video-progress-bar"),
 currentVidTime = container.querySelector(".current-time"),
@@ -26,14 +26,20 @@ settingsOptions = container.querySelector(".settings-options"),
 volumeRange = container.querySelector(".volume input"),
 playbackSelect = container.querySelector(".playback select"),
 fullScreenBtn = container.querySelector(".fullscreen i"),
-// dynamic settings options
-dynamicSettingsLanguage = container.getElementById('dynamic-settings-language'),
-dynamicSettingsDubbed = container.getElementById('dynamic-settings-dubbed'),
-dynamicSettingsUpdateProgress = container.getElementById('dynamic-settings-update-progress')
+// dynamic video settings options
+dynamicSettingsUpdateProgress = document.getElementById('dynamic-settings-update-progress'),
+dynamicSettingsUpdateProgressSlider = document.getElementById('dynamic-settings-update-progress-slider'),
+dynamicSettingsDubbed = document.getElementById('dynamic-settings-dubbed'),
+dynamicSettingsLanguage = document.getElementById('dynamic-settings-language'),
+// settings options
+updateProgressCheckbox = document.getElementById('update-progress-checkbox'),
+dubbedCheckbox = document.getElementById('dubbed-checkbox'),
+languageSelect = document.getElementById('language-select')
 
 // variables
 let timer
-let updated = 0 /* to update anime progress automatically */
+let updated = false /* to update anime progress automatically */
+let canUpdate = store.get('update_progress')
 
 const setVolume = value => {
     mainVideo.volume = value;
@@ -78,11 +84,42 @@ const hideControls = () => {
 hideControls()
 
 // dynamic settings options
-// dynamicSettingsDubbed.addEventListener('change', () => {
-//     dubbedCheckbox.checked == true
-//         ? store.set('dubbed', true)
-//         : store.set('dubbed', false)
-// })
+const reloadVideoAtPreviousTime = () => {
+    let animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+    let n = document.querySelector('#video-episode').innerHTML
+
+    video.displayVideo(`episode-${animeId}-${n}`, mainVideo.currentTime)
+}
+
+if(!store.get('logged')) {
+    dynamicSettingsUpdateProgress.setAttribute('disabled', '')
+    dynamicSettingsUpdateProgressSlider.classList.add('disabled')
+}
+
+dynamicSettingsUpdateProgress.addEventListener('change', () => {
+    canUpdate = dynamicSettingsUpdateProgress.checked
+    store.set('update_progress', dynamicSettingsUpdateProgress.checked)
+
+    updateProgressCheckbox.checked = dynamicSettingsUpdateProgress.checked
+})
+
+dynamicSettingsDubbed.addEventListener('change', () => {
+    dynamicSettingsDubbed.checked == true
+        ? store.set('dubbed', true)
+        : store.set('dubbed', false)
+
+    reloadVideoAtPreviousTime()
+
+    dubbedCheckbox.checked = dynamicSettingsDubbed.checked
+})
+
+dynamicSettingsLanguage.addEventListener('change', () => {
+    store.set('source_flag', dynamicSettingsLanguage.value)
+    
+    reloadVideoAtPreviousTime()
+
+    languageSelect.value = dynamicSettingsLanguage.value
+})
 
 // pause info
 var pauseTimer
@@ -186,7 +223,7 @@ fullScreenBtn.addEventListener("click", () => {
 })
 
 exitBtn.addEventListener("click", () => {
-    updated = 0
+    updated = false
     mainVideo.pause()
     mainVideo.currentTime = 0
     mainVideo.src = null
@@ -242,7 +279,7 @@ skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
 skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
 nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
-    updated = 0
+    updated = false
 })
 
 settingsBtn.addEventListener("click", () => {
@@ -251,9 +288,10 @@ settingsBtn.addEventListener("click", () => {
 
 /* trigger auto updating episode when the user reaches the 80% of the anime */
 mainVideo.addEventListener('timeupdate', () => {
+    if(canUpdate) console.log(mainVideo.currentTime * 100 / mainVideo.duration)
     if(mainVideo.currentTime * 100 / mainVideo.duration > 80
-       && updated === 0) {
-        updated = 1
+       && !updated && canUpdate) {
+        updated = true
         video.updateAnimeProgress()
     }
 })
@@ -307,7 +345,7 @@ document.addEventListener("keydown", async (event) => {
             }
             case 'n': {
                 await video.nextEpisode()
-                updated = 0
+                updated = false
                 break
             }
         }

@@ -88,7 +88,7 @@ module.exports = class Video {
     }
 
     /**
-     * Loads dynamic settings options
+     * Loads video dynamic settings options
      */
     displayDynamicSettingsOptions() {
         this.dynamicSettingsLanguage.value = this.store.get('source_flag')
@@ -105,9 +105,11 @@ module.exports = class Video {
     /**
      * Displays and plays the episode video
      * 
-     * @param {*} episode 
+     * @param {*} episode episode id ( `episode-${animeId}-${episodeNumber}` )
+     * @param {*} time time to play the video
      */
-    async displayVideo(episode) {
+    async displayVideo(episode, time = 0) {
+        console.log(episode)
         this.container.style.display = 'block'
 
         const cons = this.getSourceFlagObject()
@@ -147,7 +149,11 @@ module.exports = class Video {
             this.pauseInfoEpisodeDescription.innerHTML = episodeDescription
 
             this.putSource(videoSource.url, videoSource.isM3U8)
-            this.videoElement.play()
+            this.videoElement.currentTime = time
+
+            // if play an episode and immediately close the player, do not load episode
+            if(this.container.style.display == 'block')
+                this.videoElement.play()
         } else {
             this.container.style.display = 'none'
         }
