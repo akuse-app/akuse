@@ -155,7 +155,10 @@ module.exports = class Video {
             if(this.container.style.display == 'block')
                 this.videoElement.play()
         } else {
-            this.container.style.display = 'none'
+            // suppose that time is not 0 only when the video is changed inside the video player (language or dub/sub togglers)
+            // so in that case, don't hide the video player
+            if(time === 0)
+                this.container.style.display = 'none'
         }
     }
 
