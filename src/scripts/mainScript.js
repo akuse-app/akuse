@@ -9,6 +9,8 @@ const clientData = require('../modules/clientData.js')
 const store = new Store()
 const frontend = new Frontend()
 
+var userListDisplayed = false
+
 let loginButton= document.getElementById('login-icon')
 loginButton.addEventListener('click', () => {
     ipcRenderer.send('load-login-url')
@@ -100,22 +102,25 @@ ipcRenderer.on('load-app', async (event) => {
     frontend.displayGenreAnimeSection(featuredEntries, 'trending-home')
     frontend.displayGenreAnimeSection(await anilist.getMostPopularAnimes(viewerIdFlag), 'most-popular-home')
     frontend.displayGenreAnimeSection(await anilist.nextAnimeReleases(viewerIdFlag), 'next-releases-home')
-    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Adventure", viewerIdFlag), 'adventure-home') 
-    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Comedy", viewerIdFlag), 'comedy-home') 
-    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Fantasy", viewerIdFlag), 'fantasy-home')
-    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Horror", viewerIdFlag), 'horror-home') 
-    // frontend.displayGenreAnimeSection(await anilist.getAnimesByGenre("Music", viewerIdFlag), 'music-home')
-
-    // user lists
-    if(logged) {
-        frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'PLANNING'), 'planning-my-list', true)
-        frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'COMPLETED'), 'completed-my-list', true)
-        frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'DROPPED'), 'dropped-my-list', true)      
-        frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'PAUSED'), 'paused-my-list', true)
-        frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'REPEATING'), 'repeating-my-list', true)
-    }
 
     setTimeout(() => {
         frontend.doDisplayAnimeSectionsScrollingButtons()
     }, 1000)
+
+    // user lists
+    document.getElementById('nav-my-list').addEventListener('click', async () => {
+        if(!userListDisplayed) {
+            frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'PLANNING'), 'planning-my-list', true)
+            frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'COMPLETED'), 'completed-my-list', true)
+            frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'DROPPED'), 'dropped-my-list', true)
+            frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'PAUSED'), 'paused-my-list', true)
+            frontend.displayUserAnimeSection(await anilist.getViewerList(viewerId, 'REPEATING'), 'repeating-my-list', true)
+            
+            setTimeout(() => {
+                frontend.doDisplayAnimeSectionsScrollingButtons()
+            }, 1000)
+    
+            userListDisplayed = true
+        }
+    })
 })
