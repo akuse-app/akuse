@@ -142,9 +142,10 @@ module.exports = class Video {
             this.displayDynamicSettingsOptions()
 
             this.videoTitle.innerHTML = title
-            this.pauseInfoAnimeTitle.innerHTML = title
             this.videoEpisode.innerHTML = episodeId
             this.videoEpisodeTitle.innerHTML = episodeTitle
+            
+            this.pauseInfoAnimeTitle.innerHTML = title
             this.pauseInfoEpisodeTitle.innerHTML = episodeTitle
             this.pauseInfoEpisodeDescription.innerHTML = episodeDescription
 
@@ -170,6 +171,7 @@ module.exports = class Video {
         const progress = this.videoEpisode.innerHTML
 
         if(this.store.get('update_progress')) {
+            console.log(animeId, progress)
             this.anilist.updateAnimeProgress(animeId, progress)
         }
     }
@@ -187,6 +189,9 @@ module.exports = class Video {
 
         const cons = this.getSourceFlagObject()
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+        const episodeId = parseInt(this.videoEpisode.innerHTML) + 1
+        const episodeTitle = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .title`).innerHTML
+        const episodeDescription = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .description`).innerHTML
         let animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
 
@@ -194,14 +199,17 @@ module.exports = class Video {
 
         let i = 0
         do {
-            var videoSource = await cons.getEpisodeUrl(animeTitles[i], parseInt(this.videoEpisode.innerHTML) + 1, this.store.get('dubbed'))
+            var videoSource = await cons.getEpisodeUrl(animeTitles[i], episodeId, this.store.get('dubbed'))
             i++
         } while(videoSource === -1 && i < animeTitles.length)
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
-        this.videoEpisode.innerHTML = parseInt(this.videoEpisode.innerHTML) + 1
+        this.videoEpisode.innerHTML = episodeId
         this.videoEpisodeTitle.innerHTML = document.querySelector(`.episode-entry#episode-${animeId}-${this.videoEpisode.innerHTML} .title`).innerHTML
+
+        this.pauseInfoEpisodeTitle.innerHTML = episodeTitle
+        this.pauseInfoEpisodeDescription.innerHTML = episodeDescription
     }
     
     /**

@@ -246,6 +246,7 @@ exitBtn.addEventListener("click", () => {
     updated = false
     mainVideo.pause()
     mainVideo.currentTime = 0
+    videoDuration.innerText = '00:00'
     mainVideo.src = null
     videoTitle.innerHTML = ''
     videoEpisodeTitle.innerHTML = ''
@@ -326,46 +327,58 @@ document.addEventListener("keydown", async (event) => {
     if(videoIsDisplayed()) {
         switch(event.code) {
             case 'Space': {
+                event.preventDefault();
+
                 mainVideo.paused ? mainVideo.play() : mainVideo.pause()
                 break
             }
             case 'ArrowLeft': {
+                event.preventDefault();
+
                 mainVideo.currentTime -= 5
                 break
             }
             case 'ArrowUp': {
-                // mainVideo.volume += 0.1
-                // volumeRange.value = mainVideo.volume
+                event.preventDefault();
 
                 setVolume(getVolume() + 0.1)
                 break
             }
             case 'ArrowRight': {
+                event.preventDefault();
+
                 mainVideo.currentTime += 5
                 break
             }
             case 'ArrowDown': {
-                // mainVideo.volume -= 0.1
-                // volumeRange.value = mainVideo.volume
+                event.preventDefault();
 
                 setVolume(getVolume() - 0.1)
                 break
             }
             case 'F11': {
+                event.preventDefault();
+
                 toggleFullScreen()
                 break
             }
         }
         switch(event.key) {
             case 'f': {
+                event.preventDefault();
+
                 toggleFullScreen()
                 break
             }
             case 'm': {
+                event.preventDefault();
+
                 toggleMute()
                 break
             }
             case 'n': {
+                event.preventDefault();
+
                 await video.nextEpisode()
                 updated = false
                 break
