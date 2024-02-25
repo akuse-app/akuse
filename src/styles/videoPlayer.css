@@ -341,10 +341,23 @@
     width: 72px;
 }
 
+.skip-forward-small {
+    width: 36px;
+}
+
 .mid-controls button {
     color: var(--color-transparency);
     font-size: 4.6rem;
 }
+
+.mid-controls .skip-forward-small {
+    font-size: 2.3rem;
+}
+
+.mid-controls .skip-forward-small span {
+    font-size: 1rem;
+}
+
 
 .mid-controls button i:hover {
     color: var(--font-1);

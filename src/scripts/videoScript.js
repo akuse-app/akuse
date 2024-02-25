@@ -16,6 +16,8 @@ currentVidTime = container.querySelector(".current-time"),
 videoDuration = container.querySelector(".video-duration"),
 skipBackward = container.querySelector(".skip-backward i"),
 skipForward = container.querySelector(".skip-forward i"),
+skipForwardSmall = container.querySelector(".skip-forward-small i"),
+skipForwardSmallText = container.querySelector(".skip-forward-small span"),
 playPauseBtn = container.querySelector(".play-pause i"),
 nextEpisodeBtn = container.querySelector(".next"),
 exitBtn = container.querySelector('.exit-video'),
@@ -25,6 +27,7 @@ settingsBtn = container.querySelector(".settings i"),
 settingsOptions = container.querySelector(".settings-options"),
 volumeRange = container.querySelector(".volume input"),
 playbackSelect = container.querySelector(".playback select"),
+introSkipTime = container.querySelector(".intro-skip-time select"),
 fullScreenBtn = container.querySelector(".fullscreen i"),
 // dynamic video settings options
 dynamicSettingsUpdateProgress = document.getElementById('dynamic-settings-update-progress'),
@@ -57,6 +60,15 @@ const setPlayback = value => {
 
 const getPlayback = () => store.get('video_playback')
 
+const setIntroSkipTime = value => {
+    introSkipTime.value = value
+    skipForwardSmallText.textContent = value
+    store.set('intro_skip_time', value)
+}
+
+const getIntroSkipTime = () => store.get('intro_skip_time')
+
+
 // stored data load
 getVolume()
     ? setVolume(parseFloat(store.get('video_volume')))
@@ -69,6 +81,10 @@ if(getVolume() == 0) {
 getPlayback()
     ? setPlayback(store.get('video_playback'))
     : setPlayback(1)
+
+getIntroSkipTime()
+    ? setIntroSkipTime(store.get('intro_skip_time'))
+    : setIntroSkipTime(85) 
 
 // controls
 const hideControls = () => {
@@ -218,6 +234,10 @@ playbackSelect.addEventListener('change', () => {
     setPlayback(playbackSelect.value)
 })
 
+introSkipTime.addEventListener('change', () => {
+    setIntroSkipTime(introSkipTime.value)
+})
+
 fullScreenBtn.addEventListener("click", () => {
     toggleFullScreen()
 })
@@ -277,6 +297,8 @@ mainVideo.addEventListener("play", () => playPauseBtn.classList.replace("fa-play
 mainVideo.addEventListener("pause", () => playPauseBtn.classList.replace("fa-pause", "fa-play"))
 skipBackward.addEventListener("click", () => mainVideo.currentTime -= 5)
 skipForward.addEventListener("click", () => mainVideo.currentTime += 5)
+skipForwardSmall.addEventListener("click", () => mainVideo.currentTime += Number(getIntroSkipTime()));
+
 nextEpisodeBtn.addEventListener("click", async () => {
     await video.nextEpisode()
     updated = false
