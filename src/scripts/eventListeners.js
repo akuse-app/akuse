@@ -215,6 +215,8 @@ document.addEventListener('keydown', (event) => {
                 break
             }
             case 'F2': {
+                if(!store.get('logged')) break
+                
                 clearModalPages('F2');
                 document.getElementById('nav-my-list').click();
                 break
