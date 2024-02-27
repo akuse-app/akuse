@@ -810,10 +810,14 @@ module.exports = class Frontend {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
                 watch_buttons_1.innerHTML += `Start watching`
                 watch_buttons_1.id = `watch-${id}-${1}`
+                watch_buttons_1.classList.remove('disabled')
+                watch_buttons_1.removeAttribute('disabled')
             } else if(progress == episodes) {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
                 watch_buttons_1.innerHTML += `Watch again`
                 watch_buttons_1.id = `watch-${id}-${1}`
+                watch_buttons_1.classList.remove('disabled')
+                watch_buttons_1.removeAttribute('disabled')
             } else if(progress == availableEpisodes) {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-hourglass"></i>`
                 watch_buttons_1.innerHTML += `${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`
@@ -823,7 +827,11 @@ module.exports = class Frontend {
                 watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
                 watch_buttons_1.innerHTML += `Resume from Ep. ${progress + 1}`
                 watch_buttons_1.id = `watch-${id}-${progress + 1}`
+                watch_buttons_1.classList.remove('disabled')
+                watch_buttons_1.removeAttribute('disabled')
             }
+
+            pers_data_10.innerHTML = `${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`
 
             watch_buttons_2.classList.add('main-button-0')
 
@@ -927,6 +935,7 @@ module.exports = class Frontend {
         pers_data_7.classList.add('persdata-anime-episodes')
         pers_data_8.classList.add('persdata-anime-media-list-id')
         pers_data_9.classList.add('persdata-anime-are-episodes-loaded')
+        pers_data_10.classList.add('persdata-time-before-airing')
         modal_page_wrapper.classList.add('modal-page-wrapper')
         modal_page_wrapper.classList.add('fade-in')
         anime_page.classList.add('anime-page')
@@ -1071,6 +1080,7 @@ module.exports = class Frontend {
         pers_data.appendChild(pers_data_7)
         pers_data.appendChild(pers_data_8)
         pers_data.appendChild(pers_data_9)
+        pers_data.appendChild(pers_data_10)
         anime_page.appendChild(pers_data)
         anime_page.appendChild(exit_button)
         anime_page.appendChild(content_wrapper)
@@ -1520,85 +1530,12 @@ module.exports = class Frontend {
                                          userScore.value*10,
                                          userProgress.value)
 
-        this.updateDataAfterListEditor(parseInt(animeId), 
+        this.video.updateDataAndWatchButtons(parseInt(animeId),
+                                       parseInt(userProgress.value),
                                        userList.value, 
-                                       parseInt(userScore.value), 
-                                       parseInt(userProgress.value))
+                                       parseInt(userScore.value))
             
         this.closeListEditorPage()
-    }
-
-    /**
-     * Update the data visible by the user after executing list editor
-     * 
-     * @param {*} animeId 
-     * @param {*} userList 
-     * @param {*} userScore 
-     * @param {*} userProgress 
-     */
-    updateDataAfterListEditor(animeId, userList, userScore, userProgress) {
-        let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
-        let pers_data_common = document.getElementById('persistent-data-common')
-
-        // refresh persistent data
-        pers_data.querySelector('.persdata-anime-user-status').innerHTML = userList
-        pers_data.querySelector('.persdata-anime-user-progress').innerHTML = userProgress
-        pers_data.querySelector('.persdata-anime-user-score').innerHTML = userScore
-        
-        pers_data_common.innerHTML = pers_data.innerHTML
-
-        // watch buttons
-        let watch_buttons_1 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).firstChild
-        let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
-        let episodes = parseInt(pers_data.querySelector('.persdata-anime-episodes').innerHTML)
-        let availableEpisodes = parseInt(pers_data.querySelector('.persdata-anime-available-episodes').innerHTML)
-        
-        if(userProgress == 0) {
-            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
-            watch_buttons_1.innerHTML += `Start watching`
-            watch_buttons_1.id = `watch-${animeId}-${1}`
-        } else if(userProgress == episodes) {
-            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
-            watch_buttons_1.innerHTML += `Watch again`
-            watch_buttons_1.id = `watch-${animeId}-${1}`
-        } else if (userProgress != availableEpisodes){
-            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
-            watch_buttons_1.innerHTML += `Resume from ep. ${userProgress + 1}`
-            watch_buttons_1.id = `watch-${animeId}-${userProgress + 1}`
-        }
-
-        // watch buttons 2
-        watch_buttons_2.classList.remove('not-in-list')
-        watch_buttons_2.classList.add('in-list')
-        watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
-
-        // anime sections
-        switch(userList) {
-            case 'CURRENT':
-                var entryId = 'current-home'
-                break
-            case 'PLANNING':
-                var entryId = 'planning-my-list'
-                break
-            case 'COMPLETED':
-                var entryId = 'completed-my-list'
-                break
-            case 'DROPPED':
-                var entryId = 'dropped-my-list'
-                break
-            case 'PAUSED':
-                var entryId = 'paused-my-list'
-                break
-            case 'REPEATING':
-                var entryId = 'repeating-my-list'
-                break
-        }
-
-        let anime_section_div = document.querySelector(`#${entryId}`)
-        let anime_entry_div = document.querySelector(`#anime-entry-${animeId}`)
-        if(anime_entry_div) {
-            anime_section_div.prepend(anime_entry_div)
-        }
     }
         
     /**

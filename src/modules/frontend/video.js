@@ -173,6 +173,8 @@ module.exports = class Video {
         if(this.store.get('update_progress')) {
             console.log(animeId, progress)
             this.anilist.updateAnimeProgress(animeId, progress)
+
+            this.updateDataAndWatchButtons(animeId, parseInt(progress))
         }
     }
 
@@ -222,8 +224,96 @@ module.exports = class Video {
         const episodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`))
 
         return this.videoEpisode.innerHTML != episodes 
-               ? true
-               : false
+            ? true
+            : false
+    }
+
+    /**
+     * Update the data visible by the user after executing list editor
+     * 
+     * @param {*} animeId 
+     * @param {*} userList 
+     * @param {*} userScore 
+     * @param {*} userProgress 
+     */
+    updateDataAndWatchButtons(animeId, userProgress = null, userList = null, userScore = null) {
+        let pers_data = document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data`)
+        let pers_data_common = document.getElementById('persistent-data-common')
+
+        // refresh persistent data
+        if(userProgress) pers_data.querySelector('.persdata-anime-user-progress').innerHTML = userProgress
+        if(userList) pers_data.querySelector('.persdata-anime-user-status').innerHTML = userList
+        if(userScore) pers_data.querySelector('.persdata-anime-user-score').innerHTML = userScore
+        
+        pers_data_common.innerHTML = pers_data.innerHTML
+
+        // watch buttons
+        let watch_buttons_1 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).firstChild
+        let watch_buttons_2 = document.querySelector(`#anime-page-${animeId} .anime-page .watch-buttons`).lastChild
+        let episodes = parseInt(pers_data.querySelector('.persdata-anime-episodes').innerHTML)
+        let availableEpisodes = parseInt(pers_data.querySelector('.persdata-anime-available-episodes').innerHTML)
+        let timeUntilAiring = pers_data.querySelector('.persdata-time-before-airing').innerHTML
+
+        console.log('episodes', episodes)
+        console.log('available', availableEpisodes)
+        console.log('userProgress', userProgress)
+        
+        if(userProgress == 0) {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+            watch_buttons_1.innerHTML += `Start watching`
+            watch_buttons_1.id = `watch-${animeId}-${1}`
+            watch_buttons_1.classList.remove('disabled')
+            watch_buttons_1.removeAttribute('disabled')
+        } else if(userProgress == episodes) {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-rotate"></i>`
+            watch_buttons_1.innerHTML += `Watch again`
+            watch_buttons_1.id = `watch-${animeId}-${1}`
+            watch_buttons_1.classList.remove('disabled')
+            watch_buttons_1.removeAttribute('disabled')
+        } else if(userProgress == availableEpisodes) {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-hourglass"></i>`
+            watch_buttons_1.innerHTML += timeUntilAiring
+            watch_buttons_1.classList.add('disabled')
+            watch_buttons_1.setAttribute('disabled', '')
+        } else {
+            watch_buttons_1.innerHTML = `<i style="margin-right: 7px" class="fa-solid fa-play"></i>`
+            watch_buttons_1.innerHTML += `Resume from ep. ${userProgress + 1}`
+            watch_buttons_1.id = `watch-${animeId}-${userProgress + 1}`
+            watch_buttons_1.classList.remove('disabled')
+            watch_buttons_1.removeAttribute('disabled')
+        }
+
+        // watch buttons 2
+        watch_buttons_2.classList.remove('not-in-list')
+        watch_buttons_2.classList.add('in-list')
+        watch_buttons_2.innerHTML = `<i class="fa-solid fa-check"></i>`
+
+        // anime sections
+        switch(pers_data.querySelector('.persdata-anime-user-status').innerHTML) {
+            case 'CURRENT':
+                var entryId = 'current-home'
+                break
+            case 'PLANNING':
+                var entryId = 'planning-my-list'
+                break
+            case 'COMPLETED':
+                var entryId = 'completed-my-list'
+                break
+            case 'DROPPED':
+                var entryId = 'dropped-my-list'
+                break
+            case 'PAUSED':
+                var entryId = 'paused-my-list'
+                break
+            case 'REPEATING':
+                var entryId = 'repeating-my-list'
+                break
+        }
+
+        let anime_section_div = document.querySelector(`#${entryId}`)
+        let anime_entry_div = document.querySelector(`#anime-entry-${animeId}`)
+        if(anime_entry_div)
+            anime_section_div.prepend(anime_entry_div)
     }
 
     /**
