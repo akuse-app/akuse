@@ -28,6 +28,7 @@ module.exports = class Video {
         this.videoTitle = document.getElementById('video-title')
         this.videoEpisodeTitle = document.getElementById('video-episode-title')
         this.videoEpisode = document.getElementById('video-episode')
+        this.nextEpisodeBtn = document.querySelector('.container .next')
 
         // pause info
         this.pauseInfoAnimeTitle = document.getElementById('pause-info-anime-title')
@@ -111,7 +112,7 @@ module.exports = class Video {
     async displayVideo(episode, time = 0) {
         console.log(episode)
         this.container.style.display = 'block'
-
+        
         const cons = this.getSourceFlagObject()
         const animeId = episode.split('-')[1]
         const episodeId = episode.split('-')[2]
@@ -120,6 +121,10 @@ module.exports = class Video {
         const episodeDescription = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .description`).innerHTML
         const animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
+        
+        this.nextEpisodeBtn.classList.add('show-next-episode-btn')
+        if(this.isLastAvailableEpisode(episodeId))
+            this.nextEpisodeBtn.classList.remove('show-next-episode-btn')
 
         console.log('Looking for sources...')
 
@@ -184,10 +189,10 @@ module.exports = class Video {
      * @returns if you are watching the last episode
      */
     async nextEpisode() {
-        if(!this.canUpdateEpisode()) {
-            console.warn('This is the last episode, You can\'t go any further!')
-            return
-        }
+        // if(!this.canUpdateEpisode()) {
+        //     console.warn('This is the last episode, You can\'t go any further!')
+        //     return
+        // }
 
         const cons = this.getSourceFlagObject()
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
@@ -196,6 +201,11 @@ module.exports = class Video {
         const episodeDescription = document.querySelector(`#anime-page-${animeId} .episode-entry#episode-${animeId}-${episodeId} .description`).innerHTML
         let animeTitles = this.getParsedAnimeTitles()
         const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
+        
+        this.videoElement.src = null
+        this.nextEpisodeBtn.classList.add('show-next-episode-btn')
+        if(this.isLastAvailableEpisode(episodeId))
+            this.nextEpisodeBtn.classList.remove('show-next-episode-btn')
 
         if(customTitle !== undefined) animeTitles.unshift(customTitle)
 
@@ -217,15 +227,32 @@ module.exports = class Video {
     /**
      * Returns if you can update the episodes progress or not
      * 
-     * @returns -1 if you are watching the last episode
+     * @returns true/false
+     * @deprecated
      */
     canUpdateEpisode() {
         const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
-        const episodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`))
+        const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`))
 
-        return this.videoEpisode.innerHTML != episodes 
+        return this.videoEpisode.innerHTML != availableEpisodes
             ? true
             : false
+    }
+
+    /**
+     * Returns if the episode played is the last available or not
+     * 
+     * @param {*} episode episode number
+     * @returns true/false
+     */
+    isLastAvailableEpisode(episode) {
+        const animeId = document.querySelector('#persistent-data-common .persdata-anime-id').innerHTML
+        const availableEpisodes = parseInt(document.querySelector(`#anime-page-${animeId} .anime-page .persistent-data .persdata-anime-available-episodes`).innerHTML)
+
+        console.log(episode)
+        console.log(availableEpisodes)
+
+        return episode == availableEpisodes
     }
 
     /**

@@ -500,7 +500,7 @@ nav {
                 list-style-type: none;
                 color: var(--font-3);
                 font-size: 1.1rem;
-                padding: 10px;
+                padding: 13px 20px;
                 margin-bottom: 10px;
                 /* cursor: pointer; */
                 border-radius: var(--border-radius);

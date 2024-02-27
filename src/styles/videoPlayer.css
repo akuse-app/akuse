@@ -51,10 +51,24 @@
 
 .container button i {
     cursor: pointer;
+    transition: 0.1s ease-out;
 }
 
 .container button i:hover {
     color: var(--font-1);
+    transform: scale(1.1);
+}
+
+.container button i:active {
+    transform: scale(1);
+}
+
+.container .next {
+    display: none;
+}
+
+.container .next.show-next-episode-btn {
+    display: block;
 }
 
 .video-timeline {
@@ -185,7 +199,11 @@
     transition: 0.3s;
 }
 
-.container.show-controls .up-controls,
+.container.show-controls .up-controls {
+    z-index: 896;
+    opacity: 1;
+    transition: 0.3s;
+}
 .container.show-controls .mid-controls,
 .container.show-controls .bottom-controls,
 .container.show-controls .shadow-controls {
@@ -332,7 +350,6 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     transition: opacity 0.13s ease;
     pointer-events: auto;
-    z-index: 999999999;
 }
 
 .mid-controls .play-pause-center {

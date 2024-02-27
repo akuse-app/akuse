@@ -319,9 +319,8 @@ mainVideo.addEventListener('timeupdate', () => {
 })
 
 document.addEventListener("keydown", async (event) => {
-    if (event.isComposing || event.keyCode === 229) {
+    if (event.isComposing || event.keyCode === 229) 
         return
-    }
     
     if(videoIsDisplayed()) {
         switch(event.code) {
