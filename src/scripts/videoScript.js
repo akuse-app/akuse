@@ -22,7 +22,6 @@ playPauseBtn = container.querySelector(".play-pause i"),
 nextEpisodeBtn = container.querySelector(".next"),
 exitBtn = container.querySelector('.exit-video'),
 volumeBtn = container.querySelector(".volume i"),
-speedBtn = container.querySelector(".playback-speed i"),
 settingsBtn = container.querySelector(".settings i"),
 settingsOptions = container.querySelector(".settings-options"),
 volumeRange = container.querySelector(".volume input"),
@@ -328,8 +327,9 @@ document.addEventListener("keydown", async (event) => {
         switch(event.code) {
             case 'Space': {
                 event.preventDefault();
-
+                
                 mainVideo.paused ? mainVideo.play() : mainVideo.pause()
+                hidePauseInfo()
                 break
             }
             case 'ArrowLeft': {
