@@ -90,8 +90,16 @@
                 {
                     "arch": "x64",
                     "target": "rpm"
+                },
+                {
+                    "arch":"x64",
+                    "target":"flatpak"
                 }
-            ]
+            ],
+            "flatpak":{
+                "runtimeVersion":"23.08",
+                "baseVersion":"23.08"
+             }
         }
     },
     "author": "aleganza <ganzarolli.alessio@gmail.com>",
