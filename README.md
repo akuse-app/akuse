@@ -107,7 +107,7 @@ sudo dnf install libxcrypt-compat
 - rpm installation can be created using dist:linux using following command
 
   ```shell
-  npm rn dist:linux rpm
+  npm run dist:linux rpm
   ```
 
   **Note:-** RPM installation support user login. Tested on
