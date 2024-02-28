@@ -103,6 +103,7 @@
     "dependencies": {
         "@consumet/extensions": "github:consumet/consumet.ts",
         "axios": "^1.6.2",
+        "discord-rpc-electron": "^4.0.1",
         "electron-squirrel-startup": "^1.0.0",
         "electron-store": "^8.1.0",
         "electron-updater": "^6.1.7",
