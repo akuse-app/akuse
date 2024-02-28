@@ -66,6 +66,55 @@ To start, run:
 npm start
 ```
 
+## Building for Linux
+
+Before building for linux make sure to install dependency `libcrypt` on your system
+
+#### Debian base systems
+
+```shell
+sudo apt install libcrypt
+```
+
+#### Fedora/RHL systems
+
+```shell
+sudo dnf install libxcrypt-compat
+```
+
+### AppImage
+
+- use script `dist:linux` using following command
+
+  ```shell
+  npm run dist:linux AppImage
+  ```
+
+  **Note:-** AppImage Does Not Support Login reason being deeplink's not supported by AppImage
+
+## Deb
+
+- deb also can be build using script `dist:linux` using following command
+
+  ```shell
+  npm run dist:linux deb
+  ```
+
+  **Note:-** DEB installation should support user login after installation (not yet tested).  Raise issue if login does not work for deb installations.
+
+## Rpm
+
+- rpm installation can be created using dist:linux using following command
+
+  ```shell
+  npm rn dist:linux rpm
+  ```
+
+  **Note:-** RPM installation support user login. Tested on
+- OS: **Fedora Workstation 39**
+- DE: GNOME 45.4
+
+
 ## ⚠ How to Log-In in development
 
 In development, the Log-In redirect doesn't work since the app is not packed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance, just distribute the app (```npm run dist:win``` for Windows, other scripts are in package.json file) and Log-In from there once. After that, your app will be authenticated also in development mode.
@@ -73,19 +122,19 @@ In development, the Log-In redirect doesn't work since the app is not packed and
 ## ⌨ Shortcuts
 
 - Pages
-    - F1: go to Discover page
-    - F2: go to Library page
-    - F3: go to Search page
+  - F1: go to Discover page
+  - F2: go to Library page
+  - F3: go to Search page
 - Video player
-    - Space: play/pause video
-    - Left arrow: fast rewind (5s)
-    - Right arrow: fast forward (5s)
-    - Upper arrow: increase volume
-    - Lower arrow: decrease volume
-    - F11: fullscreen toggler
-    - F: fullscreen toggler
-    - M: mute/unmute video
-    - N: play next episode
+  - Space: play/pause video
+  - Left arrow: fast rewind (5s)
+  - Right arrow: fast forward (5s)
+  - Upper arrow: increase volume
+  - Lower arrow: decrease volume
+  - F11: fullscreen toggler
+  - F: fullscreen toggler
+  - M: mute/unmute video
+  - N: play next episode
 
 ## 🐛 Known Issues
 
