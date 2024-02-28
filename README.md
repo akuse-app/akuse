@@ -4,12 +4,12 @@
 </p>
 
 <p align="center">Simple and easy to use anime streaming desktop app without ads.</p>
-<p align="center" ><i>Both dub and sub supported!</i></p>
 
 <p align="center">
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/akuse-app/akuse">
     <img alt="total-downloads" src="https://img.shields.io/github/downloads/aleganza/akuse/total">
+    <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/aleganza/akuse?color=yellow">
     <a href="https://discord.gg/f3wdnqSNX5">
         <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?label=discord&color=%235567E3">
     </a>
