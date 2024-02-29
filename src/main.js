@@ -163,6 +163,8 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
+/* DISCORD RICH PRESENCE */
+
 const clientId = '1212475013408628818';
 
 DiscordRPC.register(clientId);
