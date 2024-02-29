@@ -8,6 +8,7 @@ const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const ProtocolUtils = require('./protocolUtils.js')
 const clientData = require ('./modules/clientData.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
+const icon = path.join(__dirname, "../assets/img/icon/icon.png");
 
 const store = new Store()
 const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
@@ -68,7 +69,7 @@ const createWindow = () => {
             symbolColor: '#eee',
             height: 28
         },
-        icon: 'assets/img/icon/icon.png',
+        icon:icon ,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
