@@ -22,6 +22,7 @@
         "appId": "com.electron.akuse",
         "productName": "Akuse",
         "copyright": "Copyright © 2023 Alessio Ganzarolli",
+        "asarUnpack":"assets/**",
         "mac": {
             "target": "dmg",
             "hardenedRuntime": true,
