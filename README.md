@@ -15,12 +15,6 @@
     </a>
 </p>
 
-<p align="center">
-    <a href="https://www.buymeacoffee.com/aleganza">
-        <img style="width:250px" alt="buymeacoffee" src="https://i.imgur.com/fxJ4BNq.png">
-    </a>
-</p>
-
 <img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
 
 ## ⚙️ Running locally for development
