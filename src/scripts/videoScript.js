@@ -27,6 +27,7 @@ settingsOptions = container.querySelector(".settings-options"),
 volumeRange = container.querySelector(".volume input"),
 playbackSelect = container.querySelector(".playback select"),
 introSkipTime = container.querySelector(".intro-skip-time select"),
+pictureInPictureBtn = container.querySelector('.picture-in-picture i'),
 fullScreenBtn = container.querySelector(".fullscreen i"),
 // dynamic video settings options
 dynamicSettingsUpdateProgress = document.getElementById('dynamic-settings-update-progress'),
@@ -236,6 +237,18 @@ playbackSelect.addEventListener('change', () => {
 introSkipTime.addEventListener('change', () => {
     setIntroSkipTime(introSkipTime.value)
 })
+
+pictureInPictureBtn.addEventListener('click', () => document.pictureInPictureElement ? document.exitPictureInPicture() : mainVideo.requestPictureInPicture());
+
+mainVideo.addEventListener('enterpictureinpicture', () => {
+    mainVideo.style.display = 'none';
+    pictureInPictureBtn.classList.replace('fa-window-restore', 'fa-window-maximize');
+});
+
+mainVideo.addEventListener('leavepictureinpicture', () => {
+    mainVideo.style.display = '';
+    pictureInPictureBtn.classList.replace('fa-window-maximize', 'fa-window-restore');
+});
 
 fullScreenBtn.addEventListener("click", () => {
     toggleFullScreen()
