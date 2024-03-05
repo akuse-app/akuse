@@ -3,10 +3,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
+const DiscordRPC = require('discord-rpc-electron');
 const Store = require('electron-store')
-const AniListAPI = require ('./modules/anilist/anilistApi.js')
+const AniListAPI = require('./modules/anilist/anilistApi.js')
 const ProtocolUtils = require('./protocolUtils.js')
-const clientData = require ('./modules/clientData.js')
+const clientData = require('./modules/clientData.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
 const icon = path.join(__dirname, "../assets/img/icon/icon.png")
 const process = require('process')
@@ -25,7 +26,7 @@ autoUpdater.autoRunAppAfterInstall = true
 let mainWin
 
 const gotTheLock = app.requestSingleInstanceLock()
-    
+
 if (!gotTheLock) {
     app.quit()
 } else {
@@ -53,8 +54,7 @@ if (!gotTheLock) {
     })
 
     // Create mainWin, load the rest of the app, etc...
-    app.on('ready', () => {
-    })
+    app.on('ready', () => { })
 }
 
 const createWindow = async() => {
@@ -98,15 +98,15 @@ const createWindow = async() => {
     }
     mainWin.loadFile(__dirname + '/windows/index.html')
     mainWin.setBackgroundColor('#0c0b0b')
-    
+
     mainWin.webContents.on('did-finish-load', () => {
         // console.log(store.get('logged'))
         // console.log(store.get('access_token'))
 
         mainWin.show()
         mainWin.maximize()
-        
-        if(store.get('logged') !== true)
+
+        if (store.get('logged') !== true)
             store.set('logged', false)
 
         mainWin.webContents.send('load-app')
@@ -192,6 +192,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
+
 async function handleLogin(authUrl){
         let code = authUrl.split('?code=')[1]
         console.log(code);
@@ -212,3 +213,42 @@ async function handleLogin(authUrl){
         }
 
 }
+
+/* DISCORD RICH PRESENCE */
+
+const clientId = '1212475013408628818';
+
+DiscordRPC.register(clientId);
+
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+const startTimestamp = new Date();
+
+async function setActivity() {
+    if (!rpc || !mainWin) {
+        return;
+    }
+
+    rpc.setActivity({
+        details: 'Anime streaming desktop app',
+        buttons: [
+            {
+                label: 'GitHub',
+                url: 'https://github.com/akuse-app/Akuse'
+            }
+        ],
+        startTimestamp,
+        largeImageKey: 'icon',
+        largeImageText: 'Akuse'
+    });
+}
+
+rpc.on('ready', () => {
+    setActivity();
+
+    setInterval(() => {
+        setActivity();
+    }, 15e3);
+});
+
+rpc.login({ clientId }).catch(console.error);
+
