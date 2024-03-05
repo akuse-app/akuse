@@ -18,7 +18,6 @@ const isAppImage = process.env.SNAP_NAME === undefined && process.env.FLATPAK_PA
 const store = new Store()
 const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${isAppImage? clientData.clientIdAppImage:clientData.clientId}&redirect_uri=${isAppImage? clientData.redirectUriAppImage:clientData.redirectUri}&response_type=code`
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
-console.log(authUrl);
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
 autoUpdater.autoRunAppAfterInstall = true
@@ -77,7 +76,6 @@ const createWindow = async() => {
             contextIsolation: false
         }
     })
-    console.log('Command Line Arguments:');
     for (let i = 0; i < process.argv.length; i++) {
       if (process.argv[i].startsWith('-')) {
         const flagName = process.argv[i];
@@ -88,20 +86,17 @@ const createWindow = async() => {
                 await handleLogin(flagValue)
                 console.log("Loged In...")
             } catch (error) {
-                
+                console.log("login falied",error.message)
             }
         
 
         }
-        console.log(`  ${flagName}: ${flagValue}`);
       }
     }
     mainWin.loadFile(__dirname + '/windows/index.html')
     mainWin.setBackgroundColor('#0c0b0b')
 
     mainWin.webContents.on('did-finish-load', () => {
-        // console.log(store.get('logged'))
-        // console.log(store.get('access_token'))
 
         mainWin.show()
         mainWin.maximize()
@@ -195,7 +190,6 @@ app.on('window-all-closed', () => {
 
 async function handleLogin(authUrl){
         let code = authUrl.split('?code=')[1]
-        console.log(code);
         mainWin.webContents.send("console-log", code)
         try {
             const cData = {
