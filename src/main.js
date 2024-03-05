@@ -16,7 +16,7 @@ const isAppImage = process.env.SNAP_NAME === undefined && process.env.FLATPAK_PA
 
 
 const store = new Store()
-const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${isAppImage? clientData.clientIdAppImage:clientData.clientId}&redirect_uri=${isAppImage? clientData.redirectUriAppImage:clientData.redirectUri}&response_type=code`
+const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage||!(app.isPackaged))? clientData.redirectUriAppImage:clientData.redirectUri}&response_type=code`
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
@@ -39,7 +39,8 @@ if (!gotTheLock) {
 
         // logged in
         try {   
-            await handleLogin(commandLine[2]);
+            let code = commandLine[2].split('?code=')[1]
+            await handleLogin(code);
             console.log('Logged In! Relaunching app...')
             //Reload the window instead of relaunching application.
             //Reason see comment on line no:122
@@ -188,14 +189,13 @@ app.on('window-all-closed', () => {
 })
 
 
-async function handleLogin(authUrl){
-        let code = authUrl.split('?code=')[1]
+async function handleLogin(code){
         mainWin.webContents.send("console-log", code)
         try {
             const cData = {
-                clientId: isAppImage? clientData.clientIdAppImage:clientData.clientId,
-                redirectUri: isAppImage? clientData.redirectUriAppImage:clientData.redirectUri,
-                clientSecret: isAppImage?clientData.clientSecretAppImage:clientData.clientSecret,
+                clientId: clientData.clientId,
+                redirectUri: (isAppImage||!(app.isPackaged))? clientData.redirectUriAppImage:clientData.redirectUri,
+                clientSecret: clientData.clientSecret,
             }
             const anilist = new AniListAPI(cData)
             const token = await anilist.getAccessToken(code)
