@@ -8,12 +8,16 @@ const AniListAPI = require ('./modules/anilist/anilistApi.js')
 const ProtocolUtils = require('./protocolUtils.js')
 const clientData = require ('./modules/clientData.js')
 const { autoUpdater, AppUpdater } = require("electron-updater")
-const icon = path.join(__dirname, "../assets/img/icon/icon.png");
+const icon = path.join(__dirname, "../assets/img/icon/icon.png")
+const process = require('process')
+
+const isAppImage = process.env.SNAP_NAME === undefined && process.env.FLATPAK_PATH === undefined && process.env.APPIMAGE !== undefined && process.env.APPIMAGE !== null;
+
 
 const store = new Store()
-const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
+const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${isAppImage? clientData.clientIdAppImage:clientData.clientId}&redirect_uri=${isAppImage? clientData.redirectUriAppImage:clientData.redirectUri}&response_type=code`
 const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new'
-
+console.log(authUrl);
 autoUpdater.autoDownload = false
 autoUpdater.autoInstallOnAppQuit = true
 autoUpdater.autoRunAppAfterInstall = true
@@ -34,20 +38,18 @@ if (!gotTheLock) {
         }
 
         // logged in
-        let code = commandLine[2].split('?code=')[1]
-        mainWin.webContents.send("console-log", code)
-
-        const anilist = new AniListAPI(clientData)
-        const token = await anilist.getAccessToken(code)
-
-        mainWin.webContents.send("console-log", token)
-        store.set('access_token', token)
-        store.set('logged', true)
-
-        console.log('Logged In! Relaunching app...')
-
-        app.relaunch()
-        app.exit()
+        try {   
+            await handleLogin(commandLine[2]);
+            console.log('Logged In! Relaunching app...')
+            //Reload the window instead of relaunching application.
+            //Reason see comment on line no:122
+            mainWin.reload()
+            // app.relaunch()
+            // app.exit()
+        } catch (error) {
+            console.log('something went wrong second-instance',error.message)
+        }
+        
     })
 
     // Create mainWin, load the rest of the app, etc...
@@ -55,7 +57,7 @@ if (!gotTheLock) {
     })
 }
 
-const createWindow = () => {
+const createWindow = async() => {
     mainWin = new BrowserWindow({
         width: 1300,
         height: 850,
@@ -75,7 +77,25 @@ const createWindow = () => {
             contextIsolation: false
         }
     })
+    console.log('Command Line Arguments:');
+    for (let i = 0; i < process.argv.length; i++) {
+      if (process.argv[i].startsWith('-')) {
+        const flagName = process.argv[i];
+        const flagValue = process.argv[i + 1] || ''; // Check for next element as value
+        if(flagName=="--login"){
+            console.log("STARTING LOGIN....")
+            try {
+                await handleLogin(flagValue)
+                console.log("Loged In...")
+            } catch (error) {
+                
+            }
+        
 
+        }
+        console.log(`  ${flagName}: ${flagValue}`);
+      }
+    }
     mainWin.loadFile(__dirname + '/windows/index.html')
     mainWin.setBackgroundColor('#0c0b0b')
     
@@ -103,17 +123,25 @@ ipcMain.on('logout', () => {
     store.clear('access_token')
 
     console.log('Logged Out! Relaunching app...')
-
-    app.relaunch()
-    app.exit()
+    //Instead of Relaunching th Application Just reload the Window
+    //This Provide More consistant cross-platform experience 
+    //As sandboxed environment does not support relauch 
+    //Beside that reload is more appropriate in this case because application only need's to read stored credential's
+    mainWin.reload() 
+    // app.relaunch()
+    // app.exit()
 })
 
 ipcMain.on('load-issues-url', () => {
     require('electron').shell.openExternal(githubOpenNewIssueUrl)
 })
 
-app.whenReady().then(() => {
-    createWindow()
+app.whenReady().then(async() => {
+    try {
+        await createWindow()
+    } catch (error) {
+        console.log(error.message)
+    }
     // app.setAsDefaultProtocolClient("akuse")
 
     ProtocolUtils.setDefaultProtocolClient(app);
@@ -163,3 +191,24 @@ ipcMain.on('download-update', () => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
+
+async function handleLogin(authUrl){
+        let code = authUrl.split('?code=')[1]
+        console.log(code);
+        mainWin.webContents.send("console-log", code)
+        try {
+            const cData = {
+                clientId: isAppImage? clientData.clientIdAppImage:clientData.clientId,
+                redirectUri: isAppImage? clientData.redirectUriAppImage:clientData.redirectUri,
+                clientSecret: isAppImage?clientData.clientSecretAppImage:clientData.clientSecret,
+            }
+            const anilist = new AniListAPI(cData)
+            const token = await anilist.getAccessToken(code)
+            mainWin.webContents.send("console-log", token)
+            store.set('access_token', token)
+            store.set('logged', true)
+        } catch (error) {
+            console.log("login failed with error: " + error.message);
+        }
+
+}
