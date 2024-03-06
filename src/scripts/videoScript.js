@@ -256,14 +256,18 @@ fullScreenBtn.addEventListener("click", () => {
 
 exitBtn.addEventListener("click", () => {
     updated = false
-    mainVideo.pause()
-    mainVideo.currentTime = 0
-    videoDuration.innerText = '00:00'
-    mainVideo.src = null
+
+    mainVideo.src = ''
+    mainVideo.load()
+
     videoTitle.innerHTML = ''
     videoEpisodeTitle.innerHTML = ''
+    videoDuration.innerText = '00:00'
+
     container.style.display = 'none'
-    if(document.fullscreenEnabled) {
+
+    if (document.pictureInPictureElement) document.exitPictureInPicture()
+    if (document.fullscreenEnabled) {
         document.exitFullscreen()
         fullScreenBtn.classList.replace("fa-compress", "fa-expand")
     }
