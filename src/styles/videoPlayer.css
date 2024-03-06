@@ -49,22 +49,26 @@
     transition: 0.1s ease-out;
 }
 
+.container button:disabled {
+    color: var(--font-3);
+}
+
 .container button i {
     cursor: pointer;
     transition: 0.1s ease-out;
 }
 
-.container button i:hover {
+.container button:not([disabled]) i:hover {
     color: var(--font-1);
     transform: scale(1.1);
 }
 
-.container button i.fa-solid.fa-window-maximize {
-    color: var(--font-1);  
-}
-
 .container button i:active {
     transform: scale(1);
+}
+
+.container button i.fa-solid.fa-window-maximize {
+    color: var(--font-1);  
 }
 
 .container .next {

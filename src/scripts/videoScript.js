@@ -238,17 +238,21 @@ introSkipTime.addEventListener('change', () => {
     setIntroSkipTime(introSkipTime.value)
 })
 
-pictureInPictureBtn.addEventListener('click', () => document.pictureInPictureElement ? document.exitPictureInPicture() : mainVideo.requestPictureInPicture());
+if (!document.pictureInPictureEnabled) {
+    pictureInPictureBtn.disabled = true;
+} else {
+    pictureInPictureBtn.addEventListener('click', () => document.pictureInPictureElement ? document.exitPictureInPicture() : mainVideo.requestPictureInPicture());
 
-mainVideo.addEventListener('enterpictureinpicture', () => {
-    mainVideo.style.display = 'none';
-    pictureInPictureBtn.classList.replace('fa-window-restore', 'fa-window-maximize');
-});
+    mainVideo.addEventListener('enterpictureinpicture', () => {
+        mainVideo.style.display = 'none';
+        pictureInPictureBtn.classList.replace('fa-window-restore', 'fa-window-maximize');
+    });
 
-mainVideo.addEventListener('leavepictureinpicture', () => {
-    mainVideo.style.display = '';
-    pictureInPictureBtn.classList.replace('fa-window-maximize', 'fa-window-restore');
-});
+    mainVideo.addEventListener('leavepictureinpicture', () => {
+        mainVideo.style.display = '';
+        pictureInPictureBtn.classList.replace('fa-window-maximize', 'fa-window-restore');
+    });
+}
 
 fullScreenBtn.addEventListener("click", () => {
     toggleFullScreen()
