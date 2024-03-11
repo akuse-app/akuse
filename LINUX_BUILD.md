@@ -22,7 +22,7 @@ sudo dnf install libxcrypt-compat
   npm run dist:linux AppImage
   ```
 
-**Note:-** AppImage Does Not Support Login reason being deeplink's not supported by AppImage
+**Note:-** AppImage Support Login see `REAMDE.ME` for detail
 
 ## Deb
 
@@ -35,25 +35,32 @@ sudo dnf install libxcrypt-compat
   **Note:-** DEB installation should support user login after installation (not yet tested).  Raise issue if login does not work for deb installations.
 
 ## Rpm
-RPM build requires additional package `rpmbuild`. install it using your package manager.<Br>
-### Dependecies installation:
-- **Debian Distros**<BR>
-    ```
-    sudo apt install rpm-build    
-    ```
-- **Fedora/RHL**<BR>
-    ```
-    sudo apt install rpm-build    
-    ```
-    **Read more about [rpm-build](https://linux.die.net/man/8/rpmbuild)**
-### BUILD RPM
-rpm installation can be created using dist:linux using following command
 
-  ```shell
-  npm run dist:linux rpm
+RPM build requires additional package `rpmbuild`. install it using your package manager.`<Br>`
+
+### Dependecies installation:
+
+- **Debian Distros** `<BR>`
+  ```
+  sudo apt install rpm-build  
+  ```
+- **Fedora/RHL** `<BR>`
+  ```
+  sudo dnf install rpm-build  
   ```
 
+  **Read more about [rpm-build](https://linux.die.net/man/8/rpmbuild)**
+
+### BUILD RPM
+
+rpm installation can be created using dist:linux using following command
+
+```shell
+  npm run dist:linux rpm
+```
+
   **Note:-** RPM installation support user login. Tested on
+
 - OS: **Fedora Workstation 39**
 - DE: GNOME 45.4
 
@@ -74,14 +81,12 @@ rpm installation can be created using dist:linux using following command
       }
   }
   ```
-
-  **Note:-** if `runtimeVersion` and `baseVersion` are not set it will default to`20.08` which might not be installed on your system so check the version using following command and update the package.json accordingly.
+  **Note:-** if `runtimeVersion` and `baseVersion` are not set it will default to `20.08` which might not be installed on your system so check the version using following command and update the package.json accordingly.
 
   ```shell
   flatpak info runtime/org.freedesktop.Platform
 
   ```
-
   The output will look something like this
 
   ```
@@ -103,7 +108,6 @@ rpm installation can be created using dist:linux using following command
        Subject: Export org.freedesktop.Platform
           Date: 2024-02-05 13:19:29 +0000
   ```
-
   specify the version `23.08` (according to above output) as `runtimeVersion` .
 
   check baseVersion using the following command
@@ -111,24 +115,20 @@ rpm installation can be created using dist:linux using following command
   ```shell
   flatpak info app/org.electronjs.Electron2.BaseApp
   ```
-
   if you get error something like this
 
   ```
   error: No remote refs found for ‘app/org.electronjs.Electron2.BaseApp/x86_64/23.08’
 
   ```
-
   this means you did not have BaseApp install it using following command
 - ````shell
   flatpak install flathub app/org.electronjs.Electron2.BaseApp
   ````
-
   then run the previous command again to check the version and set the `baseVersion`
 - At last use the following command to build the flatpak
 
   ```shell
   npm run dist:linux flatpak
   ```
-
   **Note:-** if you get any error while building flatpak run this `env DEBUG='@malept/flatpak-bundler'` command and then run above command again to see detailed logs.
