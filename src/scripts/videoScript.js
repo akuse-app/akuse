@@ -222,7 +222,20 @@ mainVideo.addEventListener("timeupdate", e => {
 })
 
 mainVideo.addEventListener("timeupdate", () => {
+    let timeTrack = mainVideo.currentTime;
     videoDuration.innerText = formatTime(mainVideo.duration - mainVideo.currentTime)
+
+    // if (store.get('logged') == true) {} // NOTE should a user be logged in to track their ep time? 
+    // NOTE should this be added in the settings to allow users to choose?
+    var entry = localStorage.getItem('seasonInfo')
+        if (entry !== null) {
+            const seasonInfo = JSON.parse(entry);
+            if (Object.keys(seasonInfo).length !== 0) {
+                if (timeTrack !== 0) {
+                    store.set(`episode_${parseInt(seasonInfo.animeId)}-${parseInt(seasonInfo.episodeId)}`, { animeId: parseInt(seasonInfo.animeId), episodeId: parseInt(seasonInfo.episodeId), lastWatchedAt: timeTrack });
+                }
+            }
+        }
 })
 
 const draggableProgressBar = e => {

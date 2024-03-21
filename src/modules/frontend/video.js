@@ -160,7 +160,8 @@ module.exports = class Video {
             this.pauseInfoEpisodeDescription.innerHTML = episodeDescription
 
             this.putSource(videoSource.url, videoSource.isM3U8)
-            this.videoElement.currentTime = time
+            // NOTE maybe this feature should be here only
+            this.videoElement.currentTime = this.getLastWatchTime(animeId, episodeId) || time
 
             // if play an episode and immediately close the player, do not load episode
             if (this.container.style.display == 'block')
@@ -225,6 +226,7 @@ module.exports = class Video {
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
+        this.videoElement.currentTime = this.getLastWatchTime(animeId, episodeId)
         this.videoEpisode.innerHTML = episodeId
         this.videoEpisodeTitle.innerHTML = document.querySelector(`.episode-entry#episode-${animeId}-${this.videoEpisode.innerHTML} .title`).innerHTML
 
@@ -263,6 +265,7 @@ module.exports = class Video {
 
         this.putSource(videoSource.url, videoSource.isM3U8)
         this.videoElement.play()
+        this.videoElement.currentTime = this.getLastWatchTime(animeId, episodeId)
         this.videoEpisode.innerHTML = episodeId
         this.videoEpisodeTitle.innerHTML = document.querySelector(`.episode-entry#episode-${animeId}-${this.videoEpisode.innerHTML} .title`).innerHTML
 
@@ -408,5 +411,19 @@ module.exports = class Video {
         } else {
             this.videoElement.src = url
         }
+    }
+
+    getLastWatchTime(animeId = 0, epId = 0) {
+        if (animeId === 0 || epId === 0) {
+            return 0;
+        }
+
+        const lwData = this.store.get(`episode_${animeId}-${epId}`);
+
+        if (!lwData || Object.keys(lwData).length === 0) {
+            return 0;
+        }
+
+        return lwData.lastWatchedAt;
     }
 }
