@@ -25,6 +25,7 @@
         "asarUnpack":"assets/**",
         "mac": {
             "target": "dmg",
+            "icon": "assets/img/icon/icon.icns",
             "hardenedRuntime": true,
             "gatekeeperAssess": true,
             "extendInfo": {
@@ -34,16 +35,17 @@
             }
         },
         "dmg": {
+            "sign": false,
             "iconSize": 100,
             "contents": [
                 {
-                    "x": 255,
-                    "y": 85,
+                    "x": 150,
+                    "y": 220,
                     "type": "file"
                 },
                 {
-                    "x": 253,
-                    "y": 325,
+                    "x": 385,
+                    "y": 220,
                     "type": "link",
                     "path": "/Applications"
                 }
