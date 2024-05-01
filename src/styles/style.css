@@ -129,7 +129,7 @@ img {
     background-color: var(--color-2);
 }
 
-.document-controls ul li i {
+.document-controls ul li .i {
     font-size: 0.8rem;
 }
 
@@ -313,7 +313,7 @@ aside {
     height: calc(100% - 55px);
     padding: 10px;
     background-color: var(--color-1);
-    margin: 15px;
+    margin: 0 15px 15px 15px;
     border-radius: var(--border-radius);
     z-index: 15;
 }
@@ -405,7 +405,7 @@ aside h1 {
             border-radius: 100px;
         }
 
-        aside ul li .i-wrapper i {
+        aside ul li .i-wrapper .i {
             font-size: 1.4rem;
         }
         
@@ -626,7 +626,7 @@ nav {
         gap: 15px;
     }
 
-    .search-main-bar .input-container i {
+    .search-main-bar .input-container .i {
             font-size: 1.3rem;
             color: var(--font-3);
             font-weight: var(--font-weight);
@@ -1391,7 +1391,7 @@ main section:not(:last-child) {
         z-index: 30;
     }
 
-    main section button.circle-button-0 i {
+    main section button.circle-button-0 .i {
         font-size: 1rem;
     }
 
@@ -1661,7 +1661,7 @@ main .filters-container {
             color: var(--font-3);
         }
         
-        main .filters-container .filter i {
+        main .filters-container .filter .i {
             margin-right: 5px;
         }
         
