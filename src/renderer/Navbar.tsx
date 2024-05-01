@@ -1,10 +1,6 @@
 import '../styles/style.css';
 
-import {
-  faBookmark,
-  faCompass,
-  IconDefinition,
-} from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
@@ -12,10 +8,12 @@ import {
   faMagnifyingGlassPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-interface NavItemProps {
+import { AuthContext } from './App';
+
+interface NavUpperItemProps {
   text: string;
   icon: IconDefinition;
   to: string;
@@ -23,7 +21,13 @@ interface NavItemProps {
   onClick: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({
+interface NavLowerItemProps {
+  text: string;
+  icon: IconDefinition;
+  onClick: () => void;
+}
+
+const NavUpperItem: React.FC<NavUpperItemProps> = ({
   text,
   icon,
   to,
@@ -32,7 +36,7 @@ const NavItem: React.FC<NavItemProps> = ({
 }) => {
   return (
     <Link to={to} className={active ? 'active' : ''} onClick={onClick}>
-      <li className={active ? 'active' : ''} data-title="Discover">
+      <li className={active ? 'active' : ''} data-title={text}>
         <div className="i-wrapper">
           <FontAwesomeIcon className="i" icon={icon} />
         </div>
@@ -42,33 +46,56 @@ const NavItem: React.FC<NavItemProps> = ({
   );
 };
 
+const NavLowerItem: React.FC<NavLowerItemProps> = ({
+  text,
+  icon,
+  onClick,
+}) => {
+  return (
+    <li data-title={text} onClick={onClick}>
+      <div className="i-wrapper">
+        <FontAwesomeIcon className="i" icon={icon} />
+      </div>
+      <span>{text}</span>
+    </li>
+  );
+};
+
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState(1);
-
+  const logged = useContext(AuthContext);
+  
   return (
     <aside id="nav-main">
       <ul className="upper">
-        <NavItem
+        <NavUpperItem
           text="Discover"
           icon={activeTab === 1 ? faCompassFull : faCompass}
           to="/"
           active={activeTab === 1}
           onClick={() => setActiveTab(1)}
         />
-        <NavItem
+        <NavUpperItem
           text="Library"
           icon={activeTab === 2 ? faBookmarkFull : faBookmark}
           to="/tab2"
           active={activeTab === 2}
           onClick={() => setActiveTab(2)}
         />
-        <NavItem
+        <NavUpperItem
           text="Search"
           icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
           to="/tab3"
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
         />
+      </ul>
+      <ul className="lower">
+        {/* <NavLowerItem 
+          text='Report a bug'
+          icon={faBug}
+          onClick={}
+          /> */}
       </ul>
       {/* <ul className="lower">
       <li id="user-dropdown-bug-report" data-title="Report a bug">

@@ -1,3 +1,4 @@
+import { TrendingAnime } from '../../types/anilistAPITypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import { getOptions, makeRequest } from '../requests';
@@ -68,10 +69,6 @@ const MEDIA_DATA: string = `
             site
             thumbnail
         }
-        streamingEpisodes {
-            title
-            thumbnail
-        }
     `;
 
 /**
@@ -80,7 +77,7 @@ const MEDIA_DATA: string = `
  * @param {*} code
  * @returns access token
  */
-export const getAccessToken = async (code: any) => {
+export const getAccessToken = async (code: any): Promise<string> => {
   const url = 'https://anilist.co/api/v2/oauth/token';
   const data = {
     grant_type: 'authorization_code',
@@ -90,22 +87,17 @@ export const getAccessToken = async (code: any) => {
     code: code,
   };
 
-  const respData = await makeRequest(
-    METHOD,
-    url,
-    HEADERS,
-    data,
-  );
+  const respData = await makeRequest(METHOD, url, HEADERS, data);
 
   return respData.access_token;
-}
+};
 
 /**
  * Gets the anilist viewer (user) id
  *
  * @returns viewer id
  */
-export const getViewerId = async () => {
+export const getViewerId = async (): Promise<number> => {
   var query = `
           query {
               Viewer {
@@ -120,16 +112,13 @@ export const getViewerId = async () => {
     Accept: 'application/json',
   };
 
+  
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  console.log(options);
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Viewer.id;
-}
+};
 
 /**
  * Gets the viewer (user) info
@@ -161,15 +150,10 @@ export const getViewerInfo = async (viewerId: any) => {
   };
 
   const options = getOptions(query, variables);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data;
-}
+};
 
 /**
  * Gets a viewer list (current, completed...)
@@ -211,18 +195,13 @@ export const getViewerList = async (viewerId: any, status: any) => {
   const options = getOptions(query, variables);
 
   try {
-    const respData = await makeRequest(
-      METHOD,
-      GRAPH_QL_URL,
-      headers,
-      options,
-    );
+    const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
     return respData.data.MediaListCollection.lists[0].entries;
   } catch (error) {
     console.log(`${status} not fetched`);
     console.log(error);
   }
-}
+};
 
 // NOT WORKING
 export const getFollowingUsers = async (viewerId: any) => {
@@ -249,13 +228,8 @@ export const getFollowingUsers = async (viewerId: any) => {
   };
 
   const options = getOptions(query, variables);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
-}
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+};
 
 /**
  * Gets the info from an anime
@@ -283,15 +257,10 @@ export const getAnimeInfo = async (animeId: any) => {
   };
 
   const options = getOptions(query, variables);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Media;
-}
+};
 
 /**
  * Gets the current trending animes on anilist
@@ -300,8 +269,7 @@ export const getAnimeInfo = async (animeId: any) => {
  * @param {*} viewerId
  * @returns object with trending animes
  */
-export const getTrendingAnimes = async (viewerId: any) => {
-  // not logged query
+export const getTrendingAnime = async (viewerId: number): Promise<TrendingAnime> => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {
@@ -331,14 +299,9 @@ export const getTrendingAnimes = async (viewerId: any) => {
   }
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
   return respData.data.Page;
-}
+};
 
 /**
  * Gets the current most popular animes on anilist
@@ -377,15 +340,10 @@ export const getMostPopularAnimes = async (viewerId: any) => {
   }
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Page;
-}
+};
 
 /**
  * Gets the next anime releases
@@ -422,15 +380,10 @@ export const nextAnimeReleases = async (viewerId: any) => {
   }
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Page;
-}
+};
 
 /**
  * Gets searched anime with filters
@@ -455,15 +408,10 @@ export const searchFilteredAnime = async (args: any) => {
       `;
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    HEADERS,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, HEADERS, options);
 
   return respData.data.Page;
-}
+};
 
 /**
  * Gets the next anime releases
@@ -487,15 +435,10 @@ export const releasingAnimes = async () => {
       `;
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    HEADERS,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, HEADERS, options);
 
   return respData.data.Page;
-}
+};
 
 /**
  * Gets the current trending animes filtered by a genre
@@ -535,15 +478,10 @@ export const getAnimesByGenre = async (genre: any, viewerId: any) => {
   }
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    headers,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Page;
-}
+};
 
 /**
  * Gets anime entries from a search query
@@ -570,15 +508,10 @@ export const getSearchedAnimes = async (input: any) => {
       `;
 
   const options = getOptions(query);
-  const respData = await makeRequest(
-    METHOD,
-    GRAPH_QL_URL,
-    HEADERS,
-    options,
-  );
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, HEADERS, options);
 
   return respData.data.Page.media;
-}
+};
 
 /* MUTATIONS */
 
@@ -611,7 +544,7 @@ export const updateAnimeFromList = async (
 
   const options = getOptions(query, variables);
   await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-}
+};
 
 // NOT WORKING
 export const deleteAnimeFromList = async (id: any) => {
@@ -635,7 +568,7 @@ export const deleteAnimeFromList = async (id: any) => {
 
   const options = getOptions(query, variables);
   await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-}
+};
 
 /**
  * Updates the progress of an anime on list
@@ -668,5 +601,4 @@ export const updateAnimeProgress = async (mediaId: any, progress: any) => {
   await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   console.log(`Progress updated (${progress})`);
-}
-
+};

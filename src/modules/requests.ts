@@ -7,7 +7,7 @@ import axios from 'axios';
  * @param {*} variables
  * @returns object with the data options
  */
-export const getOptions = async (query: any = {}, variables: any = {}) => {
+export const getOptions = (query: any = {}, variables: any = {}) => {
   return JSON.stringify({
     query: query,
     variables: variables,

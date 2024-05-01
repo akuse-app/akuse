@@ -1,10 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { clientData } from "../../modules/clientData";
 import FeaturedContent from "../components/FeaturedContent";
 
 const Tab1 = () => {
   
-  let logged = window.electron.store.get('logged')
 
   return (
     <div className="main-container">
