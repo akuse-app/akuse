@@ -12,22 +12,20 @@ import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import Store from 'electron-store';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-const store = new Store();
-ipcMain.on('electron-store-get', async (event, val) => {
-  event.returnValue = store.get(val);
-});
-ipcMain.on('electron-store-set', async (event, key, val) => {
-  store.set(key, val);
-});
+import Store from 'electron-store'
+
+const STORE = new Store()
+
+
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
 // const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new';
 // autoUpdater.autoDownload = false;
 // autoUpdater.autoInstallOnAppQuit = true;
 // autoUpdater.autoRunAppAfterInstall = true;
+
 
 class AppUpdater {
   constructor() {
@@ -97,10 +95,11 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
-      preload: app.isPackaged
-        ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
-    }
+      contextIsolation: false,
+      // preload: app.isPackaged
+      //   ? path.join(__dirname, 'preload.js')
+      //   : path.join(__dirname, '../../.erb/dll/preload.js'),
+    },
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
@@ -116,7 +115,7 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.maximize();
 
-      if (store.get('logged') !== true) store.set('logged', false);
+      if (STORE.get('logged') !== true) STORE.set('logged', false);
 
       // mainWindow.webContents.send('load-app');
       // autoUpdater.checkForUpdates();
