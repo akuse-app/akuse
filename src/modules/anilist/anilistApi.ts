@@ -1,4 +1,4 @@
-import { TrendingAnime } from '../../types/anilistAPITypes';
+import { AnimeData, MostPopularAnime, TrendingAnime } from '../../types/anilistAPITypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import { getOptions, makeRequest } from '../requests';
@@ -310,7 +310,7 @@ export const getTrendingAnime = async (viewerId: number): Promise<TrendingAnime>
  * @param {*} viewerId
  * @returns object with most popular animes
  */
-export const getMostPopularAnimes = async (viewerId: any) => {
+export const getMostPopularAnime = async (viewerId: number): Promise<MostPopularAnime> => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {

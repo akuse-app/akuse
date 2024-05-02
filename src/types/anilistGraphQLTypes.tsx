@@ -1,4 +1,3 @@
-
 export type MediaTitle = {
   romaji?: string;
   english?: string;
@@ -41,12 +40,28 @@ export type MediaCoverImage = {
 };
 
 export type AiringSchedule = {
-  id?: number;
-  airingAt?: number;
-  timeUntilAiring?: number;
-  episode?: number;
-  mediaId?: number;
+  id: number;
+  airingAt: number;
+  timeUntilAiring: number;
+  episode: number;
+  mediaId: number;
   media?: Media;
+};
+
+export type MediaListStatus =
+  | 'CURRENT'
+  | 'PLANNING'
+  | 'COMPLETED'
+  | 'DROPPED'
+  | 'PAUSED'
+  | 'REPEATING';
+
+export type MediaList = {
+  id: number;
+  mediaId: number;
+  status?: MediaListStatus;
+  score?: number;
+  progress?: number;
 };
 
 export type MediaTrailer = {
@@ -62,7 +77,7 @@ export type PageInfo = {
 };
 
 export type Media = {
-  id: number;
+  id?: number;
   title?: MediaTitle;
   format?: MediaFormat;
   status?: MediaStatus;
@@ -75,8 +90,8 @@ export type Media = {
   duration?: number;
   coverImage?: MediaCoverImage;
   bannerImage?: string;
-  genres?: [string];
-  synonyms?: [string];
+  genres?: string[];
+  synonyms?: string[];
   averageScore?: number;
   meanScore?: number;
   popularity?: number;
