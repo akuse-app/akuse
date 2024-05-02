@@ -1,10 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { getTrendingAnime } from '../../modules/anilist/anilistApi';
-import { AuthContext, ViewerIdContext } from '../App';
+import { ViewerIdContext } from '../App';
 import { TrendingAnime } from '../../types/anilistAPITypes';
 import { Media } from '../../types/anilistGraphQLTypes';
-import { Button1 } from './Buttons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { Button1, CircleButton1 } from './Buttons';
+import {
+  faArrowLeftLong,
+  faArrowRightLong,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 
 interface FeaturedItemProps {
   media: Media;
@@ -18,8 +22,7 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
       <div className="featured-container">
         <div className="content show">
           <div className="anime-info">
-            <div className="anime-format">{media.format}</div>
-            •
+            <div className="anime-format">{media.format}</div>•
             <div className="anime-year">
               {media.season} {media.seasonYear}
             </div>
@@ -39,22 +42,55 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
 
 const FeaturedContent = () => {
   const viewerId = useContext(ViewerIdContext);
-  const logged = useContext(AuthContext);
 
   const [trendingAnime, setTrendingAnime] = useState<TrendingAnime>();
+  const [showButtons, setShowButtons] = useState(false);
+  const scrollWrapperRef = useRef<HTMLDivElement>(null);
 
-  const fun = async () => {
+  const retrieveTrendingAnime = async () => {
     setTrendingAnime(await getTrendingAnime(viewerId));
   };
 
+  const onLeftPress = () => {
+    if (scrollWrapperRef.current) {
+      scrollWrapperRef.current.scrollLeft -= 1000;
+    }
+  };
+
+  const onRightPress = () => {
+    if (scrollWrapperRef.current) {
+      scrollWrapperRef.current.scrollLeft += 1000;
+    }
+  };
+
   useEffect(() => {
-    fun();
+    retrieveTrendingAnime();
   }, []);
 
   return (
     <>
+      <div
+        onMouseEnter={() => setShowButtons(true)}
+        onMouseLeave={() => setShowButtons(false)}
+      >
+        <CircleButton1
+          icon={faArrowLeftLong}
+          classes={`left ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
+          onPress={onLeftPress}
+        />
+        <CircleButton1
+          icon={faArrowRightLong}
+          classes={`right ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
+          onPress={onRightPress}
+        />
+      </div>
       <h1>Popular Now</h1>
-      <div className="featured-scroller">
+      <div
+        className="featured-scroller"
+        ref={scrollWrapperRef}
+        onMouseEnter={() => setShowButtons(true)}
+        onMouseLeave={() => setShowButtons(false)}
+      >
         <div className="featured-scroller-wrapper">
           {trendingAnime?.media?.map((media, index) => (
             <FeaturedItem key={index} media={media} />

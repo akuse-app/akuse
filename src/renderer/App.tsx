@@ -1,12 +1,14 @@
+import '..//styles/components.css';
 import '../styles/style.css';
-
-import { createContext, useEffect, useState } from 'react';
-import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
-import Navbar from './Navbar';
-import Tab1 from './tabs/Tab1';
-import { getTrendingAnime, getViewerId } from '../modules/anilist/anilistApi';
+import '../styles/animations.css';
 
 import Store from 'electron-store';
+import { createContext, useEffect, useState } from 'react';
+import { MemoryRouter as Router, Route, Routes } from 'react-router-dom';
+
+import { getViewerId } from '../modules/anilist/anilistApi';
+import Navbar from './Navbar';
+import Tab1 from './tabs/Tab1';
 
 const store = new Store();
 

@@ -756,9 +756,13 @@ main button.circle-button-0 {
   display: block;
   top: 355px;
   right: 25px;
-  opacity: 0;
+  /* opacity: 0; */
   z-index: 7;
 }
+
+  main button.circle-button-0 .i{
+    font-size: 1.2rem;
+  }
 
 main button.circle-button-0.hide {
   display: none;
