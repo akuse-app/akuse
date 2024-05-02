@@ -771,6 +771,7 @@ main button.circle-button-0.left {
 main .featured-scroller .featured-scroller-wrapper {
   display: flex;
   align-content: flex-start;
+  width: 2000%;
   height: 382px;
 }
 
@@ -817,9 +818,12 @@ main .featured .anime-title {
 
 main .featured .anime-info {
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
+  main .featured .anime-info .anime-format {
+    color: var(--color-important);
+  }
 
 main .featured .anime-info,
 main .featured .anime-genres {

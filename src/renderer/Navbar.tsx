@@ -38,7 +38,7 @@ const NavUpperItem: React.FC<NavUpperItemProps> = ({
     <Link to={to} className={active ? 'active' : ''} onClick={onClick}>
       <li className={active ? 'active' : ''} data-title={text}>
         <div className="i-wrapper">
-          <FontAwesomeIcon className="i" icon={icon} />
+          <FontAwesomeIcon className="i" icon={icon}/>
         </div>
         <span>{text}</span>
       </li>
