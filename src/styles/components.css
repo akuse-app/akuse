@@ -1,6 +1,7 @@
 /* MAIN BUTTON 0 */
 
-button.b1 {
+button.b1,
+button.b1 .primary {
     font-size: 1.1rem;
     font-weight: 800;
     color: var(--color-1);
@@ -11,6 +12,16 @@ button.b1 {
     border-radius: var(--border-radius);
     border: none;
     outline: none;
+}
+
+button.b1 .light {
+  color: var(--color-1);
+  background-color: var(--font-1);
+}
+
+button.b1 .dark {
+  color: var(--font-1);
+  background-color: var(--color-1);
 }
 
 button.b1:hover {

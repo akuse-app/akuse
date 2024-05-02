@@ -19,7 +19,22 @@ export const Button1: React.FC<ButtonProps> = ({
   onPress,
 }) => {
   return (
-    <button className="b1" onClick={onPress}>
+    <button className="b1 primary" onClick={onPress}>
+      {icon && (
+        <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
+      )}
+      {text}
+    </button>
+  );
+};
+
+export const Button2: React.FC<ButtonProps> = ({
+  text,
+  icon = null,
+  onPress,
+}) => {
+  return (
+    <button className="b1 light" onClick={onPress}>
       {icon && (
         <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
       )}

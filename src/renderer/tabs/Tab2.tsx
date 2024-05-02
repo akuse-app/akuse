@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 
 const Tab2 = () => {
   return (

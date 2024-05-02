@@ -115,7 +115,6 @@ export const getViewerId = async (): Promise<number> => {
   };
 
   const options = getOptions(query);
-  console.log(options);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Viewer.id;

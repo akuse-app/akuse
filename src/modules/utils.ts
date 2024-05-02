@@ -173,7 +173,7 @@ export const parseDescription = (description: string) =>
  * @param {*} status
  * @returns
  */
-export const getParsedStatus = (status: MediaStatus) => {
+export const getParsedStatus = (status: MediaStatus | undefined) => {
   switch (status) {
     case 'FINISHED':
       return 'Finished';
@@ -185,6 +185,8 @@ export const getParsedStatus = (status: MediaStatus) => {
       return 'Cancelled';
     case 'HIATUS':
       return 'Discontinued';
+    default:
+      return '?';
   }
 };
 
@@ -222,12 +224,12 @@ export const getParsedFormat = (format: MediaFormat | undefined) => {
  * @returns
  */
 export const getParsedSeasonYear = (animeEntry: Media | undefined): string => {
-  if(animeEntry?.seasonYear) {
-    return animeEntry.seasonYear?.toString()
+  if (animeEntry?.seasonYear) {
+    return animeEntry.seasonYear?.toString();
   } else {
-    return '?'
+    return '?';
   }
-}
+};
 
 /**
  * Capitalizes the first letter of a string
@@ -236,7 +238,4 @@ export const getParsedSeasonYear = (animeEntry: Media | undefined): string => {
  * @returns parsed string
  */
 export const capitalizeFirstLetter = (string: string) =>
-  string == null
-    ? ''
-    : string.toLowerCase().charAt(0).toUpperCase() +
-      string.toLowerCase().slice(1);
+  string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1);

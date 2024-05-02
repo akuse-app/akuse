@@ -1,19 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { getTrendingAnime } from '../../modules/anilist/anilistApi';
-import { AuthContext } from '../App';
-import { TrendingAnime } from '../../types/anilistAPITypes';
-import { Media } from '../../types/anilistGraphQLTypes';
-import { Button1, CircleButton1 } from './Buttons';
 import {
   faArrowLeftLong,
   faArrowRightLong,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
+import React, { useRef, useState } from 'react';
 import {
+  capitalizeFirstLetter,
   getParsedSeasonYear,
   getTitle,
   parseDescription,
 } from '../../modules/utils';
+import { ListAnimeData } from '../../types/anilistAPITypes';
+import { Media } from '../../types/anilistGraphQLTypes';
+import { Button1, CircleButton1 } from './Buttons';
+
+interface FeaturedContentProps {
+  animeData: ListAnimeData[]
+}
 
 interface FeaturedItemProps {
   media: Media;
@@ -29,7 +32,7 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
           <div className="anime-info">
             <div className="anime-format">{media.format}</div>•
             <div className="anime-year">
-              {media.season} {getParsedSeasonYear(media)}
+              {capitalizeFirstLetter(media.season ?? '?')} {getParsedSeasonYear(media)}
             </div>
             •<div className="anime-episodes">{media.episodes} Episodes</div>
           </div>
@@ -47,18 +50,9 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
   );
 };
 
-const FeaturedContent = () => {
-  const logged = useContext(AuthContext);
-
-  const [viewerId, setViewerId] = useState<number | null>(null);
-
-  const [trendingAnime, setTrendingAnime] = useState<TrendingAnime>();
+const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
   const [showButtons, setShowButtons] = useState(false);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
-
-  const retrieveTrendingAnime = async () => {
-    setTrendingAnime(await getTrendingAnime(viewerId));
-  };
 
   const onLeftPress = () => {
     if (scrollWrapperRef.current) {
@@ -71,10 +65,6 @@ const FeaturedContent = () => {
       scrollWrapperRef.current.scrollLeft += 1000;
     }
   };
-
-  useEffect(() => {
-    retrieveTrendingAnime();
-  }, []);
 
   return (
     <>
@@ -105,13 +95,13 @@ const FeaturedContent = () => {
           style={{
             width: `${
               // trendingAnime?.media?.length! * 100
-              (trendingAnime?.media?.filter((media) => media?.bannerImage)?.length ?? 0) * 100
+              (animeData?.filter((listAnimeData) => listAnimeData?.media.bannerImage)?.length ?? 0) * 100
             }%`,
           }}
         >
-          {trendingAnime?.media
-            ?.filter((media) => media.bannerImage)
-            .map((media, index) => <FeaturedItem key={index} media={media} />)}
+          {animeData
+            ?.filter((animeData) => animeData.media.bannerImage)
+            .map((animeData, index) => <FeaturedItem key={index} media={animeData.media} />)}
         </div>
       </div>
     </>

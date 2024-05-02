@@ -1,90 +1,24 @@
-import { useContext, useEffect, useState } from 'react';
 
-import {
-  getMostPopularAnime,
-  getTrendingAnime,
-  getViewerId,
-  getViewerList,
-} from '../../modules/anilist/anilistApi';
-import { Media } from '../../types/anilistGraphQLTypes';
-import { AuthContext } from '../App';
+import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
 import FeaturedContent from '../components/FeaturedContent';
-import { ListAnimeData } from '../../types/anilistAPITypes';
 
-const Tab1 = () => {
-  // const viewerId = useContext(ViewerIdContext);
-  const logged = useContext(AuthContext);
+interface Tab1Props {
+  currentListAnime: ListAnimeData[]
+  trendingAnime: ListAnimeData[]
+  mostPopularAnime: ListAnimeData[]
+}
 
-  const [viewerId, setViewerId] = useState<number | null>(null);
-  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>([]);
-  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>([]);
-  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>([]);
-
-  const loadViewerId = async () => {
-    if (logged) setViewerId(await getViewerId());
-  };
-
-  const fetchAnimeSectionsData = async () => {
-    try {
-      var viewerIdLocal = null;
-
-      if (logged) {
-        viewerIdLocal = await getViewerId();
-        setViewerId(viewerIdLocal);
-
-        setCurrentListAnime(await getViewerList(viewerIdLocal, 'CURRENT'));
-      }
-
-      const ta = await getTrendingAnime(viewerId);
-      const mpa = await getMostPopularAnime(viewerId);
-
-      if (ta?.media) {
-        let data: ListAnimeData[] = [];
-
-        ta.media.forEach((media) => {
-          data.push({
-            id: null,
-            mediaId: null,
-            progress: null,
-            media: media,
-          });
-        });
-
-        setTrendingAnime(data);
-      }
-
-      if (mpa?.media) {
-        let data: ListAnimeData[] = [];
-
-        mpa.media.forEach((media) => {
-          data.push({
-            id: null,
-            mediaId: null,
-            progress: null,
-            media: media,
-          });
-        });
-
-        setMostPopularAnime(data);
-      }
-    } catch (error) {
-      console.log('Tab1 error: ' + error);
-    }
-  };
-
-  useEffect(() => {
-    // loadViewerId();
-    fetchAnimeSectionsData();
-  }, []);
+const Tab1: React.FC<Tab1Props> = ({ currentListAnime, trendingAnime, mostPopularAnime }) => {
+  // const logged = useContext(AuthContext);
 
   return (
     <div className="main-container">
       <main>
-        <FeaturedContent />
-        
+        <FeaturedContent animeData={trendingAnime}/>
+
         <div className="section-container">
-          {logged && (
+          {currentListAnime.length !== 0 && (
             <AnimeSection
               title="Continue Watching"
               animeData={currentListAnime}
