@@ -13,7 +13,7 @@ import Tab1 from './tabs/Tab1';
 const store = new Store();
 
 export const AuthContext = createContext<boolean>(false);
-export const ViewerIdContext = createContext<any | null>(null);
+// export const ViewerIdContext = createContext<any | null>(null);
 
 function TabScreen1() {
   return <Tab1 />;
@@ -29,16 +29,16 @@ function TabScreen3() {
 
 export default function App() {
   const [logged, setLogged] = useState<boolean>(false);
-  const [viewerId, setViewerId] = useState<number | null>(null);
+  // const [viewerId, setViewerId] = useState<number | null>(null);
 
   const loadContext = async () => {
-    const isLogged = store.get('logged') as boolean
-    setLogged(isLogged)
+    const isLogged = store.get('logged') as boolean;
+    setLogged(isLogged);
 
-    if(isLogged) {
-      const id = await getViewerId()
-      setViewerId(id)
-    }
+    // if (isLogged) {
+    //   const id = await getViewerId();
+    //   setViewerId(id);
+    // }
   };
 
   useEffect(() => {
@@ -46,8 +46,8 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={logged}>
-      <ViewerIdContext.Provider value={viewerId}>
+    <AuthContext.Provider value={store.get('logged') as boolean}>
+      {/* <ViewerIdContext.Provider value={viewerId}> */}
         <Router>
           <Navbar />
           <Routes>
@@ -56,7 +56,7 @@ export default function App() {
             <Route path="/tab3" element={<TabScreen3 />} />
           </Routes>
         </Router>
-      </ViewerIdContext.Provider>
+      {/* </ViewerIdContext.Provider> */}
     </AuthContext.Provider>
   );
 }

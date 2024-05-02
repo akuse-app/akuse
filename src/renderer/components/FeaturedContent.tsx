@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { getTrendingAnime } from '../../modules/anilist/anilistApi';
-import { ViewerIdContext } from '../App';
+import { AuthContext } from '../App';
 import { TrendingAnime } from '../../types/anilistAPITypes';
 import { Media } from '../../types/anilistGraphQLTypes';
 import { Button1, CircleButton1 } from './Buttons';
@@ -9,6 +9,11 @@ import {
   faArrowRightLong,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  getParsedSeasonYear,
+  getTitle,
+  parseDescription,
+} from '../../modules/utils';
 
 interface FeaturedItemProps {
   media: Media;
@@ -24,12 +29,14 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
           <div className="anime-info">
             <div className="anime-format">{media.format}</div>•
             <div className="anime-year">
-              {media.season} {media.seasonYear}
+              {media.season} {getParsedSeasonYear(media)}
             </div>
             •<div className="anime-episodes">{media.episodes} Episodes</div>
           </div>
-          <div className="anime-title">{media.title?.english}</div>
-          <div className="anime-description">{media.description}</div>
+          <div className="anime-title">{getTitle(media)}</div>
+          <div className="anime-description">
+            {parseDescription(media.description ?? '')}
+          </div>
           <Button1 text="Watch now" icon={faPlay} onPress={onPress} />
         </div>
       </div>
@@ -41,7 +48,9 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
 };
 
 const FeaturedContent = () => {
-  const viewerId = useContext(ViewerIdContext);
+  const logged = useContext(AuthContext);
+
+  const [viewerId, setViewerId] = useState<number | null>(null);
 
   const [trendingAnime, setTrendingAnime] = useState<TrendingAnime>();
   const [showButtons, setShowButtons] = useState(false);
@@ -91,10 +100,18 @@ const FeaturedContent = () => {
         onMouseEnter={() => setShowButtons(true)}
         onMouseLeave={() => setShowButtons(false)}
       >
-        <div className="featured-scroller-wrapper">
-          {trendingAnime?.media?.map((media, index) => (
-            <FeaturedItem key={index} media={media} />
-          ))}
+        <div
+          className="featured-scroller-wrapper"
+          style={{
+            width: `${
+              // trendingAnime?.media?.length! * 100
+              (trendingAnime?.media?.filter((media) => media?.bannerImage)?.length ?? 0) * 100
+            }%`,
+          }}
+        >
+          {trendingAnime?.media
+            ?.filter((media) => media.bannerImage)
+            .map((media, index) => <FeaturedItem key={index} media={media} />)}
         </div>
       </div>
     </>

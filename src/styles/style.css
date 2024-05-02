@@ -775,7 +775,6 @@ main button.circle-button-0.left {
 main .featured-scroller .featured-scroller-wrapper {
   display: flex;
   align-content: flex-start;
-  width: 2000%;
   height: 382px;
 }
 
@@ -1529,7 +1528,7 @@ main .anime-entry .anime-info {
   font-weight: var(--font-weight);
 }
 
-main .anime-entry .anime-info .seasonYear {
+main .anime-entry .anime-info .season-year {
   width: 75%;
 }
 

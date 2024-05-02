@@ -5,5 +5,13 @@ export type AnimeData = {
   pageInfo?: PageInfo
 }
 
+export type ListAnimeData = {
+  id: number | null
+  mediaId: number | null
+  progress?: number | null
+  media: Media
+}
+
 export type TrendingAnime = AnimeData
 export type MostPopularAnime = AnimeData
+export type CurrentListAnime = ListAnimeData[]

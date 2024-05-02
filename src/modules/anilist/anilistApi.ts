@@ -1,8 +1,10 @@
-import { AnimeData, MostPopularAnime, TrendingAnime } from '../../types/anilistAPITypes';
+import Store from 'electron-store';
+
+import { CurrentListAnime, MostPopularAnime, TrendingAnime } from '../../types/anilistAPITypes';
+import { MediaListStatus } from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import { getOptions, makeRequest } from '../requests';
-import Store from 'electron-store';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -112,7 +114,6 @@ export const getViewerId = async (): Promise<number> => {
     Accept: 'application/json',
   };
 
-  
   const options = getOptions(query);
   console.log(options);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
@@ -126,7 +127,7 @@ export const getViewerId = async (): Promise<number> => {
  * @param {*} viewerId
  * @returns object with viewer info
  */
-export const getViewerInfo = async (viewerId: any) => {
+export const getViewerInfo = async (viewerId: number | null) => {
   var query = `
           query($userId : Int) {
               User(id: $userId, sort: ID) {
@@ -162,7 +163,10 @@ export const getViewerInfo = async (viewerId: any) => {
  * @param {*} status
  * @returns object with anime entries
  */
-export const getViewerList = async (viewerId: any, status: any) => {
+export const getViewerList = async (
+  viewerId: number,
+  status: MediaListStatus,
+): Promise<CurrentListAnime> => {
   var query = `
           query($userId : Int) {
               MediaListCollection(userId : $userId, type: ANIME, status : ${status}, sort: UPDATED_TIME_DESC) {
@@ -194,13 +198,8 @@ export const getViewerList = async (viewerId: any, status: any) => {
 
   const options = getOptions(query, variables);
 
-  try {
-    const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-    return respData.data.MediaListCollection.lists[0].entries;
-  } catch (error) {
-    console.log(`${status} not fetched`);
-    console.log(error);
-  }
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  return respData.data.MediaListCollection.lists[0].entries;
 };
 
 // NOT WORKING
@@ -269,7 +268,9 @@ export const getAnimeInfo = async (animeId: any) => {
  * @param {*} viewerId
  * @returns object with trending animes
  */
-export const getTrendingAnime = async (viewerId: number): Promise<TrendingAnime> => {
+export const getTrendingAnime = async (
+  viewerId: number | null,
+): Promise<TrendingAnime> => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {
@@ -310,7 +311,9 @@ export const getTrendingAnime = async (viewerId: number): Promise<TrendingAnime>
  * @param {*} viewerId
  * @returns object with most popular animes
  */
-export const getMostPopularAnime = async (viewerId: number): Promise<MostPopularAnime> => {
+export const getMostPopularAnime = async (
+  viewerId: number | null,
+): Promise<MostPopularAnime> => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {
@@ -350,7 +353,7 @@ export const getMostPopularAnime = async (viewerId: number): Promise<MostPopular
  *
  * @returns object with next anime releases
  */
-export const nextAnimeReleases = async (viewerId: any) => {
+export const nextAnimeReleases = async (viewerId: number | null) => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {
@@ -448,7 +451,7 @@ export const releasingAnimes = async () => {
  * @param {*} viewerId
  * @returns object with animes entries filtered by genre
  */
-export const getAnimesByGenre = async (genre: any, viewerId: any) => {
+export const getAnimesByGenre = async (genre: any, viewerId: number | null) => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {
