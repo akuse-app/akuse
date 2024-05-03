@@ -24,7 +24,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
 
   return (
     <>
-      <AnimeModal listAnimeData={listAnimeData} show={showModal} />
+      <AnimeModal listAnimeData={listAnimeData} show={showModal} onXPress={() => setShowModal(false)}/>
 
       <div className="anime-entry show" onClick={() => {setShowModal(true)}}>
         <div className="anime-cover">

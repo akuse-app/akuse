@@ -1,5 +1,11 @@
-import { faFilm, faStar, faTv, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFilm,
+  faStar,
+  faTv,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ReactDOM from 'react-dom';
 
 import {
   capitalizeFirstLetter,
@@ -7,19 +13,30 @@ import {
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
-  parseDescription,
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
-import { AnimeModalGenres, AnimeModalOtherTitles, AnimeModalStatus } from './AnimeModalElements';
+import {
+  AnimeModalDescription,
+  AnimeModalGenres,
+  AnimeModalOtherTitles,
+  AnimeModalStatus,
+} from './AnimeModalElements';
 import { Button2 } from './Buttons';
+
+const modalsRoot = document.getElementById('modals-root');
 
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
+  onXPress: () => void;
 }
 
-const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
-  return (
+const AnimeModal: React.FC<AnimeModalProps> = ({
+  listAnimeData,
+  show,
+  onXPress,
+}) => {
+  return ReactDOM.createPortal(
     <>
       <div
         className="modal-page-shadow-background show-page-shadow-background"
@@ -31,10 +48,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
         style={{ display: show ? 'flex' : 'none' }}
       >
         <div className="anime-page">
-          <button className="exit">
-            <FontAwesomeIcon className="i" icon={faXmark} />
-          </button>
           <div className="content-wrapper">
+            <button className="exit" onClick={onXPress}>
+              <FontAwesomeIcon className="i" icon={faXmark} />
+            </button>
             <div className="banner-wrapper">
               {listAnimeData.media.bannerImage && (
                 <img src={listAnimeData.media.bannerImage} className="banner" />
@@ -73,10 +90,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
                     {getEpisodes(listAnimeData.media)} Episodes
                   </li>
                 </ul>
-                <div className="description">
-                  {parseDescription(listAnimeData.media.description ?? '')}
-                </div>
-                <span className="show-more">show more</span>
+                <AnimeModalDescription listAnimeData={listAnimeData}/>
               </div>
               <div className="right">
                 <p className="additional-info">
@@ -96,7 +110,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
           </div>
         </div>
       </div>
-    </>
+    </>,
+    modalsRoot!,
   );
 };
 

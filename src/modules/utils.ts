@@ -239,3 +239,11 @@ export const getParsedSeasonYear = (animeEntry: Media | undefined): string => {
  */
 export const capitalizeFirstLetter = (string: string) =>
   string.toLowerCase().charAt(0).toUpperCase() + string.toLowerCase().slice(1);
+
+/**
+ * Returns whether a div is cropped (with -webkit-line-clamp) or not
+ *
+ * @param {*} div
+ * @returns
+ */
+// export const isEllipsisActive = (div: HTMLElement) => div.scrollHeight > div.clientHeight;
