@@ -21,7 +21,7 @@
   --font-3-transparent: rgba(168, 168, 168, 0.5);
 
   --font-weight: 600;
-  --border-radius: 14px;
+  --border-radius: 10px;
   /* --border-radius: 8px; */
   --transition: 0.2s ease-out;
   --shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;

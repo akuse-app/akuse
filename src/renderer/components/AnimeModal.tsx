@@ -1,85 +1,22 @@
+import { faFilm, faStar, faTv, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ListAnimeData } from '../../types/anilistAPITypes';
+
 import {
-  faBan,
-  faFilm,
-  faStar,
-  faTv,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
-import { Button2 } from './Buttons';
-import {
+  capitalizeFirstLetter,
   getEpisodes,
   getParsedFormat,
-  getParsedStatus,
+  getParsedSeasonYear,
   getTitle,
   parseDescription,
 } from '../../modules/utils';
-import { MediaStatus } from '../../types/anilistGraphQLTypes';
-import {
-  faCircleCheck,
-  faCircleDot,
-  faClock,
-} from '@fortawesome/free-regular-svg-icons';
+import { ListAnimeData } from '../../types/anilistAPITypes';
+import { AnimeModalGenres, AnimeModalOtherTitles, AnimeModalStatus } from './AnimeModalElements';
+import { Button2 } from './Buttons';
 
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
 }
-
-interface AnimeModalStatusProps {
-  status: MediaStatus | undefined;
-}
-
-const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({ status }) => {
-  let style = getComputedStyle(document.body);
-  const parsedStatus = getParsedStatus(status);
-
-  return (
-    <>
-      {status === 'FINISHED' && (
-        <li>
-          <FontAwesomeIcon
-            className="i"
-            icon={faCircleCheck}
-            style={{ marginRight: 7 }}
-          />
-          {parsedStatus}
-        </li>
-      )}
-      {status === 'RELEASING' && (
-        <li style={{ color: style.getPropertyValue('--color-success') }}>
-          <FontAwesomeIcon
-            className="i"
-            icon={faCircleDot}
-            style={{ marginRight: 7 }}
-          />
-          {parsedStatus}
-        </li>
-      )}
-      {status === 'NOT_YET_RELEASED' && (
-        <li style={{ color: style.getPropertyValue('--color-alert') }}>
-          <FontAwesomeIcon
-            className="i"
-            icon={faClock}
-            style={{ marginRight: 7 }}
-          />
-          {parsedStatus}
-        </li>
-      )}
-      {(status === 'CANCELLED' || status === 'HIATUS') && (
-        <li style={{ color: style.getPropertyValue('--color-warning') }}>
-          <FontAwesomeIcon
-            className="i"
-            icon={faBan}
-            style={{ marginRight: 7 }}
-          />
-          {parsedStatus}
-        </li>
-      )}
-    </>
-  );
-};
 
 const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
   return (
@@ -141,7 +78,19 @@ const AnimeModal: React.FC<AnimeModalProps> = ({ listAnimeData, show }) => {
                 </div>
                 <span className="show-more">show more</span>
               </div>
-              <div className="right"></div>
+              <div className="right">
+                <p className="additional-info">
+                  <span>Released on: </span>
+                  {capitalizeFirstLetter(
+                    listAnimeData.media.season ?? '?',
+                  )}{' '}
+                  {getParsedSeasonYear(listAnimeData.media)}
+                </p>
+                <AnimeModalGenres genres={listAnimeData.media.genres ?? []} />
+                <AnimeModalOtherTitles
+                  synonyms={listAnimeData.media.synonyms ?? []}
+                />
+              </div>
             </div>
             <div className="episodes-section"></div>
           </div>
