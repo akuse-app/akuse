@@ -22,6 +22,7 @@ import {
   AnimeModalStatus,
 } from './AnimeModalElements';
 import { Button2 } from './Buttons';
+import { ModalPage, ModalPageShadow } from './Modal';
 
 const modalsRoot = document.getElementById('modals-root');
 
@@ -38,15 +39,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 }) => {
   return ReactDOM.createPortal(
     <>
-      <div
-        className="modal-page-shadow-background show-page-shadow-background"
-        style={{ display: show ? 'flex' : 'none' }}
-      />
-
-      <div
-        className={`modal-page-wrapper fade-in show-page`}
-        style={{ display: show ? 'flex' : 'none' }}
-      >
+      <ModalPageShadow show={show} />
+      <ModalPage show={show}>
         <div className="anime-page">
           <div className="content-wrapper">
             <button className="exit" onClick={onXPress}>
@@ -90,7 +84,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     {getEpisodes(listAnimeData.media)} Episodes
                   </li>
                 </ul>
-                <AnimeModalDescription listAnimeData={listAnimeData}/>
+                <AnimeModalDescription listAnimeData={listAnimeData} />
               </div>
               <div className="right">
                 <p className="additional-info">
@@ -109,7 +103,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             <div className="episodes-section"></div>
           </div>
         </div>
-      </div>
+      </ModalPage>
     </>,
     modalsRoot!,
   );
