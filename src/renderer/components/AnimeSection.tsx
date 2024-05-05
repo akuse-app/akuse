@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Media } from '../../types/anilistGraphQLTypes';
 import { faCalendar, faCircleDot } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import {
   getParsedFormat,
   getParsedSeasonYear,
@@ -20,11 +19,15 @@ interface AnimeEntryProps {
 }
 
 const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
+  
+  // wether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
+  // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
+  const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
 
   return (
     <>
-      {showModal && (
+      {hasModalBeenShowed && (
         <AnimeModal
           listAnimeData={listAnimeData}
           show={showModal}
@@ -36,6 +39,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
         className="anime-entry show"
         onClick={() => {
           setShowModal(true);
+          if(!hasModalBeenShowed) setHasModalBeenShowed(true)
         }}
       >
         <div className="anime-cover">

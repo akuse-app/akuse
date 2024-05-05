@@ -95,10 +95,10 @@ export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
     <p className="additional-info">
       <span>Genres: </span>
       {genres?.map((genre, index) => (
-        <div key={index}>
+        <>
           {genre}
           {genres?.length! - 1 !== index && ', '}
-        </div>
+        </>
       ))}
     </p>
   );
@@ -115,10 +115,10 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
     <p className="additional-info">
       <span>Other titles: </span>
       {synonyms?.map((title, index) => (
-        <div key={index}>
+        <>
           {title}
           {synonyms?.length! - 1 !== index && ', '}
-        </div>
+        </>
       ))}
     </p>
   );

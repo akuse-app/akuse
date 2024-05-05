@@ -35,7 +35,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   useEffect(() => {
     console.log(loadEpisodesInfo);
     console.log(episodesInfoHasFetched);
-    loadEpisodesInfo && !episodesInfoHasFetched && fetchEpisodesInfo();
+    if (!episodesInfoHasFetched) fetchEpisodesInfo();
   }, []);
 
   /**
@@ -71,6 +71,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
           <h2>Episodes</h2>
           <select name="" id=""></select>
         </div>
+        <h1>{episodesInfoHasFetched ? 'si' : 'no'}</h1>
 
         {pages.map((page, index) => (
           <div key={index} className="episodes show">
