@@ -8,7 +8,7 @@ import {
   getTitle,
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
-import AnimeModal from './AnimeModal';
+import AnimeModal from './modals/AnimeModal';
 
 interface AnimeSectionProps {
   title: string;

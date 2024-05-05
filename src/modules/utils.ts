@@ -120,8 +120,10 @@ export const isAnimeAvailable = (animeEntry: Media) => {
  * @param {*} animeEntry
  * @returns
  */
-export const getTimeUntilAiring = (animeEntry: Media) => {
-  if (animeEntry.nextAiringEpisode == null) return -1;
+export const getTimeUntilAiring = (
+  animeEntry: Media,
+): { days: number; hours: number; minutes: number; seconds: number } | null => {
+  if (animeEntry.nextAiringEpisode == null) return null;
 
   let seconds = animeEntry.nextAiringEpisode.timeUntilAiring;
   let days = Math.floor(seconds / (3600 * 24));

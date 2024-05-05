@@ -13,15 +13,16 @@ import {
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
-} from '../../modules/utils';
-import { ListAnimeData } from '../../types/anilistAPITypes';
+} from '../../../modules/utils';
+import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
   AnimeModalDescription,
   AnimeModalGenres,
   AnimeModalOtherTitles,
   AnimeModalStatus,
+  AnimeModalWatchButtons,
 } from './AnimeModalElements';
-import { Button2 } from './Buttons';
+import { Button2 } from '../Buttons';
 import { ModalPage, ModalPageShadow } from './Modal';
 
 const modalsRoot = document.getElementById('modals-root');
@@ -50,9 +51,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               {listAnimeData.media.bannerImage && (
                 <img src={listAnimeData.media.bannerImage} className="banner" />
               )}
-              <div className="watch-buttons">
-                <Button2 text="Watch" onPress={() => {}} />
-              </div>
+            <AnimeModalWatchButtons listAnimeData={listAnimeData}/>
             </div>
             <div className="content">
               <div className="left">

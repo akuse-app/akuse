@@ -7,14 +7,26 @@ import {
   faBan,
   faChevronDown,
   faChevronUp,
+  faHourglass,
+  faPlay,
+  faRotate,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { getParsedStatus, parseDescription } from '../../modules/utils';
-import { ListAnimeData } from '../../types/anilistAPITypes';
-import { MediaStatus } from '../../types/anilistGraphQLTypes';
+import {
+  getAvailableEpisodes,
+  getEpisodes,
+  getParsedStatus,
+  getProgress,
+  getTimeUntilAiring,
+  parseDescription,
+} from '../../../modules/utils';
+import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { MediaStatus } from '../../../types/anilistGraphQLTypes';
+import { Button2 } from '../Buttons';
+import { AuthContext } from '../../App';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -128,34 +140,32 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
     setFullText(!fullText);
   };
 
-  const isEllipsisActive = () => {
-    const clientHeight = descriptionRef.current?.clientHeight!;
-    const scrollHeight = descriptionRef.current?.scrollHeight!;
-
-    console.log(clientHeight);
-    console.log(scrollHeight);
-
-    return scrollHeight > clientHeight;
-  };
+  const isEllipsisActive = () =>
+    descriptionRef.current?.scrollHeight! >
+    descriptionRef.current?.clientHeight!;
 
   useEffect(() => {
-    // isEllipsisActive();
-  }, []);
+    setTimeout(() => {
+      isEllipsisActive();
+    }, 100);
+  });
 
   return (
     <>
       <div
         ref={descriptionRef}
         className={`description ${fullText ? '' : 'cropped'}`}
+        // onClick={handleToggleFullText}
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(
             parseDescription(listAnimeData.media.description ?? ''),
           ),
         }}
       ></div>
+      <span></span>
       <span
-        className="show-more show-element"
-        // className={`show-more ${ellipsis ? 'show-element' : ''}`}
+        // className="show-more show-element"
+        className={`show-more ${ellipsis ? 'show-element' : ''}`}
         onClick={handleToggleFullText}
       >
         {fullText ? (
@@ -179,5 +189,54 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
         )}
       </span>
     </>
+  );
+};
+
+interface AnimeModalWatchButtonsProps {
+  listAnimeData: ListAnimeData;
+}
+
+export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
+  listAnimeData,
+}) => {
+  const logged = useContext(AuthContext);
+  console.log(logged);
+
+  const progress = getProgress(listAnimeData.media);
+  const episodes = getEpisodes(listAnimeData.media);
+  const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
+  const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
+
+  return logged ? (
+    <div className="watch-buttons">
+      {progress === 0 && (
+        <Button2 text="Start watching" icon={faPlay} onPress={() => {}} />
+      )}
+
+      {progress === episodes ? (
+        <Button2 text="Watch again" icon={faRotate} onPress={() => {}} />
+      ) : (
+        progress === availableEpisodes &&
+        timeUntilAiring && (
+          <Button2
+            text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
+            icon={faHourglass}
+            onPress={() => {}}
+          />
+        )
+      )}
+
+      {progress !== 0 &&
+        progress !== episodes &&
+        progress !== availableEpisodes && (
+          <Button2
+            text={`Resume from Ep. ${progress ?? 0 + 1}`}
+            icon={faPlay}
+            onPress={() => {}}
+          />
+        )}
+    </div>
+  ) : (
+    <></>
   );
 };
