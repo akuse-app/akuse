@@ -1,5 +1,29 @@
 import { Media, MediaStatus, MediaFormat } from '../types/anilistGraphQLTypes';
 
+const months = {
+  '1': 'January',
+  '2': 'February',
+  '3': 'March',
+  '4': 'April',
+  '5': 'May',
+  '6': 'June',
+  '7': 'July',
+  '8': 'August',
+  '9': 'Septempber',
+  '01': 'January',
+  '02': 'February',
+  '03': 'March',
+  '04': 'April',
+  '05': 'May',
+  '06': 'June',
+  '07': 'July',
+  '08': 'August',
+  '09': 'Septempber',
+  '10': 'October',
+  '11': 'November',
+  '12': 'December'
+}
+
 /**
  * Gets the anime title (english or romaji)
  *
@@ -248,4 +272,7 @@ export const capitalizeFirstLetter = (string: string) =>
  * @param {*} div
  * @returns
  */
-// export const isEllipsisActive = (div: HTMLElement) => div.scrollHeight > div.clientHeight;
+export const isEllipsisActive = (div: HTMLElement) => div.scrollHeight > div.clientHeight;
+
+export const parseAirdate = (airdate: string) => `${airdate.split('-')[2]} ${months[airdate.split('-')[1] as keyof typeof months]} ${airdate.split('-')[0]}`
+

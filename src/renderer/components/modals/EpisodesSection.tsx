@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { makeRequest } from '../../../modules/requests';
-import { getEpisodes } from '../../../modules/utils';
+import { getEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import EpisodeEntry from './EpisodeEntry';
 import axios from 'axios';
+import { EpisodeInfo, EpisodesInfo } from '../../../types/types';
 
 const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const EPISODES_PER_PAGE = 30;
@@ -25,16 +26,16 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
     useState<boolean>(false);
 
+  const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
+
   const fetchEpisodesInfo = async () => {
-    console.log(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
-    const data = await axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
-    console.log(data)
-    setEpisodesInfoHasFetched(true);
+    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
+      if (data.data && data.data.episodes) setEpisodeInfo(data.data.episodes);
+      setEpisodesInfoHasFetched(true);
+    });
   };
 
   useEffect(() => {
-    console.log(loadEpisodesInfo);
-    console.log(episodesInfoHasFetched);
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
   }, []);
 
@@ -71,20 +72,39 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
           <h2>Episodes</h2>
           <select name="" id=""></select>
         </div>
-        <h1>{episodesInfoHasFetched ? 'si' : 'no'}</h1>
 
         {pages.map((page, index) => (
           <div key={index} className="episodes show">
             {page.map((episode, index) => (
               <EpisodeEntry
                 key={index}
-                infoLoaded={false}
-                number=""
-                cover={listAnimeData.media.bannerImage ?? ''}
-                title={`Episode ${episode}`}
-                description=""
-                releaseDate=""
-                duration=""
+                hasInfoLoaded={episodesInfoHasFetched}
+                number={episodeInfo ? `Ep, ${index + 1} - ` : ''}
+                cover={
+                  episodeInfo
+                    ? episodeInfo[index + 1]?.image ??
+                      listAnimeData.media.bannerImage ??
+                      ''
+                    : listAnimeData.media.bannerImage ?? ''
+                }
+                title={
+                  episodeInfo && episodeInfo[index + 1]?.title
+                    ? episodeInfo[index + 1]?.title?.en ?? `Episode ${episode}`
+                    : `Episode ${episode}`
+                }
+                description={
+                  episodeInfo ? episodeInfo[index + 1]?.summary ?? '' : ''
+                }
+                releaseDate={
+                  episodeInfo
+                    ? parseAirdate(episodeInfo[index + 1]?.airdate || '') ?? ''
+                    : ''
+                }
+                duration={
+                  episodeInfo
+                    ? `${episodeInfo[index + 1]?.length}min` ?? ''
+                    : ''
+                }
               />
             ))}
           </div>

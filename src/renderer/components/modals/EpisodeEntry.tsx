@@ -1,19 +1,22 @@
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Skeleton from 'react-loading-skeleton';
 
 interface EpisodeEntryProps {
-  infoLoaded: boolean;
+  hasInfoLoaded: boolean;
   number: string;
-  cover: string;
-  title: string;
-  description: string;
-  releaseDate: string;
-  duration: string;
+  cover: string | null;
+  title: string | null;
+  description: string | null;
+  releaseDate: string | null;
+  duration: string | null;
 }
 
+const ImageReplacer = () => <div className="image-replacer" />
+
 const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
-  infoLoaded,
+  hasInfoLoaded,
   number,
   cover,
   title,
@@ -23,33 +26,41 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
 }) => {
   return (
     <div className="episode-entry">
-      <img src={cover} alt="episode cover" />
+      {hasInfoLoaded ? <img src={cover ?? ''} alt="episode cover" /> : <Skeleton wrapper={ImageReplacer}/>}
       <div className="episode-content">
         <div className="title">
           <span>{number}</span>
-          {title}
+          {hasInfoLoaded ? title : <Skeleton />}
         </div>
-        {infoLoaded && (
-          <div className="info">
+        <div className="info">
+          {hasInfoLoaded ? (
+            <>
+              <span>
+                <FontAwesomeIcon
+                  className="i"
+                  icon={faCalendar}
+                  style={{ marginRight: 7 }}
+                />
+                {releaseDate}
+              </span>
+              <span>
+                <FontAwesomeIcon
+                  className="i"
+                  icon={faStopwatch}
+                  style={{ marginRight: 7 }}
+                />
+                {duration}
+              </span>
+            </>
+          ) : (
             <span>
-              <FontAwesomeIcon
-                className="i"
-                icon={faCalendar}
-                style={{ marginRight: 7 }}
-              />
-              {releaseDate}
+              <Skeleton />
             </span>
-            <span>
-              <FontAwesomeIcon
-                className="i"
-                icon={faStopwatch}
-                style={{ marginRight: 7 }}
-              />
-              {duration}
-            </span>
-          </div>
-        )}
-        <div className="description">{description}</div>
+          )}
+        </div>
+        <div className="description">
+          {hasInfoLoaded ? description : <Skeleton count={4} />}
+        </div>
       </div>
     </div>
   );

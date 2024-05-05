@@ -760,9 +760,9 @@ main button.circle-button-0 {
   z-index: 7;
 }
 
-  main button.circle-button-0 .i{
-    font-size: 1.2rem;
-  }
+main button.circle-button-0 .i {
+  font-size: 1.2rem;
+}
 
 main button.circle-button-0.hide {
   display: none;
@@ -824,9 +824,9 @@ main .featured .anime-info {
   gap: 10px;
 }
 
-  main .featured .anime-info .anime-format {
-    color: var(--color-important);
-  }
+main .featured .anime-info .anime-format {
+  color: var(--color-important);
+}
 
 main .featured .anime-info,
 main .featured .anime-genres {
@@ -1138,7 +1138,13 @@ main .featured .featured-img img {
             filter: brightness(0.7);
         } */
 
-.anime-page .episodes-section .episode-entry img {
+.anime-page .episodes-section .episode-entry .image-replacer {
+  min-width: 311.5px;
+  height: 100%;
+  aspect-ratio: 1.78 / 1;
+}
+
+.anime-page .episodes-section .episode-entry img{
   min-width: 311.5px;
   height: 100%;
   aspect-ratio: 1.78 / 1;
@@ -1149,6 +1155,7 @@ main .featured .featured-img img {
 }
 
 .anime-page .episodes-section .episode-entry .episode-content {
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
