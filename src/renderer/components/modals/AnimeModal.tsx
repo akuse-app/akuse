@@ -1,4 +1,5 @@
 import {
+  faCircleExclamation,
   faFilm,
   faStar,
   faTv,
@@ -52,19 +53,29 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               {listAnimeData.media.bannerImage && (
                 <img src={listAnimeData.media.bannerImage} className="banner" />
               )}
-            <AnimeModalWatchButtons listAnimeData={listAnimeData}/>
+              <AnimeModalWatchButtons listAnimeData={listAnimeData} />
             </div>
             <div className="content">
               <div className="left">
                 <h1 className="title">{getTitle(listAnimeData.media)}</h1>
                 <ul className="info">
+                  {listAnimeData.media.isAdult && (
+                    <li style={{ color: '#ff6b6b' }}>
+                      <FontAwesomeIcon
+                        className="i"
+                        icon={faCircleExclamation}
+                        style={{ marginRight: 7 }}
+                      />
+                      Adults
+                    </li>
+                  )}
                   <li style={{ color: '#e5a639' }}>
                     <FontAwesomeIcon
                       className="i"
                       icon={faStar}
                       style={{ marginRight: 7 }}
                     />
-                    {listAnimeData.media.averageScore}%
+                    {listAnimeData.media.meanScore}%
                   </li>
                   <AnimeModalStatus status={listAnimeData.media.status} />
                   <li>
@@ -100,7 +111,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 />
               </div>
             </div>
-            <EpisodesSection loadEpisodesInfo={show} listAnimeData={listAnimeData} />
+            <EpisodesSection
+              loadEpisodesInfo={show}
+              listAnimeData={listAnimeData}
+            />
             <div className="episodes-section"></div>
           </div>
         </div>
