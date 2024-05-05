@@ -13,7 +13,7 @@ interface EpisodeEntryProps {
   duration: string | null;
 }
 
-const ImageReplacer = () => <div className="image-replacer" />
+const ImageReplacer = () => <div className="image-replacer" />;
 
 const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
   hasInfoLoaded,
@@ -26,7 +26,11 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
 }) => {
   return (
     <div className="episode-entry">
-      {hasInfoLoaded ? <img src={cover ?? ''} alt="episode cover" /> : <Skeleton wrapper={ImageReplacer}/>}
+      {hasInfoLoaded ? (
+        <img src={cover ?? ''} alt="episode cover" />
+      ) : (
+        <Skeleton wrapper={ImageReplacer} />
+      )}
       <div className="episode-content">
         <div className="title">
           <span>{number}</span>

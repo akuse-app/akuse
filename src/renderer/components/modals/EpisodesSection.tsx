@@ -1,10 +1,10 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { makeRequest } from '../../../modules/requests';
+
 import { getEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { EpisodeInfo } from '../../../types/types';
 import EpisodeEntry from './EpisodeEntry';
-import axios from 'axios';
-import { EpisodeInfo, EpisodesInfo } from '../../../types/types';
 
 const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const EPISODES_PER_PAGE = 30;
