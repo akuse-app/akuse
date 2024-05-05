@@ -43,10 +43,10 @@ export const getTitlesAndSynonyms = (animeEntry: Media): string[] => {
  * @param {*} animeEntry
  * @returns episodes number
  */
-export const getEpisodes = (animeEntry: Media) =>
+export const getEpisodes = (animeEntry: Media): number | null =>
   animeEntry.episodes == null
     ? animeEntry.nextAiringEpisode == null
-      ? '?'
+      ? null
       : animeEntry.nextAiringEpisode.episode - 1
     : animeEntry.episodes;
 
@@ -59,7 +59,7 @@ export const getEpisodes = (animeEntry: Media) =>
 export const getAvailableEpisodes = (animeEntry: Media) =>
   animeEntry.nextAiringEpisode == null
     ? animeEntry.episodes == null
-      ? '?'
+      ? null
       : animeEntry.episodes
     : animeEntry.nextAiringEpisode.episode - 1;
 

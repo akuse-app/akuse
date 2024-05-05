@@ -20,13 +20,24 @@ interface AnimeEntryProps {
 }
 
 const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <>
-      <AnimeModal listAnimeData={listAnimeData} show={showModal} onXPress={() => setShowModal(false)}/>
+      {showModal && (
+        <AnimeModal
+          listAnimeData={listAnimeData}
+          show={showModal}
+          onXPress={() => setShowModal(false)}
+        />
+      )}
 
-      <div className="anime-entry show" onClick={() => {setShowModal(true)}}>
+      <div
+        className="anime-entry show"
+        onClick={() => {
+          setShowModal(true);
+        }}
+      >
         <div className="anime-cover">
           <img src={listAnimeData.media.coverImage?.large} alt="anime cover" />
         </div>

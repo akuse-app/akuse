@@ -24,6 +24,7 @@ import {
 } from './AnimeModalElements';
 import { Button2 } from '../Buttons';
 import { ModalPage, ModalPageShadow } from './Modal';
+import EpisodesSection from './EpisodesSection';
 
 const modalsRoot = document.getElementById('modals-root');
 
@@ -99,6 +100,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 />
               </div>
             </div>
+            <EpisodesSection loadEpisodesInfo={show} listAnimeData={listAnimeData} />
             <div className="episodes-section"></div>
           </div>
         </div>
