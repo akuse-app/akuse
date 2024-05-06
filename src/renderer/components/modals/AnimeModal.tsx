@@ -1,3 +1,5 @@
+import React, { MouseEventHandler, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import {
   faCircleExclamation,
   faFilm,
@@ -6,8 +8,6 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ReactDOM from 'react-dom';
-
 import {
   capitalizeFirstLetter,
   getEpisodes,
@@ -33,21 +33,46 @@ const modalsRoot = document.getElementById('modals-root');
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
-  onXPress: () => void;
+  onClose: () => void;
 }
 
 const AnimeModal: React.FC<AnimeModalProps> = ({
   listAnimeData,
   show,
-  onXPress,
+  onClose, 
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // close modal by clicking shadow area
+  const handleClickOutside = (event: any) => {
+    if (!modalRef.current?.contains(event.target as Node)) {
+      onClose();
+    }
+  };
+  
+  // close modal by pressing ESC
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [show]);
+
   return ReactDOM.createPortal(
     <>
       <ModalPageShadow show={show} />
       <ModalPage show={show}>
-        <div className="anime-page">
-          <div className="content-wrapper">
-            <button className="exit" onClick={onXPress}>
+        <div className="anime-page" onClick={handleClickOutside}>
+          <div className="content-wrapper" ref={modalRef}>
+            <button className="exit" onClick={onClose}>
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
             <div className="banner-wrapper">
@@ -105,9 +130,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 />
               </div>
             </div>
-            <EpisodesSection
-              listAnimeData={listAnimeData}
-            />
+            <EpisodesSection listAnimeData={listAnimeData} />
             <div className="episodes-section"></div>
           </div>
         </div>

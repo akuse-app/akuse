@@ -22,7 +22,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
         <AnimeModal
           listAnimeData={listAnimeData}
           show={showModal}
-          onXPress={() => setShowModal(false)}
+          onClose={() => setShowModal(false)}
         />
       )}
 
