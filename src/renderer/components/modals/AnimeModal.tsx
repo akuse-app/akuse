@@ -18,6 +18,7 @@ import {
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
   AnimeModalDescription,
+  AnimeModalEpisodes,
   AnimeModalGenres,
   AnimeModalOtherTitles,
   AnimeModalStatus,
@@ -86,14 +87,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     />
                     {getParsedFormat(listAnimeData.media.format)}
                   </li>
-                  <li>
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={faFilm}
-                      style={{ marginRight: 7 }}
-                    />
-                    {getEpisodes(listAnimeData.media)} Episodes
-                  </li>
+                  <AnimeModalEpisodes listAnimeData={listAnimeData} />
                 </ul>
                 <AnimeModalDescription listAnimeData={listAnimeData} />
               </div>
@@ -112,7 +106,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               </div>
             </div>
             <EpisodesSection
-              loadEpisodesInfo={show}
               listAnimeData={listAnimeData}
             />
             <div className="episodes-section"></div>

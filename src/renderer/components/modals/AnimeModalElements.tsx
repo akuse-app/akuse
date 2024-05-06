@@ -7,9 +7,11 @@ import {
   faBan,
   faChevronDown,
   faChevronUp,
+  faFilm,
   faHourglass,
   faPlay,
   faRotate,
+  faStopwatch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
@@ -18,6 +20,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   getAvailableEpisodes,
   getEpisodes,
+  getParsedFormat,
   getParsedStatus,
   getProgress,
   getTimeUntilAiring,
@@ -121,6 +124,44 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
         </>
       ))}
     </p>
+  );
+};
+
+interface AnimeModalEpisodesProps {
+  listAnimeData: ListAnimeData;
+}
+
+export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
+  listAnimeData,
+}) => {
+  const format = getParsedFormat(listAnimeData.media.format);
+  const duration = listAnimeData.media.duration;
+  const status = getParsedStatus(listAnimeData.media.status)
+  const episodes = getEpisodes(listAnimeData.media);
+  const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
+
+  return (
+    <li>
+      {format === 'Movie' ? (
+        <>
+          <FontAwesomeIcon
+            className="i"
+            icon={faStopwatch}
+            style={{ marginRight: 7 }}
+          />
+          {duration} Minutes
+        </>
+      ) : (
+        <>
+          <FontAwesomeIcon
+            className="i"
+            icon={faFilm}
+            style={{ marginRight: 7 }}
+          />
+          {availableEpisodes} {status === 'Releasing' && ` / ${episodes}`} Episodes
+        </>
+      )}
+    </li>
   );
 };
 
@@ -229,7 +270,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         progress !== episodes &&
         progress !== availableEpisodes && (
           <Button2
-            text={`Resume from Ep. ${progress ?? 0 + 1}`}
+            text={`Resume from Ep. ${(progress ?? 0) + 1}`}
             icon={faPlay}
             onPress={() => {}}
           />
