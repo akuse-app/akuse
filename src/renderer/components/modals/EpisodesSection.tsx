@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { getEpisodes, parseAirdate } from '../../../modules/utils';
+import { getAvailableEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import EpisodeEntry from './EpisodeEntry';
@@ -10,23 +10,14 @@ const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const EPISODES_PER_PAGE = 30;
 
 interface EpisodesSectionProps {
-  loadEpisodesInfo: boolean;
   listAnimeData: ListAnimeData;
 }
 
-const EpisodesSection: React.FC<EpisodesSectionProps> = ({
-  loadEpisodesInfo = false,
-  listAnimeData,
-}) => {
-  // const nPages = Array.from(
-  //   { length: episodes / EPISODES_PER_PAGE + 1 },
-  //   (_, i) => i + 1,
-  // );
-
+const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
     useState<boolean>(false);
-
   const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
+  const [activeSection, setActiveSection] = useState<number>(0);
 
   const fetchEpisodesInfo = async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
@@ -39,11 +30,9 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
   }, []);
 
-  /**
-   * @returns array with parsed episodes indexes (e.g. one piece 1103 episodes => array[36][30])
-   */
+  const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
+
   const getEpisodesArray = () => {
-    const episodes = getEpisodes(listAnimeData.media) ?? 0;
     const total_pages: number = Math.ceil(episodes / EPISODES_PER_PAGE);
     const episodesArray: number[][] = [];
 
@@ -65,50 +54,64 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
 
   const pages = getEpisodesArray();
 
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setActiveSection(parseInt(event.target.value));
+  };
+
   return (
     <div className="episodes-section">
       <div className="episodes-scroller">
         <div className="episodes-options">
           <h2>Episodes</h2>
-          <select name="" id=""></select>
+          {episodes > EPISODES_PER_PAGE && (
+            <select
+              className="main-select-0"
+              onChange={handleChange}
+              value={activeSection}
+            >
+              {pages.map((page, index) => (
+                <option key={index} value={index}>
+                  {page[0]}
+                  <span> - </span>
+                  {page.slice(-1)}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
-        {pages.map((page, index) => (
-          <div key={index} className="episodes show">
-            {page.map((episode, index) => (
-              <EpisodeEntry
-                key={index}
-                hasInfoLoaded={episodesInfoHasFetched}
-                number={episodeInfo ? `Ep, ${index + 1} - ` : ''}
-                cover={
-                  episodeInfo
-                    ? episodeInfo[index + 1]?.image ??
-                      listAnimeData.media.bannerImage ??
-                      ''
-                    : listAnimeData.media.bannerImage ?? ''
-                }
-                title={
-                  episodeInfo && episodeInfo[index + 1]?.title
-                    ? episodeInfo[index + 1]?.title?.en ?? `Episode ${episode}`
-                    : `Episode ${episode}`
-                }
-                description={
-                  episodeInfo ? episodeInfo[index + 1]?.summary ?? '' : ''
-                }
-                releaseDate={
-                  episodeInfo
-                    ? parseAirdate(episodeInfo[index + 1]?.airdate || '') ?? ''
-                    : ''
-                }
-                duration={
-                  episodeInfo
-                    ? `${episodeInfo[index + 1]?.length}min` ?? ''
-                    : ''
-                }
-              />
-            ))}
-          </div>
-        ))}
+        <div className="episodes">
+          {pages[activeSection].map((episode, index) => (
+            <EpisodeEntry
+              key={index}
+              hasInfoLoaded={episodesInfoHasFetched}
+              number={episodeInfo ? `Ep: ${episode} - ` : ''}
+              cover={
+                episodeInfo
+                  ? episodeInfo[episode]?.image ??
+                    listAnimeData.media.bannerImage ??
+                    ''
+                  : listAnimeData.media.bannerImage ?? ''
+              }
+              title={
+                episodeInfo && episodeInfo[episode]?.title
+                  ? episodeInfo[episode]?.title?.en ?? `Episode ${episode}`
+                  : `Episode ${episode}`
+              }
+              description={
+                episodeInfo ? episodeInfo[episode]?.summary ?? '' : ''
+              }
+              releaseDate={
+                episodeInfo
+                  ? parseAirdate(episodeInfo[episode]?.airdate || '') ?? ''
+                  : ''
+              }
+              duration={
+                episodeInfo ? `${episodeInfo[episode]?.length}min` ?? '' : ''
+              }
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
