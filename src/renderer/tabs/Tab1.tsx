@@ -1,4 +1,5 @@
 
+import { getNextReleases } from '../../modules/anilist/anilistApi';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
 import FeaturedContent from '../components/FeaturedContent';
@@ -7,11 +8,10 @@ interface Tab1Props {
   currentListAnime: ListAnimeData[]
   trendingAnime: ListAnimeData[]
   mostPopularAnime: ListAnimeData[]
+  nextReleasesAnime: ListAnimeData[]
 }
 
-const Tab1: React.FC<Tab1Props> = ({ currentListAnime, trendingAnime, mostPopularAnime }) => {
-  // const logged = useContext(AuthContext);
-
+const Tab1: React.FC<Tab1Props> = ({ currentListAnime, trendingAnime, mostPopularAnime, nextReleasesAnime }) => {
   return (
     <div className="main-container">
       <main>
@@ -26,6 +26,7 @@ const Tab1: React.FC<Tab1Props> = ({ currentListAnime, trendingAnime, mostPopula
           )}
           <AnimeSection title="Trending Now" animeData={trendingAnime} />
           <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
+          <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
         </div>
       </main>
     </div>

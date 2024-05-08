@@ -9,6 +9,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
   getMostPopularAnime,
+  getNextReleases,
   getTrendingAnime,
   getViewerId,
   getViewerList,
@@ -20,6 +21,7 @@ import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import Tab4 from './tabs/Tab4';
+import { animeDataToListAnimeData } from '../modules/utils';
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
@@ -30,6 +32,7 @@ export default function App() {
   const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>([]);
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>([]);
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>([]);
+  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>([]);
 
   let style = getComputedStyle(document.body)
 
@@ -42,38 +45,10 @@ export default function App() {
         setCurrentListAnime(await getViewerList(viewerId, 'CURRENT'));
       }
 
-      const ta = await getTrendingAnime(viewerId);
-      const mpa = await getMostPopularAnime(viewerId);
+      setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(viewerId)));
+      setMostPopularAnime(animeDataToListAnimeData(await await getMostPopularAnime(viewerId)))
+      setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(viewerId)))
 
-      if (ta?.media) {
-        let data: ListAnimeData[] = [];
-
-        ta.media.forEach((media) => {
-          data.push({
-            id: null,
-            mediaId: null,
-            progress: null,
-            media: media,
-          });
-        });
-
-        setTrendingAnime(data);
-      }
-
-      if (mpa?.media) {
-        let data: ListAnimeData[] = [];
-
-        mpa.media.forEach((media) => {
-          data.push({
-            id: null,
-            mediaId: null,
-            progress: null,
-            media: media,
-          });
-        });
-
-        setMostPopularAnime(data);
-      }
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -96,6 +71,7 @@ export default function App() {
                   currentListAnime={currentListAnime}
                   trendingAnime={trendingAnime}
                   mostPopularAnime={mostPopularAnime}
+                  nextReleasesAnime={nextReleasesAnime}
                 />
               }
             />

@@ -352,7 +352,7 @@ export const getMostPopularAnime = async (
  *
  * @returns object with next anime releases
  */
-export const nextAnimeReleases = async (viewerId: number | null) => {
+export const getNextReleases = async (viewerId: number | null) => {
   var query = `
       {
           Page(page: 1, perPage: ${PAGES}) {

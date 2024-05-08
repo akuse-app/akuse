@@ -1,3 +1,4 @@
+import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaStatus, MediaFormat } from '../types/anilistGraphQLTypes';
 
 const months = {
@@ -21,8 +22,29 @@ const months = {
   '09': 'Septempber',
   '10': 'October',
   '11': 'November',
-  '12': 'December'
-}
+  '12': 'December',
+};
+
+export const animeDataToListAnimeData = (
+  animeData: AnimeData,
+): ListAnimeData[] => {
+  if (animeData?.media) {
+    let data: ListAnimeData[] = [];
+
+    animeData.media.forEach((media) => {
+      data.push({
+        id: null,
+        mediaId: null,
+        progress: null,
+        media: media,
+      });
+    });
+
+    return data
+  }
+
+  return []
+};
 
 /**
  * Gets the anime title (english or romaji)
@@ -272,7 +294,10 @@ export const capitalizeFirstLetter = (string: string) =>
  * @param {*} div
  * @returns
  */
-export const isEllipsisActive = (div: HTMLElement) => div.scrollHeight > div.clientHeight;
+export const isEllipsisActive = (div: HTMLElement) =>
+  div.scrollHeight > div.clientHeight;
 
-export const parseAirdate = (airdate: string) => `${airdate.split('-')[2]} ${months[airdate.split('-')[1] as keyof typeof months]} ${airdate.split('-')[0]}`
-
+export const parseAirdate = (airdate: string) =>
+  `${airdate.split('-')[2]} ${
+    months[airdate.split('-')[1] as keyof typeof months]
+  } ${airdate.split('-')[0]}`;
