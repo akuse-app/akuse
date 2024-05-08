@@ -19,6 +19,7 @@ import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import { SkeletonTheme } from 'react-loading-skeleton';
+import Tab4 from './tabs/Tab4';
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
@@ -100,6 +101,8 @@ export default function App() {
             />
             <Route path="/tab2" element={<Tab2 />} />
             <Route path="/tab3" element={<Tab3 />} />
+            <Route path="/tab4" element={<Tab4 />} />
+            {/* <Route path="/tab5" element={<Tab5 />} /> */}
           </Routes>
         </MemoryRouter>
       </SkeletonTheme>

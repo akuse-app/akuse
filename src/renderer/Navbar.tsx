@@ -1,9 +1,14 @@
 import '../styles/style.css';
 
-import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faBookmark,
+  faCompass,
+  IconDefinition,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
+  faGear,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
 } from '@fortawesome/free-solid-svg-icons';
@@ -38,7 +43,7 @@ const NavUpperItem: React.FC<NavUpperItemProps> = ({
     <Link to={to} className={active ? 'active' : ''} onClick={onClick}>
       <li className={active ? 'active' : ''} data-title={text}>
         <div className="i-wrapper">
-          <FontAwesomeIcon className="i" icon={icon}/>
+          <FontAwesomeIcon className="i" icon={icon} />
         </div>
         <span>{text}</span>
       </li>
@@ -46,11 +51,7 @@ const NavUpperItem: React.FC<NavUpperItemProps> = ({
   );
 };
 
-const NavLowerItem: React.FC<NavLowerItemProps> = ({
-  text,
-  icon,
-  onClick,
-}) => {
+const NavLowerItem: React.FC<NavLowerItemProps> = ({ text, icon, onClick }) => {
   return (
     <li data-title={text} onClick={onClick}>
       <div className="i-wrapper">
@@ -64,7 +65,7 @@ const NavLowerItem: React.FC<NavLowerItemProps> = ({
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState(1);
   const logged = useContext(AuthContext);
-  
+
   return (
     <aside id="nav-main">
       <ul className="upper">
@@ -88,6 +89,13 @@ const Navbar = () => {
           to="/tab3"
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
+        />
+        <NavUpperItem
+          text="Settings"
+          icon={faGear}
+          to="/tab4"
+          active={activeTab === 4}
+          onClick={() => setActiveTab(4)}
         />
       </ul>
       <ul className="lower">
