@@ -954,8 +954,8 @@ main .featured .featured-img img {
 
 .anime-page .banner-wrapper {
   position: relative;
-  height: 30vh;
-  /* height: 50vh; */
+  aspect-ratio: 16 / 9;
+  height: 50vh;
 }
 
 .anime-page .banner-wrapper::after {
@@ -973,6 +973,12 @@ main .featured .featured-img img {
   height: 100%;
   object-fit: cover;
   filter: brightness(0.6);
+  border-radius: var(--border-radius);
+}
+
+.anime-page .trailer {
+  width: 100%;
+  height: 100%;
   border-radius: var(--border-radius);
 }
 
@@ -1063,12 +1069,12 @@ main .featured .featured-img img {
 
 .anime-page .content .additional-info {
   font-size: 1rem;
-  color: var(--font-2);
+  color: var(--font-3);
   line-height: 24px;
 }
 
 .anime-page .content .additional-info span {
-  color: var(--font-3);
+  color: var(--font-2);
 }
 
 .anime-page .episodes-section {

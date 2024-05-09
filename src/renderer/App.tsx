@@ -46,7 +46,7 @@ export default function App() {
       }
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(viewerId)));
-      setMostPopularAnime(animeDataToListAnimeData(await await getMostPopularAnime(viewerId)))
+      setMostPopularAnime(animeDataToListAnimeData(await getMostPopularAnime(viewerId)))
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(viewerId)))
 
     } catch (error) {

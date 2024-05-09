@@ -53,6 +53,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
   };
 
   const pages = getEpisodesArray();
+  console.log('-> ' + pages);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setActiveSection(parseInt(event.target.value));
@@ -81,36 +82,37 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
         </div>
 
         <div className="episodes">
-          {pages[activeSection].map((episode, index) => (
-            <EpisodeEntry
-              key={index}
-              hasInfoLoaded={episodesInfoHasFetched}
-              number={episodeInfo ? `Ep: ${episode} - ` : ''}
-              cover={
-                episodeInfo
-                  ? episodeInfo[episode]?.image ??
-                    listAnimeData.media.bannerImage ??
-                    ''
-                  : listAnimeData.media.bannerImage ?? ''
-              }
-              title={
-                episodeInfo && episodeInfo[episode]?.title
-                  ? episodeInfo[episode]?.title?.en ?? `Episode ${episode}`
-                  : `Episode ${episode}`
-              }
-              description={
-                episodeInfo ? episodeInfo[episode]?.summary ?? '' : ''
-              }
-              releaseDate={
-                episodeInfo
-                  ? parseAirdate(episodeInfo[episode]?.airdate || '') ?? ''
-                  : ''
-              }
-              duration={
-                episodeInfo ? `${episodeInfo[episode]?.length}min` ?? '' : ''
-              }
-            />
-          ))}
+          {pages.length !== 0 &&
+            pages[activeSection].map((episode, index) => (
+              <EpisodeEntry
+                key={index}
+                hasInfoLoaded={episodesInfoHasFetched}
+                number={episodeInfo ? `Ep: ${episode} - ` : ''}
+                cover={
+                  episodeInfo
+                    ? episodeInfo[episode]?.image ??
+                      listAnimeData.media.bannerImage ??
+                      ''
+                    : listAnimeData.media.bannerImage ?? ''
+                }
+                title={
+                  episodeInfo && episodeInfo[episode]?.title
+                    ? episodeInfo[episode]?.title?.en ?? `Episode ${episode}`
+                    : `Episode ${episode}`
+                }
+                description={
+                  episodeInfo ? episodeInfo[episode]?.summary ?? '' : ''
+                }
+                releaseDate={
+                  episodeInfo
+                    ? parseAirdate(episodeInfo[episode]?.airdate || '') ?? ''
+                    : ''
+                }
+                duration={
+                  episodeInfo ? `${episodeInfo[episode]?.length}min` ?? '' : ''
+                }
+              />
+            ))}
         </div>
       </div>
     </div>

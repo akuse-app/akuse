@@ -96,12 +96,12 @@ export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
 }) => {
   return (
     <p className="additional-info">
-      <span>Genres: </span>
+      {'Genres: '}
       {genres?.map((genre, index) => (
-        <>
+        <span key={index}>
           {genre}
           {genres?.length! - 1 !== index && ', '}
-        </>
+        </span>
       ))}
     </p>
   );
@@ -116,12 +116,12 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
 }) => {
   return (
     <p className="additional-info">
-      <span>Other titles: </span>
+      {'Other titles: '}
       {synonyms?.map((title, index) => (
-        <>
+        <span key={index}>
           {title}
           {synonyms?.length! - 1 !== index && ', '}
-        </>
+        </span>
       ))}
     </p>
   );
@@ -136,7 +136,7 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
 }) => {
   const format = getParsedFormat(listAnimeData.media.format);
   const duration = listAnimeData.media.duration;
-  const status = getParsedStatus(listAnimeData.media.status)
+  const status = getParsedStatus(listAnimeData.media.status);
   const episodes = getEpisodes(listAnimeData.media);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
 
@@ -158,7 +158,8 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
             icon={faFilm}
             style={{ marginRight: 7 }}
           />
-          {availableEpisodes} {status === 'Releasing' && ` / ${episodes}`} Episodes
+          {availableEpisodes} {status === 'Releasing' && ` / ${episodes}`}{' '}
+          Episodes
         </>
       )}
     </li>

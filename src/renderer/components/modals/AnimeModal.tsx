@@ -1,16 +1,14 @@
-import React, { MouseEventHandler, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import {
   faCircleExclamation,
-  faFilm,
   faStar,
   faTv,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import {
   capitalizeFirstLetter,
-  getEpisodes,
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
@@ -24,9 +22,8 @@ import {
   AnimeModalStatus,
   AnimeModalWatchButtons,
 } from './AnimeModalElements';
-import { Button2 } from '../Buttons';
-import { ModalPage, ModalPageShadow } from './Modal';
 import EpisodesSection from './EpisodesSection';
+import { ModalPage, ModalPageShadow } from './Modal';
 
 const modalsRoot = document.getElementById('modals-root');
 
@@ -39,9 +36,11 @@ interface AnimeModalProps {
 const AnimeModal: React.FC<AnimeModalProps> = ({
   listAnimeData,
   show,
-  onClose, 
+  onClose,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const [trailer, setTrailer] = useState<string | undefined>(undefined);
 
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
@@ -49,13 +48,28 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       onClose();
     }
   };
-  
+
   // close modal by pressing ESC
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       onClose();
     }
   };
+
+  const doesTrailerExists = () => {
+    if (listAnimeData.media.trailer?.site === 'youtube') {
+      console.log(listAnimeData.media.trailer);
+      setTrailer(listAnimeData.media.trailer.id);
+    }
+  };
+
+  const handleTrailerEnd = () => {
+    console.log('fine!')
+  }
+
+  useEffect(() => {
+    doesTrailerExists();
+  }, []);
 
   useEffect(() => {
     if (show) {
@@ -76,8 +90,21 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
             <div className="banner-wrapper">
-              {listAnimeData.media.bannerImage && (
-                <img src={listAnimeData.media.bannerImage} className="banner" />
+              {trailer ? (
+                <iframe
+                  className="trailer"
+                  title="Youtube player"
+                  sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
+                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=1&&controls=0&showinfo=0&rel=0&fs=0&modestbranding=1`}
+                  frameBorder={0}
+                ></iframe>
+              ) : (
+                listAnimeData.media.bannerImage && (
+                  <img
+                    src={listAnimeData.media.bannerImage}
+                    className="banner"
+                  />
+                )
               )}
               <AnimeModalWatchButtons listAnimeData={listAnimeData} />
             </div>
@@ -118,11 +145,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               </div>
               <div className="right">
                 <p className="additional-info">
-                  <span>Released on: </span>
-                  {capitalizeFirstLetter(
-                    listAnimeData.media.season ?? '?',
-                  )}{' '}
-                  {getParsedSeasonYear(listAnimeData.media)}
+                  {'Released on: '}
+                  <span>
+                    {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
+                    {getParsedSeasonYear(listAnimeData.media)}
+                  </span>
                 </p>
                 <AnimeModalGenres genres={listAnimeData.media.genres ?? []} />
                 <AnimeModalOtherTitles
