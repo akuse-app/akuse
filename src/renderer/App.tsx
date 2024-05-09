@@ -30,10 +30,10 @@ export const AuthContext = createContext<boolean>(false);
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
 
-  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>([]);
-  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>([]);
-  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>([]);
-  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>([]);
+  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[] | undefined>(undefined);
+  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[] | undefined>(undefined);
+  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[] | undefined>(undefined);
+  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[] | undefined>(undefined);
 
   let style = getComputedStyle(document.body)
 
@@ -61,7 +61,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={logged}>
-      <SkeletonTheme baseColor={style.getPropertyValue('--color-2')} highlightColor={style.getPropertyValue('--color-3')}>
+      <SkeletonTheme baseColor={style.getPropertyValue('--color-3')} highlightColor={style.getPropertyValue('--color-4')}>
         <MemoryRouter>
           <Navbar />
           <Routes>

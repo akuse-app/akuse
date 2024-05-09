@@ -13,10 +13,7 @@ import {
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { Media } from '../../types/anilistGraphQLTypes';
 import { Button1, CircleButton1 } from './Buttons';
-
-interface FeaturedContentProps {
-  animeData: ListAnimeData[]
-}
+import Skeleton from 'react-loading-skeleton';
 
 interface FeaturedItemProps {
   media: Media;
@@ -32,7 +29,8 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
           <div className="anime-info">
             <div className="anime-format">{media.format}</div>•
             <div className="anime-year">
-              {capitalizeFirstLetter(media.season ?? '?')} {getParsedSeasonYear(media)}
+              {capitalizeFirstLetter(media.season ?? '?')}{' '}
+              {getParsedSeasonYear(media)}
             </div>
             •<div className="anime-episodes">{media.episodes} Episodes</div>
           </div>
@@ -50,6 +48,10 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
   );
 };
 
+interface FeaturedContentProps {
+  animeData?: ListAnimeData[];
+}
+
 const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
   const [showButtons, setShowButtons] = useState(false);
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
@@ -66,7 +68,7 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
     }
   };
 
-  return (
+  return animeData ? (
     <>
       <div
         onMouseEnter={() => setShowButtons(true)}
@@ -95,16 +97,22 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
           style={{
             width: `${
               // trendingAnime?.media?.length! * 100
-              (animeData?.filter((listAnimeData) => listAnimeData?.media.bannerImage)?.length ?? 0) * 100
+              (animeData?.filter(
+                (listAnimeData) => listAnimeData?.media.bannerImage,
+              )?.length ?? 0) * 100
             }%`,
           }}
         >
           {animeData
             ?.filter((animeData) => animeData.media.bannerImage)
-            .map((animeData, index) => <FeaturedItem key={index} media={animeData.media} />)}
+            .map((animeData, index) => (
+              <FeaturedItem key={index} media={animeData.media} />
+            ))}
         </div>
       </div>
     </>
+  ) : (
+    <Skeleton className="featured skeleton"/>
   );
 };
 

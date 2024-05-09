@@ -343,7 +343,7 @@ aside ul {
   flex-direction: column;
   list-style-type: none;
   padding-left: 0;
-  gap: 10px;
+  gap: 5px;
 }
 
 aside ul.mid {
@@ -353,8 +353,8 @@ aside ul.mid {
   aside ul.mid .separe {
     margin: auto;
     margin-bottom: 10px;
-    width: 80%;
-    height: 2px;
+    width: 30px;
+    height: 3px;
     background-color: var(--font-3);
     filter: brightness(0.5);
     border-radius: var(--border-radius);
@@ -804,7 +804,10 @@ main .featured-scroller .featured-scroller-wrapper {
 main .featured {
   position: relative;
   width: 100%;
+  height: 382px;
+  margin-bottom: 20px;
   scroll-snap-align: center;
+  border-radius: var(--border-radius);
 }
 
 main .featured .featured-container {
@@ -1555,16 +1558,19 @@ main .anime-entry {
   height: min-content;
   margin-top: 10px;
   /* must be in anime-entry or hover scaling won't work */
-  cursor: pointer;
   transition: 0.25s ease-out;
   border-radius: var(--border-radius);
 }
 
-main .anime-entry:not(.loading):hover {
+main .anime-entry:not(.skeleton) {
+  cursor: pointer;
+}
+
+main .anime-entry:not(.skeleton):hover {
   transform: scale(1.07);
 }
 
-main .anime-entry:not(.loading):hover .anime-cover {
+main .anime-entry:not(.skeleton):hover .anime-cover {
   outline: 3px solid var(--font-1);
 }
 
@@ -1639,12 +1645,14 @@ main .anime-entry .anime-title span {
 
 main .anime-entry .anime-info {
   display: flex;
+  gap: 5px;
   font-size: 0.9rem;
   color: var(--font-3);
   font-weight: var(--font-weight);
 }
 
 main .anime-entry .anime-info .season-year {
+  height: 100%;
   width: 75%;
 }
 

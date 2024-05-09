@@ -3,7 +3,7 @@ import AnimeEntry from './AnimeEntry';
 
 interface AnimeSectionProps {
   title: string;
-  animeData: ListAnimeData[];
+  animeData?: ListAnimeData[];
 }
 
 const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
@@ -12,9 +12,11 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       <h1>{title}</h1>
       <div className="anime-list-wrapper">
         <div className="anime-list">
-          {animeData.map((listAnimeData, index) => (
-            <AnimeEntry key={index} listAnimeData={listAnimeData} />
-          ))}
+          {(animeData ? animeData : Array(20).fill(undefined)).map(
+            (listAnimeData, index) => (
+              <AnimeEntry key={index} listAnimeData={listAnimeData} />
+            ),
+          )}
         </div>
       </div>
     </section>
