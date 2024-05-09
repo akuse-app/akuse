@@ -3,12 +3,14 @@ import '../styles/style.css';
 import {
   faBookmark,
   faCompass,
-  IconDefinition,
+  IconDefinition
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
+  faBug,
   faCompass as faCompassFull,
   faGear,
+  faHeart as faHeartFull,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,12 +25,6 @@ interface NavUpperItemProps {
   icon: IconDefinition;
   to: string;
   active: boolean;
-  onClick: () => void;
-}
-
-interface NavLowerItemProps {
-  text: string;
-  icon: IconDefinition;
   onClick: () => void;
 }
 
@@ -51,9 +47,16 @@ const NavUpperItem: React.FC<NavUpperItemProps> = ({
   );
 };
 
-const NavLowerItem: React.FC<NavLowerItemProps> = ({ text, icon, onClick }) => {
+interface NavLowerItemProps {
+  text: string;
+  icon: IconDefinition;
+  onClick: () => void;
+  link?: boolean
+}
+
+const NavLowerItem: React.FC<NavLowerItemProps> = ({ text, icon, onClick, link = false }) => {
   return (
-    <li data-title={text} onClick={onClick}>
+    <li data-title={text} onClick={onClick} style={{ cursor: link ? 'default' : 'pointer' }}>
       <div className="i-wrapper">
         <FontAwesomeIcon className="i" icon={icon} />
       </div>
@@ -90,6 +93,9 @@ const Navbar = () => {
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
         />
+      </ul>
+      <ul className="mid">
+        <div className="separe"></div>
         <NavUpperItem
           text="Settings"
           icon={faGear}
@@ -99,11 +105,8 @@ const Navbar = () => {
         />
       </ul>
       <ul className="lower">
-        {/* <NavLowerItem 
-          text='Report a bug'
-          icon={faBug}
-          onClick={}
-          /> */}
+        <NavLowerItem text="Sponsor" icon={faHeartFull} onClick={() => {}} link/>
+        <NavLowerItem text="Report a bug" icon={faBug} onClick={() => {}} link/>
       </ul>
       {/* <ul className="lower">
       <li id="user-dropdown-bug-report" data-title="Report a bug">

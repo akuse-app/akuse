@@ -346,6 +346,20 @@ aside ul {
   gap: 10px;
 }
 
+aside ul.mid {
+  margin-top: 15px;
+}
+
+  aside ul.mid .separe {
+    margin: auto;
+    margin-bottom: 10px;
+    width: 80%;
+    height: 2px;
+    background-color: var(--font-3);
+    filter: brightness(0.5);
+    border-radius: var(--border-radius);
+  }
+
 aside ul.lower {
   position: absolute;
   bottom: 10px;
@@ -356,7 +370,7 @@ aside ul li {
   align-items: center;
   gap: 10px;
   color: var(--font-3);
-  /* cursor: pointer; */
+  cursor: pointer;
   font-weight: var(--font-weight);
   display: flex;
   /* transition: var(--transition); */
@@ -1115,9 +1129,52 @@ main .featured .featured-img img {
 
 .anime-page .episodes-section .episodes-options {
   display: flex;
+  position: relative;
   width: calc(100% - 30px);
   margin: 0 15px 10px 15px;
 }
+
+  .anime-page .episodes-section .episodes-options .right {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+    .anime-page .episodes-section .episodes-options .right .search-bar {
+      padding: 6px 0px 6px 8px;
+      background-color: var(--color-3);
+      border-radius: var(--border-radius);
+    }
+
+    .anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 100%;
+    }
+
+    .anime-page .episodes-section .episodes-options .right .search-bar .wrapper {
+      align-items: center;
+      display: flex
+    }
+
+    .anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper .i {
+      color: var(--font-2);
+    }
+
+    .anime-page .episodes-section .episodes-options .right .search-bar input {
+      width: 30px;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      font-weight: var(--font-weight);
+      color: var(--font-2);
+      transition: var(--transition);
+    }
 
 .episode-select {
   display: flex;
@@ -1443,7 +1500,7 @@ main section:not(:last-child) {
   margin-bottom: 15px;
 }
 
-main h1 {
+h1 {
   color: var(--font-3);
   font-weight: 800;
   font-size: 1.5rem;
