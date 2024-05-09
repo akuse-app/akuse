@@ -23,7 +23,7 @@
   --font-weight: 600;
   --border-radius: 10px;
   /* --border-radius: 8px; */
-  --transition: 0.2s ease-out;
+  --transition: 0.2s ease;
   --shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
@@ -377,13 +377,21 @@ aside ul li.active {
   color: var(--color-important);
 }
 
+aside ul li.active .i-wrapper {
+  background-color: var(--color-0);
+}
+
+aside ul li .i-wrapper:active {
+  transform: scale(0.9);
+}
+
 aside ul li:hover:not(li.active) {
-  /* color: var(--font-2); */
+  color: var(--font-2);
   filter: brightness(1.50);
 }
 
 aside ul li:hover:not(li.active) .i-wrapper {
-  /* background-color: var(--color-3); */
+  /* background-color: var(--color-0); */
 }
 
 aside ul li .i-wrapper {
@@ -392,9 +400,10 @@ aside ul li .i-wrapper {
   align-items: center;
   width: 50px;
   height: 50px;
-  background-color: var(--color-0);
-  border-radius: var(--border-radius);
-  /* transition: var(--transition); */
+  /* background-color: var(--color-0); */
+  /* border-radius: var(--border-radius); */
+  border-radius: 100%;
+  transition: var(--transition);
 }
 
 aside ul li .i-wrapper.nav-user {
@@ -953,12 +962,23 @@ main .featured .featured-img img {
 }
 
 .anime-page .banner-wrapper {
+  height: 30vh;
   position: relative;
-  aspect-ratio: 16 / 9;
-  height: 50vh;
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
 
-.anime-page .banner-wrapper::after {
+.anime-page .trailer-wrapper {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  height: 500px;
+  aspect-ratio: 16/9;
+  pointer-events: none;
+}
+
+.anime-page .banner-wrapper::after,
+.anime-page .trailer-wrapper::after {
   content: '';
   display: block;
   height: 100%;
@@ -977,9 +997,11 @@ main .featured .featured-img img {
 }
 
 .anime-page .trailer {
-  width: 100%;
+  width: 300%;
   height: 100%;
+  margin-left: -1150px;
   border-radius: var(--border-radius);
+  z-index: -1;
 }
 
 .anime-page .content-wrapper .content {
@@ -1174,7 +1196,7 @@ main .featured .featured-img img {
   aspect-ratio: 1.78 / 1;
 }
 
-.anime-page .episodes-section .episode-entry img{
+.anime-page .episodes-section .episode-entry img {
   min-width: 311.5px;
   height: 100%;
   aspect-ratio: 1.78 / 1;

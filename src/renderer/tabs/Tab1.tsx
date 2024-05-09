@@ -1,5 +1,4 @@
 
-import { getNextReleases } from '../../modules/anilist/anilistApi';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
 import FeaturedContent from '../components/FeaturedContent';

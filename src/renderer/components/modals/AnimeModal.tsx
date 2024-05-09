@@ -59,13 +59,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const doesTrailerExists = () => {
     if (listAnimeData.media.trailer?.site === 'youtube') {
       console.log(listAnimeData.media.trailer);
-      setTrailer(listAnimeData.media.trailer.id);
+      // setTrailer(listAnimeData.media.trailer.id);
     }
   };
-
-  const handleTrailerEnd = () => {
-    console.log('fine!')
-  }
 
   useEffect(() => {
     doesTrailerExists();
@@ -89,25 +85,29 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             <button className="exit" onClick={onClose}>
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
-            <div className="banner-wrapper">
-              {trailer ? (
+
+            {trailer ? (
+              <div className="trailer-wrapper">
                 <iframe
                   className="trailer"
-                  title="Youtube player"
+                  title="Anime trailer"
                   sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
-                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=1&&controls=0&showinfo=0&rel=0&fs=0&modestbranding=1`}
+                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=0&controls=0&color=white&modestbranding=0&rel=0&playsinline=1&enablejsapi=1&playlist=${trailer}`}
                   frameBorder={0}
                 ></iframe>
-              ) : (
-                listAnimeData.media.bannerImage && (
+              </div>
+            ) : (
+              <div className="banner-wrapper">
+                {listAnimeData.media.bannerImage && (
                   <img
                     src={listAnimeData.media.bannerImage}
                     className="banner"
                   />
-                )
-              )}
-              <AnimeModalWatchButtons listAnimeData={listAnimeData} />
-            </div>
+                )}
+                <AnimeModalWatchButtons listAnimeData={listAnimeData} />
+              </div>
+            )}
+
             <div className="content">
               <div className="left">
                 <h1 className="title">{getTitle(listAnimeData.media)}</h1>

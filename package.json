@@ -109,6 +109,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loading-skeleton": "^3.4.0",
+    "react-player": "^2.16.0",
     "react-router-dom": "^6.16.0",
     "stream": "^0.0.2"
   },

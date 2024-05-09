@@ -251,7 +251,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   return logged ? (
     <div className="watch-buttons">
       {progress === 0 && (
-        <Button2 text="Start watching" icon={faPlay} onPress={() => {}} />
+        <Button2 text="Watch now" icon={faPlay} onPress={() => {}} />
       )}
 
       {progress === episodes ? (
@@ -278,6 +278,8 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         )}
     </div>
   ) : (
-    <></>
+    <div className="watch-buttons">
+      <Button2 text="Watch now" icon={faPlay} onPress={() => {}} />
+    </div>
   );
 };

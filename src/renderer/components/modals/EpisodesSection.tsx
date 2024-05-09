@@ -53,7 +53,6 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
   };
 
   const pages = getEpisodesArray();
-  console.log('-> ' + pages);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setActiveSection(parseInt(event.target.value));
