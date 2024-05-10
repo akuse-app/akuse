@@ -1,6 +1,10 @@
 import Store from 'electron-store';
 
-import { CurrentListAnime, MostPopularAnime, TrendingAnime } from '../../types/anilistAPITypes';
+import {
+  CurrentListAnime,
+  MostPopularAnime,
+  TrendingAnime,
+} from '../../types/anilistAPITypes';
 import { MediaListStatus } from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
@@ -198,7 +202,10 @@ export const getViewerList = async (
   const options = getOptions(query, variables);
 
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-  return respData.data.MediaListCollection.lists[0].entries;
+
+  return respData.data.MediaListCollection.lists.length === 0
+    ? []
+    : respData.data.MediaListCollection.lists[0].entries;
 };
 
 // NOT WORKING

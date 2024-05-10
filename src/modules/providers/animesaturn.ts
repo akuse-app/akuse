@@ -1,20 +1,6 @@
-'use-strict'
+import AnimeSaturn from "@consumet/extensions/dist/providers/anime/animesaturn"
 
-const Consumet = require('@consumet/extensions')
-
-/**
- * Methods to fetch anime video sources and data using Consumet library 
- * 
- * @class
- */
-module.exports = class AnimeSaturn {
-
-    /**
-     * @constructor
-     */
-    constructor() {
-        this.consumet = new Consumet.ANIME.AnimeSaturn
-    }
+const consumet = new AnimeSaturn()
 
     /**
      * Gets the episode url and isM3U8 flag
@@ -24,14 +10,14 @@ module.exports = class AnimeSaturn {
      * @returns episode object (url + isM3U8 flag) in streamtape quality
      * @returns -1 if could not get the animeId or the animeEpisodeId
      */
-    async getEpisodeUrl(animeSearch, episode, dubbed) {
-        const animeId = await this.getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch)
+    export const getEpisodeUrl = async (animeSearch: string, episode: number, dubbed: boolean) => {
+        const animeId = await getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch)
         if (animeId == -1) return -1
 
-        const animeEpisodeId = await this.getAnimeEpisodeId(animeId, episode)
+        const animeEpisodeId = await getAnimeEpisodeId(animeId, episode)
         if(animeEpisodeId === undefined) return -1
 
-        const data = await this.consumet.fetchEpisodeSources(animeEpisodeId)
+        const data = await consumet.fetchEpisodeSources(animeEpisodeId)
 
         return data.sources[1] // [1] is streamtape
     }
@@ -43,8 +29,8 @@ module.exports = class AnimeSaturn {
      * @returns anime id
      * @returns -1 if could not get the animeId
      */
-    async getAnimeId(animeSearch) {
-        const data = await this.consumet.search(animeSearch)
+    export const getAnimeId = async (animeSearch: string) => {
+        const data = await consumet.search(animeSearch)
         
         if (data.results.length !== 0) {
             return data.results[0].id
@@ -60,8 +46,8 @@ module.exports = class AnimeSaturn {
      * @param {*} episode 
      * @returns anime episode id
      */
-    async getAnimeEpisodeId(animeId, episode) {
-        const data = await this.consumet.fetchAnimeInfo(animeId)
+    export const getAnimeEpisodeId = async (animeId: string, episode: number) => {
+        const data = await consumet.fetchAnimeInfo(animeId)
         return data.episodes[episode-1]?.id
     }
 }

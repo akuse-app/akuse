@@ -30,38 +30,100 @@ export const AuthContext = createContext<boolean>(false);
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
 
-  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[] | undefined>(undefined);
-  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[] | undefined>(undefined);
-  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[] | undefined>(undefined);
-  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[] | undefined>(undefined);
+  // tab1
+  const [currentListAnime, setCurrentListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [trendingAnime, setTrendingAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [mostPopularAnime, setMostPopularAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [nextReleasesAnime, setNextReleasesAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
 
-  let style = getComputedStyle(document.body)
+  // tab2
+  const [tab2Click, setTab2Click] = useState<boolean>(false);
+  const [planningListAnime, setPlanningListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [completedListAnime, setCompletedListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [pausedListAnime, setPausedListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
+  const [RepeatingListAnime, setRepeatingListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
 
-  const fetchAnimeData = async () => {
+  let style = getComputedStyle(document.body);
+
+  const [viewerId, setViewerId] = useState<number | null>(null);
+
+  const fetchTab1AnimeData = async () => {
     try {
-      var viewerId = null;
-
       if (logged) {
-        viewerId = await getViewerId();
-        setCurrentListAnime(await getViewerList(viewerId, 'CURRENT'));
+        const id = await getViewerId();
+        setViewerId(id);
+        setCurrentListAnime(await getViewerList(id, 'CURRENT'));
       }
 
-      setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(viewerId)));
-      setMostPopularAnime(animeDataToListAnimeData(await getMostPopularAnime(viewerId)))
-      setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(viewerId)))
-
+      setTrendingAnime(
+        animeDataToListAnimeData(await getTrendingAnime(viewerId)),
+      );
+      setMostPopularAnime(
+        animeDataToListAnimeData(await getMostPopularAnime(viewerId)),
+      );
+      setNextReleasesAnime(
+        animeDataToListAnimeData(await getNextReleases(viewerId)),
+      );
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
   };
 
+  const fetchTab2AnimeData = async () => {
+    try {
+      if (viewerId) {
+        setPlanningListAnimeListAnime(
+          await getViewerList(viewerId, 'PLANNING'),
+        );
+        setCompletedListAnimeListAnime(
+          await getViewerList(viewerId, 'COMPLETED'),
+        );
+        setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
+        setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
+        setRepeatingListAnimeListAnime(
+          await getViewerList(viewerId, 'REPEATING'),
+        );
+      }
+    } catch (error) {
+      console.log('Tab2 error: ' + error);
+    }
+  };
+
   useEffect(() => {
-    fetchAnimeData();
+    fetchTab1AnimeData();
   }, []);
+
+  useEffect(() => {
+    if (tab2Click) {
+      fetchTab2AnimeData();
+    }
+  }, [tab2Click, viewerId]);
 
   return (
     <AuthContext.Provider value={logged}>
-      <SkeletonTheme baseColor={style.getPropertyValue('--color-3')} highlightColor={style.getPropertyValue('--color-4')}>
+      <SkeletonTheme
+        baseColor={style.getPropertyValue('--color-3')}
+        highlightColor={style.getPropertyValue('--color-4')}
+      >
         <MemoryRouter>
           <Navbar />
           <Routes>
@@ -76,7 +138,23 @@ export default function App() {
                 />
               }
             />
-            <Route path="/tab2" element={<Tab2 />} />
+            {logged && (
+              <Route
+                path="/tab2"
+                element={
+                  <Tab2
+                    planningListAnime={planningListAnime}
+                    completedListAnime={completedListAnime}
+                    droppedListAnime={droppedListAnime}
+                    pausedListAnime={pausedListAnime}
+                    repeatingListAnime={RepeatingListAnime}
+                    clicked={() => {
+                      !tab2Click && setTab2Click(true);
+                    }}
+                  />
+                }
+              />
+            )}
             <Route path="/tab3" element={<Tab3 />} />
             <Route path="/tab4" element={<Tab4 />} />
             <Route path="/tab5" element={<Tab5 />} />

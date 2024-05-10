@@ -77,30 +77,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
         <div className="episodes-options">
           <h2>Episodes</h2>
           <div className="right">
-            <div className="search-bar">
-              <div className="wrapper">
-                <div className="i-wrapper" onClick={() => {setSearchValue('')}}>
-                  <FontAwesomeIcon
-                    icon={searchValue !== '' ? faXmark : faSearch}
-                    className="i"
-                    style={{ marginRight: 7 }}
-                  />
-                </div>
-                <input
-                  onFocus={() => {
-                    setWidenInput(true);
-                  }}
-                  onBlur={() => {
-                    setWidenInput(false);
-                    setSearchValue('');
-                  }}
-                  style={{ width: widenInput ? 300 : 30 }}
-                  type="text"
-                  value={searchValue}
-                  onChange={handleSearchChange}
-                />
-              </div>
-            </div>
+
             {episodes > EPISODES_PER_PAGE && (
               <select
                 className="main-select-0"
@@ -158,3 +135,30 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
 };
 
 export default EpisodesSection;
+
+{/* <div className="search-bar">
+<div className="wrapper">
+  <div className="i-wrapper" onClick={() => {setSearchValue('')}}>
+    <FontAwesomeIcon
+      icon={faSearch}
+      // icon={searchValue !== '' ? faXmark : faSearch}
+      className="i"
+      style={{ marginRight: 7 }}
+    />
+  </div>
+  <input
+    onFocus={() => {
+      setWidenInput(true);
+    }}
+    onBlur={() => {
+      setWidenInput(false);
+      setSearchValue('');
+    }}
+    placeholder='Search...'
+    style={{ width: widenInput ? 300 : 75 }}
+    type="text"
+    value={searchValue}
+    onChange={handleSearchChange}
+  />
+</div>
+</div> */}

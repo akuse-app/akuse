@@ -58,7 +58,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const doesTrailerExists = () => {
     if (listAnimeData.media.trailer?.site === 'youtube') {
-      console.log(listAnimeData.media.trailer);
       // setTrailer(listAnimeData.media.trailer.id);
     }
   };

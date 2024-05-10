@@ -37,7 +37,5 @@ export const makeRequest = async (
     data: options,
   });
 
-  // console.log(response)
-
   return response.data;
 };

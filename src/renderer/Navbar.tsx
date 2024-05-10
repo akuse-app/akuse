@@ -3,7 +3,7 @@ import '../styles/style.css';
 import {
   faBookmark,
   faCompass,
-  IconDefinition
+  IconDefinition,
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
@@ -51,12 +51,21 @@ interface NavLowerItemProps {
   text: string;
   icon: IconDefinition;
   onClick: () => void;
-  link?: boolean
+  link?: boolean;
 }
 
-const NavLowerItem: React.FC<NavLowerItemProps> = ({ text, icon, onClick, link = false }) => {
+const NavLowerItem: React.FC<NavLowerItemProps> = ({
+  text,
+  icon,
+  onClick,
+  link = false,
+}) => {
   return (
-    <li data-title={text} onClick={onClick} style={{ cursor: link ? 'default' : 'pointer' }}>
+    <li
+      data-title={text}
+      onClick={onClick}
+      style={{ cursor: link ? 'default' : 'pointer' }}
+    >
       <div className="i-wrapper">
         <FontAwesomeIcon className="i" icon={icon} />
       </div>
@@ -79,13 +88,15 @@ const Navbar = () => {
           active={activeTab === 1}
           onClick={() => setActiveTab(1)}
         />
-        <NavUpperItem
-          text="Library"
-          icon={activeTab === 2 ? faBookmarkFull : faBookmark}
-          to="/tab2"
-          active={activeTab === 2}
-          onClick={() => setActiveTab(2)}
-        />
+        {logged && (
+          <NavUpperItem
+            text="Library"
+            icon={activeTab === 2 ? faBookmarkFull : faBookmark}
+            to="/tab2"
+            active={activeTab === 2}
+            onClick={() => setActiveTab(2)}
+          />
+        )}
         <NavUpperItem
           text="Search"
           icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
@@ -105,8 +116,18 @@ const Navbar = () => {
         />
       </ul>
       <ul className="lower">
-        <NavLowerItem text="Sponsor" icon={faHeartFull} onClick={() => {}} link/>
-        <NavLowerItem text="Report a bug" icon={faBug} onClick={() => {}} link/>
+        <NavLowerItem
+          text="Sponsor"
+          icon={faHeartFull}
+          onClick={() => {}}
+          link
+        />
+        <NavLowerItem
+          text="Report a bug"
+          icon={faBug}
+          onClick={() => {}}
+          link
+        />
       </ul>
       {/* <ul className="lower">
       <li id="user-dropdown-bug-report" data-title="Report a bug">

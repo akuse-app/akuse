@@ -353,8 +353,8 @@ aside ul.mid {
   aside ul.mid .separe {
     margin: auto;
     margin-bottom: 10px;
-    width: 30px;
-    height: 3px;
+    width: 50%;
+    height: 4px;
     background-color: var(--font-3);
     filter: brightness(0.5);
     border-radius: var(--border-radius);
@@ -1155,7 +1155,6 @@ main .featured .featured-img img {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 30px;
       height: 100%;
     }
 
