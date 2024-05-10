@@ -40,10 +40,10 @@ export const animeDataToListAnimeData = (
       });
     });
 
-    return data
+    return data;
   }
 
-  return []
+  return [];
 };
 
 /**
@@ -297,7 +297,37 @@ export const capitalizeFirstLetter = (string: string) =>
 export const isEllipsisActive = (div: HTMLElement) =>
   div.scrollHeight > div.clientHeight;
 
+/**
+ * parses airdate in a better human readable format
+ *
+ * @param airdate
+ * @returns parsed airdate
+ */
 export const parseAirdate = (airdate: string) =>
   `${airdate.split('-')[2]} ${
     months[airdate.split('-')[1] as keyof typeof months]
   } ${airdate.split('-')[0]}`;
+
+/**
+ * parses anime titles for episode url searching
+ * 
+ * @param animeEntry 
+ * @returns parsed anime titles
+ */
+export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
+  var animeTitles = getTitlesAndSynonyms(animeEntry);
+
+  // const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
+  // if(customTitle !== undefined) animeTitles.unshift(customTitle)
+
+  animeTitles.forEach((title) => {
+    if (title.includes('Season '))
+      animeTitles.push(title.replace('Season ', ''));
+    if (title.includes('Season ') && title.includes('Part '))
+      animeTitles.push(title.replace('Season ', '').replace('Part ', ''));
+    if (title.includes('Part ')) animeTitles.push(title.replace('Part ', ''));
+    if (title.includes(':')) animeTitles.push(title.replace(':', ''));
+  });
+
+  return animeTitles
+};
