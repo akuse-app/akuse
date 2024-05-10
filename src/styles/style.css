@@ -62,6 +62,10 @@
   z-index: 1;
 }
 
+#root {
+  height: 100%;
+}
+
 html,
 body {
   background: var(--color-0);
@@ -1746,10 +1750,17 @@ main#my-list-page .section-container {
   flex-direction: column;
 }
 
+main.search {
+  display: flex;
+  flex-direction: row;
+  gap: 10px
+}
+
 main .filters-container {
   position: relative;
   display: flex;
-  width: 100%;
+  flex-direction: column;
+  width: 300px;
   gap: 20px;
 }
 
@@ -1804,7 +1815,7 @@ main .filters-container .filter .i {
 }
 
 main .filters-container .filter h2 {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
 }
 
 main .search-buttons-container {
