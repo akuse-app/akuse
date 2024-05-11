@@ -4,118 +4,215 @@ import {
   faHeading,
   faLeaf,
   faMasksTheater,
-  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useContext, useState } from 'react';
+
+import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
+import { searchFilteredAnime } from '../../modules/anilist/anilistApi';
+import { animeDataToListAnimeData } from '../../modules/utils';
+import { ListAnimeData } from '../../types/anilistAPITypes';
+import { ViewerIdContext } from '../App';
+import AnimeEntry from '../components/AnimeEntry';
+
+import Dots from 'react-activity/dist/Dots';
+import 'react-activity/dist/Dots.css';
 
 const Tab3 = () => {
+  const viewerId = useContext(ViewerIdContext);
+
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedSeason, setSelectedSeason] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('');
+  const [selectedSort, setSelectedSort] = useState('');
+
+  const [searchedAnime, setSearchedAnime] = useState<
+    ListAnimeData[] | undefined
+  >([]);
+
+  const handleTitleChange = (event: any) => {
+    setSelectedTitle(event.target.value);
+  };
+
+  const handleGenreChange = (event: any) => {
+    setSelectedGenre(event.target.value);
+  };
+
+  const handleSeasonChange = (event: any) => {
+    setSelectedSeason(event.target.value);
+  };
+
+  const handleYearChange = (event: any) => {
+    setSelectedYear(event.target.value);
+  };
+
+  const handleFormatChange = (event: any) => {
+    setSelectedFormat(event.target.value);
+  };
+
+  const handleSortChange = (event: any) => {
+    setSelectedSort(event.target.value);
+  };
+
+  const handleClearClick = () => {
+    setSelectedTitle('');
+    setSelectedGenre('');
+    setSelectedSeason('');
+    setSelectedYear('');
+    setSelectedFormat('');
+    setSelectedSort('');
+  };
+
+  const handleSearchClick = async () => {
+    setSearchedAnime(undefined);
+
+    let title = '';
+    let genre = '';
+    let season = '';
+    let year = '';
+    let format = '';
+    let sort = '';
+
+    let args = [
+      selectedTitle !== ''
+        ? (title = `search: "${selectedTitle}"`)
+        : (title = ''),
+      selectedGenre !== ''
+        ? (genre = `genre: "${selectedGenre}"`)
+        : (genre = ''),
+      selectedSeason !== ''
+        ? (season = `season: ${selectedSeason}`)
+        : (season = ''),
+      selectedYear !== ''
+        ? (year = `seasonYear: ${selectedYear}`)
+        : (year = ''),
+      selectedFormat !== ''
+        ? (format = `format: ${selectedFormat}`)
+        : (format = ''),
+      selectedSort !== '' ? (sort = `sort: ${selectedSort}`) : (sort = ''),
+    ].filter((item) => !(item == ''));
+
+    const parsedArgs = args.concat('type: ANIME').join(', ');
+    console.table(parsedArgs);
+    const diocan = await searchFilteredAnime(parsedArgs, viewerId);
+    console.log(diocan);
+    setSearchedAnime(animeDataToListAnimeData(diocan));
+  };
+
   return (
     <div className="main-container">
-      <main className='search'>
+      <h1>Search</h1>
+      <main className="search">
         <div className="filters-container">
           <div className="filter">
             <h2>
-              <FontAwesomeIcon className="i" icon={faHeading} />
-              Title
+              <FontAwesomeIcon className="i" icon={faHeading} /> Title
             </h2>
             <input
               type="text"
               id="search-page-filter-title"
               placeholder="Search..."
+              value={selectedTitle}
+              onChange={handleTitleChange}
             />
           </div>
           <div className="filter">
             <h2>
-              <FontAwesomeIcon className="i" icon={faMasksTheater} />
-              Genre
+              <FontAwesomeIcon className="i" icon={faMasksTheater} /> Genre
             </h2>
-            <select name="" id="search-page-filter-genre">
-              <option value="" selected>
-                Any
-              </option>
-              <option value="Action">Action</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Comedy">Comedy</option>
-              <option value="Drama">Drama</option>
-              <option value="Ecchi">Ecchi</option>
-              <option value="Fantasy">Fantasy</option>
-              <option value="Horror">Horror</option>
-              <option value="Mahou Shoujo">Mahou Shoujo</option>
-              <option value="Mecha">Mecha</option>
-              <option value="Music">Music</option>
-              <option value="Mistery">Mistery</option>
-              <option value="Psychological">Psychological</option>
-              <option value="Romance">Romance</option>
-              <option value="Sci-Fi">Sci-Fi</option>
-              <option value="Slice of Life">Slice of Life</option>
-              <option value="Sports">Sports</option>
-              <option value="Supernatural">Supernatural</option>
-              <option value="Thriller">Thriller</option>
+            <select
+              id="search-page-filter-genre"
+              value={selectedGenre}
+              onChange={handleGenreChange}
+            >
+              {GENRES.map((genre) => (
+                <option key={genre.value} value={genre.value}>
+                  {genre.label}
+                </option>
+              ))}
             </select>
           </div>
           <div className="filter">
             <h2>
-              <FontAwesomeIcon className="i" icon={faLeaf} />
-              Season
+              <FontAwesomeIcon className="i" icon={faLeaf} /> Season
             </h2>
             <div className="filter-divisor">
-              <select name="" id="search-page-filter-season">
-                <option value="" selected>
-                  Any
-                </option>
-                <option value="WINTER">Winter</option>
-                <option value="SPRING">Spring</option>
-                <option value="SUMMER">Summer</option>
-                <option value="FALL">Fall</option>
+              <select
+                id="search-page-filter-season"
+                value={selectedSeason}
+                onChange={handleSeasonChange}
+              >
+                {SEASONS.map((season) => (
+                  <option key={season.value} value={season.value}>
+                    {season.label}
+                  </option>
+                ))}
               </select>
               <input
                 type="number"
                 id="search-page-filter-year"
                 placeholder="Year"
+                value={selectedYear}
+                onChange={handleYearChange}
               />
             </div>
           </div>
           <div className="filter">
             <h2>
-              <FontAwesomeIcon className="i" icon={faDisplay} />
-              Format
+              <FontAwesomeIcon className="i" icon={faDisplay} /> Format
             </h2>
-            <select name="" id="search-page-filter-format">
-              <option value="" selected>
-                Any
-              </option>
-              <option value="TV">TV Show</option>
-              <option value="TV_SHORT">TV Short</option>
-              <option value="MOVIE">Movie</option>
-              <option value="SPECIAL">Special</option>
-              <option value="OVA">OVA</option>
-              <option value="ONA">ONA</option>
-              <option value="MUSIC">Music</option>
+            <select
+              id="search-page-filter-format"
+              value={selectedFormat}
+              onChange={handleFormatChange}
+            >
+              {FORMATS.map((format) => (
+                <option key={format.value} value={format.value}>
+                  {format.label}
+                </option>
+              ))}
             </select>
           </div>
-          <div style={{ marginRight: 45 }} className="filter">
+          <div className="filter">
             <h2>
-              <FontAwesomeIcon className="i" icon={faFilter} />
-              Sort
+              <FontAwesomeIcon className="i" icon={faFilter} /> Sort
             </h2>
-            <select name="" id="search-page-filter-sort">
-              <option value="" selected>
-                Any
-              </option>
-              <option value="START_DATE_DESC">Release Date</option>
-              <option value="SCORE_DESC">Score</option>
-              <option value="POPULARITY_DESC">Popularity</option>
-              <option value="TRENDING_DESC">Trending</option>
+            <select
+              id="search-page-filter-sort"
+              value={selectedSort}
+              onChange={handleSortChange}
+            >
+              {SORTS.map((sort) => (
+                <option key={sort.value} value={sort.value}>
+                  {sort.label}
+                </option>
+              ))}
             </select>
           </div>
-          <button id="search-clear">
-            <FontAwesomeIcon className="i" icon={faTrashCan} />
-          </button>
+          <div className="filter">
+            <button id="search-clear" onClick={handleClearClick}>
+              Clear
+            </button>
+          </div>
+          <div className="filter">
+            <button id="search-submit" onClick={handleSearchClick}>
+              Search
+            </button>
+          </div>
         </div>
-        {/* <div className="search-buttons-container">
-          <button id="search-submit">Search</button>
-        </div> */}
-        <div className="entries-container"></div>
+        <div className="entries-container">
+          {!searchedAnime ? (
+            <div className="activity-indicator">
+              <Dots />
+            </div>
+          ) : (
+            searchedAnime?.map((value, index) => (
+              <AnimeEntry key={index} listAnimeData={value} />
+            ))
+          )}
+        </div>
       </main>
     </div>
   );

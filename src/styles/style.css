@@ -354,15 +354,15 @@ aside ul.mid {
   margin-top: 15px;
 }
 
-  aside ul.mid .separe {
-    margin: auto;
-    margin-bottom: 10px;
-    width: 50%;
-    height: 4px;
-    background-color: var(--font-3);
-    filter: brightness(0.5);
-    border-radius: var(--border-radius);
-  }
+aside ul.mid .separe {
+  margin: auto;
+  margin-bottom: 10px;
+  width: 50%;
+  height: 4px;
+  background-color: var(--font-3);
+  filter: brightness(0.5);
+  border-radius: var(--border-radius);
+}
 
 aside ul.lower {
   position: absolute;
@@ -1135,46 +1135,46 @@ main .featured .featured-img img {
   margin: 0 15px 10px 15px;
 }
 
-  .anime-page .episodes-section .episodes-options .right {
-    display: flex;
-    gap: 10px;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+.anime-page .episodes-section .episodes-options .right {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
-    .anime-page .episodes-section .episodes-options .right .search-bar {
-      padding: 6px 0px 6px 8px;
-      background-color: var(--color-3);
-      border-radius: var(--border-radius);
-    }
+.anime-page .episodes-section .episodes-options .right .search-bar {
+  padding: 6px 0px 6px 8px;
+  background-color: var(--color-3);
+  border-radius: var(--border-radius);
+}
 
-    .anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
+.anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 
-    .anime-page .episodes-section .episodes-options .right .search-bar .wrapper {
-      align-items: center;
-      display: flex
-    }
+.anime-page .episodes-section .episodes-options .right .search-bar .wrapper {
+  align-items: center;
+  display: flex
+}
 
-    .anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper .i {
-      color: var(--font-2);
-    }
+.anime-page .episodes-section .episodes-options .right .search-bar .i-wrapper .i {
+  color: var(--font-2);
+}
 
-    .anime-page .episodes-section .episodes-options .right .search-bar input {
-      width: 30px;
-      background-color: transparent;
-      border: none;
-      outline: none;
-      font-size: 1rem;
-      font-weight: var(--font-weight);
-      color: var(--font-2);
-      transition: var(--transition);
-    }
+.anime-page .episodes-section .episodes-options .right .search-bar input {
+  width: 30px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: var(--font-weight);
+  color: var(--font-2);
+  transition: var(--transition);
+}
 
 .episode-select {
   display: flex;
@@ -1755,7 +1755,6 @@ main .filters-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 300px;
   gap: 20px;
 }
 
@@ -1763,13 +1762,14 @@ main .filters-container .filter {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  flex-basis: 100%;
+  /* flex-basis: 100%; */
   color: var(--font-3);
   transition: var(--transition);
 }
 
 main .filters-container .filter .filter-divisor {
   display: flex;
+  flex-direction: column;
   gap: 5px;
 }
 
@@ -1782,7 +1782,6 @@ main .filters-container .filter input,
 main .filters-container .filter select {
   border: none;
   outline: none;
-  width: 100%;
   height: 30px;
   padding: 0 10px;
   color: var(--font-2);
@@ -1790,10 +1789,6 @@ main .filters-container .filter select {
   font-weight: var(--font-weight);
   background-color: var(--color-3);
   border-radius: var(--border-radius);
-}
-
-main .filters-container .filter input {
-  width: calc(100% - 20px);
 }
 
 main .filters-container .filter input::placeholder {
@@ -1845,40 +1840,38 @@ main .search-buttons-container .search-tags .tags-container .tag {
   font-weight: var(--font-weight);
 }
 
-main .search-buttons-container button#search-submit {
+main button#search-submit {
   border: none;
   outline: none;
-  width: 100px;
-  height: 35px;
+  height: 30px;
   padding: 0 10px;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: var(--font-weight);
-  border-radius: var(--border-radius);
   color: var(--color-0);
   background-color: var(--color-important);
-  /* cursor: pointer; */
+  border-radius: var(--border-radius);
 }
 
 main button#search-clear {
   border: none;
   outline: none;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 30px;
   height: 30px;
+  padding: 0 10px;
+  font-size: 1.1rem;
+  font-weight: var(--font-weight);
   color: var(--font-3);
   background-color: var(--color-3);
   border-radius: var(--border-radius);
-  /* cursor: pointer; */
 }
 
+main button#search-submit:hover,
 main button#search-clear:hover {
-  color: var(--font-2);
+  filter: brightness(0.90);
 }
 
+main button#search-submit:active,
 main button#search-clear:active {
-  color: var(--font-3);
+  filter: brightness(0.80);
 }
 
 main .entries-container {
@@ -1886,10 +1879,11 @@ main .entries-container {
   grid-template-columns: repeat(auto-fit, minmax(170px, max-content));
   justify-content: center;
   width: 100%;
-  height: 100%;
   margin-top: 20px;
 }
 
-main .entries-container .anime-entry {
-  margin-bottom: 20px;
+main .entries-container .activity-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

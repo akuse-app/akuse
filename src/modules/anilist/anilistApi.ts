@@ -1,6 +1,7 @@
 import Store from 'electron-store';
 
 import {
+  AnimeData,
   CurrentListAnime,
   MostPopularAnime,
   TrendingAnime,
@@ -400,7 +401,7 @@ export const getNextReleases = async (viewerId: number | null) => {
  * @param {*} args
  * @returns object with the searched filtered anime
  */
-export const searchFilteredAnime = async (args: any) => {
+export const searchFilteredAnime = async (args: string, viewerId: number | null): Promise<AnimeData> => {
   var query = `
       {
           Page(page: 1, perPage: 50) {
@@ -416,8 +417,21 @@ export const searchFilteredAnime = async (args: any) => {
       }
       `;
 
+  if (viewerId) {
+    var headers: any = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  } else {
+    var headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
+
   const options = getOptions(query);
-  const respData = await makeRequest(METHOD, GRAPH_QL_URL, HEADERS, options);
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Page;
 };

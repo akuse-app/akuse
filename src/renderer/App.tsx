@@ -27,12 +27,13 @@ import { setDefaultSourceFlag } from '../modules/storeVariables';
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
+export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
 
-  setDefaultSourceFlag()
+  setDefaultSourceFlag();
 
   // tab1
   const [currentListAnime, setCurrentListAnime] = useState<
@@ -70,22 +71,18 @@ export default function App() {
 
   const fetchTab1AnimeData = async () => {
     try {
-      var id = null
+      var id = null;
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
         setCurrentListAnime(await getViewerList(id, 'CURRENT'));
       }
 
-      setTrendingAnime(
-        animeDataToListAnimeData(await getTrendingAnime(id)),
-      );
+      setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
       setMostPopularAnime(
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
-      setNextReleasesAnime(
-        animeDataToListAnimeData(await getNextReleases(id)),
-      );
+      setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -123,46 +120,48 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={logged}>
-      <SkeletonTheme
-        baseColor={style.getPropertyValue('--color-3')}
-        highlightColor={style.getPropertyValue('--color-4')}
-      >
-        <MemoryRouter>
-          <Navbar />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Tab1
-                  currentListAnime={currentListAnime}
-                  trendingAnime={trendingAnime}
-                  mostPopularAnime={mostPopularAnime}
-                  nextReleasesAnime={nextReleasesAnime}
-                />
-              }
-            />
-            {logged && (
+      <ViewerIdContext.Provider value={viewerId}>
+        <SkeletonTheme
+          baseColor={style.getPropertyValue('--color-3')}
+          highlightColor={style.getPropertyValue('--color-4')}
+        >
+          <MemoryRouter>
+            <Navbar />
+            <Routes>
               <Route
-                path="/tab2"
+                path="/"
                 element={
-                  <Tab2
-                    planningListAnime={planningListAnime}
-                    completedListAnime={completedListAnime}
-                    droppedListAnime={droppedListAnime}
-                    pausedListAnime={pausedListAnime}
-                    repeatingListAnime={RepeatingListAnime}
-                    clicked={() => {
-                      !tab2Click && setTab2Click(true);
-                    }}
+                  <Tab1
+                    currentListAnime={currentListAnime}
+                    trendingAnime={trendingAnime}
+                    mostPopularAnime={mostPopularAnime}
+                    nextReleasesAnime={nextReleasesAnime}
                   />
                 }
               />
-            )}
-            <Route path="/tab3" element={<Tab3 />} />
-            <Route path="/tab4" element={<Tab4 />} />
-          </Routes>
-        </MemoryRouter>
-      </SkeletonTheme>
+              {logged && (
+                <Route
+                  path="/tab2"
+                  element={
+                    <Tab2
+                      planningListAnime={planningListAnime}
+                      completedListAnime={completedListAnime}
+                      droppedListAnime={droppedListAnime}
+                      pausedListAnime={pausedListAnime}
+                      repeatingListAnime={RepeatingListAnime}
+                      clicked={() => {
+                        !tab2Click && setTab2Click(true);
+                      }}
+                    />
+                  }
+                />
+              )}
+              <Route path="/tab3" element={<Tab3 />} />
+              <Route path="/tab4" element={<Tab4 />} />
+            </Routes>
+          </MemoryRouter>
+        </SkeletonTheme>
+      </ViewerIdContext.Provider>
     </AuthContext.Provider>
   );
 }
