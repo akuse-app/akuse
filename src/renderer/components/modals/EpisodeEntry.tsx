@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Skeleton from 'react-loading-skeleton';
 
 interface EpisodeEntryProps {
+  onPress: () => void
   hasInfoLoaded: boolean;
   number: string;
   cover: string | null;
@@ -13,9 +14,8 @@ interface EpisodeEntryProps {
   duration: string | null;
 }
 
-const ImageReplacer = () => <div className="image-replacer" />;
-
 const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
+  onPress,
   hasInfoLoaded,
   number,
   cover,
@@ -25,11 +25,11 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
   duration,
 }) => {
   return (
-    <div className="episode-entry">
+    <div className="episode-entry" onClick={onPress}>
       {hasInfoLoaded ? (
         <img src={cover ?? ''} alt="episode cover" />
       ) : (
-        <Skeleton wrapper={ImageReplacer} />
+        <Skeleton className='image-replacer' />
       )}
       <div className="episode-content">
         <div className="title">

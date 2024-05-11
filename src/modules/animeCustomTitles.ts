@@ -5,7 +5,13 @@
     "AnimeId": `AnimeCustomTitle` // problem faced
 */
 
-module.exports = {
+type AnimeCustomTitles = {
+  [languageCode: string]: {
+    [animeId: string]: string;
+  };
+};
+
+export const animeCustomTitles: AnimeCustomTitles = {
   US: {
     '113415': `Jujutsu Kaisen Tv`, // pulled Jujutsu Kaisen 0 movie
     '150672': `"Oshi No Ko"`, // pulled a total different show

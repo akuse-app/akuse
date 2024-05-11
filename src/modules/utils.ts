@@ -1,7 +1,11 @@
-import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
-import { Media, MediaStatus, MediaFormat } from '../types/anilistGraphQLTypes';
+import Store from 'electron-store';
 
-const months = {
+import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
+import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
+import { animeCustomTitles } from './animeCustomTitles';
+
+const STORE = new Store();
+const MONTHS = {
   '1': 'January',
   '2': 'February',
   '3': 'March',
@@ -305,20 +309,21 @@ export const isEllipsisActive = (div: HTMLElement) =>
  */
 export const parseAirdate = (airdate: string) =>
   `${airdate.split('-')[2]} ${
-    months[airdate.split('-')[1] as keyof typeof months]
+    MONTHS[airdate.split('-')[1] as keyof typeof MONTHS]
   } ${airdate.split('-')[0]}`;
 
 /**
  * parses anime titles for episode url searching
- * 
- * @param animeEntry 
+ *
+ * @param animeEntry
  * @returns parsed anime titles
  */
 export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
   var animeTitles = getTitlesAndSynonyms(animeEntry);
 
-  // const customTitle = animeCustomTitles[this.store.get('source_flag')][animeId]
-  // if(customTitle !== undefined) animeTitles.unshift(customTitle)
+  const customTitle =
+    animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
+  if (!customTitle) animeTitles.unshift(customTitle);
 
   animeTitles.forEach((title) => {
     if (title.includes('Season '))
@@ -329,5 +334,5 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
     if (title.includes(':')) animeTitles.push(title.replace(':', ''));
   });
 
-  return animeTitles
+  return animeTitles;
 };

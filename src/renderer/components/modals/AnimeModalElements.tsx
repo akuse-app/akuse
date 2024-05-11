@@ -236,10 +236,12 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
 
 interface AnimeModalWatchButtonsProps {
   listAnimeData: ListAnimeData;
+  onPlay: (episode: number) => void
 }
 
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
+  onPlay
 }) => {
   const logged = useContext(AuthContext);
 
@@ -251,18 +253,18 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   return logged ? (
     <div className="watch-buttons">
       {progress === 0 && (
-        <Button2 text="Watch now" icon={faPlay} onPress={() => {}} />
+        <Button2 text="Watch now" icon={faPlay} onPress={() => onPlay(1)} />
       )}
 
       {progress === episodes ? (
-        <Button2 text="Watch again" icon={faRotate} onPress={() => {}} />
+        <Button2 text="Watch again" icon={faRotate} onPress={() => onPlay(1)} />
       ) : (
         progress === availableEpisodes &&
         timeUntilAiring && (
           <Button2
             text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
             icon={faHourglass}
-            onPress={() => {}}
+            onPress={() => onPlay(progress + 1)}
           />
         )
       )}
@@ -271,9 +273,9 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         progress !== episodes &&
         progress !== availableEpisodes && (
           <Button2
-            text={`Resume from Ep. ${(progress ?? 0) + 1}`}
+            text={`Resume from Ep. ${progress! + 1}`}
             icon={faPlay}
-            onPress={() => {}}
+            onPress={() => onPlay(progress! + 1)}
           />
         )}
     </div>

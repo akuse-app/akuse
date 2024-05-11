@@ -17,9 +17,10 @@ const EPISODES_PER_PAGE = 30;
 
 interface EpisodesSectionProps {
   listAnimeData: ListAnimeData;
+  onPlay: (episode: number) => void
 }
 
-const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
+const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData, onPlay }) => {
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
     useState<boolean>(false);
   const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
@@ -99,7 +100,9 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData }) => {
         <div className="episodes">
           {pages.length !== 0 &&
             pages[activeSection].map((episode, index) => (
+              // onPress={() => {onPlay(episode)}}
               <EpisodeEntry
+                onPress={() => {onPlay(episode)}}
                 key={index}
                 hasInfoLoaded={episodesInfoHasFetched}
                 number={episodeInfo ? `Ep: ${episode} - ` : ''}

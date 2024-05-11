@@ -547,18 +547,12 @@ nav ul li {
   background-color: var(--color-3);
 }
 
-.settings-page .content .right {
-  width: 80%;
+.settings-page {
+  width: 100%;
   height: 100%;
-  padding-left: 30px;
 }
 
-.settings-page .content .right>* {
-  margin-bottom: 20px;
-}
-
-.settings-page .content .right .toggler {
-  width: calc(100% - 100px);
+.settings-page .toggler {
   display: flex;
   align-items: center;
   padding: 10px 20px;
@@ -568,27 +562,27 @@ nav ul li {
   border-radius: var(--border-radius);
 }
 
-.settings-page .content .right .toggler label {
+.settings-page .toggler label {
   margin-left: auto;
 }
 
-.settings-page .content .right form {
+.settings-page form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.settings-page .content .right form p {
+.settings-page form p {
   color: var(--font-1);
 }
 
-.settings-page .content .right form .form-element {
+.settings-page form .form-element {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.settings-page .content .right img {
+.settings-page img {
   width: 75px;
 }
 
@@ -1257,6 +1251,7 @@ main .featured .featured-img img {
   min-width: 311.5px;
   height: 100%;
   aspect-ratio: 1.78 / 1;
+  border-radius: var(--border-radius);
 }
 
 .anime-page .episodes-section .episode-entry img {

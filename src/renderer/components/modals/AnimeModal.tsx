@@ -1,18 +1,11 @@
-import {
-  faCircleExclamation,
-  faStar,
-  faTv,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faStar, faTv, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import {
-  capitalizeFirstLetter,
-  getParsedFormat,
-  getParsedSeasonYear,
-  getTitle,
-} from '../../../modules/utils';
+
+import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
+import { capitalizeFirstLetter, getParsedAnimeTitles, getParsedFormat, getParsedSeasonYear, getTitle } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
   AnimeModalDescription,
@@ -27,6 +20,8 @@ import { ModalPage, ModalPageShadow } from './Modal';
 
 const modalsRoot = document.getElementById('modals-root');
 
+const STORE = new Store()
+
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
@@ -39,7 +34,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   onClose,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-
   const [trailer, setTrailer] = useState<string | undefined>(undefined);
 
   // close modal by clicking shadow area
@@ -58,12 +52,32 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const doesTrailerExists = () => {
     if (listAnimeData.media.trailer?.site === 'youtube') {
-      // setTrailer(listAnimeData.media.trailer.id);
+      setTrailer(listAnimeData.media.trailer.id);
     }
   };
 
+  const playEpisode = async (episode: number) => {
+    STORE.set('source_flag', 'IT')
+    const lang = await STORE.get('source_flag')
+    const dubbed = await STORE.get('dubbed')
+    const animeTitles = getParsedAnimeTitles(listAnimeData.media)
+
+    console.table(animeTitles)
+
+    switch(lang) {
+      case 'US': {
+        console.log('manca gogo')
+        break
+      }
+      case 'IT': {
+        console.log(await animesaturn(animeTitles, episode, false))
+        break
+      }
+    }
+  }
+
   useEffect(() => {
-    doesTrailerExists();
+    // doesTrailerExists();
   }, []);
 
   useEffect(() => {
@@ -103,10 +117,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     className="banner"
                   />
                 )}
-                <AnimeModalWatchButtons listAnimeData={listAnimeData} />
+                <AnimeModalWatchButtons listAnimeData={listAnimeData} onPlay={playEpisode}/>
               </div>
             )}
-
+            
             <div className="content">
               <div className="left">
                 <h1 className="title">{getTitle(listAnimeData.media)}</h1>
@@ -156,8 +170,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 />
               </div>
             </div>
-            <EpisodesSection listAnimeData={listAnimeData} />
-            <div className="episodes-section"></div>
+            <EpisodesSection listAnimeData={listAnimeData} onPlay={playEpisode} />
           </div>
         </div>
       </ModalPage>

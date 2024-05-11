@@ -12,27 +12,37 @@ const consumet = new AnimeSaturn();
  * @returns consumet IVideo if url is found, otherwise null
  */
 export const getEpisodeUrl = async (
-  // animeSearch: string,
   animeTitles: string[],
   episode: number,
   dubbed: boolean,
 ): Promise<IVideo | null> => {
-  animeTitles.forEach(async (animeSearch) => {
-    const animeId = await getAnimeId(
-      dubbed ? `${animeSearch} (ITA)` : animeSearch,
-    );
+  console.log(`%c Episode ${episode}, looking for AnimeSaturn source...`, `color: #6b8cff`);
 
-    if (animeId) {
-      const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
-      if (animeEpisodeId) {
-        const data = await consumet.fetchEpisodeSources(animeEpisodeId);
-        return data.sources[1]; // [1] is streamtape
-      }
+  for (const animeSearch of animeTitles) {
+    const result = await searchEpisodeUrl(animeSearch, episode, dubbed);
+    if (result) {
+      return result;
     }
-  });
+  }
 
   return null;
-};
+}
+
+async function searchEpisodeUrl(animeSearch: string, episode: number, dubbed: boolean): Promise<IVideo | null> {
+  const animeId = await getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch);
+
+  if (animeId) {
+    const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
+    if (animeEpisodeId) {
+      const data = await consumet.fetchEpisodeSources(animeEpisodeId);
+      console.log(`%c ${animeSearch}`, `color: #45AD67`);
+      return data.sources[1]; // [1] is streamtape
+    }
+  }
+
+  console.log(`%c ${animeSearch}`, `color: #E5A639`);
+  return null;
+}
 
 /**
  * Gets the anime id

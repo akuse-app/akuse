@@ -16,9 +16,9 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
 import Store from 'electron-store'
-
 const STORE = new Store()
 
+app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
 // const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new';
@@ -96,6 +96,8 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      webSecurity: false,
+      allowRunningInsecureContent: false
       // preload: app.isPackaged
       //   ? path.join(__dirname, 'preload.js')
       //   : path.join(__dirname, '../../.erb/dll/preload.js'),

@@ -5,6 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import Store from 'electron-store';
 import { createContext, useEffect, useState } from 'react';
+import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
@@ -14,21 +15,24 @@ import {
   getViewerId,
   getViewerList,
 } from '../modules/anilist/anilistApi';
+import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData } from '../types/anilistAPITypes';
 import Navbar from './Navbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
-import { SkeletonTheme } from 'react-loading-skeleton';
 import Tab4 from './tabs/Tab4';
-import { animeDataToListAnimeData } from '../modules/utils';
-import Tab5 from './tabs/Tab5';
+
+import { setDefaultSourceFlag } from '../modules/storeVariables';
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
 
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
+  const [viewerId, setViewerId] = useState<number | null>(null);
+
+  setDefaultSourceFlag()
 
   // tab1
   const [currentListAnime, setCurrentListAnime] = useState<
@@ -64,24 +68,23 @@ export default function App() {
 
   let style = getComputedStyle(document.body);
 
-  const [viewerId, setViewerId] = useState<number | null>(null);
-
   const fetchTab1AnimeData = async () => {
     try {
+      var id = null
       if (logged) {
-        const id = await getViewerId();
+        id = await getViewerId();
         setViewerId(id);
         setCurrentListAnime(await getViewerList(id, 'CURRENT'));
       }
 
       setTrendingAnime(
-        animeDataToListAnimeData(await getTrendingAnime(viewerId)),
+        animeDataToListAnimeData(await getTrendingAnime(id)),
       );
       setMostPopularAnime(
-        animeDataToListAnimeData(await getMostPopularAnime(viewerId)),
+        animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(
-        animeDataToListAnimeData(await getNextReleases(viewerId)),
+        animeDataToListAnimeData(await getNextReleases(id)),
       );
     } catch (error) {
       console.log('Tab1 error: ' + error);
@@ -157,7 +160,6 @@ export default function App() {
             )}
             <Route path="/tab3" element={<Tab3 />} />
             <Route path="/tab4" element={<Tab4 />} />
-            <Route path="/tab5" element={<Tab5 />} />
           </Routes>
         </MemoryRouter>
       </SkeletonTheme>
