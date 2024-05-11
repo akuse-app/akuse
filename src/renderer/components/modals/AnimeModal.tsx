@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
+import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
 import { capitalizeFirstLetter, getParsedAnimeTitles, getParsedFormat, getParsedSeasonYear, getTitle } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
@@ -57,20 +58,19 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const playEpisode = async (episode: number) => {
-    STORE.set('source_flag', 'IT')
-    const lang = await STORE.get('source_flag')
-    const dubbed = await STORE.get('dubbed')
+    const lang = await STORE.get('source_flag') as string
+    const dubbed = await STORE.get('dubbed') as boolean
     const animeTitles = getParsedAnimeTitles(listAnimeData.media)
 
     console.table(animeTitles)
 
     switch(lang) {
       case 'US': {
-        console.log('manca gogo')
+        console.log(await gogoanime(animeTitles, episode, dubbed))
         break
       }
       case 'IT': {
-        console.log(await animesaturn(animeTitles, episode, false))
+        console.log(await animesaturn(animeTitles, episode, dubbed))
         break
       }
     }
