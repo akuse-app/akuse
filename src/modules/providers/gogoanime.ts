@@ -2,14 +2,7 @@ import { IVideo } from '@consumet/extensions';
 import Gogoanime from '@consumet/extensions/dist/providers/anime/gogoanime';
 const consumet = new Gogoanime();
 
-/**
- * Gets the episode url and isM3U8 flag
- *
- * @param {*} animeTitles array of anime titles
- * @param {*} episode anime episode to look for
- * @param {*} dubbed dubbed version or not
- * @returns consumet IVideo if url is found, otherwise null
- */
+
 export const getEpisodeUrl = async (
   animeTitles: string[],
   episode: number,
@@ -30,6 +23,14 @@ export const getEpisodeUrl = async (
   return null;
 };
 
+/**
+ * Gets the episode url and isM3U8 flag
+ *
+ * @param {*} animeTitles array of anime titles
+ * @param {*} episode anime episode to look for
+ * @param {*} dubbed dubbed version or not
+ * @returns consumet IVideo if url is found, otherwise null
+ */
 async function searchEpisodeUrl(
   animeSearch: string,
   episode: number,

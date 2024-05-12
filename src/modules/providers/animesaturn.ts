@@ -4,12 +4,11 @@ import AnimeSaturn from '@consumet/extensions/dist/providers/anime/animesaturn';
 const consumet = new AnimeSaturn();
 
 /**
- * Gets the episode url and isM3U8 flag
- *
- * @param {*} animeTitles array of anime titles
- * @param {*} episode anime episode to look for
- * @param {*} dubbed dubbed version or not
- * @returns consumet IVideo if url is found, otherwise null
+ * 
+ * @param animeTitles 
+ * @param episode 
+ * @param dubbed 
+ * @returns 
  */
 export const getEpisodeUrl = async (
   animeTitles: string[],
@@ -28,6 +27,14 @@ export const getEpisodeUrl = async (
   return null;
 }
 
+/**
+ * Gets the episode url and isM3U8 flag
+ *
+ * @param {*} animeTitles array of anime titles
+ * @param {*} episode anime episode to look for
+ * @param {*} dubbed dubbed version or not
+ * @returns consumet IVideo if url is found, otherwise null
+ */
 async function searchEpisodeUrl(animeSearch: string, episode: number, dubbed: boolean): Promise<IVideo | null> {
   const animeId = await getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch);
 
