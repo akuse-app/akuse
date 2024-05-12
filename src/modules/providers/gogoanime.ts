@@ -51,13 +51,12 @@ async function searchEpisodeUrl(
           source.quality === '720p' ||
           source.quality === 'default'
         ) {
-          console.log(`%c ${source.quality} quality`, `color: #45AD67`);
+          console.log(`%c ${animeSearch}: ${source.quality} quality`, `color: #45AD67`);
           return source;
         }
       }
 
-      console.log(`%c ${animeSearch}`, `color: #45AD67`);
-      console.log(`%c Default quality`, `color: #45AD67`);
+      console.log(`%c ${animeSearch}: default quality`, `color: #45AD67`);
       return data.sources[0];
     }
   }
