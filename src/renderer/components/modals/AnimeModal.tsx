@@ -55,7 +55,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // episodes info
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
     useState<boolean>(false);
-  const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
+  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
 
   // player
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
@@ -79,7 +79,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const fetchEpisodesInfo = async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
-      if (data.data && data.data.episodes) setEpisodeInfo(data.data.episodes);
+      if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
       setEpisodesInfoHasFetched(true);
     });
   };
@@ -100,7 +100,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
     setAnimeEpisodeNumber(episode);
-    setAnimeEpisodeTitle('episodeTitle');
+    setAnimeEpisodeTitle(
+      episodesInfo
+        ? episodesInfo[episode].title?.en ?? `Episode ${episode}`
+        : `Episode ${episode}`,
+    );
 
     setShowPlayer(true);
 
@@ -135,14 +139,15 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   return ReactDOM.createPortal(
     <>
-      {/* <VideoPlayer
+      <VideoPlayer
         url={playerIVideo?.url}
         isM3U8={playerIVideo?.isM3U8}
         animeTitle={listAnimeData.media.title?.english ?? ''}
         animeEpisodeNumber={animeEpisodeNumber}
         animeEpisodeTitle={animeEpisodeTitle}
         show={showPlayer}
-      /> */}
+        onClose={() => {setShowPlayer(false)}}
+      />
       <ModalPageShadow show={show} />
       <ModalPage show={show}>
         <div className="anime-page" onClick={handleClickOutside}>
@@ -226,7 +231,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               </div>
             </div>
             <EpisodesSection
-              episodesInfo={episodeInfo}
+              episodesInfo={episodesInfo}
               episodesInfoHasFetched={episodesInfoHasFetched}
               listAnimeData={listAnimeData}
               onPlay={playEpisode}

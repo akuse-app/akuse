@@ -78,9 +78,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
               >
                 {pages.map((page, index) => (
                   <option key={index} value={index}>
-                    {page[0]}
-                    <span> - </span>
-                    {page.slice(-1)}
+                    {`${page[0]} - ${page.slice(-1)}`}
                   </option>
                 ))}
               </select>
