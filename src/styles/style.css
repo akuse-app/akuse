@@ -1773,6 +1773,7 @@ main .filters-container .filter .filter-divisor {
   gap: 5px;
 }
 
+main .filters-container .filter.active,
 main .filters-container .filter:hover,
 main .filters-container .filter:focus {
   color: var(--font-2);
@@ -1784,10 +1785,9 @@ main .filters-container .filter select {
   outline: none;
   height: 30px;
   padding: 0 10px;
-  color: var(--font-2);
   font-size: 1rem;
   font-weight: var(--font-weight);
-  background-color: var(--color-3);
+  background-color: var(--color-2);
   border-radius: var(--border-radius);
 }
 
@@ -1795,9 +1795,16 @@ main .filters-container .filter input::placeholder {
   color: var(--font-3);
 }
 
+main .filters-container .filter input {
+  color: var(--font-2);
+}
+
 main .filters-container .filter select {
-  /* cursor: pointer; */
   color: var(--font-3);
+}
+
+main .filters-container .filter select.active {
+  color: var(--font-2);
 }
 
 main .filters-container .filter .i {
@@ -1886,4 +1893,8 @@ main .entries-container .activity-indicator {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+main .entries-container .anime-entry {
+  margin-bottom: 20px;
 }

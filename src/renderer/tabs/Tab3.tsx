@@ -20,6 +20,7 @@ import 'react-activity/dist/Dots.css';
 
 const Tab3 = () => {
   const viewerId = useContext(ViewerIdContext);
+  let style = getComputedStyle(document.body);
 
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -95,10 +96,7 @@ const Tab3 = () => {
     ].filter((item) => !(item == ''));
 
     const parsedArgs = args.concat('type: ANIME').join(', ');
-    console.table(parsedArgs);
-    const diocan = await searchFilteredAnime(parsedArgs, viewerId);
-    console.log(diocan);
-    setSearchedAnime(animeDataToListAnimeData(diocan));
+    setSearchedAnime(animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)));
   };
 
   return (
@@ -118,7 +116,7 @@ const Tab3 = () => {
               onChange={handleTitleChange}
             />
           </div>
-          <div className="filter">
+          <div className={`filter ${selectedGenre === '' ? '' : 'active'}`}>
             <h2>
               <FontAwesomeIcon className="i" icon={faMasksTheater} /> Genre
             </h2>
@@ -126,15 +124,16 @@ const Tab3 = () => {
               id="search-page-filter-genre"
               value={selectedGenre}
               onChange={handleGenreChange}
+              className={selectedGenre === '' ? '' : 'active'}
             >
               {GENRES.map((genre) => (
-                <option key={genre.value} value={genre.value}>
+                <option key={genre.value} value={genre.value ?? ''}>
                   {genre.label}
                 </option>
               ))}
             </select>
           </div>
-          <div className="filter">
+          <div className={`filter ${selectedSeason === '' ? '' : 'active'}`}>
             <h2>
               <FontAwesomeIcon className="i" icon={faLeaf} /> Season
             </h2>
@@ -143,9 +142,10 @@ const Tab3 = () => {
                 id="search-page-filter-season"
                 value={selectedSeason}
                 onChange={handleSeasonChange}
+                className={selectedSeason === '' ? '' : 'active'}
               >
                 {SEASONS.map((season) => (
-                  <option key={season.value} value={season.value}>
+                  <option key={season.value} value={season.value ?? ''}>
                     {season.label}
                   </option>
                 ))}
@@ -159,7 +159,7 @@ const Tab3 = () => {
               />
             </div>
           </div>
-          <div className="filter">
+          <div className={`filter ${selectedFormat === '' ? '' : 'active'}`}>
             <h2>
               <FontAwesomeIcon className="i" icon={faDisplay} /> Format
             </h2>
@@ -167,15 +167,16 @@ const Tab3 = () => {
               id="search-page-filter-format"
               value={selectedFormat}
               onChange={handleFormatChange}
+              className={selectedFormat === '' ? '' : 'active'}
             >
               {FORMATS.map((format) => (
-                <option key={format.value} value={format.value}>
+                <option key={format.value} value={format.value ?? ''}>
                   {format.label}
                 </option>
               ))}
             </select>
           </div>
-          <div className="filter">
+          <div className={`filter ${selectedSort === '' ? '' : 'active'}`}>
             <h2>
               <FontAwesomeIcon className="i" icon={faFilter} /> Sort
             </h2>
@@ -183,9 +184,10 @@ const Tab3 = () => {
               id="search-page-filter-sort"
               value={selectedSort}
               onChange={handleSortChange}
+              className={selectedSort === '' ? '' : 'active'}
             >
               {SORTS.map((sort) => (
-                <option key={sort.value} value={sort.value}>
+                <option key={sort.value} value={sort.value ?? ''}>
                   {sort.label}
                 </option>
               ))}
