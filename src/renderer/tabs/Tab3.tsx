@@ -1,3 +1,5 @@
+import 'react-activity/dist/Dots.css';
+
 import {
   faDisplay,
   faFilter,
@@ -7,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
+import Dots from 'react-activity/dist/Dots';
 
 import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
 import { searchFilteredAnime } from '../../modules/anilist/anilistApi';
@@ -15,12 +18,8 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
 
-import Dots from 'react-activity/dist/Dots';
-import 'react-activity/dist/Dots.css';
-
 const Tab3 = () => {
   const viewerId = useContext(ViewerIdContext);
-  let style = getComputedStyle(document.body);
 
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -96,7 +95,9 @@ const Tab3 = () => {
     ].filter((item) => !(item == ''));
 
     const parsedArgs = args.concat('type: ANIME').join(', ');
-    setSearchedAnime(animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)));
+    setSearchedAnime(
+      animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)),
+    );
   };
 
   return (

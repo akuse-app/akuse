@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { getAvailableEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import { EpisodeInfo } from '../../../types/types';
+import { EpisodeInfo, EpisodesInfo } from '../../../types/types';
 import EpisodeEntry from './EpisodeEntry';
 import {
   faSearch,
@@ -12,32 +12,24 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const EPISODES_PER_PAGE = 30;
 
 interface EpisodesSectionProps {
+  episodesInfo: EpisodeInfo[] | null;
+  episodesInfoHasFetched: boolean;
   listAnimeData: ListAnimeData;
-  onPlay: (episode: number) => void
+  onPlay: (episode: number) => void;
 }
 
-const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData, onPlay }) => {
-  const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
-    useState<boolean>(false);
-  const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
+const EpisodesSection: React.FC<EpisodesSectionProps> = ({
+  episodesInfo,
+  episodesInfoHasFetched,
+  listAnimeData,
+  onPlay,
+}) => {
   const [activeSection, setActiveSection] = useState<number>(0);
   const [searchValue, setSearchValue] = useState<string>('');
   const [widenInput, setWidenInput] = useState<boolean>(false);
-
-  const fetchEpisodesInfo = async () => {
-    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
-      if (data.data && data.data.episodes) setEpisodeInfo(data.data.episodes);
-      setEpisodesInfoHasFetched(true);
-    });
-  };
-
-  useEffect(() => {
-    if (!episodesInfoHasFetched) fetchEpisodesInfo();
-  }, []);
 
   const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
 
@@ -78,7 +70,6 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData, onPlay
         <div className="episodes-options">
           <h2>Episodes</h2>
           <div className="right">
-
             {episodes > EPISODES_PER_PAGE && (
               <select
                 className="main-select-0"
@@ -100,34 +91,35 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData, onPlay
         <div className="episodes">
           {pages.length !== 0 &&
             pages[activeSection].map((episode, index) => (
-              // onPress={() => {onPlay(episode)}}
               <EpisodeEntry
-                onPress={() => {onPlay(episode)}}
+                onPress={() => {
+                  onPlay(episode);
+                }}
                 key={index}
                 hasInfoLoaded={episodesInfoHasFetched}
-                number={episodeInfo ? `Ep: ${episode} - ` : ''}
+                number={episodesInfo ? `Ep: ${episode} - ` : ''}
                 cover={
-                  episodeInfo
-                    ? episodeInfo[episode]?.image ??
+                  episodesInfo
+                    ? episodesInfo[episode]?.image ??
                       listAnimeData.media.bannerImage ??
                       ''
                     : listAnimeData.media.bannerImage ?? ''
                 }
                 title={
-                  episodeInfo && episodeInfo[episode]?.title
-                    ? episodeInfo[episode]?.title?.en ?? `Episode ${episode}`
+                  episodesInfo && episodesInfo[episode]?.title
+                    ? episodesInfo[episode]?.title?.en ?? `Episode ${episode}`
                     : `Episode ${episode}`
                 }
                 description={
-                  episodeInfo ? episodeInfo[episode]?.summary ?? '' : ''
+                  episodesInfo ? episodesInfo[episode]?.summary ?? '' : ''
                 }
                 releaseDate={
-                  episodeInfo
-                    ? parseAirdate(episodeInfo[episode]?.airdate || '') ?? ''
+                  episodesInfo
+                    ? parseAirdate(episodesInfo[episode]?.airdate || '') ?? ''
                     : ''
                 }
                 duration={
-                  episodeInfo ? `${episodeInfo[episode]?.length}min` ?? '' : ''
+                  episodesInfo ? `${episodesInfo[episode]?.length}min` ?? '' : ''
                 }
               />
             ))}
@@ -139,7 +131,8 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({ listAnimeData, onPlay
 
 export default EpisodesSection;
 
-{/* <div className="search-bar">
+{
+  /* <div className="search-bar">
 <div className="wrapper">
   <div className="i-wrapper" onClick={() => {setSearchValue('')}}>
     <FontAwesomeIcon
@@ -164,4 +157,5 @@ export default EpisodesSection;
     onChange={handleSearchChange}
   />
 </div>
-</div> */}
+</div> */
+}

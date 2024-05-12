@@ -1,4 +1,9 @@
-import { faCircleExclamation, faStar, faTv, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleExclamation,
+  faStar,
+  faTv,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
@@ -6,7 +11,13 @@ import ReactDOM from 'react-dom';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import { capitalizeFirstLetter, getParsedAnimeTitles, getParsedFormat, getParsedSeasonYear, getTitle } from '../../../modules/utils';
+import {
+  capitalizeFirstLetter,
+  getParsedAnimeTitles,
+  getParsedFormat,
+  getParsedSeasonYear,
+  getTitle,
+} from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
   AnimeModalDescription,
@@ -18,10 +29,14 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import VideoPlayer from '../player/VideoPlayer';
+import { IVideo } from '@consumet/extensions';
+import axios from 'axios';
+import { EpisodeInfo } from '../../../types/types';
 
+const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const modalsRoot = document.getElementById('modals-root');
-
-const STORE = new Store()
+const STORE = new Store();
 
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
@@ -37,6 +52,17 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const [trailer, setTrailer] = useState<string | undefined>(undefined);
 
+  // episodes info
+  const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
+    useState<boolean>(false);
+  const [episodeInfo, setEpisodeInfo] = useState<EpisodeInfo[] | null>(null);
+
+  // player
+  const [showPlayer, setShowPlayer] = useState<boolean>(false);
+  const [animeEpisodeNumber, setAnimeEpisodeNumber] = useState<number>(0);
+  const [animeEpisodeTitle, setAnimeEpisodeTitle] = useState<string>('');
+  const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
+
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
     if (!modalRef.current?.contains(event.target as Node)) {
@@ -51,6 +77,17 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   };
 
+  const fetchEpisodesInfo = async () => {
+    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
+      if (data.data && data.data.episodes) setEpisodeInfo(data.data.episodes);
+      setEpisodesInfoHasFetched(true);
+    });
+  };
+
+  useEffect(() => {
+    if (!episodesInfoHasFetched) fetchEpisodesInfo();
+  }, []);
+
   const doesTrailerExists = () => {
     if (listAnimeData.media.trailer?.site === 'youtube') {
       setTrailer(listAnimeData.media.trailer.id);
@@ -58,23 +95,30 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const playEpisode = async (episode: number) => {
-    const lang = await STORE.get('source_flag') as string
-    const dubbed = await STORE.get('dubbed') as boolean
-    const animeTitles = getParsedAnimeTitles(listAnimeData.media)
+    const lang = (await STORE.get('source_flag')) as string;
+    const dubbed = (await STORE.get('dubbed')) as boolean;
+    const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
-    console.table(animeTitles)
+    setAnimeEpisodeNumber(episode);
+    setAnimeEpisodeTitle('episodeTitle');
 
-    switch(lang) {
+    setShowPlayer(true);
+
+    switch (lang) {
       case 'US': {
-        console.log(await gogoanime(animeTitles, episode, dubbed))
-        break
+        gogoanime(animeTitles, episode, dubbed).then((value) => {
+          setPlayerIVideo(value);
+        });
+        break;
       }
       case 'IT': {
-        console.log(await animesaturn(animeTitles, episode, dubbed))
-        break
+        animesaturn(animeTitles, episode, dubbed).then((value) => {
+          setPlayerIVideo(value);
+        });
+        break;
       }
     }
-  }
+  };
 
   useEffect(() => {
     // doesTrailerExists();
@@ -91,6 +135,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   return ReactDOM.createPortal(
     <>
+      {/* <VideoPlayer
+        url={playerIVideo?.url}
+        isM3U8={playerIVideo?.isM3U8}
+        animeTitle={listAnimeData.media.title?.english ?? ''}
+        animeEpisodeNumber={animeEpisodeNumber}
+        animeEpisodeTitle={animeEpisodeTitle}
+        show={showPlayer}
+      /> */}
       <ModalPageShadow show={show} />
       <ModalPage show={show}>
         <div className="anime-page" onClick={handleClickOutside}>
@@ -117,10 +169,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     className="banner"
                   />
                 )}
-                <AnimeModalWatchButtons listAnimeData={listAnimeData} onPlay={playEpisode}/>
+                <AnimeModalWatchButtons
+                  listAnimeData={listAnimeData}
+                  onPlay={playEpisode}
+                />
               </div>
             )}
-            
+
             <div className="content">
               <div className="left">
                 <h1 className="title">{getTitle(listAnimeData.media)}</h1>
@@ -170,7 +225,12 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 />
               </div>
             </div>
-            <EpisodesSection listAnimeData={listAnimeData} onPlay={playEpisode} />
+            <EpisodesSection
+              episodesInfo={episodeInfo}
+              episodesInfoHasFetched={episodesInfoHasFetched}
+              listAnimeData={listAnimeData}
+              onPlay={playEpisode}
+            />
           </div>
         </div>
       </ModalPage>
