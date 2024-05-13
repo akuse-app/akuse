@@ -123,12 +123,21 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const togglePlayingWithoutPropagation = (event: any) => {
+    if (event.target !== event.currentTarget) return;
+    playing ? pauseVideo() : playVideo();
+  };
+
+  const togglePlaying = () => {
+    playing ? pauseVideo() : playVideo();
+  };
+
   const playVideoAndSetTime = () => {
     if (videoRef.current) {
       setTimeout(() => {
         playVideo();
-        setCurrentTime(videoRef.current?.currentTime)
-        setDuration(videoRef.current?.duration)
+        setCurrentTime(videoRef.current?.currentTime);
+        setDuration(videoRef.current?.duration);
       }, 1000);
     }
   };
@@ -136,7 +145,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleTimeUpdate = () => {
     setCurrentTime(videoRef.current?.currentTime);
     setDuration(videoRef.current?.duration);
-    setBuffered(videoRef.current?.buffered)
+    setBuffered(videoRef.current?.buffered);
   };
 
   const handleMouseMove = () => {
@@ -158,6 +167,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       document.exitFullscreen();
     }
     onClose();
+  };
+
+  const toggleFullScreenWithoutPropagation = (event: any) => {
+    if (event.target !== event.currentTarget) return;
+    toggleFullScreen();
   };
 
   const toggleFullScreen = () => {
@@ -241,7 +255,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             <h1 id="pause-info-episode-description">{episodeDescription}</h1>
           </div>
         </div>
-        <div className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}>
+        <div
+          className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}
+          onClick={togglePlayingWithoutPropagation}
+          onDoubleClick={toggleFullScreenWithoutPropagation}
+        >
           <TopControls
             videoRef={videoRef}
             listAnimeData={listAnimeData}
@@ -254,6 +272,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onChangeEpisode={changeEpisode}
             onSettingsToggle={(isShowed) => setIsSettingsShowed(isShowed)}
             onExit={handleExit}
+            onClick={togglePlayingWithoutPropagation}
+            onDblClick={toggleFullScreenWithoutPropagation}
           />
           <MidControls
             videoRef={videoRef}
@@ -261,6 +281,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             playVideo={playVideo}
             pauseVideo={pauseVideo}
             loading={loading}
+            onClick={togglePlayingWithoutPropagation}
+            onDblClick={toggleFullScreenWithoutPropagation}
           />
           <BottomControls
             videoRef={videoRef}
@@ -268,6 +290,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             currentTime={currentTime}
             duration={duration}
             buffered={buffered}
+            onClick={togglePlayingWithoutPropagation}
+            onDblClick={toggleFullScreenWithoutPropagation}
           />
         </div>
         <video

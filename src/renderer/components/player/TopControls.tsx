@@ -19,6 +19,8 @@ interface TopControlsProps {
   onFullScreentoggle: () => void
   onChangeEpisode: (episode: number) => void;
   onExit: () => void;
+  onClick?: (event: any) => void
+  onDblClick?: (event: any) => void
 }
 
 const TopControls: React.FC<TopControlsProps> = ({
@@ -33,6 +35,8 @@ const TopControls: React.FC<TopControlsProps> = ({
   onFullScreentoggle,
   onChangeEpisode,
   onExit,
+  onClick,
+  onDblClick
 }) => {
 
   const handleSettingsToggle = (isShowed: boolean) => {
@@ -40,7 +44,7 @@ const TopControls: React.FC<TopControlsProps> = ({
   };
 
   return (
-    <div className="up-controls">
+    <div className="up-controls" onClick={onClick} onDoubleClick={onDblClick}>
       <div className="left">
         <div className="info exit-video" onClick={onExit}>
           <span className="title">{listAnimeData.media.title?.english}</span>

@@ -11,9 +11,11 @@ interface SettingsProps {
   playVideo: () => void
   pauseVideo: () => void
   loading: boolean
+  onClick?: (event: any) => void
+  onDblClick?: (event: any) => void
 }
 
-const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pauseVideo, loading }) => {
+const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pauseVideo, loading, onClick, onDblClick }) => {
   const handlePlayPause = () => {
     if (videoRef.current) {
       playing ? pauseVideo() : playVideo();
@@ -33,7 +35,7 @@ const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pa
   };
 
   return (
-    <div className="mid-controls">
+    <div className="mid-controls" onClick={onClick} onDoubleClick={onDblClick}>
       {loading ? (
         <Dots />
       ) : (

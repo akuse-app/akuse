@@ -7,6 +7,8 @@ interface BottomControlsProps {
   currentTime?: number;
   duration?: number;
   buffered?: TimeRanges;
+  onClick?: (event: any) => void
+  onDblClick?: (event: any) => void
 }
 
 const BottomControls: React.FC<BottomControlsProps> = ({
@@ -15,6 +17,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   currentTime,
   duration,
   buffered,
+  onClick,
+  onDblClick
 }) => {
   const videoTimeline = useRef<HTMLDivElement>(null);
 
@@ -65,7 +69,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   };
 
   return (
-    <div className="bottom-controls">
+    <div className="bottom-controls" onClick={onClick} onDoubleClick={onDblClick}>
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"
