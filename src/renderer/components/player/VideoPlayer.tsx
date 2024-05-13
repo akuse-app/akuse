@@ -40,6 +40,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   onClose,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoUrl, setVideoUrl] = useState<string>();
@@ -60,12 +61,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     useState<boolean>(true);
 
   // timeline
-  const [currentTime, setCurrentTime] = useState<string>('00:00');
-  const [progressTime, setProgressTime] = useState<string>('00:00');
-  const [videoDuration, setVideoDuration] = useState<string>('00:00');
-  const [remainingtime, setRemainingTime] = useState<string>('00:00');
-  const [progressBarWidth, setProgressBarWidth] = useState<string>('0%');
-  const [bufferedBarWidth, setBufferedBarWidth] = useState<string>('0%');
+  const [currentTime, setCurrentTime] = useState<number>();
+  const [duration, setDuration] = useState<number>();
+  const [buffered, setBuffered] = useState<TimeRanges>();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -129,27 +127,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (videoRef.current) {
       setTimeout(() => {
         playVideo();
-        setCurrentTime(formatTime(videoRef.current?.currentTime!));
-        setVideoDuration(formatTime(videoRef.current?.duration!));
-        // setRemainingTime(formatTime(videoRef.current?.duration!));
-        setProgressBarWidth('0%');
-        setBufferedBarWidth('0%');
+        setCurrentTime(videoRef.current?.currentTime)
+        setDuration(videoRef.current?.duration)
       }, 1000);
     }
   };
 
   const handleTimeUpdate = () => {
-    const ctime = videoRef.current?.currentTime!;
-    const duration = videoRef.current?.duration!;
-
-    setCurrentTime(formatTime(ctime));
-    setRemainingTime(formatTime(duration - ctime));
-    setProgressBarWidth(`${(ctime / duration) * 100}%`);
-
-    if (videoRef.current && videoRef.current.buffered.length > 0) {
-      const endTime = videoRef.current?.buffered.end(0)!;
-      setBufferedBarWidth(`${(endTime / duration) * 100}%`);
-    }
+    setCurrentTime(videoRef.current?.currentTime);
+    setDuration(videoRef.current?.duration);
+    setBuffered(videoRef.current?.buffered)
   };
 
   const handleMouseMove = () => {
@@ -237,13 +224,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
 
-
-
   return (
     show && (
       <div
         className={`container ${showControls ? 'show-controls' : ''}`}
         onMouseMove={handleMouseMove}
+        ref={containerRef}
       >
         <div className="pause-info">
           <div className="content">
@@ -278,10 +264,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           />
           <BottomControls
             videoRef={videoRef}
+            containerRef={containerRef}
             currentTime={currentTime}
-            remainingtime={remainingtime}
-            bufferedBarWidth={bufferedBarWidth}
-            progressBarWidth={progressBarWidth}
+            duration={duration}
+            buffered={buffered}
           />
         </div>
         <video

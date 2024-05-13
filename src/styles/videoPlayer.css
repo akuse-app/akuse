@@ -94,7 +94,7 @@
   position: relative;
   background: var(--color-transparency);
   border-radius: var(--border-radius);
-  /* transition: 0.1s; */
+  transition: ease 0.1s;
 }
 
 .video-timeline:hover .progress-area {
@@ -160,7 +160,7 @@
   position: absolute;
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  box-shadow: inset 0px 100px 400px -100px #000000;
+  box-shadow: inset 0px -100px 400px -100px #000000, inset 0px 100px 400px -100px #000000;
   transition: 0.3s;
   cursor: none;
 }

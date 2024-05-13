@@ -920,13 +920,6 @@ main .featured .featured-img img {
   background-color: var(--font-1);
 }
 
-.anime-page .watch-buttons button:nth-child(1).disabled,
-.anime-page .watch-buttons button:nth-child(1).disabled:hover,
-.anime-page .watch-buttons button:nth-child(1).disabled:active {
-  cursor: auto;
-  filter: brightness(0.60);
-}
-
 .anime-page .watch-buttons button:nth-child(2) {
   display: flex;
   align-items: center;
