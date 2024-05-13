@@ -13,10 +13,18 @@ import { useState } from 'react';
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
+  onToggle: (isShowed: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ videoRef }) => {
+const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
   const [settings, setSettings] = useState<boolean>(false);
+
+  const toggleSettings = () => {
+    const show = !settings;
+
+    setSettings(show);
+    onToggle(show);
+  };
 
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const volume = parseFloat(event.target.value);
@@ -46,12 +54,7 @@ const Settings: React.FC<SettingsProps> = ({ videoRef }) => {
 
   return (
     <div className="settings-content">
-      <button
-        className="settings"
-        onClick={() => {
-          setSettings(!settings);
-        }}
-      >
+      <button className="settings" onClick={toggleSettings}>
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
       {settings && (
@@ -88,7 +91,9 @@ const Settings: React.FC<SettingsProps> = ({ videoRef }) => {
               <option value="0.25">0.25</option>
               <option value="0.50">0.50</option>
               <option value="0.75">0.75</option>
-              <option value="1">Normal</option>
+              <option value="1" selected>
+                Normal
+              </option>
               <option value="1.25">1.25</option>
               <option value="1.50">1.50</option>
               <option value="1.75">1.75</option>
@@ -106,7 +111,9 @@ const Settings: React.FC<SettingsProps> = ({ videoRef }) => {
               <option value="70">70</option>
               <option value="75">75</option>
               <option value="80">80</option>
-              <option value="85">85 (Default)</option>
+              <option value="85" selected>
+                85 (Default)
+              </option>
               <option value="90">90</option>
               <option value="95">95</option>
             </select>

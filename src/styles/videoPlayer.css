@@ -60,7 +60,7 @@
 
 .container button .i:hover {
   color: var(--font-1);
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .container button .i:active {

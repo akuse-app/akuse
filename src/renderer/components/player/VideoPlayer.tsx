@@ -3,6 +3,7 @@ import 'react-activity/dist/Dots.css';
 import { IVideo } from '@consumet/extensions';
 import {
   faAngleLeft,
+  faBackward,
   faCompress,
   faExpand,
   faForward,
@@ -63,6 +64,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [showCursor, setShowCursor] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
+  const [isSettingsShowed, setIsSettingsShowed] = useState<boolean>(false);
+  const [showNextEpisodeButton, setShowNextEpisodeButton] =
+    useState<boolean>(true);
+  const [showPreviousEpisodeButton, setShowPreviousEpisodeButton] =
+    useState<boolean>(true);
 
   // timeline
   const [currentTime, setCurrentTime] = useState<string>('00:00');
@@ -90,28 +96,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     );
     setLoading(false);
     loadSource(url ?? '', isM3U8);
-  }, []);
 
-  // useEffect(() => {
-  //   if (show && videoUrl && videoRef.current) {
-  //     if (videoIsM3U8) {
-  //       if (Hls.isSupported()) {
-  //         const hls = new Hls();
-  //         hls.loadSource(videoUrl);
-  //         hls.attachMedia(videoRef.current as HTMLVideoElement);
-  //         playVideoAndSetTime();
-  //       } else if (
-  //         videoRef.current.canPlayType('application/vnd.apple.mpegurl')
-  //       ) {
-  //         videoRef.current.src = videoUrl;
-  //         playVideoAndSetTime();
-  //       }
-  //     } else {
-  //       videoRef.current.src = videoUrl;
-  //       playVideoAndSetTime();
-  //     }
-  //   }
-  // }, [show, videoUrl, videoIsM3U8]);
+    setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
+    setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
+  }, []);
 
   const loadSource = (url: string, isM3U8: boolean) => {
     if (videoRef.current) {
@@ -161,8 +149,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setTimeout(() => {
         playVideo();
         setCurrentTime(formatTime(videoRef.current?.currentTime!));
-        setVideoDuration(formatTime(videoRef.current?.duration!)); // not displayed anywhere
-        setRemainingTime(formatTime(videoRef.current?.duration!));
+        setVideoDuration(formatTime(videoRef.current?.duration!));
+        // setRemainingTime(formatTime(videoRef.current?.duration!));
         setProgressBarWidth('0%');
         setBufferedBarWidth('0%');
       }, 1000);
@@ -187,6 +175,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     clearTimeout(timer);
     setShowControls(true);
     setShowCursor(true);
+
+    if (isSettingsShowed) return;
 
     timer = setTimeout(() => {
       setShowControls(false);
@@ -224,9 +214,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  const nextEpisode = async () => {
+  const handleSettingsToggle = (isShowed: boolean) => {
+    setIsSettingsShowed(isShowed);
+  };
+
+  const changeEpisode = async (modificator: number) => {
     setLoading(true);
-    const nextEpisodeNumber = episodeNumber + 1;
+    const nextEpisodeNumber = episodeNumber + modificator;
 
     const lang = (await STORE.get('source_flag')) as string;
     const dubbed = (await STORE.get('dubbed')) as boolean;
@@ -263,7 +257,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         episodesInfo ? episodesInfo[nextEpisodeNumber].summary ?? '' : '',
       );
       loadSource(value?.url ?? '', value?.isM3U8 ?? false);
+      setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
+      setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
     };
+  };
+
+  const canPreviousEpisode = (episode: number): boolean => {
+    return episode !== 1;
+  };
+
+  const canNextEpisode = (episode: number): boolean => {
+    return episode !== getAvailableEpisodes(listAnimeData.media);
   };
 
   return (
@@ -300,21 +304,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             </div>
             <div className="center"></div>
             <div className="right">
-              <Settings videoRef={videoRef} />
+              <Settings videoRef={videoRef} onToggle={handleSettingsToggle} />
+              {showPreviousEpisodeButton && (
+                <button
+                  className="next show-next-episode-btn"
+                  onClick={() => {
+                    changeEpisode(-1);
+                  }}
+                >
+                  <FontAwesomeIcon className="i" icon={faBackward} />
+                </button>
+              )}
+              {showNextEpisodeButton && (
+                <button
+                  className="next show-next-episode-btn"
+                  onClick={() => changeEpisode(1)}
+                >
+                  <FontAwesomeIcon className="i" icon={faForward} />
+                </button>
+              )}
               <button className="fullscreen" onClick={toggleFullScreen}>
                 <FontAwesomeIcon
                   className="i"
                   icon={fullscreen ? faCompress : faExpand}
                 />
               </button>
-              {episodeNumber !== getAvailableEpisodes(listAnimeData.media) && (
-                <button
-                  className="next show-next-episode-btn"
-                  onClick={nextEpisode}
-                >
-                  <FontAwesomeIcon className="i" icon={faForward} />
-                </button>
-              )}
             </div>
           </div>
           <div className="mid-controls">
