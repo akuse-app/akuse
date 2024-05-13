@@ -221,8 +221,11 @@
 .mid-controls,
 .bottom-controls {
   width: calc(100% - 80px);
+  height: 98px;
   opacity: 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   margin: 40px;
   color: white;

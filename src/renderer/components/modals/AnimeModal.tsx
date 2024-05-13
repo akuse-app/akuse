@@ -61,6 +61,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [animeEpisodeNumber, setAnimeEpisodeNumber] = useState<number>(0);
   const [animeEpisodeTitle, setAnimeEpisodeTitle] = useState<string>('');
+  const [animeEpisodeDescription, setAnimeEpisodeDescription] =
+    useState<string>('');
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
   // close modal by clicking shadow area
@@ -100,12 +102,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
     setAnimeEpisodeNumber(episode);
-    setAnimeEpisodeTitle(
-      episodesInfo
-        ? episodesInfo[episode].title?.en ?? `Episode ${episode}`
-        : `Episode ${episode}`,
-    );
-
     setShowPlayer(true);
 
     switch (lang) {
@@ -139,15 +135,17 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   return ReactDOM.createPortal(
     <>
-      <VideoPlayer
+      {showPlayer && <VideoPlayer
         url={playerIVideo?.url}
         isM3U8={playerIVideo?.isM3U8}
-        animeTitle={listAnimeData.media.title?.english ?? ''}
+        listAnimeData={listAnimeData}
+        episodesInfo={episodesInfo}
         animeEpisodeNumber={animeEpisodeNumber}
-        animeEpisodeTitle={animeEpisodeTitle}
         show={showPlayer}
-        onClose={() => {setShowPlayer(false)}}
-      />
+        onClose={() => {
+          setShowPlayer(false);
+        }}
+      />}
       <ModalPageShadow show={show} />
       <ModalPage show={show}>
         <div className="anime-page" onClick={handleClickOutside}>
