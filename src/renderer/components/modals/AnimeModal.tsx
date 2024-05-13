@@ -65,6 +65,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     useState<string>('');
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
+  const [loading, setLoading] = useState<boolean> (false)
+
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
     if (!modalRef.current?.contains(event.target as Node)) {
@@ -97,27 +99,35 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const playEpisode = async (episode: number) => {
+    setLoading(true)
+
     const lang = (await STORE.get('source_flag')) as string;
     const dubbed = (await STORE.get('dubbed')) as boolean;
     const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
     setAnimeEpisodeNumber(episode);
-    setShowPlayer(true);
 
     switch (lang) {
       case 'US': {
         gogoanime(animeTitles, episode, dubbed).then((value) => {
           setPlayerIVideo(value);
+          setShowPlayer(true);
+          setLoading(false)
         });
-        break;
+        return;
       }
       case 'IT': {
         animesaturn(animeTitles, episode, dubbed).then((value) => {
           setPlayerIVideo(value);
+          setShowPlayer(true);
+          setLoading(false)
         });
-        break;
+        return;
       }
     }
+
+    console.log('video non caricato')
+    setLoading(false)
   };
 
   useEffect(() => {
@@ -175,6 +185,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 <AnimeModalWatchButtons
                   listAnimeData={listAnimeData}
                   onPlay={playEpisode}
+                  loading={loading}
                 />
               </div>
             )}

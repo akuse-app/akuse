@@ -336,3 +336,16 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
 
   return animeTitles;
 };
+
+export const formatTime = (time: number) => {
+  let seconds: any = Math.floor(time % 60),
+  minutes: any = Math.floor(time / 60) % 60,
+  hours: any = Math.floor(time / 3600)
+  seconds = seconds < 10 ? `0${seconds}` : seconds
+  minutes = minutes < 10 ? `0${minutes}` : minutes
+  hours = hours < 10 ? `0${hours}` : hours
+  if(hours == 0) {
+      return `${minutes}:${seconds}`
+  }
+  return `${hours}:${minutes}:${seconds}`
+}

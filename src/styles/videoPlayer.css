@@ -1,5 +1,6 @@
 :root {
-  --color-transparency: #ffffff6c;
+  --color-transparency: #d1d1d16c;
+  --color-transparency-2: #ffffffaf;
 }
 
 #video {
@@ -64,6 +65,7 @@
 
 .container button .i:active {
   transform: scale(1);
+  color: var(--color-transparency);
 }
 
 .container .next {
@@ -109,6 +111,18 @@
   transform: translateX(-50%);
 }
 
+.progress-area .video-buffered-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  margin: 0;
+  z-index: 1;
+  background: var(--color-transparency-2);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
 .progress-area .video-progress-bar {
   width: 0%;
   height: 100%;
@@ -146,7 +160,7 @@
   position: absolute;
   opacity: 0;
   background-color: rgba(0, 0, 0, 0.4);
-  /* box-shadow: inset 0px 300px 400px -100px #000000; */
+  box-shadow: inset 0px 100px 400px -100px #000000;
   transition: 0.3s;
   cursor: none;
 }

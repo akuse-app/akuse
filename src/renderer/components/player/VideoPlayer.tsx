@@ -1,3 +1,6 @@
+import 'react-activity/dist/Dots.css';
+
+import { IVideo } from '@consumet/extensions';
 import {
   faAngleLeft,
   faCompress,
@@ -9,21 +12,21 @@ import {
   faRotateRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
+import Dots from 'react-activity/dist/Dots';
+
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import Settings from './VideoSettings';
-import { EpisodeInfo } from '../../../types/types';
-import { ListAnimeData } from '../../../types/anilistAPITypes';
-import Store from 'electron-store';
 import {
+  formatTime,
   getAvailableEpisodes,
   getParsedAnimeTitles,
 } from '../../../modules/utils';
-import 'react-activity/dist/Dots.css';
-import Dots from 'react-activity/dist/Dots';
-import { IVideo } from '@consumet/extensions';
+import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { EpisodeInfo } from '../../../types/types';
+import Settings from './VideoSettings';
 
 const STORE = new Store();
 var timer: any;
@@ -61,9 +64,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [playing, setPlaying] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
+  // timeline
+  const [currentTime, setCurrentTime] = useState<string>('00:00');
+  const [progressTime, setProgressTime] = useState<string>('00:00');
+  const [videoDuration, setVideoDuration] = useState<string>('00:00');
+  const [remainingtime, setRemainingTime] = useState<string>('00:00');
+  const [progressBarWidth, setProgressBarWidth] = useState<string>('0%');
+  const [bufferedBarWidth, setBufferedBarWidth] = useState<string>('0%');
+
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setLoading(true);
     setVideoUrl(url);
     setVideoIsM3U8(isM3U8);
     setEpisodeNumber(animeEpisodeNumber);
@@ -76,7 +88,59 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setEpisodeDescription(
       episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
     );
-  });
+    setLoading(false);
+    loadSource(url ?? '', isM3U8);
+  }, []);
+
+  // useEffect(() => {
+  //   if (show && videoUrl && videoRef.current) {
+  //     if (videoIsM3U8) {
+  //       if (Hls.isSupported()) {
+  //         const hls = new Hls();
+  //         hls.loadSource(videoUrl);
+  //         hls.attachMedia(videoRef.current as HTMLVideoElement);
+  //         playVideoAndSetTime();
+  //       } else if (
+  //         videoRef.current.canPlayType('application/vnd.apple.mpegurl')
+  //       ) {
+  //         videoRef.current.src = videoUrl;
+  //         playVideoAndSetTime();
+  //       }
+  //     } else {
+  //       videoRef.current.src = videoUrl;
+  //       playVideoAndSetTime();
+  //     }
+  //   }
+  // }, [show, videoUrl, videoIsM3U8]);
+
+  const loadSource = (url: string, isM3U8: boolean) => {
+    if (videoRef.current) {
+      if (isM3U8) {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(videoRef.current as HTMLVideoElement);
+          playVideoAndSetTime();
+        } else if (
+          videoRef.current.canPlayType('application/vnd.apple.mpegurl')
+        ) {
+          videoRef.current.src = url;
+          playVideoAndSetTime();
+        }
+      } else {
+        videoRef.current.src = url;
+        playVideoAndSetTime();
+      }
+    }
+  };
+
+  const handleExit = () => {
+    if (document.fullscreenElement) {
+      setFullscreen(false);
+      document.exitFullscreen();
+    }
+    onClose();
+  };
 
   const playVideo = () => {
     if (videoRef.current) {
@@ -92,32 +156,32 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (show && videoUrl && videoRef.current) {
-      if (videoIsM3U8) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(videoUrl);
-          hls.attachMedia(videoRef.current as HTMLVideoElement);
-          setTimeout(() => {
-            playVideo();
-          }, 1000);
-        } else if (
-          videoRef.current.canPlayType('application/vnd.apple.mpegurl')
-        ) {
-          videoRef.current.src = videoUrl;
-          setTimeout(() => {
-            playVideo();
-          }, 1000);
-        }
-      } else {
-        videoRef.current.src = videoUrl;
-        setTimeout(() => {
-          playVideo();
-        }, 1000);
-      }
+  const playVideoAndSetTime = () => {
+    if (videoRef.current) {
+      setTimeout(() => {
+        playVideo();
+        setCurrentTime(formatTime(videoRef.current?.currentTime!));
+        setVideoDuration(formatTime(videoRef.current?.duration!)); // not displayed anywhere
+        setRemainingTime(formatTime(videoRef.current?.duration!));
+        setProgressBarWidth('0%');
+        setBufferedBarWidth('0%');
+      }, 1000);
     }
-  }, [show, videoUrl, videoIsM3U8]);
+  };
+
+  const handleTimeUpdate = () => {
+    const ctime = videoRef.current?.currentTime!;
+    const duration = videoRef.current?.duration!;
+
+    setCurrentTime(formatTime(ctime));
+    setRemainingTime(formatTime(duration - ctime));
+    setProgressBarWidth(`${(ctime / duration) * 100}%`);
+
+    if (videoRef.current && videoRef.current.buffered.length > 0) {
+      const endTime = videoRef.current?.buffered.end(0)!;
+      setBufferedBarWidth(`${(endTime / duration) * 100}%`);
+    }
+  };
 
   const handleMouseMove = () => {
     clearTimeout(timer);
@@ -145,6 +209,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handlePlayPause = () => {
     if (videoRef.current) {
       playing ? pauseVideo() : playVideo();
+    }
+  };
+
+  const handleFastRewind = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime -= 5;
+    }
+  };
+
+  const handleFastForward = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime += 5;
     }
   };
 
@@ -186,6 +262,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodesInfo ? episodesInfo[nextEpisodeNumber].summary ?? '' : '',
       );
+      loadSource(value?.url ?? '', value?.isM3U8 ?? false);
     };
   };
 
@@ -208,7 +285,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         <div className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}>
           <div className="up-controls">
             <div className="left">
-              <div className="info exit-video" onClick={onClose}>
+              <div className="info exit-video" onClick={handleExit}>
                 <span className="title">
                   {listAnimeData.media.title?.english}
                 </span>
@@ -245,7 +322,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <Dots />
             ) : (
               <>
-                <button className="skip-backward">
+                <button className="skip-backward" onClick={handleFastRewind}>
                   <FontAwesomeIcon className="i" icon={faRotateLeft} />
                 </button>
                 <div className="play-pause-center">
@@ -258,7 +335,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   </button>
                 </div>
                 <div>
-                  <button className="skip-forward">
+                  <button className="skip-forward" onClick={handleFastForward}>
                     <FontAwesomeIcon className="i" icon={faRotateRight} />
                   </button>
                   {/* <button className="skip-forward-small">
@@ -269,17 +346,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             )}
           </div>
           <div className="bottom-controls">
-            <p className="current-time">00:00</p>
+            <p className="current-time">{currentTime}</p>
             <div className="video-timeline">
               <div className="progress-area">
-                <span>00:00</span>
-                <div className="video-progress-bar"></div>
+                <div
+                  className="video-buffered-bar"
+                  style={{ width: bufferedBarWidth }}
+                ></div>
+                <span>{currentTime}</span>
+                <div
+                  className="video-progress-bar"
+                  style={{ width: progressBarWidth }}
+                ></div>
               </div>
             </div>
-            <p className="video-duration">00:00</p>
+            <p className="video-duration">-{remainingtime}</p>
           </div>
         </div>
-        <video id="video" ref={videoRef}></video>
+        <video
+          id="video"
+          ref={videoRef}
+          onTimeUpdate={handleTimeUpdate}
+        ></video>
       </div>
     )
   );

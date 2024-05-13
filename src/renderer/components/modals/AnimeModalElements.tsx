@@ -1,8 +1,6 @@
-import {
-  faCircleCheck,
-  faCircleDot,
-  faClock,
-} from '@fortawesome/free-regular-svg-icons';
+import 'react-activity/dist/Dots.css';
+
+import { faCircleCheck, faCircleDot, faClock } from '@fortawesome/free-regular-svg-icons';
 import {
   faBan,
   faChevronDown,
@@ -28,8 +26,8 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { MediaStatus } from '../../../types/anilistGraphQLTypes';
-import { Button2 } from '../Buttons';
 import { AuthContext } from '../../App';
+import { Button2, ButtonLoading } from '../Buttons';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -236,12 +234,14 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
 
 interface AnimeModalWatchButtonsProps {
   listAnimeData: ListAnimeData;
-  onPlay: (episode: number) => void
+  onPlay: (episode: number) => void;
+  loading: boolean;
 }
 
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
-  onPlay
+  onPlay,
+  loading,
 }) => {
   const logged = useContext(AuthContext);
 
@@ -250,7 +250,11 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
   const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
 
-  return logged ? (
+  return loading ? (
+    <div className="watch-buttons">
+      <ButtonLoading />
+    </div>
+  ) : logged ? (
     <div className="watch-buttons">
       {progress === 0 && (
         <Button2 text="Watch now" icon={faPlay} onPress={() => onPlay(1)} />
