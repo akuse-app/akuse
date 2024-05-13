@@ -1,3 +1,4 @@
+import { IVideo } from '@consumet/extensions';
 import {
   faCircleExclamation,
   faStar,
@@ -5,18 +6,22 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
+import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   capitalizeFirstLetter,
-  getParsedAnimeTitles,
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { EpisodeInfo } from '../../../types/types';
+import VideoPlayer from '../player/VideoPlayer';
 import {
   AnimeModalDescription,
   AnimeModalEpisodes,
@@ -27,15 +32,11 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
-import VideoPlayer from '../player/VideoPlayer';
-import { IVideo } from '@consumet/extensions';
-import axios from 'axios';
-import { EpisodeInfo } from '../../../types/types';
-import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 
 const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
+const style = getComputedStyle(document.body);
 
 interface AnimeModalProps {
   listAnimeData: ListAnimeData;
@@ -102,15 +103,23 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     setAnimeEpisodeNumber(episode);
 
     getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+      if (!data) {
+        toast(`Source not found.`, {
+          style: {
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+          },
+          icon: '❌',
+        });
+        setLoading(false);
+
+        return;
+      }
+
       setPlayerIVideo(data);
       setShowPlayer(true);
       setLoading(false);
-
-      return;
     });
-
-    console.log('video non caricato');
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -233,6 +242,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           </div>
         </div>
       </ModalPage>
+      <Toaster />
     </>,
     modalsRoot!,
   );

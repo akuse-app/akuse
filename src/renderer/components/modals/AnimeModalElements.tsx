@@ -36,7 +36,7 @@ interface AnimeModalStatusProps {
 export const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({
   status,
 }) => {
-  let style = getComputedStyle(document.body);
+  const style = getComputedStyle(document.body);
   const parsedStatus = getParsedStatus(status);
 
   return (

@@ -68,7 +68,7 @@ export default function App() {
     ListAnimeData[] | undefined
   >(undefined);
 
-  let style = getComputedStyle(document.body);
+  const style = getComputedStyle(document.body);
 
   const fetchTab1AnimeData = async () => {
     try {
