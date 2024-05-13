@@ -7,11 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import {
-  formatTime,
-  getAvailableEpisodes,
-  getParsedAnimeTitles,
-} from '../../../modules/utils';
+import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
@@ -20,6 +16,8 @@ import TopControls from './TopControls';
 
 const STORE = new Store();
 var timer: any;
+var pauseInfoTimer: any;
+
 interface VideoPlayerProps {
   url?: string;
   isM3U8?: boolean;
@@ -51,6 +49,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
+  const [showPauseInfo, setShowPauseInfo] = useState<boolean>(false);
   const [showCursor, setShowCursor] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -143,15 +142,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleTimeUpdate = () => {
+    setShowPauseInfo(false);
     setCurrentTime(videoRef.current?.currentTime);
     setDuration(videoRef.current?.duration);
     setBuffered(videoRef.current?.buffered);
   };
 
+  const handleVideoPause = () => {
+    clearTimeout(pauseInfoTimer);
+    setShowPauseInfo(false);
+    pauseInfoTimer = setTimeout(() => {
+      setShowPauseInfo(true);
+    }, 3000);
+  };
+
   const handleMouseMove = () => {
+    clearTimeout(pauseInfoTimer);
+    setShowPauseInfo(false);
+    
+    pauseInfoTimer = setTimeout(() => {
+      if(videoRef.current && videoRef.current.paused) {
+        setShowPauseInfo(true);
+      }
+    }, 3000);
+
     clearTimeout(timer);
     setShowControls(true);
     setShowCursor(true);
+
+    setShowPauseInfo(false);
 
     if (isSettingsShowed) return;
 
@@ -241,7 +260,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   return (
     show && (
       <div
-        className={`container ${showControls ? 'show-controls' : ''}`}
+        className={`container ${showControls ? 'show-controls' : ''} ${
+          showPauseInfo ? 'show-pause-info' : ''
+        }`}
         onMouseMove={handleMouseMove}
         ref={containerRef}
       >
@@ -298,6 +319,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           id="video"
           ref={videoRef}
           onTimeUpdate={handleTimeUpdate}
+          onPause={handleVideoPause}
         ></video>
       </div>
     )
