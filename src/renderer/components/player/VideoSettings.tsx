@@ -9,14 +9,23 @@ import {
   faVolumeHigh,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+
+import Store from 'electron-store'
+import { watch } from 'fs';
+
+const STORE = new Store()
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   onToggle: (isShowed: boolean) => void;
+  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
+const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle, onChangeEpisode }) => {
+  const [updateProgress, setUpdateProgress] = useState<boolean>(STORE.get('update_progress') as boolean);
+  const [watchDubbed, setWatchDubbed] = useState<boolean>(STORE.get('dubbed') as boolean);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(STORE.get('source_flag') as string);
   const [settings, setSettings] = useState<boolean>(false);
 
   const toggleSettings = () => {
@@ -41,15 +50,22 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
   };
 
   const handleUpdateProgressChange = () => {
-    //todo
+    STORE.set('update_progress', !updateProgress)
+    setUpdateProgress(!updateProgress);
   };
 
-  const handleDubbedChange = () => {
-    //todo
+  const handleWatchDubbedChange = () => {
+    STORE.set('dubbed', !watchDubbed)
+    setWatchDubbed(!watchDubbed);
+
+    onChangeEpisode(0, true)
   };
 
-  const handleLanguageChange = () => {
-    //todo
+  const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    STORE.set('source_flag', event.target.value)
+    setSelectedLanguage(event.target.value);
+
+    onChangeEpisode(0, true)
   };
 
   return (
@@ -124,7 +140,7 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
               Update progress
             </span>
             <label className="switch">
-              <input type="checkbox" onChange={handleUpdateProgressChange} />
+              <input type="checkbox" checked={updateProgress} onChange={handleUpdateProgressChange} />
               <span className="slider round"></span>
             </label>
           </li>
@@ -134,7 +150,7 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
               Dub
             </span>
             <label className="switch">
-              <input type="checkbox" onChange={handleDubbedChange} />
+              <input type="checkbox" checked={watchDubbed} onChange={handleWatchDubbedChange} />
               <span className="slider round"></span>
             </label>
           </li>
@@ -143,7 +159,7 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle }) => {
               <FontAwesomeIcon className="i" icon={faLanguage} />
               Language
             </span>
-            <select className="main-select-0" onChange={handleLanguageChange}>
+            <select className="main-select-0" value={selectedLanguage} onChange={handleLanguageChange}>
               <option value="US">English</option>
               <option value="IT">Italian</option>
             </select>

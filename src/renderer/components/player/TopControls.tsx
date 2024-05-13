@@ -1,6 +1,12 @@
 import 'react-activity/dist/Dots.css';
 
-import { faAngleLeft, faBackward, faCompress, faExpand, faForward } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+  faBackward,
+  faCompress,
+  faExpand,
+  faForward,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 
@@ -14,13 +20,13 @@ interface TopControlsProps {
   episodeTitle: string;
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
-  fullscreen: boolean
-  onSettingsToggle: (isShowed: boolean) => void
-  onFullScreentoggle: () => void
-  onChangeEpisode: (episode: number) => void;
+  fullscreen: boolean;
+  onSettingsToggle: (isShowed: boolean) => void;
+  onFullScreentoggle: () => void;
+  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
   onExit: () => void;
-  onClick?: (event: any) => void
-  onDblClick?: (event: any) => void
+  onClick?: (event: any) => void;
+  onDblClick?: (event: any) => void;
 }
 
 const TopControls: React.FC<TopControlsProps> = ({
@@ -36,9 +42,8 @@ const TopControls: React.FC<TopControlsProps> = ({
   onChangeEpisode,
   onExit,
   onClick,
-  onDblClick
+  onDblClick,
 }) => {
-
   const handleSettingsToggle = (isShowed: boolean) => {
     onSettingsToggle(isShowed);
   };
@@ -59,7 +64,11 @@ const TopControls: React.FC<TopControlsProps> = ({
       </div>
       <div className="center"></div>
       <div className="right">
-        <Settings videoRef={videoRef} onToggle={handleSettingsToggle} />
+        <Settings
+          videoRef={videoRef}
+          onToggle={handleSettingsToggle}
+          onChangeEpisode={onChangeEpisode}
+        />
         {showPreviousEpisodeButton && (
           <button
             className="next show-next-episode-btn"

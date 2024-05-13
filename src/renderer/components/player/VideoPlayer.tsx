@@ -7,7 +7,10 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
+import {
+  getAvailableEpisodes,
+  getParsedAnimeTitles,
+} from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
@@ -152,19 +155,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
     pauseInfoTimer = setTimeout(() => {
-      setShowPauseInfo(true);
-    }, 3000);
+      !isSettingsShowed && setShowPauseInfo(true);
+    }, 7500);
   };
 
   const handleMouseMove = () => {
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
-    
+
     pauseInfoTimer = setTimeout(() => {
-      if(videoRef.current && videoRef.current.paused) {
-        setShowPauseInfo(true);
+      if (videoRef.current && videoRef.current.paused) {
+        !isSettingsShowed && setShowPauseInfo(true);
       }
-    }, 3000);
+    }, 7500);
 
     clearTimeout(timer);
     setShowControls(true);
@@ -205,7 +208,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  const changeEpisode = async (modificator: number) => {
+  const changeEpisode = async (
+    modificator: number,
+    reloadAtPreviousTime?: boolean,
+  ) => {
     setLoading(true);
     const nextEpisodeNumber = episodeNumber + modificator;
 
@@ -213,11 +219,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const dubbed = (await STORE.get('dubbed')) as boolean;
     const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
+    var previousTime = 0;
+    if (reloadAtPreviousTime && videoRef.current)
+      previousTime = videoRef.current?.currentTime;
+
     switch (lang) {
       case 'US': {
         gogoanime(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           setData(value);
           setLoading(false);
+          if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
       }
@@ -225,6 +236,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         animesaturn(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           setData(value);
           setLoading(false);
+          if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
       }
