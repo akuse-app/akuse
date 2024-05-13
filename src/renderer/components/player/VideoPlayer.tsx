@@ -1,22 +1,9 @@
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
-import {
-  faAngleLeft,
-  faBackward,
-  faCompress,
-  faExpand,
-  faForward,
-  faPause,
-  faPlay,
-  faRotateLeft,
-  faRotateRight,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
-import Dots from 'react-activity/dist/Dots';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
@@ -27,7 +14,9 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
-import Settings from './VideoSettings';
+import BottomControls from './BottomControls';
+import MidControls from './MidControls';
+import TopControls from './TopControls';
 
 const STORE = new Store();
 var timer: any;
@@ -122,14 +111,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  const handleExit = () => {
-    if (document.fullscreenElement) {
-      setFullscreen(false);
-      document.exitFullscreen();
-    }
-    onClose();
-  };
-
   const playVideo = () => {
     if (videoRef.current) {
       setPlaying(true);
@@ -184,6 +165,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 2000);
   };
 
+  const handleExit = () => {
+    if (document.fullscreenElement) {
+      setFullscreen(false);
+      document.exitFullscreen();
+    }
+    onClose();
+  };
+
   const toggleFullScreen = () => {
     if (document.fullscreenElement) {
       setFullscreen(false);
@@ -194,28 +183,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         document.documentElement.requestFullscreen();
       }
     }
-  };
-
-  const handlePlayPause = () => {
-    if (videoRef.current) {
-      playing ? pauseVideo() : playVideo();
-    }
-  };
-
-  const handleFastRewind = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime -= 5;
-    }
-  };
-
-  const handleFastForward = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime += 5;
-    }
-  };
-
-  const handleSettingsToggle = (isShowed: boolean) => {
-    setIsSettingsShowed(isShowed);
   };
 
   const changeEpisode = async (modificator: number) => {
@@ -270,6 +237,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
 
+
+
   return (
     show && (
       <div
@@ -287,95 +256,33 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           </div>
         </div>
         <div className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}>
-          <div className="up-controls">
-            <div className="left">
-              <div className="info exit-video" onClick={handleExit}>
-                <span className="title">
-                  {listAnimeData.media.title?.english}
-                </span>
-                <span className="back">
-                  <FontAwesomeIcon className="i" icon={faAngleLeft} />
-                  <span className="episode">
-                    <span>{`Ep. ${episodeNumber} - `}</span>
-                    {episodeTitle}
-                  </span>
-                </span>
-              </div>
-            </div>
-            <div className="center"></div>
-            <div className="right">
-              <Settings videoRef={videoRef} onToggle={handleSettingsToggle} />
-              {showPreviousEpisodeButton && (
-                <button
-                  className="next show-next-episode-btn"
-                  onClick={() => {
-                    changeEpisode(-1);
-                  }}
-                >
-                  <FontAwesomeIcon className="i" icon={faBackward} />
-                </button>
-              )}
-              {showNextEpisodeButton && (
-                <button
-                  className="next show-next-episode-btn"
-                  onClick={() => changeEpisode(1)}
-                >
-                  <FontAwesomeIcon className="i" icon={faForward} />
-                </button>
-              )}
-              <button className="fullscreen" onClick={toggleFullScreen}>
-                <FontAwesomeIcon
-                  className="i"
-                  icon={fullscreen ? faCompress : faExpand}
-                />
-              </button>
-            </div>
-          </div>
-          <div className="mid-controls">
-            {loading ? (
-              <Dots />
-            ) : (
-              <>
-                <button className="skip-backward" onClick={handleFastRewind}>
-                  <FontAwesomeIcon className="i" icon={faRotateLeft} />
-                </button>
-                <div className="play-pause-center">
-                  <button className="play-pause" onClick={handlePlayPause}>
-                    <i className="fas fa-play"></i>
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={playing ? faPause : faPlay}
-                    />
-                  </button>
-                </div>
-                <div>
-                  <button className="skip-forward" onClick={handleFastForward}>
-                    <FontAwesomeIcon className="i" icon={faRotateRight} />
-                  </button>
-                  {/* <button className="skip-forward-small">
-                    <FontAwesomeIcon className="i" icon={faRotateRight} />
-                  </button> */}
-                </div>
-              </>
-            )}
-          </div>
-          <div className="bottom-controls">
-            <p className="current-time">{currentTime}</p>
-            <div className="video-timeline">
-              <div className="progress-area">
-                <div
-                  className="video-buffered-bar"
-                  style={{ width: bufferedBarWidth }}
-                ></div>
-                <span>{currentTime}</span>
-                <div
-                  className="video-progress-bar"
-                  style={{ width: progressBarWidth }}
-                ></div>
-              </div>
-            </div>
-            <p className="video-duration">-{remainingtime}</p>
-          </div>
+          <TopControls
+            videoRef={videoRef}
+            listAnimeData={listAnimeData}
+            episodeNumber={episodeNumber}
+            episodeTitle={episodeTitle}
+            showNextEpisodeButton={showNextEpisodeButton}
+            showPreviousEpisodeButton={showPreviousEpisodeButton}
+            fullscreen={fullscreen}
+            onFullScreentoggle={toggleFullScreen}
+            onChangeEpisode={changeEpisode}
+            onSettingsToggle={(isShowed) => setIsSettingsShowed(isShowed)}
+            onExit={handleExit}
+          />
+          <MidControls
+            videoRef={videoRef}
+            playing={playing}
+            playVideo={playVideo}
+            pauseVideo={pauseVideo}
+            loading={loading}
+          />
+          <BottomControls
+            videoRef={videoRef}
+            currentTime={currentTime}
+            remainingtime={remainingtime}
+            bufferedBarWidth={bufferedBarWidth}
+            progressBarWidth={progressBarWidth}
+          />
         </div>
         <video
           id="video"
