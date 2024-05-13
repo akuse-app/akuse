@@ -9,8 +9,6 @@ import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
-import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
 import {
   capitalizeFirstLetter,
   getParsedAnimeTitles,
@@ -33,6 +31,7 @@ import VideoPlayer from '../player/VideoPlayer';
 import { IVideo } from '@consumet/extensions';
 import axios from 'axios';
 import { EpisodeInfo } from '../../../types/types';
+import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 
 const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const modalsRoot = document.getElementById('modals-root');
@@ -65,7 +64,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     useState<string>('');
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
-  const [loading, setLoading] = useState<boolean> (false)
+  const [loading, setLoading] = useState<boolean>(false);
 
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
@@ -99,35 +98,19 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const playEpisode = async (episode: number) => {
-    setLoading(true)
-
-    const lang = (await STORE.get('source_flag')) as string;
-    const dubbed = (await STORE.get('dubbed')) as boolean;
-    const animeTitles = getParsedAnimeTitles(listAnimeData.media);
-
+    setLoading(true);
     setAnimeEpisodeNumber(episode);
 
-    switch (lang) {
-      case 'US': {
-        gogoanime(animeTitles, episode, dubbed).then((value) => {
-          setPlayerIVideo(value);
-          setShowPlayer(true);
-          setLoading(false)
-        });
-        return;
-      }
-      case 'IT': {
-        animesaturn(animeTitles, episode, dubbed).then((value) => {
-          setPlayerIVideo(value);
-          setShowPlayer(true);
-          setLoading(false)
-        });
-        return;
-      }
-    }
+    getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+      setPlayerIVideo(data);
+      setShowPlayer(true);
+      setLoading(false);
 
-    console.log('video non caricato')
-    setLoading(false)
+      return;
+    });
+
+    console.log('video non caricato');
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -145,17 +128,19 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   return ReactDOM.createPortal(
     <>
-      {showPlayer && <VideoPlayer
-        url={playerIVideo?.url}
-        isM3U8={playerIVideo?.isM3U8}
-        listAnimeData={listAnimeData}
-        episodesInfo={episodesInfo}
-        animeEpisodeNumber={animeEpisodeNumber}
-        show={showPlayer}
-        onClose={() => {
-          setShowPlayer(false);
-        }}
-      />}
+      {showPlayer && (
+        <VideoPlayer
+          url={playerIVideo?.url}
+          isM3U8={playerIVideo?.isM3U8}
+          listAnimeData={listAnimeData}
+          episodesInfo={episodesInfo}
+          animeEpisodeNumber={animeEpisodeNumber}
+          show={showPlayer}
+          onClose={() => {
+            setShowPlayer(false);
+          }}
+        />
+      )}
       <ModalPageShadow show={show} />
       <ModalPage show={show}>
         <div className="anime-page" onClick={handleClickOutside}>
