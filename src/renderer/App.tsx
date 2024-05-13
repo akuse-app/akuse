@@ -24,7 +24,7 @@ import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
-import { setDefaultSourceFlag } from '../modules/storeVariables';
+import { setDefaultStoreVariables } from '../modules/storeVariables';
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
@@ -34,7 +34,7 @@ export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
 
-  setDefaultSourceFlag();
+  setDefaultStoreVariables();
 
   // tab1
   const [currentListAnime, setCurrentListAnime] = useState<

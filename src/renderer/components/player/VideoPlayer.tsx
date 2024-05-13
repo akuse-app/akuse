@@ -7,10 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import {
-  getAvailableEpisodes,
-  getParsedAnimeTitles,
-} from '../../../modules/utils';
+import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';

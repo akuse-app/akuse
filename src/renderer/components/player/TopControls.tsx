@@ -1,14 +1,7 @@
 import 'react-activity/dist/Dots.css';
 
-import {
-  faAngleLeft,
-  faBackward,
-  faCompress,
-  faExpand,
-  faForward,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faBackward, faCompress, faExpand, faForward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import Settings from './VideoSettings';

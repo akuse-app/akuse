@@ -9,12 +9,12 @@ import {
   faVolumeHigh,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChangeEvent, useState } from 'react';
+import Store from 'electron-store';
+import { ChangeEvent, useContext, useState } from 'react';
 
-import Store from 'electron-store'
-import { watch } from 'fs';
+import { AuthContext } from '../../App';
 
-const STORE = new Store()
+const STORE = new Store();
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -22,10 +22,25 @@ interface SettingsProps {
   onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle, onChangeEpisode }) => {
-  const [updateProgress, setUpdateProgress] = useState<boolean>(STORE.get('update_progress') as boolean);
-  const [watchDubbed, setWatchDubbed] = useState<boolean>(STORE.get('dubbed') as boolean);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(STORE.get('source_flag') as string);
+const Settings: React.FC<SettingsProps> = ({
+  videoRef,
+  onToggle,
+  onChangeEpisode,
+}) => {
+  const logged = useContext(AuthContext);
+
+  const [updateProgress, setUpdateProgress] = useState<boolean>(
+    STORE.get('update_progress') as boolean,
+  );
+  const [watchDubbed, setWatchDubbed] = useState<boolean>(
+    STORE.get('dubbed') as boolean,
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    STORE.get('source_flag') as string,
+  );
+  const [skipTime, setSkipTime] = useState<number>(
+    STORE.get('intro_skip_time') as number,
+  );
   const [settings, setSettings] = useState<boolean>(false);
 
   const toggleSettings = () => {
@@ -50,22 +65,27 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle, onChangeEpisode
   };
 
   const handleUpdateProgressChange = () => {
-    STORE.set('update_progress', !updateProgress)
+    STORE.set('update_progress', !updateProgress);
     setUpdateProgress(!updateProgress);
   };
 
   const handleWatchDubbedChange = () => {
-    STORE.set('dubbed', !watchDubbed)
+    STORE.set('dubbed', !watchDubbed);
     setWatchDubbed(!watchDubbed);
 
-    onChangeEpisode(0, true)
+    onChangeEpisode(0, true);
   };
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('source_flag', event.target.value)
+    STORE.set('source_flag', event.target.value);
     setSelectedLanguage(event.target.value);
 
-    onChangeEpisode(0, true)
+    onChangeEpisode(0, true);
+  };
+
+  const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    STORE.set('intro_skip_time', parseInt(event.target.value));
+    setSkipTime(parseInt(event.target.value));
   };
 
   return (
@@ -121,36 +141,48 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle, onChangeEpisode
               <FontAwesomeIcon className="i" icon={faRotateRight} />
               Intro Skip Time
             </span>
-            <select className="main-select-0">
+            <select
+              className="main-select-0"
+              value={skipTime}
+              onChange={handleSkipTimeChange}
+            >
               <option value="60">60</option>
               <option value="65">65</option>
               <option value="70">70</option>
               <option value="75">75</option>
               <option value="80">80</option>
-              <option value="85" selected>
-                85 (Default)
-              </option>
+              <option value="85">85</option>
               <option value="90">90</option>
               <option value="95">95</option>
             </select>
           </li>
-          <li className="update-progress">
-            <span>
-              <FontAwesomeIcon className="i" icon={faSpinner} />
-              Update progress
-            </span>
-            <label className="switch">
-              <input type="checkbox" checked={updateProgress} onChange={handleUpdateProgressChange} />
-              <span className="slider round"></span>
-            </label>
-          </li>
+          {logged && (
+            <li className="update-progress">
+              <span>
+                <FontAwesomeIcon className="i" icon={faSpinner} />
+                Update progress
+              </span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={updateProgress}
+                  onChange={handleUpdateProgressChange}
+                />
+                <span className="slider round"></span>
+              </label>
+            </li>
+          )}
           <li className="dub">
             <span>
               <FontAwesomeIcon className="i" icon={faHeadphones} />
               Dub
             </span>
             <label className="switch">
-              <input type="checkbox" checked={watchDubbed} onChange={handleWatchDubbedChange} />
+              <input
+                type="checkbox"
+                checked={watchDubbed}
+                onChange={handleWatchDubbedChange}
+              />
               <span className="slider round"></span>
             </label>
           </li>
@@ -159,7 +191,11 @@ const Settings: React.FC<SettingsProps> = ({ videoRef, onToggle, onChangeEpisode
               <FontAwesomeIcon className="i" icon={faLanguage} />
               Language
             </span>
-            <select className="main-select-0" value={selectedLanguage} onChange={handleLanguageChange}>
+            <select
+              className="main-select-0"
+              value={selectedLanguage}
+              onChange={handleLanguageChange}
+            >
               <option value="US">English</option>
               <option value="IT">Italian</option>
             </select>
