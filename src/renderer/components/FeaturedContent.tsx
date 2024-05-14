@@ -49,6 +49,7 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
   };
 
   const handlePressButton = async () => {
+    setShowPlayer(true);
     setLoading(true);
 
     await fetchEpisodesInfo();
@@ -67,14 +68,13 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
       }
 
       setPlayerIVideo(data);
-      setShowPlayer(true);
       setLoading(false);
     });
   };
 
   const handleChangeLoading = (value: boolean) => {
-    setLoading(value)
-  }
+    setLoading(value);
+  };
 
   return (
     <>
@@ -118,15 +118,11 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
               {parseDescription(listAnimeData.media.description ?? '')}
             </div>
             <div className="buttons">
-              {loading ? (
-                <ButtonLoading />
-              ) : (
-                <Button1
-                  text="Watch now"
-                  icon={faPlay}
-                  onPress={handlePressButton}
-                />
-              )}
+              <Button1
+                text="Watch now"
+                icon={faPlay}
+                onPress={handlePressButton}
+              />
               <Button2
                 text="More info"
                 icon={faArrowUpRightFromSquare}

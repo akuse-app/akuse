@@ -20,7 +20,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   onClick,
   onDblClick,
 }) => {
-  const videoTimeline = useRef<HTMLDivElement>(null);
+  const videoTimelineRef = useRef<HTMLDivElement>(null);
 
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
@@ -57,12 +57,25 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     });
   });
 
-  const movePreviewThumbnail = async (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
+  const [offsetX, setOffsetX] = useState(0);
+  const [percent, setPercent] = useState(0);
 
+  // Funzione per calcolare il tempo in base alla posizione sull'asse X
+  const calculateTime = (event: any) => {
+    if (!videoTimelineRef.current || !duration) return;
+
+    let timelineWidth = videoTimelineRef.current.clientWidth;
+    const newOffsetX = event.nativeEvent.offsetX;
+    const newPercent = Math.floor((newOffsetX / timelineWidth) * duration);
+    const clampedOffsetX =
+      newOffsetX < 20
+        ? 20
+        : newOffsetX > timelineWidth - 20
+        ? timelineWidth - 20
+        : newOffsetX;
+
+    setOffsetX(clampedOffsetX);
+    setPercent(newPercent);
   };
 
   const dragProgressBar = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -89,25 +102,26 @@ const BottomControls: React.FC<BottomControlsProps> = ({
         className="video-timeline"
         onClick={dragProgressBar}
         onMouseMove={(event) => {
-          movePreviewThumbnail(event);
+          calculateTime(event);
           if (!isMouseDown) return;
           dragProgressBar(event);
         }}
         onMouseDown={() => setIsMouseDown(true)}
         onMouseUp={() => setIsMouseDown(false)}
-        ref={videoTimeline}
+        ref={videoTimelineRef}
       >
         <div className="progress-area">
           <div
             className="video-buffered-bar"
             style={{ width: bufferedBarWidth }}
           ></div>
-          <div className="preview-thumbnail">
+          {/* <div className="preview-thumbnail">
             <img src={previewThumbnailSrc} alt="preview" />
             <div className="time">
               <span>{videoCurrentTime}</span>
-            </div>
-          </div>
+              </div>
+            </div> */}
+          <span style={{ left: `${offsetX}px` }}>{formatTime(percent)}</span>
           <div
             className="video-progress-bar"
             style={{ width: progressBarWidth }}
@@ -120,6 +134,3 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 };
 
 export default BottomControls;
-function captureThumbnail(videoElement: HTMLVideoElement, time: string) {
-  throw new Error('Function not implemented.');
-}
