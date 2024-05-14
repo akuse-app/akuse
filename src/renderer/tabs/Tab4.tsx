@@ -1,6 +1,7 @@
 import Store from 'electron-store';
 import { ContentSteeringController } from 'hls.js';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
+import { AuthContext } from '../App';
 
 const STORE = new Store();
 
@@ -81,6 +82,8 @@ const SelectElement: React.FC<SelectElementProps> = ({
   );
 };
 const Tab4: React.FC = () => {
+  const logged = useContext(AuthContext)
+
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
   );
@@ -135,11 +138,11 @@ const Tab4: React.FC = () => {
       <div className="settings-page">
         <h1>Settings</h1>
 
-        <CheckboxElement
+        {logged  && <CheckboxElement
           label="Update progress automatically"
           checked={updateProgress}
           onChange={handleUpdateProgressChange}
-        />
+        />}
         <CheckboxElement
           label="Watch dubbed"
           checked={watchDubbed}

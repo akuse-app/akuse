@@ -599,7 +599,7 @@ export const deleteAnimeFromList = async (id: any) => {
  * @param {*} mediaId
  * @param {*} progress
  */
-export const updateAnimeProgress = async (mediaId: any, progress: any) => {
+export const updateAnimeProgress = async (mediaId: number, progress: number) => {
   var query = `
           mutation($mediaId: Int, $progress: Int) {
               SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
@@ -623,5 +623,5 @@ export const updateAnimeProgress = async (mediaId: any, progress: any) => {
   const options = getOptions(query, variables);
   await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  console.log(`Progress updated (${progress})`);
+  console.log(`Progress updated (${progress}) for anime ${mediaId}`);
 };

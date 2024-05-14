@@ -17,6 +17,7 @@ import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
 import ReactDOM from 'react-dom';
+import { updateAnimeProgress } from '../../../modules/anilist/anilistApi';
 
 const STORE = new Store();
 const videoPlayerRoot = document.getElementById('video-player-root');
@@ -52,6 +53,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [episodeNumber, setEpisodeNumber] = useState<number>(0);
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
+  const [progressUpdated, setProgressUpdated] = useState<boolean>(false)
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -77,7 +79,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [loading]);
 
   useEffect(() => {
-    console.log(video)
     if (video !== null) {
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
@@ -153,10 +154,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleTimeUpdate = () => {
-    setShowPauseInfo(false);
-    setCurrentTime(videoRef.current?.currentTime);
-    setDuration(videoRef.current?.duration);
-    setBuffered(videoRef.current?.buffered);
+    const cTime = videoRef.current?.currentTime;
+    const dTime = videoRef.current?.duration;
+
+    if (cTime && dTime) {
+      setShowPauseInfo(false);
+      setCurrentTime(cTime);
+      setDuration(dTime);
+      setBuffered(videoRef.current?.buffered);
+
+      // automatically update progress
+      (cTime * 100) / dTime <= 85 && console.log((cTime * 100) / dTime);
+      if ((cTime * 100) / dTime > 85 && STORE.get('update_progress') as boolean && !progressUpdated) {
+        updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
+        setProgressUpdated(true)
+      }
+    }
   };
 
   const handleVideoPause = () => {
@@ -251,7 +264,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
 
     const setData = (value: IVideo | null) => {
-      setVideoData(value)
+      setVideoData(value);
       setEpisodeNumber(nextEpisodeNumber);
       setEpisodeTitle(
         episodesInfo
@@ -265,6 +278,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       loadSource(value?.url ?? '', value?.isM3U8 ?? false);
       setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
+      setProgressUpdated(false)
     };
   };
 
@@ -339,6 +353,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ref={videoRef}
           onTimeUpdate={handleTimeUpdate}
           onPause={handleVideoPause}
+          crossOrigin="anonymous"
         ></video>
       </div>
     ),

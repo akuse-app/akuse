@@ -7,8 +7,8 @@ interface BottomControlsProps {
   currentTime?: number;
   duration?: number;
   buffered?: TimeRanges;
-  onClick?: (event: any) => void
-  onDblClick?: (event: any) => void
+  onClick?: (event: any) => void;
+  onDblClick?: (event: any) => void;
 }
 
 const BottomControls: React.FC<BottomControlsProps> = ({
@@ -18,7 +18,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   duration,
   buffered,
   onClick,
-  onDblClick
+  onDblClick,
 }) => {
   const videoTimeline = useRef<HTMLDivElement>(null);
 
@@ -30,6 +30,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [remainingtime, setRemainingTime] = useState<string>('00:00');
   const [progressBarWidth, setProgressBarWidth] = useState<string>('0%');
   const [bufferedBarWidth, setBufferedBarWidth] = useState<string>('0%');
+
+  const [previewThumbnailSrc, setPreviewThumbnailSrc] = useState<string>('');
 
   // start
   useEffect(() => {
@@ -55,6 +57,14 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     });
   });
 
+  const movePreviewThumbnail = async (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+  };
+
   const dragProgressBar = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!videoRef.current) return;
 
@@ -69,12 +79,17 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   };
 
   return (
-    <div className="bottom-controls" onClick={onClick} onDoubleClick={onDblClick}>
+    <div
+      className="bottom-controls"
+      onClick={onClick}
+      onDoubleClick={onDblClick}
+    >
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"
         onClick={dragProgressBar}
         onMouseMove={(event) => {
+          movePreviewThumbnail(event);
           if (!isMouseDown) return;
           dragProgressBar(event);
         }}
@@ -87,7 +102,12 @@ const BottomControls: React.FC<BottomControlsProps> = ({
             className="video-buffered-bar"
             style={{ width: bufferedBarWidth }}
           ></div>
-          <span>{videoCurrentTime}</span>
+          <div className="preview-thumbnail">
+            <img src={previewThumbnailSrc} alt="preview" />
+            <div className="time">
+              <span>{videoCurrentTime}</span>
+            </div>
+          </div>
           <div
             className="video-progress-bar"
             style={{ width: progressBarWidth }}
@@ -100,3 +120,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 };
 
 export default BottomControls;
+function captureThumbnail(videoElement: HTMLVideoElement, time: string) {
+  throw new Error('Function not implemented.');
+}

@@ -39,6 +39,7 @@ module.exports = class Video {
         this.dynamicSettingsLanguage = document.getElementById('dynamic-settings-language')
         this.dynamicSettingsDubbed = document.getElementById('dynamic-settings-dubbed')
         this.dynamicSettingsUpdateProgress = document.getElementById('dynamic-settings-update-progress')
+      this.src = undefined
     }
 
     /**
