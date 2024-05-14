@@ -1,4 +1,4 @@
-<h1 align="center">⚠ This is a no longer supported version! </h1>
+<h1 align="center">⚠ This version is no longer supported! </h1>
 <p align="center">
     <img width="100px" src="https://github.com/aleganza/akuse/blob/main/assets/img/icon/icon.png"/>
     <h1 align="center">Akuse</h1>
