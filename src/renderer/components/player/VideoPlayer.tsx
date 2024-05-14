@@ -24,30 +24,31 @@ var timer: any;
 var pauseInfoTimer: any;
 
 interface VideoPlayerProps {
-  url?: string;
-  isM3U8?: boolean;
+  video: IVideo | null;
   listAnimeData: ListAnimeData;
   episodesInfo: EpisodeInfo[] | null;
   animeEpisodeNumber: number;
   show: boolean;
+  loading: boolean;
+  onChangeLoading: (value: boolean) => void;
   onClose: () => void;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
-  url,
-  isM3U8 = false,
+  video,
   listAnimeData,
   episodesInfo,
   animeEpisodeNumber,
   show,
+  loading,
+  onChangeLoading,
   onClose,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
-  const [videoUrl, setVideoUrl] = useState<string>();
-  const [videoIsM3U8, setVideoIsM3U8] = useState<boolean>();
+  const [videoData, setVideoData] = useState<IVideo | null>(null);
   const [episodeNumber, setEpisodeNumber] = useState<number>(0);
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
@@ -69,28 +70,33 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [videoLoading, setLoading] = useState<boolean>(loading);
 
   useEffect(() => {
-    setLoading(true);
-    setVideoUrl(url);
-    setVideoIsM3U8(isM3U8);
-    setEpisodeNumber(animeEpisodeNumber);
-    setEpisodeTitle(
-      episodesInfo
-        ? episodesInfo[animeEpisodeNumber].title?.en ??
-            `Episode ${animeEpisodeNumber}`
-        : `Episode ${animeEpisodeNumber}`,
-    );
-    setEpisodeDescription(
-      episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
-    );
-    setLoading(false);
-    loadSource(url ?? '', isM3U8);
+    onChangeLoading(loading);
+  }, [loading]);
 
-    setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
-    setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
-  }, []);
+  useEffect(() => {
+    console.log(video)
+    if (video !== null) {
+      setVideoData(video);
+      setEpisodeNumber(animeEpisodeNumber);
+      setEpisodeTitle(
+        episodesInfo
+          ? episodesInfo[animeEpisodeNumber].title?.en ??
+              `Episode ${animeEpisodeNumber}`
+          : `Episode ${animeEpisodeNumber}`,
+      );
+      setEpisodeDescription(
+        episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
+      );
+      // onChangeLoading(false);
+      loadSource(video.url, video.isM3U8 ?? false);
+
+      setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
+      setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
+    }
+  }, [video]);
 
   const loadSource = (url: string, isM3U8: boolean) => {
     if (videoRef.current) {
@@ -214,7 +220,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     modificator: number,
     reloadAtPreviousTime?: boolean,
   ) => {
-    setLoading(true);
+    onChangeLoading(true);
     const nextEpisodeNumber = episodeNumber + modificator;
 
     const lang = (await STORE.get('source_flag')) as string;
@@ -229,7 +235,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       case 'US': {
         gogoanime(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           setData(value);
-          setLoading(false);
+          onChangeLoading(false);
           if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
@@ -237,7 +243,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       case 'IT': {
         animesaturn(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           setData(value);
-          setLoading(false);
+          onChangeLoading(false);
           if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
@@ -245,8 +251,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
 
     const setData = (value: IVideo | null) => {
-      setVideoUrl(value?.url);
-      setVideoIsM3U8(value?.isM3U8);
+      setVideoData(value)
       setEpisodeNumber(nextEpisodeNumber);
       setEpisodeTitle(
         episodesInfo

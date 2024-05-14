@@ -96,6 +96,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const playEpisode = async (episode: number) => {
+    setShowPlayer(true);
     setLoading(true);
     setAnimeEpisodeNumber(episode);
 
@@ -114,7 +115,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }
 
       setPlayerIVideo(data);
-      setShowPlayer(true);
+      // setShowPlayer(true);
       setLoading(false);
     });
   };
@@ -132,16 +133,21 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   }, [show]);
 
+  const handleChangeLoading = (value: boolean) => {
+    setLoading(value)
+  }
+
   return ReactDOM.createPortal(
     <>
       {showPlayer && (
         <VideoPlayer
-          url={playerIVideo?.url}
-          isM3U8={playerIVideo?.isM3U8}
+          video={playerIVideo}
           listAnimeData={listAnimeData}
           episodesInfo={episodesInfo}
           animeEpisodeNumber={animeEpisodeNumber}
           show={showPlayer}
+          loading={loading}
+          onChangeLoading={handleChangeLoading}
           onClose={() => {
             setShowPlayer(false);
           }}
@@ -176,7 +182,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 <AnimeModalWatchButtons
                   listAnimeData={listAnimeData}
                   onPlay={playEpisode}
-                  loading={loading}
+                  loading={false} // loading disabled
                 />
               </div>
             )}
@@ -234,6 +240,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               episodesInfo={episodesInfo}
               episodesInfoHasFetched={episodesInfoHasFetched}
               listAnimeData={listAnimeData}
+              loading={loading}
               onPlay={playEpisode}
             />
           </div>

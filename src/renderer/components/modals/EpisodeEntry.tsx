@@ -1,10 +1,13 @@
+import 'react-activity/dist/Dots.css';
+
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
-import { faStopwatch } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faStopwatch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Dots from 'react-activity/dist/Dots';
 import Skeleton from 'react-loading-skeleton';
 
 interface EpisodeEntryProps {
-  onPress: () => void
+  onPress: () => void;
   hasInfoLoaded: boolean;
   number: string;
   cover: string | null;
@@ -12,6 +15,7 @@ interface EpisodeEntryProps {
   description: string | null;
   releaseDate: string | null;
   duration: string | null;
+  loading?: boolean;
 }
 
 const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
@@ -23,13 +27,16 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
   description,
   releaseDate,
   duration,
+  loading,
 }) => {
   return (
     <div className="episode-entry" onClick={onPress}>
       {hasInfoLoaded ? (
-        <img src={cover ?? ''} alt="episode cover" />
+        <div className="image">
+          <img src={cover ?? ''} alt="episode cover" />
+        </div>
       ) : (
-        <Skeleton className='image-replacer' />
+        <Skeleton className="image" />
       )}
       <div className="episode-content">
         <div className="title">

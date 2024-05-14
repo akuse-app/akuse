@@ -241,7 +241,7 @@ interface AnimeModalWatchButtonsProps {
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
   onPlay,
-  loading,
+  loading = false
 }) => {
   const logged = useContext(AuthContext);
 

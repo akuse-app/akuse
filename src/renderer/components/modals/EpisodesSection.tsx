@@ -18,6 +18,7 @@ interface EpisodesSectionProps {
   episodesInfo: EpisodeInfo[] | null;
   episodesInfoHasFetched: boolean;
   listAnimeData: ListAnimeData;
+  loading?: boolean
   onPlay: (episode: number) => void;
 }
 
@@ -25,6 +26,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   episodesInfo,
   episodesInfoHasFetched,
   listAnimeData,
+  loading,
   onPlay,
 }) => {
   const [activeSection, setActiveSection] = useState<number>(0);
@@ -119,6 +121,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
                 duration={
                   episodesInfo ? `${episodesInfo[episode]?.length}min` ?? '' : ''
                 }
+                loading={loading}
               />
             ))}
         </div>

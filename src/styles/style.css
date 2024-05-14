@@ -832,10 +832,10 @@ main .featured .featured-container .content {
   font-weight: var(--font-weight);
 }
 
-  main .featured .featured-container .content .buttons {
-    display: flex;
-    gap: 20px
-  }
+main .featured .featured-container .content .buttons {
+  display: flex;
+  gap: 20px
+}
 
 main .featured .anime-title {
   display: -webkit-box;
@@ -1224,6 +1224,7 @@ main .featured .featured-img img {
 
 .anime-page .episodes-section .episode-entry {
   position: relative;
+  opacity: 1;
   display: flex;
   gap: 25px;
   height: 175px;
@@ -1231,25 +1232,47 @@ main .featured .featured-img img {
   aspect-ratio: 1.78 / 1;
   border-radius: var(--border-radius);
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .anime-page .episodes-section .episode-entry:hover {
   background-color: var(--color-2);
 }
 
+.anime-page .episodes-section .episode-entry:hover .image .i {
+  opacity: 1;
+}
+
+.anime-page .episodes-section .episodes:hover> :not(:hover) {
+  opacity: 0.5;
+}
+
 .anime-page .episodes-section .episode-entry:active {
   background-color: var(--color-3);
 }
 
-/* .anime-page .episodes-section .episode-entry:hover img {
-            filter: brightness(0.7);
-        } */
-
-.anime-page .episodes-section .episode-entry .image-replacer {
+.anime-page .episodes-section .episode-entry .image {
+  position: relative;
+  display: flex;
+  align-items: center;
   min-width: 311.5px;
   height: 100%;
   aspect-ratio: 1.78 / 1;
   border-radius: var(--border-radius);
+}
+
+.anime-page .episodes-section .episode-entry .image .i {
+  position: absolute;
+  opacity: 0;
+  font-size: 4rem;
+  color: var(--font-1);
+  /* left: 42%; */
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  width: 100%;
+  transition: var(--transition);
 }
 
 .anime-page .episodes-section .episode-entry img {

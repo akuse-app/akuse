@@ -72,16 +72,21 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
     });
   };
 
+  const handleChangeLoading = (value: boolean) => {
+    setLoading(value)
+  }
+
   return (
     <>
       {showPlayer && (
         <VideoPlayer
-          url={playerIVideo?.url}
-          isM3U8={playerIVideo?.isM3U8}
+          video={playerIVideo}
           listAnimeData={listAnimeData}
           episodesInfo={episodesInfo}
           animeEpisodeNumber={1}
           show={showPlayer}
+          loading={loading}
+          onChangeLoading={handleChangeLoading}
           onClose={() => {
             setShowPlayer(false);
           }}
