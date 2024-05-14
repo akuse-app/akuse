@@ -7,7 +7,7 @@ import Dots from 'react-activity/dist/Dots';
 interface ButtonProps {
   text: string;
   icon?: IconDefinition;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export const ButtonLoading = () => {
@@ -51,7 +51,7 @@ export const Button2: React.FC<ButtonProps> = ({
 interface CircleButtonProps {
   icon: IconDefinition;
   classes?: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export const CircleButton1: React.FC<CircleButtonProps> = ({

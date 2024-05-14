@@ -7,14 +7,19 @@ import { useEffect, useRef, useState } from 'react';
 
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
+import {
+  getAvailableEpisodes,
+  getParsedAnimeTitles,
+} from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
+import ReactDOM from 'react-dom';
 
 const STORE = new Store();
+const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
 var pauseInfoTimer: any;
 
@@ -266,7 +271,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
 
-  return (
+  return ReactDOM.createPortal(
     show && (
       <div
         className={`container ${showControls ? 'show-controls' : ''} ${
@@ -331,7 +336,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           onPause={handleVideoPause}
         ></video>
       </div>
-    )
+    ),
+    videoPlayerRoot!,
   );
 };
 

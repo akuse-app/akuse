@@ -1,9 +1,14 @@
+import { IVideo } from '@consumet/extensions';
 import {
   faArrowLeftLong,
   faArrowRightLong,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import React, { useRef, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import Skeleton from 'react-loading-skeleton';
+
+import { getUniversalEpisodeUrl } from '../../modules/providers/api';
 import {
   capitalizeFirstLetter,
   getParsedSeasonYear,
@@ -11,40 +16,108 @@ import {
   parseDescription,
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
-import { Media } from '../../types/anilistGraphQLTypes';
-import { Button1, CircleButton1 } from './Buttons';
-import Skeleton from 'react-loading-skeleton';
+import { Button1, ButtonLoading, CircleButton1 } from './Buttons';
+import VideoPlayer from './player/VideoPlayer';
+import { EpisodeInfo } from '../../types/types';
+import { EPISODES_INFO_URL } from '../../constants/utils';
+import axios from 'axios';
 
 interface FeaturedItemProps {
-  media: Media;
+  listAnimeData: ListAnimeData;
 }
 
-const FeaturedItem: React.FC<FeaturedItemProps> = ({ media }) => {
-  const onPress = () => {};
+const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
+  const style = getComputedStyle(document.body);
+
+  const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
+  const [showPlayer, setShowPlayer] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
+    useState<boolean>(false);
+  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
+
+  const fetchEpisodesInfo = async () => {
+    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
+      if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
+      setEpisodesInfoHasFetched(true);
+    });
+  };
+
+  const handlePressButton = async () => {
+    setLoading(true);
+
+    await fetchEpisodesInfo()
+    getUniversalEpisodeUrl(listAnimeData, 1).then(data => {
+      if (!data) {
+        toast(`Source not found.`, {
+          style: {
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+          },
+          icon: '❌',
+        });
+        setLoading(false);
+
+        return;
+      }
+
+      setPlayerIVideo(data);
+      setShowPlayer(true);
+      setLoading(false);
+    });
+  };
 
   return (
-    <div className="featured">
-      <div className="featured-container">
-        <div className="content show">
-          <div className="anime-info">
-            <div className="anime-format">{media.format}</div>•
-            <div className="anime-year">
-              {capitalizeFirstLetter(media.season ?? '?')}{' '}
-              {getParsedSeasonYear(media)}
+    <>
+      {showPlayer && (
+        <VideoPlayer
+          url={playerIVideo?.url}
+          isM3U8={playerIVideo?.isM3U8}
+          listAnimeData={listAnimeData}
+          episodesInfo={episodesInfo}
+          animeEpisodeNumber={1}
+          show={showPlayer}
+          onClose={() => {
+            setShowPlayer(false);
+          }}
+        />
+      )}
+      <div className="featured">
+        <div className="featured-container">
+          <div className="content show">
+            <div className="anime-info">
+              <div className="anime-format">{listAnimeData.media.format}</div>•
+              <div className="anime-year">
+                {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
+                {getParsedSeasonYear(listAnimeData.media)}
+              </div>
+              •
+              <div className="anime-episodes">
+                {listAnimeData.media.episodes} Episodes
+              </div>
             </div>
-            •<div className="anime-episodes">{media.episodes} Episodes</div>
+            <div className="anime-title">{getTitle(listAnimeData.media)}</div>
+            <div className="anime-description">
+              {parseDescription(listAnimeData.media.description ?? '')}
+            </div>
+            {loading ? (
+              <ButtonLoading />
+            ) : (
+              <Button1
+                text="Watch now"
+                icon={faPlay}
+                onPress={handlePressButton}
+              />
+            )}
           </div>
-          <div className="anime-title">{getTitle(media)}</div>
-          <div className="anime-description">
-            {parseDescription(media.description ?? '')}
-          </div>
-          <Button1 text="Watch now" icon={faPlay} onPress={onPress} />
+        </div>
+        <div className="featured-img">
+          <img src={listAnimeData.media.bannerImage} alt="anime banner" />
         </div>
       </div>
-      <div className="featured-img">
-        <img src={media.bannerImage} alt="anime banner" />
-      </div>
-    </div>
+      <Toaster />
+    </>
   );
 };
 
@@ -106,13 +179,13 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
           {animeData
             ?.filter((animeData) => animeData.media.bannerImage)
             .map((animeData, index) => (
-              <FeaturedItem key={index} media={animeData.media} />
+              <FeaturedItem key={index} listAnimeData={animeData} />
             ))}
         </div>
       </div>
     </>
   ) : (
-    <Skeleton className="featured skeleton"/>
+    <Skeleton className="featured skeleton" />
   );
 };
 

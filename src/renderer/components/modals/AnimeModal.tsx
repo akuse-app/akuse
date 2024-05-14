@@ -32,8 +32,8 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import { EPISODES_INFO_URL } from '../../../constants/utils';
 
-const EPISODES_INFO_URL = 'https://api.ani.zip/mappings?anilist_id=';
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -60,9 +60,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // player
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [animeEpisodeNumber, setAnimeEpisodeNumber] = useState<number>(0);
-  const [animeEpisodeTitle, setAnimeEpisodeTitle] = useState<string>('');
-  const [animeEpisodeDescription, setAnimeEpisodeDescription] =
-    useState<string>('');
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
