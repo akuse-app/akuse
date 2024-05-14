@@ -828,9 +828,14 @@ main .featured .featured-container .content {
   gap: 10px;
   max-width: 500px;
   height: max-content;
-  padding-left: 25px;
+  padding-left: 20px;
   font-weight: var(--font-weight);
 }
+
+  main .featured .featured-container .content .buttons {
+    display: flex;
+    gap: 20px
+  }
 
 main .featured .anime-title {
   display: -webkit-box;

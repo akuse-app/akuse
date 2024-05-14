@@ -2,6 +2,8 @@ import { IVideo } from '@consumet/extensions';
 import {
   faArrowLeftLong,
   faArrowRightLong,
+  faArrowUpRightFromSquare,
+  faInfo,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import React, { useRef, useState } from 'react';
@@ -16,11 +18,12 @@ import {
   parseDescription,
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
-import { Button1, ButtonLoading, CircleButton1 } from './Buttons';
+import { Button1, Button2, ButtonLoading, CircleButton1 } from './Buttons';
 import VideoPlayer from './player/VideoPlayer';
 import { EpisodeInfo } from '../../types/types';
 import { EPISODES_INFO_URL } from '../../constants/utils';
 import axios from 'axios';
+import AnimeModal from './modals/AnimeModal';
 
 interface FeaturedItemProps {
   listAnimeData: ListAnimeData;
@@ -32,23 +35,24 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
-    useState<boolean>(false);
   const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
+
+  // wether the modal is shown or not
+  const [showModal, setShowModal] = useState<boolean>(false);
+  // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
+  const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
 
   const fetchEpisodesInfo = async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
       if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
-      setEpisodesInfoHasFetched(true);
     });
   };
 
   const handlePressButton = async () => {
     setLoading(true);
 
-    await fetchEpisodesInfo()
-    getUniversalEpisodeUrl(listAnimeData, 1).then(data => {
+    await fetchEpisodesInfo();
+    getUniversalEpisodeUrl(listAnimeData, 1).then((data) => {
       if (!data) {
         toast(`Source not found.`, {
           style: {
@@ -83,6 +87,13 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
           }}
         />
       )}
+      {listAnimeData && hasModalBeenShowed && (
+        <AnimeModal
+          listAnimeData={listAnimeData}
+          show={showModal}
+          onClose={() => setShowModal(false)}
+        />
+      )}
       <div className="featured">
         <div className="featured-container">
           <div className="content show">
@@ -101,15 +112,25 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
             <div className="anime-description">
               {parseDescription(listAnimeData.media.description ?? '')}
             </div>
-            {loading ? (
-              <ButtonLoading />
-            ) : (
-              <Button1
-                text="Watch now"
-                icon={faPlay}
-                onPress={handlePressButton}
+            <div className="buttons">
+              {loading ? (
+                <ButtonLoading />
+              ) : (
+                <Button1
+                  text="Watch now"
+                  icon={faPlay}
+                  onPress={handlePressButton}
+                />
+              )}
+              <Button2
+                text="More info"
+                icon={faArrowUpRightFromSquare}
+                onPress={() => {
+                  setShowModal(true);
+                  if (!hasModalBeenShowed) setHasModalBeenShowed(true);
+                }}
               />
-            )}
+            </div>
           </div>
         </div>
         <div className="featured-img">
