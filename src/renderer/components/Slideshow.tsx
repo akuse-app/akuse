@@ -1,27 +1,26 @@
+import './styles/Slideshow.css';
+
+import { IVideo } from '@consumet/extensions';
+import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
-import './styles/Slideshow.css'; // Stili CSS per il componente slideshow
-import { ListAnimeData } from '../../../types/anilistAPITypes';
-import {
-  faPlay,
-  faArrowUpRightFromSquare,
-} from '@fortawesome/free-solid-svg-icons';
+import toast, { Toaster } from 'react-hot-toast';
+
+import { EPISODES_INFO_URL } from '../../constants/utils';
+import { getUniversalEpisodeUrl } from '../../modules/providers/api';
 import {
   capitalizeFirstLetter,
-  getParsedSeasonYear,
   getAvailableEpisodes,
+  getParsedSeasonYear,
   getTitle,
   parseDescription,
-} from '../../../modules/utils';
-import { Button1, Button2 } from '../Buttons';
-import { IVideo } from '@consumet/extensions';
-import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
-import { EPISODES_INFO_URL } from '../../../constants/utils';
-import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
-import { EpisodeInfo } from '../../../types/types';
-import AnimeModal from '../modals/AnimeModal';
-import VideoPlayer from './VideoPlayer';
-import DOMPurify from 'dompurify';
+} from '../../modules/utils';
+import { ListAnimeData } from '../../types/anilistAPITypes';
+import { EpisodeInfo } from '../../types/types';
+import { Button1, Button2 } from './Buttons';
+import AnimeModal from './modals/AnimeModal';
+import VideoPlayer from './player/VideoPlayer';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -191,27 +190,30 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
   };
 
   return (
-    <div className="slideshow-container">
-      <div
-        className="slideshow-wrapper"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
-        {animeData &&
-          animeData.map((listAnimeData, index) => (
-            <Slide key={index} listAnimeData={listAnimeData} index={index} />
-          ))}
+    <>
+      <h1>Popular now</h1>
+      <div className="slideshow-container">
+        <div
+          className="slideshow-wrapper"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {animeData &&
+            animeData.map((listAnimeData, index) => (
+              <Slide key={index} listAnimeData={listAnimeData} index={index} />
+            ))}
+        </div>
+        <div className="dot-container">
+          {animeData &&
+            animeData.map((_, index) => (
+              <span
+                key={index}
+                className={index === currentIndex ? 'dot active' : 'dot'}
+                onClick={() => goToIndex(index)}
+              ></span>
+            ))}
+        </div>
       </div>
-      <div className="dot-container">
-        {animeData &&
-          animeData.map((_, index) => (
-            <span
-              key={index}
-              className={index === currentIndex ? 'dot active' : 'dot'}
-              onClick={() => goToIndex(index)}
-            ></span>
-          ))}
-      </div>
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
-import Slideshow from '../components/player/Slideshow';
+import Slideshow from '../components/Slideshow';
 
 interface Tab1Props {
   currentListAnime?: ListAnimeData[];

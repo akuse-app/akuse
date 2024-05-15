@@ -1,7 +1,6 @@
 import '..//styles/components.css';
 import '../styles/animations.css';
 import '../styles/style.css';
-import '../styles/videoPlayer.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import Store from 'electron-store';

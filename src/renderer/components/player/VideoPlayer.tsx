@@ -1,23 +1,21 @@
+import './styles/videoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 
+import { updateAnimeProgress } from '../../../modules/anilist/anilistApi';
 import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
 import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import {
-  getAvailableEpisodes,
-  getParsedAnimeTitles,
-} from '../../../modules/utils';
+import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
-import ReactDOM from 'react-dom';
-import { updateAnimeProgress } from '../../../modules/anilist/anilistApi';
 
 const STORE = new Store();
 const videoPlayerRoot = document.getElementById('video-player-root');
@@ -80,6 +78,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     if (video !== null) {
+      loadSource(video.url, video.isM3U8 ?? false);
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
@@ -91,8 +90,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
       );
-      // onChangeLoading(false);
-      loadSource(video.url, video.isM3U8 ?? false);
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
@@ -149,6 +146,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         playVideo();
         setCurrentTime(videoRef.current?.currentTime);
         setDuration(videoRef.current?.duration);
+        onChangeLoading(false)
       }, 1000);
     }
   };
@@ -253,8 +251,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         gogoanime(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           if (!value) return;
           setData(value);
-          onChangeLoading(false);
-          if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
       }
@@ -262,8 +258,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         animesaturn(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
           if (!value) return;
           setData(value);
-          onChangeLoading(false);
-          if (videoRef.current) videoRef.current.currentTime = previousTime;
         });
         break;
       }
@@ -285,6 +279,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
       setProgressUpdated(false);
+      if (videoRef.current && reloadAtPreviousTime)
+        videoRef.current.currentTime = previousTime;
+      
+      onChangeLoading(false);
     };
   };
 

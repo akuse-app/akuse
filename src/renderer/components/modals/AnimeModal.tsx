@@ -115,7 +115,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }
 
       setPlayerIVideo(data);
-      setLoading(false);
     });
   };
 
