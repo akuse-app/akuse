@@ -377,7 +377,7 @@ aside ul li {
   cursor: pointer;
   font-weight: var(--font-weight);
   display: flex;
-  /* transition: var(--transition); */
+  transition: var(--transition);
 }
 
 /* toggler for login icon or user avatar */
@@ -399,17 +399,16 @@ aside ul li.active .i-wrapper {
   background-color: var(--color-0);
 }
 
-aside ul li .i-wrapper:active {
-  transform: scale(0.9);
+aside ul li:hover {
+  transform: scale(1.2);
+}
+
+aside ul li:active {
+  transform: scale(1);
 }
 
 aside ul li:hover:not(li.active) {
-  color: var(--font-2);
-  filter: brightness(1.50);
-}
-
-aside ul li:hover:not(li.active) .i-wrapper {
-  /* background-color: var(--color-0); */
+  color: var(--font-1);
 }
 
 aside ul li .i-wrapper {
@@ -421,7 +420,7 @@ aside ul li .i-wrapper {
   /* background-color: var(--color-0); */
   /* border-radius: var(--border-radius); */
   border-radius: 100%;
-  transition: var(--transition);
+  /* transition: var(--transition); */
 }
 
 aside ul li .i-wrapper.nav-user {
@@ -1116,8 +1115,7 @@ main .featured .featured-img img {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: calc(100% - 30px);
-  margin: 0 15px;
+  width: 100%
 }
 
 .anime-page .episodes-section .episodes-scroller {
@@ -1228,6 +1226,7 @@ main .featured .featured-img img {
   display: flex;
   gap: 25px;
   height: 175px;
+  margin: 0 15px;
   padding: 15px;
   aspect-ratio: 1.78 / 1;
   border-radius: var(--border-radius);
@@ -1236,11 +1235,8 @@ main .featured .featured-img img {
 }
 
 .anime-page .episodes-section .episode-entry:hover {
+  transform: scale(1.027);
   background-color: var(--color-2);
-}
-
-.anime-page .episodes-section .episode-entry:hover .image .i {
-  opacity: 1;
 }
 
 .anime-page .episodes-section .episodes:hover> :not(:hover) {
@@ -1248,6 +1244,7 @@ main .featured .featured-img img {
 }
 
 .anime-page .episodes-section .episode-entry:active {
+  transform: scale(1);
   background-color: var(--color-3);
 }
 
@@ -1577,7 +1574,7 @@ main .anime-entry {
   height: min-content;
   margin-top: 10px;
   /* must be in anime-entry or hover scaling won't work */
-  transition: 0.25s ease-out;
+  transition: 0.2s ease-out;
   border-radius: var(--border-radius);
 }
 
@@ -1586,7 +1583,7 @@ main .anime-entry:not(.skeleton) {
 }
 
 main .anime-entry:not(.skeleton):hover {
-  transform: scale(1.07);
+  transform: scale(1.05);
 }
 
 main .anime-entry:not(.skeleton):hover .anime-cover {
