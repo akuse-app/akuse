@@ -1,4 +1,14 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import log from 'electron-log';
+import Store from 'electron-store';
+import { autoUpdater } from 'electron-updater';
+import path from 'path';
+
+import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
+import MenuBuilder from './menu';
+import { resolveHtmlPath } from './util';
+
 
 /**
  * This module executes inside of electron's main process. You can start
@@ -8,20 +18,11 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import { BrowserWindow, app, ipcMain, shell } from 'electron';
-import log from 'electron-log';
-import { autoUpdater } from 'electron-updater';
-import path from 'path';
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
-
-import Store from 'electron-store'
 const STORE = new Store()
 
 app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
 
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
-// const githubOpenNewIssueUrl = 'https://github.com/aleganza/akuse/issues/new';
 // autoUpdater.autoDownload = false;
 // autoUpdater.autoInstallOnAppQuit = true;
 // autoUpdater.autoRunAppAfterInstall = true;
@@ -142,9 +143,17 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-/**
- * Add event listeners...
- */
+// ipcMain.on('open-login-url', () => {
+//   require('electron').shell.openExternal(authUrl)
+// })
+
+ipcMain.on('open-sponsor-url', () => {
+  require('electron').shell.openExternal(SPONSOR_URL)
+})
+
+ipcMain.on('open-issues-url', () => {
+  require('electron').shell.openExternal(OPEN_NEW_ISSUE_URL)
+})
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even

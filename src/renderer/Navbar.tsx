@@ -1,10 +1,6 @@
 import '../styles/style.css';
 
-import {
-  faBookmark,
-  faCompass,
-  IconDefinition,
-} from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faBug,
@@ -15,6 +11,7 @@ import {
   faMagnifyingGlassPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ipcRenderer } from 'electron';
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -119,13 +116,13 @@ const Navbar = () => {
         <NavLowerItem
           text="Sponsor"
           icon={faHeartFull}
-          onClick={() => {}}
+          onClick={() => {ipcRenderer.send('open-sponsor-url')}}
           link
         />
         <NavLowerItem
           text="Report a bug"
           icon={faBug}
-          onClick={() => {}}
+          onClick={() => {ipcRenderer.send('open-issues-url')}}
           link
         />
       </ul>
