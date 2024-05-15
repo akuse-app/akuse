@@ -40,11 +40,11 @@ const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pa
         <Dots />
       ) : (
         <>
-          <button className="skip-backward" onClick={handleFastRewind}>
+          <button className="b-player skip-backward" onClick={handleFastRewind}>
             <FontAwesomeIcon className="i" icon={faRotateLeft} />
           </button>
-          <div className="play-pause-center">
-            <button className="play-pause" onClick={handlePlayPause}>
+          <div className="b-player play-pause-center">
+            <button className="b-player play-pause" onClick={handlePlayPause}>
               <i className="fas fa-play"></i>
               <FontAwesomeIcon
                 className="i"
@@ -53,10 +53,10 @@ const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pa
             </button>
           </div>
           <div>
-            <button className="skip-forward" onClick={handleFastForward}>
+            <button className="b-player skip-forward" onClick={handleFastForward}>
               <FontAwesomeIcon className="i" icon={faRotateRight} />
             </button>
-            {/* <button className="skip-forward-small">
+            {/* <button className="b-player skip-forward-small">
           <FontAwesomeIcon className="i" icon={faRotateRight} />
         </button> */}
           </div>

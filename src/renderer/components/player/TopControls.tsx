@@ -64,7 +64,7 @@ const TopControls: React.FC<TopControlsProps> = ({
         />
         {showPreviousEpisodeButton && (
           <button
-            className="next show-next-episode-btn"
+            className="b-player next show-next-episode-btn"
             onClick={() => {
               onChangeEpisode(-1);
             }}
@@ -74,13 +74,13 @@ const TopControls: React.FC<TopControlsProps> = ({
         )}
         {showNextEpisodeButton && (
           <button
-            className="next show-next-episode-btn"
+            className="b-player next show-next-episode-btn"
             onClick={() => onChangeEpisode(1)}
           >
             <FontAwesomeIcon className="i" icon={faForward} />
           </button>
         )}
-        <button className="fullscreen" onClick={onFullScreentoggle}>
+        <button className="b-player fullscreen" onClick={onFullScreentoggle}>
           <FontAwesomeIcon
             className="i"
             icon={fullscreen ? faCompress : faExpand}

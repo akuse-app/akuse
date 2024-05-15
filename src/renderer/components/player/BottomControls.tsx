@@ -1,5 +1,11 @@
+import Store from 'electron-store';
 import { useEffect, useRef, useState } from 'react';
+
 import { formatTime } from '../../../modules/utils';
+import { Button1, Button2 } from '../Buttons';
+import { faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+
+const STORE = new Store();
 
 interface BottomControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -25,15 +31,21 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
   const [videoCurrentTime, setVideoCurrentTime] = useState<string>('00:00');
-  const [progressTime, setProgressTime] = useState<string>('00:00');
   const [videoDuration, setVideoDuration] = useState<string>('00:00');
   const [remainingtime, setRemainingTime] = useState<string>('00:00');
   const [progressBarWidth, setProgressBarWidth] = useState<string>('0%');
   const [bufferedBarWidth, setBufferedBarWidth] = useState<string>('0%');
 
-  const [previewThumbnailSrc, setPreviewThumbnailSrc] = useState<string>('');
+  const [offsetX, setOffsetX] = useState(0);
+  const [percent, setPercent] = useState(0);
 
-  // start
+  const [introSkip, setIntroSkip] = useState<number>(
+    STORE.get('intro_skip_time') as number,
+  );
+  const [showDuration, setShowDuration] = useState<boolean>(
+    STORE.get('show_duration') as boolean,
+  );
+
   useEffect(() => {
     setVideoCurrentTime(formatTime(videoRef.current?.currentTime ?? 0));
     setVideoDuration(formatTime(videoRef.current?.duration ?? 0));
@@ -44,6 +56,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   useEffect(() => {
     setVideoCurrentTime(formatTime(currentTime ?? 0));
     setRemainingTime(formatTime((duration ?? 0) - (currentTime ?? 0)));
+    setVideoDuration(formatTime(duration ?? 0));
     setProgressBarWidth(`${((currentTime ?? 0) / (duration ?? 0)) * 100}%`);
 
     if (videoRef.current && buffered && buffered.length > 0) {
@@ -57,11 +70,15 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     });
   });
 
-  const [offsetX, setOffsetX] = useState(0);
-  const [percent, setPercent] = useState(0);
+  const handleShowDuration = () => {
+    const show = !showDuration;
+
+    STORE.set('show_duration', show);
+    setShowDuration(show);
+  };
 
   // Funzione per calcolare il tempo in base alla posizione sull'asse X
-  const calculateTime = (event: any) => {
+  const calculateProgressTime = (event: any) => {
     if (!videoTimelineRef.current || !duration) return;
 
     let timelineWidth = videoTimelineRef.current.clientWidth;
@@ -91,18 +108,27 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     videoRef.current.currentTime = newTime;
   };
 
+  const handleSkipIntro = () => {
+    if(!videoRef.current) return
+
+    videoRef.current.currentTime += introSkip
+  }
+
   return (
     <div
       className="bottom-controls"
       onClick={onClick}
       onDoubleClick={onDblClick}
     >
+      <div className="skip-button">
+        <Button2 text={introSkip} icon={faPlus} onPress={handleSkipIntro} />
+      </div>
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"
         onClick={dragProgressBar}
         onMouseMove={(event) => {
-          calculateTime(event);
+          calculateProgressTime(event);
           if (!isMouseDown) return;
           dragProgressBar(event);
         }}
@@ -128,7 +154,13 @@ const BottomControls: React.FC<BottomControlsProps> = ({
           ></div>
         </div>
       </div>
-      <p className="video-duration">-{remainingtime}</p>
+      <p
+        className="video-duration"
+        onClick={handleShowDuration}
+        style={{ marginLeft: showDuration ? 8 : '' }}
+      >
+        {showDuration ? videoDuration : `-${remainingtime}`}
+      </p>
     </div>
   );
 };

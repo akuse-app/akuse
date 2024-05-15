@@ -19,6 +19,10 @@ export const getUniversalEpisodeUrl = async (listAnimeData: ListAnimeData, episo
   const dubbed = (await STORE.get('dubbed')) as boolean;
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
+  console.log(lang)
+  console.log(dubbed)
+  console.log(animeTitles)
+
   switch (lang) {
     case 'US': {
       const data = await gogoanime(animeTitles, episode, dubbed)

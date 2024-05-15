@@ -96,6 +96,9 @@ const Tab4: React.FC = () => {
   const [skipTime, setSkipTime] = useState<number>(
     STORE.get('intro_skip_time') as number,
   );
+  const [showDuration, setShowDuration] = useState<boolean>(
+    STORE.get('show_duration') as boolean,
+  );
 
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
@@ -115,6 +118,11 @@ const Tab4: React.FC = () => {
   const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     STORE.set('intro_skip_time', parseInt(event.target.value));
     setSkipTime(parseInt(event.target.value));
+  };
+
+  const handleShowDurationChange = () => {
+    STORE.set('dubbed', !showDuration);
+    setShowDuration(!showDuration);
   };
 
   const languageOptions: Option[] = [
@@ -159,6 +167,11 @@ const Tab4: React.FC = () => {
           value={skipTime}
           options={skipTimeOptions}
           onChange={handleSkipTimeChange}
+        />
+        <CheckboxElement
+          label="Display the video duration instead of the remaining time."
+          checked={showDuration}
+          onChange={handleShowDurationChange}
         />
       </div>
     </div>

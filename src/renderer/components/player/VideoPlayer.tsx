@@ -53,7 +53,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [episodeNumber, setEpisodeNumber] = useState<number>(0);
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
-  const [progressUpdated, setProgressUpdated] = useState<boolean>(false)
+  const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -165,9 +165,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       // automatically update progress
       (cTime * 100) / dTime <= 85 && console.log((cTime * 100) / dTime);
-      if ((cTime * 100) / dTime > 85 && STORE.get('update_progress') as boolean && !progressUpdated) {
-        updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
-        setProgressUpdated(true)
+      if (
+        (cTime * 100) / dTime > 85 &&
+        (STORE.get('update_progress') as boolean) &&
+        !progressUpdated
+      ) {
+        updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+        setProgressUpdated(true);
       }
     }
   };
@@ -247,6 +251,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     switch (lang) {
       case 'US': {
         gogoanime(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
+          if (!value) return;
           setData(value);
           onChangeLoading(false);
           if (videoRef.current) videoRef.current.currentTime = previousTime;
@@ -255,6 +260,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'IT': {
         animesaturn(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
+          if (!value) return;
           setData(value);
           onChangeLoading(false);
           if (videoRef.current) videoRef.current.currentTime = previousTime;
@@ -263,7 +269,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     }
 
-    const setData = (value: IVideo | null) => {
+    const setData = (value: IVideo) => {
       setVideoData(value);
       setEpisodeNumber(nextEpisodeNumber);
       setEpisodeTitle(
@@ -275,10 +281,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodesInfo ? episodesInfo[nextEpisodeNumber].summary ?? '' : '',
       );
-      loadSource(value?.url ?? '', value?.isM3U8 ?? false);
+      loadSource(value.url, value.isM3U8 ?? false);
       setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
-      setProgressUpdated(false)
+      setProgressUpdated(false);
     };
   };
 

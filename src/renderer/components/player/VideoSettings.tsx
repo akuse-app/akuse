@@ -90,7 +90,7 @@ const Settings: React.FC<SettingsProps> = ({
 
   return (
     <div className="settings-content">
-      <button className="settings" onClick={toggleSettings}>
+      <button className="b-player settings" onClick={toggleSettings}>
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
       {settings && (

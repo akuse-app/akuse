@@ -44,26 +44,23 @@
   border-radius: 0px;
 }
 
-.container button {
-  color: var(--font-2);
-  background-color: transparent;
+.container .b-player {
   border: none;
   outline: none;
-  font-size: 2rem;
-  transition: 0.1s ease-out;
+  background-color: transparent;
 }
 
-.container button .i {
+.container .b-player .i {
   cursor: pointer;
   transition: 0.1s ease-out;
 }
 
-.container button .i:hover {
+.container .b-player .i:hover {
   color: var(--font-1);
   transform: scale(1.05);
 }
 
-.container button .i:active {
+.container .b-player .i:active {
   transform: scale(1);
   color: var(--color-transparency);
 }
@@ -407,7 +404,13 @@
   width: 36px;
 }
 
-.mid-controls button {
+.up-controls .b-player {
+  color: var(--font-2);
+  font-size: 2rem;
+  transition: 0.1s ease-out;
+}
+
+.mid-controls .b-player {
   color: var(--color-transparency);
   font-size: 4.6rem;
 }
@@ -421,7 +424,7 @@
 }
 
 
-.mid-controls button i:hover {
+.mid-controls .b-player i:hover {
   color: var(--font-1);
 }
 
@@ -430,4 +433,18 @@
   color: var(--font-1);
   font-size: 1.4rem;
   font-family: sans-serif;
+}
+
+.bottom-controls .video-duration:hover {
+  color: var(--font-2);
+}
+
+.bottom-controls .video-duration:active {
+  transform: scale(0.95);
+}
+
+.skip-button {
+  right: 0;
+  bottom: 80px;
+  position: absolute;
 }

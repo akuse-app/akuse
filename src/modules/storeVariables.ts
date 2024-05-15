@@ -6,6 +6,7 @@ export const setDefaultStoreVariables = () => {
   if (!STORE.has('dubbed')) STORE.set('dubbed', false);
   if (!STORE.has('source_flag')) STORE.set('source_flag', 'US');
   if (!STORE.has('intro_skip_time')) STORE.set('intro_skip_time', 85);
+  if (!STORE.has('show_duration')) STORE.set('show_duration', true);
 }
 
 export const getSourceFlag = async (): Promise<'IT' | 'US' | null> => {

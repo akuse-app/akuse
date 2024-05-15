@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
 
 interface ButtonProps {
-  text: string;
+  text: string | number;
   icon?: IconDefinition;
   onPress?: () => void;
 }
