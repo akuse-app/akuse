@@ -21,6 +21,7 @@ import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import { EpisodeInfo } from '../../../types/types';
 import AnimeModal from '../modals/AnimeModal';
 import VideoPlayer from './VideoPlayer';
+import DOMPurify from 'dompurify';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -112,9 +113,14 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
               </div>
             </div>
             <div className="anime-title">{getTitle(listAnimeData.media)}</div>
-            <div className="anime-description">
-              {parseDescription(listAnimeData.media.description ?? '')}
-            </div>
+            <div
+              className="anime-description"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  parseDescription(listAnimeData.media.description ?? ''),
+                ),
+              }}
+            ></div>
             <div className="buttons">
               <Button1
                 text="Watch now"
@@ -159,6 +165,12 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
         .slice(0, 5),
     );
   }, [listAnimeData]);
+
+  useEffect(() => {
+    const intervalId = setInterval(goToNext, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [animeData, currentIndex]);
 
   const goToPrevious = () => {
     if (!animeData) return;
