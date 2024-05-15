@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
-import FeaturedContent from '../components/FeaturedContent';
+import Slideshow from '../components/player/Slideshow';
 
 interface Tab1Props {
   currentListAnime?: ListAnimeData[];
@@ -19,7 +19,9 @@ const Tab1: React.FC<Tab1Props> = ({
   return (
     <div className="main-container">
       <main>
-        <FeaturedContent listAnimeData={trendingAnime} />
+        <Slideshow
+          listAnimeData={trendingAnime}
+        />
 
         <div className="section-container">
           <AnimeSection

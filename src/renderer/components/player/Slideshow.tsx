@@ -1,36 +1,33 @@
-import { IVideo } from '@consumet/extensions';
+import React, { useEffect, useState } from 'react';
+import './styles/Slideshow.css'; // Stili CSS per il componente slideshow
+import { ListAnimeData } from '../../../types/anilistAPITypes';
 import {
-  faArrowLeftLong,
-  faArrowRightLong,
-  faArrowUpRightFromSquare,
-  faInfo,
   faPlay,
+  faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useRef, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
-import Skeleton from 'react-loading-skeleton';
-
-import { getUniversalEpisodeUrl } from '../../modules/providers/api';
 import {
   capitalizeFirstLetter,
-  getAvailableEpisodes,
   getParsedSeasonYear,
+  getAvailableEpisodes,
   getTitle,
   parseDescription,
-} from '../../modules/utils';
-import { ListAnimeData } from '../../types/anilistAPITypes';
-import { Button1, Button2, ButtonLoading, CircleButton1 } from './Buttons';
-import VideoPlayer from './player/VideoPlayer';
-import { EpisodeInfo } from '../../types/types';
-import { EPISODES_INFO_URL } from '../../constants/utils';
+} from '../../../modules/utils';
+import { Button1, Button2 } from '../Buttons';
+import { IVideo } from '@consumet/extensions';
 import axios from 'axios';
-import AnimeModal from './modals/AnimeModal';
+import toast, { Toaster } from 'react-hot-toast';
+import { EPISODES_INFO_URL } from '../../../constants/utils';
+import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
+import { EpisodeInfo } from '../../../types/types';
+import AnimeModal from '../modals/AnimeModal';
+import VideoPlayer from './VideoPlayer';
 
-interface FeaturedItemProps {
+interface SlideProps {
   listAnimeData: ListAnimeData;
+  index: number;
 }
 
-const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
+const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
   const style = getComputedStyle(document.body);
 
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
@@ -100,8 +97,8 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
           onClose={() => setShowModal(false)}
         />
       )}
-      <div className="featured">
-        <div className="featured-container">
+      <div className="slide">
+        <div className="shadow">
           <div className="content show">
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•
@@ -135,25 +132,25 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
             </div>
           </div>
         </div>
-        <div className="featured-img">
-          <img src={listAnimeData.media.bannerImage} alt="anime banner" />
-        </div>
+        <img
+          key={index}
+          src={listAnimeData.media.bannerImage}
+          alt={`Slide ${index}`}
+        />
       </div>
       <Toaster />
     </>
   );
 };
 
-interface FeaturedContentProps {
+interface SlideshowProps {
   listAnimeData?: ListAnimeData[];
 }
 
-const FeaturedContent: React.FC<FeaturedContentProps> = ({ listAnimeData }) => {
-  const scrollWrapperRef = useRef<HTMLDivElement>(null);
-  const [showButtons, setShowButtons] = useState(false);
+const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
   const [animeData, setAnimeData] = useState<ListAnimeData[] | undefined>();
-  const [scrollLeft, setScrollLeft] = useState<number>(0);
-  const [scrollWidth, setScrollWidth] = useState<number>(0);
 
   useEffect(() => {
     setAnimeData(
@@ -161,86 +158,49 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ listAnimeData }) => {
         ?.filter((animeData) => animeData?.media.bannerImage)
         .slice(0, 5),
     );
-
-    if (scrollWrapperRef.current) {
-      setScrollWidth(scrollWrapperRef.current.clientWidth);
-      setScrollLeft(scrollWrapperRef.current.scrollLeft);
-    }
   }, [listAnimeData]);
 
-  const scroll = (value: number) => {
-    if (!scrollWrapperRef.current) return;
-    scrollWrapperRef.current.scrollLeft += value;
-
-    setTimeout(() => {
-      if (!scrollWrapperRef.current) return;
-      console.log(scrollWrapperRef.current.clientWidth);
-      console.log(scrollWrapperRef.current.scrollLeft);
-      setScrollWidth(scrollWrapperRef.current.clientWidth);
-      setScrollLeft(scrollWrapperRef.current.scrollLeft);
-    }, 650);
+  const goToPrevious = () => {
+    if (!animeData) return;
+    const newIndex =
+      currentIndex === 0 ? animeData.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
   };
 
-  return animeData ? (
-    <>
+  const goToNext = () => {
+    if (!animeData) return;
+    const newIndex =
+      currentIndex === animeData.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+  };
+
+  const goToIndex = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <div className="slideshow-container">
       <div
-        onMouseEnter={() => setShowButtons(true)}
-        onMouseLeave={() => setShowButtons(false)}
+        className="slideshow-wrapper"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
-        <CircleButton1
-          icon={faArrowLeftLong}
-          classes={`left ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
-          onPress={() => {
-            scroll(-1000);
-          }}
-        />
-        <CircleButton1
-          icon={faArrowRightLong}
-          classes={`right ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
-          onPress={() => {
-            scroll(1000);
-          }}
-        />
-      </div>
-      <h1>Popular Now</h1>
-      <div
-        className="featured-scroller"
-        ref={scrollWrapperRef}
-        onMouseEnter={() => setShowButtons(true)}
-        onMouseLeave={() => setShowButtons(false)}
-      >
-        <div
-          className="featured-scroller-wrapper"
-          style={{
-            width: `${
-              // trendingAnime?.media?.length! * 100
-              (animeData?.length ?? 0) * 100
-            }%`,
-          }}
-        >
-          {animeData.map((animeData, index) => (
-            <FeaturedItem key={index} listAnimeData={animeData} />
+        {animeData &&
+          animeData.map((listAnimeData, index) => (
+            <Slide key={index} listAnimeData={listAnimeData} index={index} />
           ))}
-        </div>
       </div>
-      {/* <div className="featured-indicator">
-        <div className="featured-indicator-wrapper">
-          {animeData.map((_, index) => {
-            return (
-              <div
-                key={index}
-                className={`dot ${
-                  scrollLeft / scrollWidth === index ? 'active' : ''
-                }`}
-              ></div>
-            );
-          })}
-        </div>
-      </div> */}
-    </>
-  ) : (
-    <Skeleton className="featured skeleton" />
+      <div className="dot-container">
+        {animeData &&
+          animeData.map((_, index) => (
+            <span
+              key={index}
+              className={index === currentIndex ? 'dot active' : 'dot'}
+              onClick={() => goToIndex(index)}
+            ></span>
+          ))}
+      </div>
+    </div>
   );
 };
 
-export default FeaturedContent;
+export default Slideshow;
