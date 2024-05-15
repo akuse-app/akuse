@@ -19,7 +19,7 @@ const Tab1: React.FC<Tab1Props> = ({
   return (
     <div className="main-container">
       <main>
-        <FeaturedContent animeData={trendingAnime} />
+        <FeaturedContent listAnimeData={trendingAnime} />
 
         <div className="section-container">
           <AnimeSection

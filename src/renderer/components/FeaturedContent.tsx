@@ -6,13 +6,14 @@ import {
   faInfo,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Skeleton from 'react-loading-skeleton';
 
 import { getUniversalEpisodeUrl } from '../../modules/providers/api';
 import {
   capitalizeFirstLetter,
+  getAvailableEpisodes,
   getParsedSeasonYear,
   getTitle,
   parseDescription,
@@ -110,7 +111,7 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
               </div>
               •
               <div className="anime-episodes">
-                {listAnimeData.media.episodes} Episodes
+                {getAvailableEpisodes(listAnimeData.media)} Episodes
               </div>
             </div>
             <div className="anime-title">{getTitle(listAnimeData.media)}</div>
@@ -144,23 +145,40 @@ const FeaturedItem: React.FC<FeaturedItemProps> = ({ listAnimeData }) => {
 };
 
 interface FeaturedContentProps {
-  animeData?: ListAnimeData[];
+  listAnimeData?: ListAnimeData[];
 }
 
-const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
-  const [showButtons, setShowButtons] = useState(false);
+const FeaturedContent: React.FC<FeaturedContentProps> = ({ listAnimeData }) => {
   const scrollWrapperRef = useRef<HTMLDivElement>(null);
+  const [showButtons, setShowButtons] = useState(false);
+  const [animeData, setAnimeData] = useState<ListAnimeData[] | undefined>();
+  const [scrollLeft, setScrollLeft] = useState<number>(0);
+  const [scrollWidth, setScrollWidth] = useState<number>(0);
 
-  const onLeftPress = () => {
-    if (scrollWrapperRef.current) {
-      scrollWrapperRef.current.scrollLeft -= 1000;
-    }
-  };
+  useEffect(() => {
+    setAnimeData(
+      listAnimeData
+        ?.filter((animeData) => animeData?.media.bannerImage)
+        .slice(0, 5),
+    );
 
-  const onRightPress = () => {
     if (scrollWrapperRef.current) {
-      scrollWrapperRef.current.scrollLeft += 1000;
+      setScrollWidth(scrollWrapperRef.current.clientWidth);
+      setScrollLeft(scrollWrapperRef.current.scrollLeft);
     }
+  }, [listAnimeData]);
+
+  const scroll = (value: number) => {
+    if (!scrollWrapperRef.current) return;
+    scrollWrapperRef.current.scrollLeft += value;
+
+    setTimeout(() => {
+      if (!scrollWrapperRef.current) return;
+      console.log(scrollWrapperRef.current.clientWidth);
+      console.log(scrollWrapperRef.current.scrollLeft);
+      setScrollWidth(scrollWrapperRef.current.clientWidth);
+      setScrollLeft(scrollWrapperRef.current.scrollLeft);
+    }, 650);
   };
 
   return animeData ? (
@@ -172,12 +190,16 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
         <CircleButton1
           icon={faArrowLeftLong}
           classes={`left ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
-          onPress={onLeftPress}
+          onPress={() => {
+            scroll(-1000);
+          }}
         />
         <CircleButton1
           icon={faArrowRightLong}
           classes={`right ${showButtons ? 'show-opacity' : 'hide-opacity'}`}
-          onPress={onRightPress}
+          onPress={() => {
+            scroll(1000);
+          }}
         />
       </div>
       <h1>Popular Now</h1>
@@ -192,19 +214,29 @@ const FeaturedContent: React.FC<FeaturedContentProps> = ({ animeData }) => {
           style={{
             width: `${
               // trendingAnime?.media?.length! * 100
-              (animeData?.filter(
-                (listAnimeData) => listAnimeData?.media.bannerImage,
-              )?.length ?? 0) * 100
+              (animeData?.length ?? 0) * 100
             }%`,
           }}
         >
-          {animeData
-            ?.filter((animeData) => animeData.media.bannerImage)
-            .map((animeData, index) => (
-              <FeaturedItem key={index} listAnimeData={animeData} />
-            ))}
+          {animeData.map((animeData, index) => (
+            <FeaturedItem key={index} listAnimeData={animeData} />
+          ))}
         </div>
       </div>
+      {/* <div className="featured-indicator">
+        <div className="featured-indicator-wrapper">
+          {animeData.map((_, index) => {
+            return (
+              <div
+                key={index}
+                className={`dot ${
+                  scrollLeft / scrollWidth === index ? 'active' : ''
+                }`}
+              ></div>
+            );
+          })}
+        </div>
+      </div> */}
     </>
   ) : (
     <Skeleton className="featured skeleton" />
