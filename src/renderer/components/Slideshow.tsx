@@ -130,14 +130,14 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
                 icon={faPlay}
                 tint="primary"
                 shadow
-                onPress={handlePressButton}
+                onClick={handlePressButton}
               />
               <ButtonMain
                 text="More info"
                 icon={faArrowUpRightFromSquare}
                 tint="light"
                 shadow
-                onPress={() => {
+                onClick={() => {
                   setShowModal(true);
                   if (!hasModalBeenShowed) setHasModalBeenShowed(true);
                 }}

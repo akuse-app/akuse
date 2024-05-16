@@ -266,7 +266,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
           icon={faPlay}
           tint="light"
           shadow
-          onPress={() => onPlay(1)}
+          onClick={() => onPlay(1)}
         />
       )}
 
@@ -276,7 +276,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
           icon={faRotate}
           tint="light"
           shadow
-          onPress={() => onPlay(1)}
+          onClick={() => onPlay(1)}
         />
       ) : (
         progress === availableEpisodes &&
@@ -286,7 +286,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
             icon={faHourglass}
             tint="light"
             shadow
-            onPress={() => onPlay(progress + 1)}
+            onClick={() => onPlay(progress + 1)}
           />
         )
       )}
@@ -299,7 +299,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
             icon={faPlay}
             tint="light"
             shadow
-            onPress={() => onPlay(progress! + 1)}
+            onClick={() => onPlay(progress! + 1)}
           />
         )}
     </div>
@@ -310,7 +310,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         icon={faPlay}
         tint="light"
         shadow
-        onPress={() => {}}
+        onClick={() => {}}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-/* MAIN BUTTON 0 */
+/* MAIN BUTTON */
 
 button.bm,
 button.bm .primary {
@@ -29,12 +29,12 @@ button.bm.dark {
 
 button.bm:hover:not(.disabled) {
   transform: scale(1.05);
-  filter: brightness(0.90);
+  filter: brightness(1.2);
 }
 
 button.bm:active:not(.disabled) {
   transform: scale(1);
-  filter: brightness(0.80);
+  filter: brightness(1);
 }
 
 /* CIRCLE BUTTON */
@@ -57,6 +57,12 @@ button.bc.primary {
   will-change: transform
 }
 
+button.bc.small {
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+}
+
 button.bc.light {
   color: var(--color-1);
   background-color: var(--font-1);
@@ -69,12 +75,12 @@ button.bc.dark {
 
 button.bc:hover:not(.disabled) {
   transform: scale(1.05);
-  filter: brightness(0.90);
+  filter: brightness(1.2);
 }
 
 button.bc:active:not(.disabled) {
   transform: scale(1);
-  filter: brightness(0.80);
+  filter: brightness(1);
 }
 
 /* COMMON */

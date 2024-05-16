@@ -125,7 +125,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
           text={introSkip}
           icon={faPlus}
           tint="light"
-          onPress={handleSkipIntro}
+          onClick={handleSkipIntro}
         />
       </div>
       <p className="current-time">{videoCurrentTime}</p>

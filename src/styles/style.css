@@ -1375,24 +1375,13 @@ h1 {
   margin-bottom: 15px;
 }
 
-/* main section button.bc {
-  display: block;
+main section .scrollers {
   position: absolute;
   top: 0;
   right: 0;
-  opacity: 0;
-  width: 30px;
-  height: 30px;
-  background-color: var(--color-0);
+  display: flex;
+  gap: 10px;
   z-index: 30;
-} */
-
-main section button.bc .i {
-  font-size: 1rem;
-}
-
-main section button.bc.left {
-  right: 40px;
 }
 
 main section .anime-list-wrapper {

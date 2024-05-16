@@ -223,7 +223,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
                     tint="light"
                     shadow
-                    onPress={toggleTrailerVolume}
+                    onClick={toggleTrailerVolume}
                   />
                 </div>
               )}

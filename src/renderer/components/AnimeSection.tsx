@@ -1,9 +1,15 @@
-import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
+import './styles/Buttons.css';
+
+import {
+  faArrowLeftLong,
+  faArrowRightLong,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
+import { ButtonCircle, ButtonMain } from './Buttons';
 
 interface AnimeSectionProps {
   title: string;
@@ -17,14 +23,19 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
 
   const hideButtons = () => {
-    if(animeListWrapperRef.current && animeListRef.current) {
-      setEnableButtons(!(animeListWrapperRef.current.clientWidth > animeListRef.current.scrollWidth))
+    if (animeListWrapperRef.current && animeListRef.current) {
+      setEnableButtons(
+        !(
+          animeListWrapperRef.current.clientWidth >
+          animeListRef.current.scrollWidth
+        ),
+      );
     }
-  }
+  };
 
   const handleMouseEnter = () => {
     setShowButtons(true);
-    hideButtons()
+    hideButtons();
   };
   const handleMouseLeave = () => {
     setShowButtons(false);
@@ -42,38 +53,29 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   };
 
   return (
-    <section>
+    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <h1>{title}</h1>
       {enableButtons && (
-        <>
-          <button
-            className={`bc left ${
-              showButtons ? 'show-opacity' : 'hide-opacity'
-            }`}
+        <div
+          className={`scrollers ${
+            showButtons ? 'show-opacity' : 'hide-opacity'
+          }`}
+        >
+          <ButtonCircle
+            icon={faArrowLeftLong}
+            tint="dark"
+            small
             onClick={scrollLeft}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <FontAwesomeIcon className="i" icon={faArrowLeftLong} />
-          </button>
-          <button
-            className={`bc right ${
-              showButtons ? 'show-opacity' : 'hide-opacity'
-            }`}
+          />
+          <ButtonCircle
+            icon={faArrowRightLong}
+            tint="dark"
+            small
             onClick={scrollRight}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <FontAwesomeIcon className="i" icon={faArrowRightLong} />
-          </button>
-        </>
+          />
+        </div>
       )}
-      <div
-        className="anime-list-wrapper"
-        ref={animeListWrapperRef}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+      <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
           {(animeData ? animeData : Array(20).fill(undefined)).map(
             (listAnimeData, index) => (

@@ -5,9 +5,8 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tint?: 'primary' | 'light' | 'dark';
-  onPress?: () => void;
   shadow?: boolean;
 }
 
@@ -28,11 +27,14 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
   text,
   icon = null,
   tint = 'primary',
-  onPress,
   shadow = false,
+  ...rest
 }) => {
   return (
-    <button className={`bm primary ${tint} ${shadow ? 'shadow' : ''}`} onClick={onPress}>
+    <button
+      className={`bm primary ${tint} ${shadow ? 'shadow' : ''}`}
+      {...rest}
+    >
       {icon && (
         <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
       )}
@@ -43,16 +45,21 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
 
 interface ButtonCircleProps extends ButtonProps {
   icon: IconDefinition;
+  small?: boolean;
 }
 
 export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   icon,
   tint = 'primary',
-  onPress,
   shadow = false,
+  small = false,
+  ...rest
 }) => {
   return (
-    <button className={`bc ${tint} ${shadow ? 'shadow' : ''}`} onClick={onPress}>
+    <button
+      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''}`}
+      {...rest}
+    >
       <FontAwesomeIcon className="i" icon={icon} />
     </button>
   );
