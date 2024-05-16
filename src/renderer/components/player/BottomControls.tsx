@@ -2,8 +2,8 @@ import Store from 'electron-store';
 import { useEffect, useRef, useState } from 'react';
 
 import { formatTime } from '../../../modules/utils';
-import { Button1, Button2 } from '../Buttons';
 import { faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { ButtonMain } from '../Buttons';
 
 const STORE = new Store();
 
@@ -109,10 +109,10 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   };
 
   const handleSkipIntro = () => {
-    if(!videoRef.current) return
+    if (!videoRef.current) return;
 
-    videoRef.current.currentTime += introSkip
-  }
+    videoRef.current.currentTime += introSkip;
+  };
 
   return (
     <div
@@ -121,7 +121,12 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       onDoubleClick={onDblClick}
     >
       <div className="skip-button">
-        <Button2 text={introSkip} icon={faPlus} onPress={handleSkipIntro} />
+        <ButtonMain
+          text={introSkip}
+          icon={faPlus}
+          tint="light"
+          onPress={handleSkipIntro}
+        />
       </div>
       <p className="current-time">{videoCurrentTime}</p>
       <div

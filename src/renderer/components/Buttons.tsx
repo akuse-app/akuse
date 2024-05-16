@@ -4,27 +4,29 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
 
-interface ButtonProps {
+interface ButtonMainProps {
   text: string | number;
   icon?: IconDefinition;
+  tint?: 'primary' | 'light' | 'dark';
   onPress?: () => void;
 }
 
 export const ButtonLoading = () => {
   return (
-    <button className="b1 light disabled">
+    <button className="bm light disabled">
       <Dots />
     </button>
   );
 };
 
-export const Button1: React.FC<ButtonProps> = ({
+export const ButtonMain: React.FC<ButtonMainProps> = ({
   text,
   icon = null,
+  tint = 'primary',
   onPress,
 }) => {
   return (
-    <button className="b1 primary" onClick={onPress}>
+    <button className={`bm primary ${tint}`} onClick={onPress}>
       {icon && (
         <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
       )}
@@ -33,34 +35,20 @@ export const Button1: React.FC<ButtonProps> = ({
   );
 };
 
-export const Button2: React.FC<ButtonProps> = ({
-  text,
-  icon = null,
-  onPress,
-}) => {
-  return (
-    <button className="b1 light" onClick={onPress}>
-      {icon && (
-        <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
-      )}
-      {text}
-    </button>
-  );
-};
-
-interface CircleButtonProps {
+interface ButtonCircleProps {
   icon: IconDefinition;
   classes?: string;
+  tint?: 'primary' | 'light' | 'dark';
   onPress?: () => void;
 }
 
-export const CircleButton1: React.FC<CircleButtonProps> = ({
+export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   icon,
-  classes = '',
+  tint = 'primary',
   onPress,
 }) => {
   return (
-    <button className={`circle-button-0 ${classes}`} onClick={onPress}>
+    <button className={`bc ${tint}`} onClick={onPress}>
       <FontAwesomeIcon className="i" icon={icon} />
     </button>
   );

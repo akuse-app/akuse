@@ -787,51 +787,6 @@ main {
   gap: 10px;
 }
 
-.anime-page .watch-buttons button {
-  height: 50px;
-}
-
-.anime-page .watch-buttons button:nth-child(1) {
-  background-color: var(--font-1);
-}
-
-.anime-page .watch-buttons button:nth-child(2) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  padding: 0;
-  border-radius: 100px;
-  font-size: 1.4rem;
-}
-
-.anime-page .watch-buttons button:nth-child(2).not-in-list,
-.anime-page .watch-buttons button:nth-child(2).in-list {
-  background-color: var(--color-dark-opacity);
-  color: var(--font-1);
-  border: 2px solid var(--font-3);
-  transition: none;
-}
-
-.anime-page .watch-buttons button:nth-child(2).not-in-list:hover,
-.anime-page .watch-buttons button:nth-child(2).in-list:hover {
-  filter: brightness(1);
-  border: 2px solid var(--font-1);
-}
-
-.anime-page .watch-buttons button:nth-child(2).not-in-list:active,
-.anime-page .watch-buttons button:nth-child(2).in-list:active {
-  filter: brightness(1);
-  border: 2px solid var(--font-1);
-  background-color: var(--font-3);
-}
-
-/* .anime-page .watch-buttons button:nth-child(2).in-list {
-            background-color: var(--font-1);
-            color: var(--color-1);
-            border: 2px solid transparent;
-        } */
-
 .anime-page .content-wrapper {
   position: relative;
   display: flex;
@@ -855,9 +810,17 @@ main {
   width: 100%;
   position: relative;
   overflow: hidden;
-  height: 500px;
+  height: 100%;
   aspect-ratio: 16/9;
-  pointer-events: none;
+  border-radius: var(--border-radius);
+  /* pointer-events: none; */
+}
+
+.anime-page .trailer-wrapper .trailer-volume {
+  position: absolute;
+  bottom: 40px;
+  right: 25px;
+  display: flex;
 }
 
 .anime-page .banner-wrapper::after,
@@ -1397,7 +1360,7 @@ h1 {
   margin-bottom: 15px;
 }
 
-main section button.circle-button-0 {
+main section button.bc {
   display: block;
   position: absolute;
   top: 0;
@@ -1409,11 +1372,11 @@ main section button.circle-button-0 {
   z-index: 30;
 }
 
-main section button.circle-button-0 .i {
+main section button.bc .i {
   font-size: 1rem;
 }
 
-main section button.circle-button-0.left {
+main section button.bc.left {
   right: 40px;
 }
 

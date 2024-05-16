@@ -1,6 +1,10 @@
 import 'react-activity/dist/Dots.css';
 
-import { faCircleCheck, faCircleDot, faClock } from '@fortawesome/free-regular-svg-icons';
+import {
+  faCircleCheck,
+  faCircleDot,
+  faClock,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faBan,
   faChevronDown,
@@ -27,7 +31,7 @@ import {
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { MediaStatus } from '../../../types/anilistGraphQLTypes';
 import { AuthContext } from '../../App';
-import { Button2, ButtonLoading } from '../Buttons';
+import { ButtonMain, ButtonLoading } from '../Buttons';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -241,7 +245,7 @@ interface AnimeModalWatchButtonsProps {
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
   onPlay,
-  loading = false
+  loading = false,
 }) => {
   const logged = useContext(AuthContext);
 
@@ -257,17 +261,28 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   ) : logged ? (
     <div className="watch-buttons">
       {progress === 0 && (
-        <Button2 text="Watch now" icon={faPlay} onPress={() => onPlay(1)} />
+        <ButtonMain
+          text="Watch now"
+          icon={faPlay}
+          tint="light"
+          onPress={() => onPlay(1)}
+        />
       )}
 
       {progress === episodes ? (
-        <Button2 text="Watch again" icon={faRotate} onPress={() => onPlay(1)} />
+        <ButtonMain
+          text="Watch again"
+          icon={faRotate}
+          tint="light"
+          onPress={() => onPlay(1)}
+        />
       ) : (
         progress === availableEpisodes &&
         timeUntilAiring && (
-          <Button2
+          <ButtonMain
             text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
             icon={faHourglass}
+            tint="light"
             onPress={() => onPlay(progress + 1)}
           />
         )
@@ -276,16 +291,22 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
       {progress !== 0 &&
         progress !== episodes &&
         progress !== availableEpisodes && (
-          <Button2
+          <ButtonMain
             text={`Resume from Ep. ${progress! + 1}`}
             icon={faPlay}
+            tint="light"
             onPress={() => onPlay(progress! + 1)}
           />
         )}
     </div>
   ) : (
     <div className="watch-buttons">
-      <Button2 text="Watch now" icon={faPlay} onPress={() => {}} />
+      <ButtonMain
+        text="Watch now"
+        icon={faPlay}
+        tint="light"
+        onPress={() => {}}
+      />
     </div>
   );
 };

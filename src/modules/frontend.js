@@ -257,8 +257,8 @@ module.exports = class Frontend {
         Object.keys(anime_sections).forEach(section => {
             let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
             let anime_section_list = Object.values(anime_sections)[section].querySelector('.anime-list')
-            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
-            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
+            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('bc')[0]
+            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('bc')[1]
             let wrapperWidth = anime_section_wrapper.clientWidth
             let listWidth = anime_section_list.scrollWidth
 
@@ -321,8 +321,8 @@ module.exports = class Frontend {
         Object.keys(anime_sections).forEach(section => {
             let anime_section_wrapper = Object.values(anime_sections)[section].querySelector('.anime-list-wrapper')
             let anime_section_list = Object.values(anime_sections)[section].querySelector('.anime-list')
-            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[0]
-            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('circle-button-0')[1]
+            let anime_section_scroll_left = Object.values(anime_sections)[section].getElementsByClassName('bc')[0]
+            let anime_section_scroll_right = Object.values(anime_sections)[section].getElementsByClassName('bc')[1]
             
             let disableButtons = () => {
                 let maxScroll = anime_section_list.scrollWidth - anime_section_wrapper.clientWidth

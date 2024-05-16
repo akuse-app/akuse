@@ -47,7 +47,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       {enableButtons && (
         <>
           <button
-            className={`circle-button-0 left ${
+            className={`bc left ${
               showButtons ? 'show-opacity' : 'hide-opacity'
             }`}
             onClick={scrollLeft}
@@ -57,7 +57,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
             <FontAwesomeIcon className="i" icon={faArrowLeftLong} />
           </button>
           <button
-            className={`circle-button-0 right ${
+            className={`bc right ${
               showButtons ? 'show-opacity' : 'hide-opacity'
             }`}
             onClick={scrollRight}

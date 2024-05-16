@@ -1,36 +1,75 @@
 /* MAIN BUTTON 0 */
 
-button.b1,
-button.b1 .primary {
+button.bm,
+button.bm .primary {
+  border: none;
+  outline: none;
+  width: max-content;
+  height: 50px;
+  padding: 12px 24px;
+  margin-top: 10px;
   font-size: 1.1rem;
   font-weight: 800;
   color: var(--color-1);
   background-color: var(--color-important);
-  width: max-content;
-  padding: 12px 24px;
-  margin-top: 10px;
-  border-radius: var(--border-radius);
-  border: none;
-  outline: none;
-  transition: 0.1s ease;
+  border-radius: 9999999px;
+  transition: var(--transition);
 }
 
-button.b1.light {
+button.bm.light {
   color: var(--color-1);
   background-color: var(--font-1);
 }
 
-button.b1.dark {
+button.bm.dark {
   color: var(--font-2);
   background-color: var(--color-3);
 }
 
-button.b1:hover:not(.disabled) {
+button.bm:hover:not(.disabled) {
   transform: scale(1.05);
   filter: brightness(0.90);
 }
 
-button.b1:active:not(.disabled) {
+button.bm:active:not(.disabled) {
+  transform: scale(1);
+  filter: brightness(0.80);
+}
+
+/* CIRCLE BUTTON */
+
+button.bc {
+  border: none;
+  outline: none;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 12px;
+  font-size: 1.3rem;
+  color: var(--color-1);
+  background-color: var(--color-important);
+  border-radius: 100px;
+  transition: var(--transition);
+}
+
+button.bc.light {
+  color: var(--color-1);
+  background-color: var(--font-1);
+}
+
+button.bc.dark {
+  color: var(--font-2);
+  background-color: var(--color-3);
+}
+
+button.bc:hover:not(.disabled) {
+  transform: scale(1.05);
+  filter: brightness(0.90);
+}
+
+button.bc:active:not(.disabled) {
   transform: scale(1);
   filter: brightness(0.80);
 }
@@ -46,53 +85,6 @@ select.main-select-0 {
   background-color: var(--color-3);
   border-right: 8px solid transparent;
   border-radius: var(--border-radius);
-}
-
-/* CIRCLE BUTTON */
-
-button.circle-button-0 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  color: var(--font-3);
-  border: none;
-  outline: none;
-  background-color: var(--color-1);
-  border-radius: 100px;
-  /* cursor: pointer; */
-  transition: var(--transition);
-}
-
-button.circle-button-0 i {
-  font-size: 1.3rem;
-}
-
-button.circle-button-0:hover {
-  color: var(--color-1);
-  background-color: var(--font-1);
-}
-
-button.circle-button-0:active {
-  filter: brightness(0.80);
-}
-
-button.circle-button-0.disabled {
-  cursor: auto;
-}
-
-button.circle-button-0.disabled i {
-  color: var(--color-1);
-}
-
-button.circle-button-0.disabled:hover {
-  color: var(--color-1);
-  background-color: var(--color-0);
-}
-
-button.circle-button-0.disabled:active {
-  filter: brightness(1);
 }
 
 /* PROGRESS BAR */

@@ -18,9 +18,9 @@ import {
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../types/types';
-import { Button1, Button2 } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
 import VideoPlayer from './player/VideoPlayer';
+import { ButtonMain } from './Buttons';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -121,14 +121,16 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
               }}
             ></div>
             <div className="buttons">
-              <Button1
+              <ButtonMain
                 text="Watch now"
                 icon={faPlay}
+                tint='primary'
                 onPress={handlePressButton}
-              />
-              <Button2
+                />
+              <ButtonMain
                 text="More info"
                 icon={faArrowUpRightFromSquare}
+                tint='light'
                 onPress={() => {
                   setShowModal(true);
                   if (!hasModalBeenShowed) setHasModalBeenShowed(true);
