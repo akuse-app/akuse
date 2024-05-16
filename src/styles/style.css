@@ -785,7 +785,7 @@ main {
   left: 25px;
   display: flex;
   gap: 10px;
-  z-index: 2;
+  z-index: 4;
 }
 
 .anime-page .content-wrapper {
@@ -801,10 +801,16 @@ main {
   border-radius: var(--border-radius);
 }
 
-.anime-page .banner-wrapper {
-  height: 40vh;
+.up {
   position: relative;
-  aspect-ratio: 16/9;
+  height: 40vh;
+  width: 100%;
+}
+
+.anime-page .banner-wrapper {
+  height: 100%;
+  position: relative;
+  /* aspect-ratio: 16/9; */
   object-fit: cover;
 }
 
@@ -825,7 +831,7 @@ main {
   bottom: 40px;
   right: 25px;
   display: flex;
-  z-index: 2;
+  z-index: 4;
 }
 
 .anime-page .banner-wrapper::after,

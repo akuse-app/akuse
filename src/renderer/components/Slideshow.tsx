@@ -98,7 +98,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
         />
       )}
       <div className="slide">
-        <div className="shadow">
+        <div className="shadow-overlay">
           <div className="content show">
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•
@@ -125,12 +125,14 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
                 text="Watch now"
                 icon={faPlay}
                 tint='primary'
+                shadow
                 onPress={handlePressButton}
                 />
               <ButtonMain
                 text="More info"
                 icon={faArrowUpRightFromSquare}
                 tint='light'
+                shadow
                 onPress={() => {
                   setShowModal(true);
                   if (!hasModalBeenShowed) setHasModalBeenShowed(true);

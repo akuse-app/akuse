@@ -140,7 +140,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const handleTrailerError = () => {
-    setTrailer(false)
+    setTrailer(false);
   };
 
   const toggleTrailerVolume = () => {
@@ -206,44 +206,45 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
 
-            {trailer && (
-              <div className="trailer-wrapper">
-                <video
-                  ref={trailerRef}
-                  src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
-                  className="trailer"
-                  preload="none"
-                  loop
-                  playsInline
-                  autoPlay
-                  onPlay={handleTrailerPlay}
-                  onLoadedMetadata={handleTrailerLoad}
-                  onError={handleTrailerError}
-                />
-                <AnimeModalWatchButtons
-                  listAnimeData={listAnimeData}
-                  onPlay={playEpisode}
-                  loading={false} // loading disabled
-                />
-                <div className="trailer-volume">
-                  <ButtonCircle
-                    icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
-                    tint="light"
-                    onPress={toggleTrailerVolume}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="banner-wrapper">
-              {listAnimeData.media.bannerImage && (
-                <img src={listAnimeData.media.bannerImage} className="banner" />
-              )}
+            <div className="up">
               <AnimeModalWatchButtons
                 listAnimeData={listAnimeData}
                 onPlay={playEpisode}
                 loading={false} // loading disabled
               />
+              
+              {trailer && (
+                <div className="trailer-wrapper">
+                  <video
+                    ref={trailerRef}
+                    src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
+                    className="trailer"
+                    preload="none"
+                    loop
+                    playsInline
+                    autoPlay
+                    onPlay={handleTrailerPlay}
+                    onLoadedMetadata={handleTrailerLoad}
+                    onError={handleTrailerError}
+                  />
+                  <div className="trailer-volume">
+                    <ButtonCircle
+                      icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
+                      tint="light"
+                      onPress={toggleTrailerVolume}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="banner-wrapper">
+                {listAnimeData.media.bannerImage && (
+                  <img
+                    src={listAnimeData.media.bannerImage}
+                    className="banner"
+                  />
+                )}
+              </div>
             </div>
 
             <div className="content">

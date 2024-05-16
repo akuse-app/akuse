@@ -1,15 +1,19 @@
-import './styles/Buttons.css'
+import './styles/Buttons.css';
 import 'react-activity/dist/Dots.css';
 
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
 
-interface ButtonMainProps {
-  text: string | number;
-  icon?: IconDefinition;
+interface ButtonProps {
   tint?: 'primary' | 'light' | 'dark';
   onPress?: () => void;
+  shadow?: boolean;
+}
+
+interface ButtonMainProps extends ButtonProps {
+  text: string | number;
+  icon?: IconDefinition;
 }
 
 export const ButtonLoading = () => {
@@ -25,9 +29,10 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
   icon = null,
   tint = 'primary',
   onPress,
+  shadow = false,
 }) => {
   return (
-    <button className={`bm primary ${tint}`} onClick={onPress}>
+    <button className={`bm primary ${tint} ${shadow ? 'shadow' : ''}`} onClick={onPress}>
       {icon && (
         <FontAwesomeIcon className="i" icon={icon} style={{ marginRight: 8 }} />
       )}
@@ -36,20 +41,18 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
   );
 };
 
-interface ButtonCircleProps {
+interface ButtonCircleProps extends ButtonProps {
   icon: IconDefinition;
-  classes?: string;
-  tint?: 'primary' | 'light' | 'dark';
-  onPress?: () => void;
 }
 
 export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   icon,
   tint = 'primary',
   onPress,
+  shadow = false,
 }) => {
   return (
-    <button className={`bc ${tint}`} onClick={onPress}>
+    <button className={`bc ${tint} ${shadow ? 'shadow' : ''}`} onClick={onPress}>
       <FontAwesomeIcon className="i" icon={icon} />
     </button>
   );
