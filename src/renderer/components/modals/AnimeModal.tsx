@@ -1,12 +1,5 @@
 import { IVideo } from '@consumet/extensions';
-import {
-  faCircleExclamation,
-  faStar,
-  faTv,
-  faVolumeHigh,
-  faVolumeXmark,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faStar, faTv, faVolumeHigh, faVolumeXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Store from 'electron-store';
@@ -14,17 +7,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
+import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
-import {
-  capitalizeFirstLetter,
-  doSomethingToIFrame,
-  getParsedFormat,
-  getParsedSeasonYear,
-  getTitle,
-  toggleIFrameMute,
-} from '../../../modules/utils';
+import { capitalizeFirstLetter, getParsedFormat, getParsedSeasonYear, getTitle } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
+import { ButtonCircle } from '../Buttons';
 import VideoPlayer from '../player/VideoPlayer';
 import {
   AnimeModalDescription,
@@ -36,8 +24,6 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
-import { EPISODES_INFO_URL } from '../../../constants/utils';
-import { ButtonCircle } from '../Buttons';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -60,6 +46,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);
   const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(false);
+  const [canRePlayTrailer, setCanRePlayTrailer] = useState<boolean>(false);
 
   // episodes info
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
@@ -78,7 +65,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
-    // if (show && trailerRef.current) trailerRef.current.play();
+    if (show && trailerRef.current && canRePlayTrailer) trailerRef.current.play();
     setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
   }, [show]);
 
@@ -123,12 +110,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     });
   };
 
-  // const doesTrailerExists = () => {
-  //   if (listAnimeData.media.trailer?.site === 'youtube') {
-  //     setTrailer(listAnimeData.media.trailer.id);
-  //   }
-  // };
-
   const handleTrailerPlay = () => {
     if (trailerRef.current) {
       trailerRef.current.volume = trailerVolumeOn ? 0.2 : 0;
@@ -136,7 +117,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const handleTrailerLoad = () => {
-    if (show && trailerRef.current) trailerRef.current.play();
+    if (trailerRef.current) trailerRef.current.play();
+    setCanRePlayTrailer(true)
   };
 
   const handleTrailerError = () => {
@@ -212,7 +194,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 onPlay={playEpisode}
                 loading={false} // loading disabled
               />
-              
+
               {trailer && (
                 <div className="trailer-wrapper">
                   <video
@@ -231,6 +213,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     <ButtonCircle
                       icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
                       tint="light"
+                      shadow
                       onPress={toggleTrailerVolume}
                     />
                   </div>

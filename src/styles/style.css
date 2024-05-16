@@ -378,6 +378,7 @@ aside ul li {
   font-weight: var(--font-weight);
   display: flex;
   transition: var(--transition);
+  will-change: transform;
 }
 
 /* toggler for login icon or user avatar */
@@ -1080,6 +1081,7 @@ main {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: var(--transition);
+  will-change: transform;
 }
 
 .anime-page .episodes-section .episode-entry:hover {
@@ -1424,6 +1426,7 @@ main .anime-entry {
   /* must be in anime-entry or hover scaling won't work */
   transition: 0.2s ease-out;
   border-radius: var(--border-radius);
+  will-change: transform;
 }
 
 main .anime-entry:not(.skeleton) {

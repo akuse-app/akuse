@@ -113,6 +113,7 @@
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   /* animation-delay: 0.5s; */
+  will-change: transform;
 }
 
 @keyframes showOverlayDelay {

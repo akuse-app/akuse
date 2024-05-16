@@ -53,6 +53,7 @@
 .container .b-player .i {
   cursor: pointer;
   transition: 0.1s ease-out;
+  will-change: transform;
 }
 
 .container .b-player .i:hover {
@@ -433,6 +434,7 @@
   color: var(--font-1);
   font-size: 1.4rem;
   font-family: sans-serif;
+  will-change: transform;
 }
 
 .bottom-controls .video-duration:hover {
