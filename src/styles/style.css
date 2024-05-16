@@ -808,6 +808,17 @@ main {
   width: 100%;
 }
 
+.up::after {
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  box-shadow: inset 0px -40px 20px -15px var(--color-1);
+}
+
 .anime-page .banner-wrapper {
   height: 100%;
   position: relative;
@@ -821,30 +832,18 @@ main {
   position: absolute;
   overflow: hidden;
   object-fit: cover;
-  z-index: 3;
+  z-index: 2;
   /* aspect-ratio: 16/9; */
   border-radius: var(--border-radius);
   /* pointer-events: none; */
 }
 
-.anime-page .trailer-wrapper .trailer-volume {
+.anime-page .trailer-volume {
   position: absolute;
   bottom: 40px;
   right: 25px;
   display: flex;
   z-index: 4;
-}
-
-.anime-page .banner-wrapper::after,
-.anime-page .trailer-wrapper::after {
-  content: '';
-  display: block;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-  box-shadow: inset 0px -40px 20px -15px var(--color-1);
 }
 
 .anime-page .banner {

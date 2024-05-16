@@ -217,6 +217,17 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 loading={false} // loading disabled
               />
 
+              {canRePlayTrailer && (
+                <div className="trailer-volume">
+                  <ButtonCircle
+                    icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
+                    tint="light"
+                    shadow
+                    onPress={toggleTrailerVolume}
+                  />
+                </div>
+              )}
+              
               {trailer && (
                 <div className="trailer-wrapper">
                   <video
@@ -231,14 +242,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     onLoadedMetadata={handleTrailerLoad}
                     onError={handleTrailerError}
                   />
-                  <div className="trailer-volume">
-                    <ButtonCircle
-                      icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
-                      tint="light"
-                      shadow
-                      onPress={toggleTrailerVolume}
-                    />
-                  </div>
                 </div>
               )}
 
