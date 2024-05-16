@@ -1,15 +1,11 @@
 import './styles/Buttons.css';
 
-import {
-  faArrowLeftLong,
-  faArrowRightLong,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
-import { ButtonCircle, ButtonMain } from './Buttons';
+import { ButtonCircle } from './Buttons';
 
 interface AnimeSectionProps {
   title: string;
