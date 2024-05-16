@@ -1,38 +1,42 @@
-import { ListAnimeData } from "../../types/anilistAPITypes"
+import { ListAnimeData } from '../../types/anilistAPITypes';
 import { getEpisodeUrl as animesaturn } from './animesaturn';
+import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
-import { getParsedAnimeTitles } from "../utils";
-import Store from 'electron-store'
-import { IVideo } from "@consumet/extensions";
+import { getParsedAnimeTitles } from '../utils';
+import Store from 'electron-store';
+import { IVideo } from '@consumet/extensions';
 
-const STORE = new Store()
+const STORE = new Store();
 
 /**
  * Gets the episode url and isM3U8 flag, with stored language and dubbed
- * 
- * @param listAnimeData 
- * @param episode 
- * @returns 
+ *
+ * @param listAnimeData
+ * @param episode
+ * @returns
  */
-export const getUniversalEpisodeUrl = async (listAnimeData: ListAnimeData, episode: number): Promise<IVideo | null> => {
+export const getUniversalEpisodeUrl = async (
+  listAnimeData: ListAnimeData,
+  episode: number,
+): Promise<IVideo | null> => {
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
 
-  console.log(lang)
-  console.log(dubbed)
-  console.log(animeTitles)
+  console.log(lang);
+  console.log(dubbed);
+  console.log(animeTitles);
 
   switch (lang) {
     case 'US': {
-      const data = await gogoanime(animeTitles, episode, dubbed)
+      const data = await gogoanime(animeTitles, episode, dubbed);
       return data;
     }
     case 'IT': {
-      const data = await animesaturn(animeTitles, episode, dubbed)
+      const data = await animesaturn(animeTitles, episode, dubbed);
       return data;
     }
   }
 
-  return null
-}
+  return null;
+};
