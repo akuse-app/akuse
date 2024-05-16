@@ -101,7 +101,7 @@
   cursor: pointer;
   width: 10px;
   height: 10px;
-  margin: 0 8px;
+  margin: 0 5px;
   background-color: var(--color-4);
   border-radius: 100%;
   display: inline-block;

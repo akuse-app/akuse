@@ -55,13 +55,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   onClose,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const iFrameRef = useRef<HTMLIFrameElement>(null);
+  const trailerRef = useRef<HTMLVideoElement>(null);
 
   // trailer
-  const [trailer, setTrailer] = useState<string | undefined>(undefined);
-  const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(
-    STORE.get('trailer_volume_on') as boolean,
-  );
+  const [trailer, setTrailer] = useState<boolean>(true);
+  const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(false);
 
   // episodes info
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
@@ -75,19 +73,40 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (!episodesInfoHasFetched) fetchEpisodesInfo();
+  }, []);
+
+  useEffect(() => {
+    // if (show && trailerRef.current) trailerRef.current.play();
+    setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
+  }, [show]);
+
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [show]);
+
+  const closeModal = () => {
+    if (trailerRef.current) {
+      trailerRef.current.pause();
+      setTimeout(() => {
+        if (trailerRef.current) trailerRef.current.currentTime = 0;
+      }, 400);
+    }
+
+    onClose();
+  };
+
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
     if (!modalRef.current?.contains(event.target as Node)) {
       closeModal();
     }
-  };
-
-  const closeModal = () => {
-    if (iFrameRef.current) {
-      doSomethingToIFrame(iFrameRef.current, 'stopVideo');
-    }
-
-    onClose();
   };
 
   // close modal by pressing ESC
@@ -104,45 +123,38 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (!episodesInfoHasFetched) fetchEpisodesInfo();
-  }, []);
+  // const doesTrailerExists = () => {
+  //   if (listAnimeData.media.trailer?.site === 'youtube') {
+  //     setTrailer(listAnimeData.media.trailer.id);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (show && iFrameRef.current)
-      doSomethingToIFrame(iFrameRef.current, 'playVideo');
-  }, [show]);
-
-  useEffect(() => {
-    doesTrailerExists();
-  }, []);
-
-  useEffect(() => {
-    if (show) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }
-  }, [show]);
-
-  const doesTrailerExists = () => {
-    if (listAnimeData.media.trailer?.site === 'youtube') {
-      setTrailer(listAnimeData.media.trailer.id);
+  const handleTrailerPlay = () => {
+    if (trailerRef.current) {
+      trailerRef.current.volume = trailerVolumeOn ? 0.2 : 0;
     }
   };
 
-  const handleTrailerVolume = () => {
+  const handleTrailerLoad = () => {
+    if (show && trailerRef.current) trailerRef.current.play();
+  };
+
+  const handleTrailerError = () => {
+    setTrailer(false)
+  };
+
+  const toggleTrailerVolume = () => {
     const volumeOn = !trailerVolumeOn;
 
-    setTrailerVolumeOn(volumeOn);
-    STORE.set('trailer_volume_on', volumeOn);
-
-    if (iFrameRef.current) toggleIFrameMute(iFrameRef.current, volumeOn);
+    if (trailerRef.current) {
+      trailerRef.current.volume = volumeOn ? 0.2 : 0;
+      setTrailerVolumeOn(volumeOn);
+      STORE.set('trailer_volume_on', volumeOn);
+    }
   };
 
   const playEpisode = async (episode: number) => {
-    if (iFrameRef.current) doSomethingToIFrame(iFrameRef.current, 'pauseVideo');
+    if (trailerRef.current) trailerRef.current.pause();
     setShowPlayer(true);
     setLoading(true);
     setAnimeEpisodeNumber(episode);
@@ -181,8 +193,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           loading={loading}
           onChangeLoading={handleChangeLoading}
           onClose={() => {
-            if (iFrameRef.current)
-              doSomethingToIFrame(iFrameRef.current, 'playVideo');
+            if (trailerRef.current) trailerRef.current.play();
             setShowPlayer(false);
           }}
         />
@@ -195,16 +206,20 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
 
-            {trailer ? (
+            {trailer && (
               <div className="trailer-wrapper">
-                <iframe
-                  ref={iFrameRef}
+                <video
+                  ref={trailerRef}
+                  src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
                   className="trailer"
-                  title="Anime trailer"
-                  sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
-                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=1&controls=0&color=white&modestbranding=0&rel=0&playsinline=1&enablejsapi=1&playlist=${trailer}`}
-                  frameBorder={0}
-                ></iframe>
+                  preload="none"
+                  loop
+                  playsInline
+                  autoPlay
+                  onPlay={handleTrailerPlay}
+                  onLoadedMetadata={handleTrailerLoad}
+                  onError={handleTrailerError}
+                />
                 <AnimeModalWatchButtons
                   listAnimeData={listAnimeData}
                   onPlay={playEpisode}
@@ -214,25 +229,22 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                   <ButtonCircle
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
                     tint="light"
-                    onPress={handleTrailerVolume}
+                    onPress={toggleTrailerVolume}
                   />
                 </div>
               </div>
-            ) : (
-              <div className="banner-wrapper">
-                {listAnimeData.media.bannerImage && (
-                  <img
-                    src={listAnimeData.media.bannerImage}
-                    className="banner"
-                  />
-                )}
-                <AnimeModalWatchButtons
-                  listAnimeData={listAnimeData}
-                  onPlay={playEpisode}
-                  loading={false} // loading disabled
-                />
-              </div>
             )}
+
+            <div className="banner-wrapper">
+              {listAnimeData.media.bannerImage && (
+                <img src={listAnimeData.media.bannerImage} className="banner" />
+              )}
+              <AnimeModalWatchButtons
+                listAnimeData={listAnimeData}
+                onPlay={playEpisode}
+                loading={false} // loading disabled
+              />
+            </div>
 
             <div className="content">
               <div className="left">

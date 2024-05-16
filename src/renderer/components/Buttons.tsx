@@ -1,3 +1,4 @@
+import './styles/Buttons.css'
 import 'react-activity/dist/Dots.css';
 
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';

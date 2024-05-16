@@ -165,7 +165,7 @@ img {
   background: var(--color-0);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  z-index: 9999;
+  z-index: 110;
   transition: var(--transition);
 }
 
@@ -785,6 +785,7 @@ main {
   left: 25px;
   display: flex;
   gap: 10px;
+  z-index: 2;
 }
 
 .anime-page .content-wrapper {
@@ -792,7 +793,8 @@ main {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  width: 1175px;
+  width: 1000px;
+  /* width: 1175px; */
   height: max-content;
   margin: 25px 0;
   background: var(--color-1);
@@ -800,7 +802,7 @@ main {
 }
 
 .anime-page .banner-wrapper {
-  height: 30vh;
+  height: 40vh;
   position: relative;
   aspect-ratio: 16/9;
   object-fit: cover;
@@ -808,10 +810,12 @@ main {
 
 .anime-page .trailer-wrapper {
   width: 100%;
-  position: relative;
+  height: 40vh;
+  position: absolute;
   overflow: hidden;
-  height: 100%;
-  aspect-ratio: 16/9;
+  object-fit: cover;
+  z-index: 3;
+  /* aspect-ratio: 16/9; */
   border-radius: var(--border-radius);
   /* pointer-events: none; */
 }
@@ -821,6 +825,7 @@ main {
   bottom: 40px;
   right: 25px;
   display: flex;
+  z-index: 2;
 }
 
 .anime-page .banner-wrapper::after,
@@ -831,6 +836,7 @@ main {
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: 1;
   box-shadow: inset 0px -40px 20px -15px var(--color-1);
 }
 
@@ -843,11 +849,13 @@ main {
 }
 
 .anime-page .trailer {
-  width: 300%;
-  height: 100%;
-  margin-left: -1175px;
+  width: 100%; /* Per riempire orizzontalmente il contenitore */
+  height: 100%; /* Per riempire verticalmente il contenitore */
+  object-fit: cover; /* Per adattare e ritagliare il video nel contenitore */
+  position: absolute; /* Per posizionare il video all'interno del contenitore */
+  top: 0; /* Per posizionare il video all'angolo superiore sinistro del contenitore */
+  left: 0;
   border-radius: var(--border-radius);
-  z-index: -1;
 }
 
 .anime-page .content-wrapper .content {
@@ -1360,7 +1368,7 @@ h1 {
   margin-bottom: 15px;
 }
 
-main section button.bc {
+/* main section button.bc {
   display: block;
   position: absolute;
   top: 0;
@@ -1370,7 +1378,7 @@ main section button.bc {
   height: 30px;
   background-color: var(--color-0);
   z-index: 30;
-}
+} */
 
 main section button.bc .i {
   font-size: 1rem;
@@ -1395,7 +1403,7 @@ main section .anime-list-wrapper {
 main section .anime-list {
   float: left;
   width: max-content;
-  gap: 15px;
+  gap: 25px;
   display: flex;
   flex-direction: row;
   padding-bottom: 10px;

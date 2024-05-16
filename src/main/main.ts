@@ -9,7 +9,6 @@ import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -18,15 +17,14 @@ import { resolveHtmlPath } from './util';
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-const STORE = new Store()
+const STORE = new Store();
 
-app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
 // autoUpdater.autoDownload = false;
 // autoUpdater.autoInstallOnAppQuit = true;
 // autoUpdater.autoRunAppAfterInstall = true;
-
 
 class AppUpdater {
   constructor() {
@@ -86,6 +84,8 @@ const createWindow = async () => {
     show: false,
     width: 1300,
     height: 850,
+    minWidth: 1280,
+    minHeight: 720,
     autoHideMenuBar: true,
     // titleBarStyle: 'hidden',
     titleBarOverlay: {
@@ -98,10 +98,7 @@ const createWindow = async () => {
       nodeIntegration: true,
       contextIsolation: false,
       webSecurity: false,
-      allowRunningInsecureContent: false
-      // preload: app.isPackaged
-      //   ? path.join(__dirname, 'preload.js')
-      //   : path.join(__dirname, '../../.erb/dll/preload.js'),
+      allowRunningInsecureContent: false,
     },
   });
 
@@ -148,12 +145,12 @@ const createWindow = async () => {
 // })
 
 ipcMain.on('open-sponsor-url', () => {
-  require('electron').shell.openExternal(SPONSOR_URL)
-})
+  require('electron').shell.openExternal(SPONSOR_URL);
+});
 
 ipcMain.on('open-issues-url', () => {
-  require('electron').shell.openExternal(OPEN_NEW_ISSUE_URL)
-})
+  require('electron').shell.openExternal(OPEN_NEW_ISSUE_URL);
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
