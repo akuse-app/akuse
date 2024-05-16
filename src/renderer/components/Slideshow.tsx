@@ -1,7 +1,10 @@
 import './styles/Slideshow.css';
 
 import { IVideo } from '@consumet/extensions';
-import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowUpRightFromSquare,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +24,7 @@ import { EpisodeInfo } from '../../types/types';
 import AnimeModal from './modals/AnimeModal';
 import VideoPlayer from './player/VideoPlayer';
 import { ButtonMain } from './Buttons';
+import Skeleton from 'react-loading-skeleton';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -124,14 +128,14 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
               <ButtonMain
                 text="Watch now"
                 icon={faPlay}
-                tint='primary'
+                tint="primary"
                 shadow
                 onPress={handlePressButton}
-                />
+              />
               <ButtonMain
                 text="More info"
                 icon={faArrowUpRightFromSquare}
-                tint='light'
+                tint="light"
                 shadow
                 onPress={() => {
                   setShowModal(true);
@@ -196,27 +200,37 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
   return (
     <>
       <h1>Popular now</h1>
-      <div className="slideshow-container">
-        <div
-          className="slideshow-wrapper"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {animeData &&
-            animeData.map((listAnimeData, index) => (
-              <Slide key={index} listAnimeData={listAnimeData} index={index} />
-            ))}
+      {listAnimeData ? (
+        <div className="slideshow-container">
+          <div
+            className="slideshow-wrapper"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {animeData &&
+              animeData.map((listAnimeData, index) => (
+                <Slide
+                  key={index}
+                  listAnimeData={listAnimeData}
+                  index={index}
+                />
+              ))}
+          </div>
+          <div className="dot-container">
+            {animeData &&
+              animeData.map((_, index) => (
+                <span
+                  key={index}
+                  className={index === currentIndex ? 'dot active' : 'dot'}
+                  onClick={() => goToIndex(index)}
+                ></span>
+              ))}
+          </div>
         </div>
-        <div className="dot-container">
-          {animeData &&
-            animeData.map((_, index) => (
-              <span
-                key={index}
-                className={index === currentIndex ? 'dot active' : 'dot'}
-                onClick={() => goToIndex(index)}
-              ></span>
-            ))}
+      ) : (
+        <div style={{ marginBottom: 25 }}>
+          <Skeleton className="slideshow-container" />
         </div>
-      </div>
+      )}
     </>
   );
 };

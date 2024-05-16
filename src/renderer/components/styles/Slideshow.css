@@ -3,6 +3,7 @@
   overflow: hidden;
   margin: auto;
   width: 100%;
+  height: 491px; /* for skeleton */
   border-radius: var(--border-radius);
 }
 
