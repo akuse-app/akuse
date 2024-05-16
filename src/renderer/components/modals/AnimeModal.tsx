@@ -1,5 +1,12 @@
 import { IVideo } from '@consumet/extensions';
-import { faCircleExclamation, faStar, faTv, faVolumeHigh, faVolumeXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleExclamation,
+  faStar,
+  faTv,
+  faVolumeHigh,
+  faVolumeXmark,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Store from 'electron-store';
@@ -9,7 +16,13 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
-import { capitalizeFirstLetter, getParsedFormat, getParsedSeasonYear, getTitle } from '../../../modules/utils';
+import {
+  capitalizeFirstLetter,
+  getParsedFormat,
+  getParsedSeasonYear,
+  getTitle,
+  getUrlByCoverType,
+} from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import { ButtonCircle } from '../Buttons';
@@ -58,6 +71,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [animeEpisodeNumber, setAnimeEpisodeNumber] = useState<number>(0);
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
+  // other
+  const [alternativeBanner, setAlternativeBanner] = useState<
+    string | undefined
+  >(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -65,7 +82,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
-    if (show && trailerRef.current && canRePlayTrailer) trailerRef.current.play();
+    if (show && trailerRef.current && canRePlayTrailer)
+      trailerRef.current.play();
     setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
   }, [show]);
 
@@ -106,6 +124,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const fetchEpisodesInfo = async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
       if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
+      data.data.images &&
+        setAlternativeBanner(
+          getUrlByCoverType(data.data.images, 'fanart') ?? undefined,
+        );
       setEpisodesInfoHasFetched(true);
     });
   };
@@ -118,7 +140,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const handleTrailerLoad = () => {
     if (trailerRef.current) trailerRef.current.play();
-    setCanRePlayTrailer(true)
+    setCanRePlayTrailer(true);
   };
 
   const handleTrailerError = () => {
@@ -221,12 +243,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               )}
 
               <div className="banner-wrapper">
-                {listAnimeData.media.bannerImage && (
+                {(alternativeBanner || listAnimeData.media.bannerImage) &&
+                episodesInfoHasFetched ? (
                   <img
-                    src={listAnimeData.media.bannerImage}
+                    src={alternativeBanner || listAnimeData.media.bannerImage}
                     className="banner"
+                    alt="Banner"
                   />
-                )}
+                ) : null}
               </div>
             </div>
 

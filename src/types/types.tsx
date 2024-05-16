@@ -8,10 +8,6 @@ export type EpisodeInfo = {
   length?: string | number
 };
 
-export type EpisodesInfo = {
-  episodes?: EpisodeInfo[];
-};
-
 export type ClientData = {
   clientId: number;
   redirectUri: string;

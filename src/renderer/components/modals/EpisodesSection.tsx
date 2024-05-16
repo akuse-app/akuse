@@ -1,17 +1,10 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { getAvailableEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import { EpisodeInfo, EpisodesInfo } from '../../../types/types';
+import { EpisodeInfo } from '../../../types/types';
 import EpisodeEntry from './EpisodeEntry';
-import {
-  faSearch,
-  faX,
-  faXRay,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const EPISODES_PER_PAGE = 30;
 
 interface EpisodesSectionProps {
