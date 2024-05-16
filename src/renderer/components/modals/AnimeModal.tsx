@@ -3,6 +3,8 @@ import {
   faCircleExclamation,
   faStar,
   faTv,
+  faVolumeHigh,
+  faVolumeXmark,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,9 +17,11 @@ import toast, { Toaster } from 'react-hot-toast';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   capitalizeFirstLetter,
+  doSomethingToIFrame,
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
+  toggleIFrameMute,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
@@ -33,6 +37,7 @@ import {
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
+import { ButtonCircle } from '../Buttons';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -50,7 +55,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   onClose,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const iFrameRef = useRef<HTMLIFrameElement>(null);
+
+  // trailer
   const [trailer, setTrailer] = useState<string | undefined>(undefined);
+  const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(
+    STORE.get('trailer_volume_on') as boolean,
+  );
 
   // episodes info
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
@@ -67,14 +78,22 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
     if (!modalRef.current?.contains(event.target as Node)) {
-      onClose();
+      closeModal();
     }
+  };
+
+  const closeModal = () => {
+    if (iFrameRef.current) {
+      doSomethingToIFrame(iFrameRef.current, 'stopVideo');
+    }
+
+    onClose();
   };
 
   // close modal by pressing ESC
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      onClose();
+      closeModal();
     }
   };
 
@@ -89,13 +108,41 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
   }, []);
 
+  useEffect(() => {
+    if (show && iFrameRef.current)
+      doSomethingToIFrame(iFrameRef.current, 'playVideo');
+  }, [show]);
+
+  useEffect(() => {
+    doesTrailerExists();
+  }, []);
+
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [show]);
+
   const doesTrailerExists = () => {
     if (listAnimeData.media.trailer?.site === 'youtube') {
       setTrailer(listAnimeData.media.trailer.id);
     }
   };
 
+  const handleTrailerVolume = () => {
+    const volumeOn = !trailerVolumeOn;
+
+    setTrailerVolumeOn(volumeOn);
+    STORE.set('trailer_volume_on', volumeOn);
+
+    if (iFrameRef.current) toggleIFrameMute(iFrameRef.current, volumeOn);
+  };
+
   const playEpisode = async (episode: number) => {
+    if (iFrameRef.current) doSomethingToIFrame(iFrameRef.current, 'pauseVideo');
     setShowPlayer(true);
     setLoading(true);
     setAnimeEpisodeNumber(episode);
@@ -118,22 +165,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     });
   };
 
-  useEffect(() => {
-    // doesTrailerExists();
-  }, []);
-
-  useEffect(() => {
-    if (show) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }
-  }, [show]);
-
   const handleChangeLoading = (value: boolean) => {
-    setLoading(value)
-  }
+    setLoading(value);
+  };
 
   return ReactDOM.createPortal(
     <>
@@ -147,6 +181,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           loading={loading}
           onChangeLoading={handleChangeLoading}
           onClose={() => {
+            if (iFrameRef.current)
+              doSomethingToIFrame(iFrameRef.current, 'playVideo');
             setShowPlayer(false);
           }}
         />
@@ -155,19 +191,32 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       <ModalPage show={show}>
         <div className="anime-page" onClick={handleClickOutside}>
           <div className="content-wrapper" ref={modalRef}>
-            <button className="exit" onClick={onClose}>
+            <button className="exit" onClick={closeModal}>
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
 
             {trailer ? (
               <div className="trailer-wrapper">
                 <iframe
+                  ref={iFrameRef}
                   className="trailer"
                   title="Anime trailer"
                   sandbox="allow-same-origin allow-forms allow-popups allow-scripts allow-presentation"
-                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=0&controls=0&color=white&modestbranding=0&rel=0&playsinline=1&enablejsapi=1&playlist=${trailer}`}
+                  src={`https://youtube.com/embed/${trailer}?autoplay=1&loop=1&controls=0&color=white&modestbranding=0&rel=0&playsinline=1&enablejsapi=1&playlist=${trailer}`}
                   frameBorder={0}
                 ></iframe>
+                <AnimeModalWatchButtons
+                  listAnimeData={listAnimeData}
+                  onPlay={playEpisode}
+                  loading={false} // loading disabled
+                />
+                <div className="trailer-volume">
+                  <ButtonCircle
+                    icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
+                    tint="light"
+                    onPress={handleTrailerVolume}
+                  />
+                </div>
               </div>
             ) : (
               <div className="banner-wrapper">

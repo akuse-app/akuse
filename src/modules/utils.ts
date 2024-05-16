@@ -322,10 +322,10 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
   var animeTitles = getTitlesAndSynonyms(animeEntry);
 
   const customTitle =
-  animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
+    animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
   if (customTitle) animeTitles.unshift(customTitle);
-  
-  animeTitles.forEach(title => {
+
+  animeTitles.forEach((title) => {
     if (title.includes('Season '))
       animeTitles.push(title.replace('Season ', ''));
     if (title.includes('Season ') && title.includes('Part '))
@@ -339,13 +339,38 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
 
 export const formatTime = (time: number) => {
   let seconds: any = Math.floor(time % 60),
-  minutes: any = Math.floor(time / 60) % 60,
-  hours: any = Math.floor(time / 3600)
-  seconds = seconds < 10 ? `0${seconds}` : seconds
-  minutes = minutes < 10 ? `0${minutes}` : minutes
-  hours = hours < 10 ? `0${hours}` : hours
-  if(hours == 0) {
-      return `${minutes}:${seconds}`
+    minutes: any = Math.floor(time / 60) % 60,
+    hours: any = Math.floor(time / 3600);
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours < 10 ? `0${hours}` : hours;
+  if (hours == 0) {
+    return `${minutes}:${seconds}`;
   }
-  return `${hours}:${minutes}:${seconds}`
-}
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+export const doSomethingToIFrame = (
+  iFrame: HTMLIFrameElement,
+  func: 'stopVideo' | 'playVideo' | 'pauseVideo',
+) => {
+  if (!iFrame || !iFrame.contentWindow) return;
+
+  iFrame.contentWindow.postMessage(
+    JSON.stringify({ event: 'command', func: func }),
+    '*',
+  );
+};
+
+export const toggleIFrameMute = (iFrame: HTMLIFrameElement, mute: boolean) => {
+  if (!iFrame || !iFrame.contentWindow) return;
+
+  iFrame.contentWindow.postMessage(
+    JSON.stringify({
+      event: 'command',
+      func: 'setVolume',
+      args: [mute ? 0 : 1],
+    }),
+    '*',
+  );
+};
