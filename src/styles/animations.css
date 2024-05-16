@@ -1,6 +1,7 @@
 :root {
   --animation-transition: 0.4s ease;
   --half-animation-transition: 0.2s ease;
+  --trailer-animation-transition: 1.5s ease;
 }
 
 /* LOADING PAGE */
@@ -61,6 +62,7 @@
 
 .show-opacity {
   animation: showOpacity var(--half-animation-transition);
+  /* animation: showOpacity var(--half-animation-transition); */
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -225,5 +227,22 @@
 
   100% {
     border: 2px solid var(--font-3);
+  }
+}
+
+.show-trailer {
+  animation: showOpacity var(--trailer-animation-transition);
+  /* animation: showOpacity var(--half-animation-transition); */
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes showOpacity {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

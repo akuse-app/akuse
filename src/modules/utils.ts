@@ -354,7 +354,6 @@ export const getUrlByCoverType = (
   images: { coverType: string; url: string }[],
   coverType: string,
 ): string | undefined => {
-  console.log(images)
   const image = images.find(
     (img) => img.coverType.toLowerCase() === coverType.toLowerCase(),
   );

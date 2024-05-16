@@ -134,7 +134,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const handleTrailerPlay = () => {
     if (trailerRef.current) {
-      trailerRef.current.volume = trailerVolumeOn ? 0.2 : 0;
+      trailerRef.current.volume = trailerVolumeOn ? 1 : 0;
     }
   };
 
@@ -151,7 +151,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     const volumeOn = !trailerVolumeOn;
 
     if (trailerRef.current) {
-      trailerRef.current.volume = volumeOn ? 0.2 : 0;
+      trailerRef.current.volume = volumeOn ? 1 : 0;
       setTrailerVolumeOn(volumeOn);
       STORE.set('trailer_volume_on', volumeOn);
     }
@@ -218,7 +218,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               />
 
               {canRePlayTrailer && (
-                <div className="trailer-volume">
+                <div className="trailer-volume show-trailer">
                   <ButtonCircle
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
                     tint="light"
@@ -227,9 +227,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                   />
                 </div>
               )}
-              
+
               {trailer && (
-                <div className="trailer-wrapper">
+                <div
+                  className={`trailer-wrapper ${
+                    canRePlayTrailer ? 'show-opacity' : ''
+                  }`}
+                >
                   <video
                     ref={trailerRef}
                     src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}

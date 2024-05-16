@@ -802,13 +802,13 @@ main {
   border-radius: var(--border-radius);
 }
 
-.up {
+.anime-page .up {
   position: relative;
   height: 40vh;
   width: 100%;
 }
 
-.up::after {
+.anime-page .up::after {
   content: '';
   display: block;
   height: 100%;
