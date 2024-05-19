@@ -313,6 +313,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               videoRef={videoRef}
               hls={hlsData}
               listAnimeData={listAnimeData}
+              episodesInfo={episodesInfo}
               episodeNumber={episodeNumber}
               episodeTitle={episodeTitle}
               showNextEpisodeButton={showNextEpisodeButton}

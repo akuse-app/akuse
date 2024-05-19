@@ -3,8 +3,6 @@ import AnimeUnity from '@consumet/extensions/dist/providers/anime/animeunity';
 
 const consumet = new AnimeUnity();
 
-/* FIXFIXFIXFIXFIXFIXFIXFIXFIX */
-
 /**
  *
  * @param animeTitles
@@ -55,9 +53,9 @@ async function searchEpisodeUrl(
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
 
-      console.log(data)
-      
-      return data.sources
+      console.log(data);
+
+      return data.sources;
     }
   }
 
@@ -89,6 +87,9 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
-  const data = await consumet.fetchAnimeInfo(animeId);
-  return data?.episodes?.[episode - 1]?.id ?? null;
+  const data = await consumet.fetchAnimeInfo(
+    animeId,
+    episode > 120 ? Math.floor(episode / 120) + 1 : 1,
+  );
+  return data?.episodes?.[episode % 120 - 1]?.id ?? null;
 };

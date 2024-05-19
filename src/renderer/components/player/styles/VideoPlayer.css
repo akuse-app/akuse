@@ -337,7 +337,7 @@
   margin-left: 10px;
 }
 
-.up-controls .settings-content .settings-options {
+.up-controls .settings-content .dropdown {
   display: none;
   opacity: 0;
   width: 400px;
@@ -347,41 +347,7 @@
   right: 0;
 }
 
-.up-controls .settings-content .settings-options input[type='range'] {
-  accent-color: var(--font-1);
-}
-
-.up-controls .settings-content .settings-options li {
-  /* width: calc(100% - 30px); */
-  display: flex;
-  align-items: center;
-  font-size: 1.2rem;
-  padding: 15px;
-  color: var(--font-2);
-}
-
-.up-controls .settings-content .settings-options li .i {
-  margin-right: 8px;
-  width: 30px;
-}
-
-.up-controls .settings-content .settings-options li input,
-.up-controls .settings-content .settings-options li select,
-.up-controls .settings-content .settings-options li label {
-  position: absolute;
-  right: 15px;
-}
-
-.up-controls .settings-content .settings-options li select {
-  background-color: var(--color-2);
-}
-
-.up-controls .settings-content .settings-options li:hover {
-  color: var(--font-1);
-  background-color: var(--color-4);
-}
-
-.up-controls .settings-content .settings-options.show-options {
+.up-controls .settings-content .dropdown.settings-dropdown {
   display: block;
   opacity: 0.85;
   list-style: none;
@@ -392,6 +358,40 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: opacity 0.13s ease;
   pointer-events: auto;
+}
+
+.up-controls .settings-content .dropdown input[type='range'] {
+  accent-color: var(--font-1);
+}
+
+.up-controls .settings-content .dropdown li {
+  /* width: calc(100% - 30px); */
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  padding: 15px;
+  color: var(--font-2);
+}
+
+.up-controls .settings-content .dropdown li .i {
+  margin-right: 8px;
+  width: 30px;
+}
+
+.up-controls .settings-content .dropdown li input,
+.up-controls .settings-content .dropdown li select,
+.up-controls .settings-content .dropdown li label {
+  position: absolute;
+  right: 15px;
+}
+
+.up-controls .settings-content .dropdown li select {
+  background-color: var(--color-2);
+}
+
+.up-controls .settings-content .dropdown li:hover {
+  color: var(--font-1);
+  background-color: var(--color-4);
 }
 
 .mid-controls .play-pause-center {

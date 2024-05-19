@@ -795,7 +795,6 @@ main {
   flex-direction: column;
   gap: 15px;
   width: 1000px;
-  /* width: 1175px; */
   height: max-content;
   margin: 25px 0;
   background: var(--color-1);
@@ -1408,7 +1407,7 @@ main section .anime-list {
 
 main .anime-entry {
   position: relative;
-  width: 175px;
+  width: 165px;
   height: min-content;
   margin-top: 10px;
   /* must be in anime-entry or hover scaling won't work */
@@ -1442,8 +1441,7 @@ main .anime-entry .content {
 }
 
 main .anime-entry .anime-cover {
-  width: 175px;
-  height: 262.5px;
+  height: 247.5px;
   position: relative;
   object-fit: cover;
   border-radius: var(--border-radius);

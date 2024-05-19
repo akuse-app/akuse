@@ -14,6 +14,7 @@ import Hls from 'hls.js';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../App';
+import { EpisodeInfo } from '../../../types/types';
 
 const STORE = new Store();
 
@@ -109,7 +110,7 @@ const Settings: React.FC<SettingsProps> = ({
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
       {settings && (
-        <div className="settings-options show-options">
+        <div className="dropdown settings-dropdown">
           <li className="quality">
             <span>
               <FontAwesomeIcon className="i" icon={faVideo} />

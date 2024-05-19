@@ -160,7 +160,7 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
             icon={faFilm}
             style={{ marginRight: 7 }}
           />
-          {availableEpisodes} {status === 'Releasing' && ` / ${episodes}`}{' '}
+          {availableEpisodes} {status === 'Releasing' && ` / ${listAnimeData.media.episodes || '?'}`}{' '}
           Episodes
         </>
       )}

@@ -6,11 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import Settings from './VideoSettings';
 import Hls from 'hls.js';
+import { EpisodeInfo } from '../../../types/types';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
   hls?: Hls
   listAnimeData: ListAnimeData;
+  episodesInfo: EpisodeInfo[] | null;
   episodeNumber: number;
   episodeTitle: string;
   showPreviousEpisodeButton: boolean;
@@ -28,6 +30,7 @@ const TopControls: React.FC<TopControlsProps> = ({
   videoRef,
   hls,
   listAnimeData,
+  episodesInfo,
   episodeNumber,
   episodeTitle,
   showPreviousEpisodeButton,
