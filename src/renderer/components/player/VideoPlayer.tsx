@@ -6,11 +6,11 @@ import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 import { updateAnimeProgress } from '../../../modules/anilist/anilistApi';
-import { getEpisodeUrl as animesaturn } from '../../../modules/providers/animesaturn';
-import { getEpisodeUrl as gogoanime } from '../../../modules/providers/gogoanime';
-import { getAvailableEpisodes, getParsedAnimeTitles } from '../../../modules/utils';
+import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
+import { getAvailableEpisodes } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
@@ -18,6 +18,7 @@ import MidControls from './MidControls';
 import TopControls from './TopControls';
 
 const STORE = new Store();
+const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
 var pauseInfoTimer: any;
@@ -45,6 +46,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const [hlsData, setHlsData] = useState<Hls>();
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);
@@ -78,7 +81,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     if (video !== null) {
-      loadSource(video.url, video.isM3U8 ?? false);
+      playHlsVideo(video.url);
+      // loadSource(video.url, video.isM3U8 ?? false);
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
@@ -96,24 +100,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   }, [video]);
 
-  const loadSource = (url: string, isM3U8: boolean) => {
-    if (videoRef.current) {
-      if (isM3U8) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(url);
-          hls.attachMedia(videoRef.current as HTMLVideoElement);
+  const playHlsVideo = (url: string) => {
+    if (Hls.isSupported() && videoRef.current) {
+      var hls = new Hls();
+      hls.loadSource(url);
+      hls.attachMedia(videoRef.current);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        if (videoRef.current) {
           playVideoAndSetTime();
-        } else if (
-          videoRef.current.canPlayType('application/vnd.apple.mpegurl')
-        ) {
-          videoRef.current.src = url;
-          playVideoAndSetTime();
+          setHlsData(hls);
         }
-      } else {
-        videoRef.current.src = url;
-        playVideoAndSetTime();
-      }
+      });
     }
   };
 
@@ -146,7 +143,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         playVideo();
         setCurrentTime(videoRef.current?.currentTime);
         setDuration(videoRef.current?.duration);
-        onChangeLoading(false)
+        onChangeLoading(false);
       }, 1000);
     }
   };
@@ -162,7 +159,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setBuffered(videoRef.current?.buffered);
 
       // automatically update progress
-      (cTime * 100) / dTime <= 85 && console.log((cTime * 100) / dTime);
       if (
         (cTime * 100) / dTime > 85 &&
         (STORE.get('update_progress') as boolean) &&
@@ -238,30 +234,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onChangeLoading(true);
     const nextEpisodeNumber = episodeNumber + modificator;
 
-    const lang = (await STORE.get('source_flag')) as string;
-    const dubbed = (await STORE.get('dubbed')) as boolean;
-    const animeTitles = getParsedAnimeTitles(listAnimeData.media);
-
     var previousTime = 0;
     if (reloadAtPreviousTime && videoRef.current)
       previousTime = videoRef.current?.currentTime;
 
-    switch (lang) {
-      case 'US': {
-        gogoanime(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
-          if (!value) return;
-          setData(value);
+    getUniversalEpisodeUrl(listAnimeData, nextEpisodeNumber).then((data) => {
+      if (!data) {
+        toast(`Source not found.`, {
+          style: {
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+          },
+          icon: '❌',
         });
-        break;
+
+        return;
       }
-      case 'IT': {
-        animesaturn(animeTitles, nextEpisodeNumber, dubbed).then((value) => {
-          if (!value) return;
-          setData(value);
-        });
-        break;
-      }
-    }
+
+      setData(data);
+    });
 
     const setData = (value: IVideo) => {
       setVideoData(value);
@@ -275,13 +266,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodesInfo ? episodesInfo[nextEpisodeNumber].summary ?? '' : '',
       );
-      loadSource(value.url, value.isM3U8 ?? false);
+      playHlsVideo(value.url);
+      // loadSource(value.url, value.isM3U8 ?? false);
       setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
       setProgressUpdated(false);
       if (videoRef.current && reloadAtPreviousTime)
         videoRef.current.currentTime = previousTime;
-      
+
       onChangeLoading(false);
     };
   };
@@ -296,70 +288,72 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   return ReactDOM.createPortal(
     show && (
-      <div
-        className={`container ${showControls ? 'show-controls' : ''} ${
-          showPauseInfo ? 'show-pause-info' : ''
-        }`}
-        onMouseMove={handleMouseMove}
-        ref={containerRef}
-      >
-        <div className="pause-info">
-          <div className="content">
-            <h1 className="you-are-watching">You are watching</h1>
-            <h1 id="pause-info-anime-title">
-              {listAnimeData.media.title?.english}
-            </h1>
-            <h1 id="pause-info-episode-title">{episodeTitle}</h1>
-            <h1 id="pause-info-episode-description">{episodeDescription}</h1>
-          </div>
-        </div>
+      <>
         <div
-          className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}
-          onClick={togglePlayingWithoutPropagation}
-          onDoubleClick={toggleFullScreenWithoutPropagation}
+          className={`container ${showControls ? 'show-controls' : ''} ${showPauseInfo ? 'show-pause-info' : ''}`}
+          onMouseMove={handleMouseMove}
+          ref={containerRef}
         >
-          <TopControls
-            videoRef={videoRef}
-            listAnimeData={listAnimeData}
-            episodeNumber={episodeNumber}
-            episodeTitle={episodeTitle}
-            showNextEpisodeButton={showNextEpisodeButton}
-            showPreviousEpisodeButton={showPreviousEpisodeButton}
-            fullscreen={fullscreen}
-            onFullScreentoggle={toggleFullScreen}
-            onChangeEpisode={changeEpisode}
-            onSettingsToggle={(isShowed) => setIsSettingsShowed(isShowed)}
-            onExit={handleExit}
+          <div className="pause-info">
+            <div className="content">
+              <h1 className="you-are-watching">You are watching</h1>
+              <h1 id="pause-info-anime-title">
+                {listAnimeData.media.title?.english}
+              </h1>
+              <h1 id="pause-info-episode-title">{episodeTitle}</h1>
+              <h1 id="pause-info-episode-description">{episodeDescription}</h1>
+            </div>
+          </div>
+          <div
+            className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}
             onClick={togglePlayingWithoutPropagation}
-            onDblClick={toggleFullScreenWithoutPropagation}
-          />
-          <MidControls
-            videoRef={videoRef}
-            playing={playing}
-            playVideo={playVideo}
-            pauseVideo={pauseVideo}
-            loading={loading}
-            onClick={togglePlayingWithoutPropagation}
-            onDblClick={toggleFullScreenWithoutPropagation}
-          />
-          <BottomControls
-            videoRef={videoRef}
-            containerRef={containerRef}
-            currentTime={currentTime}
-            duration={duration}
-            buffered={buffered}
-            onClick={togglePlayingWithoutPropagation}
-            onDblClick={toggleFullScreenWithoutPropagation}
-          />
+            onDoubleClick={toggleFullScreenWithoutPropagation}
+          >
+            <TopControls
+              videoRef={videoRef}
+              hls={hlsData}
+              listAnimeData={listAnimeData}
+              episodeNumber={episodeNumber}
+              episodeTitle={episodeTitle}
+              showNextEpisodeButton={showNextEpisodeButton}
+              showPreviousEpisodeButton={showPreviousEpisodeButton}
+              fullscreen={fullscreen}
+              onFullScreentoggle={toggleFullScreen}
+              onChangeEpisode={changeEpisode}
+              onSettingsToggle={(isShowed) => setIsSettingsShowed(isShowed)}
+              onExit={handleExit}
+              onClick={togglePlayingWithoutPropagation}
+              onDblClick={toggleFullScreenWithoutPropagation}
+            />
+            <MidControls
+              videoRef={videoRef}
+              playing={playing}
+              playVideo={playVideo}
+              pauseVideo={pauseVideo}
+              loading={loading}
+              onClick={togglePlayingWithoutPropagation}
+              onDblClick={toggleFullScreenWithoutPropagation}
+            />
+            <BottomControls
+              videoRef={videoRef}
+              containerRef={containerRef}
+              currentTime={currentTime}
+              duration={duration}
+              buffered={buffered}
+              onClick={togglePlayingWithoutPropagation}
+              onDblClick={toggleFullScreenWithoutPropagation}
+            />
+          </div>
+          <video
+            id="video"
+            ref={videoRef}
+            onTimeUpdate={handleTimeUpdate}
+            onPause={handleVideoPause}
+            crossOrigin="anonymous"
+          ></video>
         </div>
-        <video
-          id="video"
-          ref={videoRef}
-          onTimeUpdate={handleTimeUpdate}
-          onPause={handleVideoPause}
-          crossOrigin="anonymous"
-        ></video>
-      </div>
+        <Toaster />
+      </>
     ),
     videoPlayerRoot!,
   );

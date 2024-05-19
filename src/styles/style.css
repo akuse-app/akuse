@@ -975,8 +975,8 @@ main {
 .anime-page .episodes-section .episodes-options {
   display: flex;
   position: relative;
-  width: calc(100% - 30px);
-  margin: 0 15px 10px 15px;
+  width: calc(100% - 50px);
+  margin: 0 25px 10px 25px;
 }
 
 .anime-page .episodes-section .episodes-options .right {
@@ -1075,7 +1075,7 @@ main {
   gap: 25px;
   height: 175px;
   margin: 0 15px;
-  padding: 15px;
+  padding: 10px;
   aspect-ratio: 1.78 / 1;
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -1741,10 +1741,11 @@ main button#search-clear:active {
 }
 
 main .entries-container {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, max-content));
   justify-content: center;
-  width: 100%;
+  gap: 25px;
   margin-top: 20px;
 }
 

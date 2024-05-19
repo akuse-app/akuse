@@ -10,7 +10,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
-import { ChangeEvent, useContext, useState } from 'react';
+import Hls from 'hls.js';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../App';
 
@@ -18,16 +19,20 @@ const STORE = new Store();
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
+  hls?: Hls;
   onToggle: (isShowed: boolean) => void;
   onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({
   videoRef,
+  hls,
   onToggle,
   onChangeEpisode,
 }) => {
   const logged = useContext(AuthContext);
+
+  const [hlsData, setHlsData] = useState<Hls>();
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
@@ -48,6 +53,16 @@ const Settings: React.FC<SettingsProps> = ({
 
     setSettings(show);
     onToggle(show);
+  };
+
+  useEffect(() => {
+    setHlsData(hls);
+  }, [hls]);
+
+  const handleQualityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (hlsData) {
+      hlsData.currentLevel = parseInt(event.target.value);
+    }
   };
 
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,8 +115,13 @@ const Settings: React.FC<SettingsProps> = ({
               <FontAwesomeIcon className="i" icon={faVideo} />
               Quality
             </span>
-            <select className="main-select-0">
-              <option selected>Soon</option>
+            <select className="main-select-0" onChange={handleQualityChange} value={hlsData?.currentLevel}>
+              {hlsData &&
+                hlsData?.levels?.map((level, index) => (
+                  <option key={index} value={index}>
+                    {`${level.height}p`}
+                  </option>
+                ))}
             </select>
           </li>
           <li className="volume">

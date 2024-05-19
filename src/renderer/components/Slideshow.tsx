@@ -68,7 +68,6 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
 
         return;
       }
-
       setPlayerIVideo(data);
       setLoading(false);
     });

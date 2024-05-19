@@ -6,18 +6,21 @@ const consumet = new AnimeUnity();
 /* FIXFIXFIXFIXFIXFIXFIXFIXFIX */
 
 /**
- * 
- * @param animeTitles 
- * @param episode 
- * @param dubbed 
- * @returns 
+ *
+ * @param animeTitles
+ * @param episode
+ * @param dubbed
+ * @returns
  */
 export const getEpisodeUrl = async (
   animeTitles: string[],
   episode: number,
   dubbed: boolean,
-): Promise<IVideo | null> => {
-  console.log(`%c Episode ${episode}, looking for AnimeUnity source...`, `color: #6b8cff`);
+): Promise<IVideo[] | null> => {
+  console.log(
+    `%c Episode ${episode}, looking for AnimeUnity source...`,
+    `color: #6b8cff`,
+  );
 
   for (const animeSearch of animeTitles) {
     const result = await searchEpisodeUrl(animeSearch, episode, dubbed);
@@ -27,25 +30,34 @@ export const getEpisodeUrl = async (
   }
 
   return null;
-}
+};
 
 /**
  * Gets the episode url and isM3U8 flag
  *
- * @param {*} animeTitles array of anime titles
+ * @param {*} animeSearch
  * @param {*} episode anime episode to look for
  * @param {*} dubbed dubbed version or not
  * @returns consumet IVideo if url is found, otherwise null
  */
-async function searchEpisodeUrl(animeSearch: string, episode: number, dubbed: boolean): Promise<IVideo | null> {
-  const animeId = await getAnimeId(dubbed ? `${animeSearch} (ITA)` : animeSearch);
+async function searchEpisodeUrl(
+  animeSearch: string,
+  episode: number,
+  dubbed: boolean,
+): Promise<IVideo[] | null> {
+  const animeId = await getAnimeId(
+    dubbed ? `${animeSearch} (ITA)` : animeSearch,
+  );
 
   if (animeId) {
     const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
     if (animeEpisodeId) {
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
+
       console.log(data)
+      
+      return data.sources
     }
   }
 

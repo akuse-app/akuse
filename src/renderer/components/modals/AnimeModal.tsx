@@ -1,12 +1,5 @@
 import { IVideo } from '@consumet/extensions';
-import {
-  faCircleExclamation,
-  faStar,
-  faTv,
-  faVolumeHigh,
-  faVolumeXmark,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faStar, faTv, faVolumeHigh, faVolumeXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Store from 'electron-store';
@@ -176,7 +169,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
         return;
       }
-
       setPlayerIVideo(data);
     });
   };

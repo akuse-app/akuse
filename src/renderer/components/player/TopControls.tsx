@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import Settings from './VideoSettings';
+import Hls from 'hls.js';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
+  hls?: Hls
   listAnimeData: ListAnimeData;
   episodeNumber: number;
   episodeTitle: string;
@@ -24,6 +26,7 @@ interface TopControlsProps {
 
 const TopControls: React.FC<TopControlsProps> = ({
   videoRef,
+  hls,
   listAnimeData,
   episodeNumber,
   episodeTitle,
@@ -59,6 +62,7 @@ const TopControls: React.FC<TopControlsProps> = ({
       <div className="right">
         <Settings
           videoRef={videoRef}
+          hls={hls}
           onToggle={handleSettingsToggle}
           onChangeEpisode={onChangeEpisode}
         />
