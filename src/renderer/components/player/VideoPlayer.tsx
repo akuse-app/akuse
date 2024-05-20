@@ -8,7 +8,10 @@ import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
-import { updateAnimeProgress } from '../../../modules/anilist/anilistApi';
+import {
+  updateAnimeFromList,
+  updateAnimeProgress,
+} from '../../../modules/anilist/anilistApi';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import { getAvailableEpisodes } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
@@ -30,10 +33,10 @@ interface VideoPlayerProps {
   animeEpisodeNumber: number;
   show: boolean;
   loading: boolean;
-  
-  // when progress updates from video player, 
+
+  // when progress updates from video player,
   // this helps displaying the correct progress value
-  onLocalProgressChange: (localprogress: number) => void
+  onLocalProgressChange: (localprogress: number) => void;
   onChangeLoading: (value: boolean) => void;
   onClose: () => void;
 }
@@ -164,14 +167,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setBuffered(videoRef.current?.buffered);
 
       // automatically update progress
+      console.log((cTime * 100) / dTime)
       if (
         (cTime * 100) / dTime > 85 &&
         (STORE.get('update_progress') as boolean) &&
         !progressUpdated
       ) {
-        updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+        // when updating progress, put the anime in current if it wasn't there
+        listAnimeData.media.mediaListEntry?.status === 'CURRENT'
+          ? updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
+          : updateAnimeFromList(
+              listAnimeData.media.id,
+              'CURRENT',
+              undefined,
+              episodeNumber,
+            );
+
         setProgressUpdated(true);
-        onLocalProgressChange(episodeNumber)
+        onLocalProgressChange(episodeNumber);
       }
     }
   };

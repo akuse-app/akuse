@@ -581,6 +581,9 @@ export const updateAnimeFromList = async (
 
     const options = getOptions(query, variables);
     const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+    console.log(`Anime list updated (status: ${status},score: ${scoreRaw},progress: ${progress}) for list ${mediaId}`);
+
     return respData.data.SaveMediaListEntry.id;
   } catch (error) {
     console.log(error);
