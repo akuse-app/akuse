@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900;9..40,1000&display=swap');
 
 :root {
-  --color-0: #0A0A0A;
-  --color-1: #141414;
-  --color-2: #202020;
-  --color-3: #242424;
-  --color-4: #393939;
-  --color-important: #FF4460;
+  --color-0: #0f1115;
+  --color-1: #1A1D24; /* 1A1D24 */
+  --color-2: #22252E; /* 22252E */
+  --color-3: #2c2e3a;
+  --color-4: #32333f;
+  --color-important: #ff546d;
   --color-dark-opacity: rgba(0, 0, 0, 0.6);
   --color-warning: #FF5454;
   --color-alert: #E5A639;
   --color-success: #45AD67;
   --color-info: #3FA0D0;
 
-  --font-1: #FBFBFB;
-  --font-2: rgb(197, 197, 197);
-  --font-3: rgb(142, 142, 142);
+  --font-1: #f1f2f6;
+  --font-2: #bec0cc;
+  --font-3: #89919a;
   /* --font-4: rgb(87, 87, 87); */
   --font-3-transparent: rgba(168, 168, 168, 0.5);
 
@@ -38,14 +38,18 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background-color: var(--color-3);
+  background-color: var(--color-2);
   border: 2px solid transparent;
   background-clip: content-box;
   transition: var(--transition);
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-3);
+}
+
 ::-webkit-scrollbar-thumb:active {
-  background-color: var(--color-4);
+  background-color: var(--color-2);
 }
 
 * {
@@ -68,7 +72,7 @@
 
 html,
 body {
-  background: var(--color-0);
+  background: var(--color-1);
   background-repeat: no-repeat;
   background-attachment: fixed;
   width: 100%;
@@ -319,7 +323,8 @@ aside {
   padding: 10px;
   background-color: var(--color-0);
   margin: 15px;
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
+  border-radius: 9999999px;
   z-index: 15;
 }
 
@@ -748,7 +753,7 @@ nav ul li {
   /* width: calc(100% - 50px);
     height: calc(100% - 50px); */
   min-height: calc(100% - 85px);
-  margin: 15px 15px 15px 100px;
+  margin: 0 0px 15px 80px;
   background-color: var(--color-1);
   border-radius: var(--border-radius);
   padding: 25px;
@@ -1368,7 +1373,7 @@ main section:not(:last-child) {
 }
 
 h1 {
-  color: var(--font-2);
+  color: var(--font-1);
   font-weight: 800;
   font-size: 1.5rem;
   margin-bottom: 15px;

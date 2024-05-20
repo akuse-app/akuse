@@ -115,6 +115,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       hls.attachMedia(videoRef.current);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         if (videoRef.current) {
+          hls.currentLevel = hls.levels.length - 1;
           playVideoAndSetTime();
           setHlsData(hls);
         }
