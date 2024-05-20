@@ -1,11 +1,7 @@
 import './styles/Slideshow.css';
 
 import { IVideo } from '@consumet/extensions';
-import {
-  faArrowUpRightFromSquare,
-  faPlay,
-  faStar,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
@@ -23,18 +19,18 @@ import {
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../types/types';
-import { ButtonCircle, ButtonMain } from './Buttons';
+import { ButtonMain } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
-import VideoPlayer from './player/VideoPlayer';
 import { IsInListButton } from './modals/AnimeModalElements';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import VideoPlayer from './player/VideoPlayer';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
   index: number;
+  isVisible: boolean;
 }
 
-const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
+const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
   const style = getComputedStyle(document.body);
 
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
@@ -42,9 +38,9 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
 
-  // wether the modal is shown or not
+  // whether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
-  // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
+  // whether the modal has been opened at least once (used to fetch episodes info only once when opening it)
   const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
 
   const fetchEpisodesInfo = async () => {
@@ -105,7 +101,10 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
         />
       )}
       <div className="slide">
-        <div className="shadow-overlay">
+        <div
+          className="shadow-overlay"
+          // style={{ display: isVisible ? 'block' : 'none' }}
+        >
           {/* <div className="score">
             <span style={{ color: '#e5a639' }}>
               <FontAwesomeIcon
@@ -116,7 +115,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
               {listAnimeData.media.meanScore}%
             </span>
           </div> */}
-          <div className="content show">
+          <div className={`content show`}>
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•
               <div className="anime-year">
@@ -182,14 +181,14 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
   useEffect(() => {
     setAnimeData(
       listAnimeData
-        ?.filter(animeData => animeData?.media.bannerImage)
-        ?.filter(animeData => !animeData.media.mediaListEntry)
+        ?.filter((animeData) => animeData?.media.bannerImage)
+        ?.filter((animeData) => !animeData.media.mediaListEntry)
         .slice(0, 5),
     );
   }, [listAnimeData]);
 
   useEffect(() => {
-    const intervalId = setInterval(goToNext, 20000);
+    const intervalId = setInterval(goToNext, 12500);
 
     return () => clearInterval(intervalId);
   }, [animeData, currentIndex]);
@@ -214,7 +213,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
 
   return (
     <>
-      <h1>Discover</h1>
+      {/* <h1>Discover</h1> */}
       {listAnimeData ? (
         <div className="slideshow-container">
           <div
@@ -227,6 +226,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
                   key={index}
                   listAnimeData={listAnimeData}
                   index={index}
+                  isVisible={index === currentIndex}
                 />
               ))}
           </div>

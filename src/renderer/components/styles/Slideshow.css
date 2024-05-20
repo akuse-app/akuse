@@ -1,14 +1,15 @@
 .slideshow-container {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: auto;
-  width: 100%;
+  width: calc(100% + 25px);
   height: 491px; /* for skeleton */
   border-radius: var(--border-radius);
 }
 
 .slideshow-wrapper {
   display: flex;
+  padding-right: 25px;
   transition: transform 0.5s ease;
   border-radius: var(--border-radius);
 }
@@ -23,6 +24,7 @@
   z-index: 0;
   background: linear-gradient(0.13turn, var(--color-0), transparent);
   border-radius: var(--border-radius);
+  transition: var(--transition);
 }
 
 .slideshow-container .score {
@@ -97,6 +99,7 @@
   position: relative;
   width: 100%;
   flex-shrink: 0;
+  margin-right: 25px;
 }
 
 .dot-container {
