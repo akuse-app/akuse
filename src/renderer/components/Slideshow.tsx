@@ -90,6 +90,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
           animeEpisodeNumber={1}
           show={showPlayer}
           loading={loading}
+          onLocalProgressChange={() => {}} // no need to local update anything in slideshow
           onChangeLoading={handleChangeLoading}
           onClose={() => {
             setShowPlayer(false);
@@ -181,7 +182,8 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
   useEffect(() => {
     setAnimeData(
       listAnimeData
-        ?.filter((animeData) => animeData?.media.bannerImage)
+        ?.filter(animeData => animeData?.media.bannerImage)
+        ?.filter(animeData => !animeData.media.mediaListEntry)
         .slice(0, 5),
     );
   }, [listAnimeData]);
@@ -212,7 +214,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
 
   return (
     <>
-      <h1>Popular now</h1>
+      <h1>Discover</h1>
       {listAnimeData ? (
         <div className="slideshow-container">
           <div
