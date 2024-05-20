@@ -1,7 +1,11 @@
 import './styles/Slideshow.css';
 
 import { IVideo } from '@consumet/extensions';
-import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowUpRightFromSquare,
+  faPlay,
+  faStar,
+} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
@@ -23,6 +27,7 @@ import { ButtonCircle, ButtonMain } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
 import VideoPlayer from './player/VideoPlayer';
 import { IsInListButton } from './modals/AnimeModalElements';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -100,6 +105,16 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
       )}
       <div className="slide">
         <div className="shadow-overlay">
+          {/* <div className="score">
+            <span style={{ color: '#e5a639' }}>
+              <FontAwesomeIcon
+                className="i"
+                icon={faStar}
+                style={{ marginRight: 7 }}
+              />
+              {listAnimeData.media.meanScore}%
+            </span>
+          </div> */}
           <div className="content show">
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•

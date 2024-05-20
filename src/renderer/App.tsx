@@ -54,18 +54,18 @@ export default function App() {
   const [planningListAnime, setPlanningListAnimeListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
-  const [completedListAnime, setCompletedListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [pausedListAnime, setPausedListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [RepeatingListAnime, setRepeatingListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
+  // const [completedListAnime, setCompletedListAnimeListAnime] = useState<
+  //   ListAnimeData[] | undefined
+  // >(undefined);
+  // const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
+  //   ListAnimeData[] | undefined
+  // >(undefined);
+  // const [pausedListAnime, setPausedListAnimeListAnime] = useState<
+  //   ListAnimeData[] | undefined
+  // >(undefined);
+  // const [RepeatingListAnime, setRepeatingListAnimeListAnime] = useState<
+  //   ListAnimeData[] | undefined
+  // >(undefined);
 
   const style = getComputedStyle(document.body);
 
@@ -94,14 +94,14 @@ export default function App() {
         setPlanningListAnimeListAnime(
           await getViewerList(viewerId, 'PLANNING'),
         );
-        setCompletedListAnimeListAnime(
-          await getViewerList(viewerId, 'COMPLETED'),
-        );
-        setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
-        setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
-        setRepeatingListAnimeListAnime(
-          await getViewerList(viewerId, 'REPEATING'),
-        );
+        // setCompletedListAnimeListAnime(
+        //   await getViewerList(viewerId, 'COMPLETED'),
+        // );
+        // setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
+        // setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
+        // setRepeatingListAnimeListAnime(
+        //   await getViewerList(viewerId, 'REPEATING'),
+        // );
       }
     } catch (error) {
       console.log('Tab2 error: ' + error);
@@ -145,10 +145,10 @@ export default function App() {
                   element={
                     <Tab2
                       planningListAnime={planningListAnime}
-                      completedListAnime={completedListAnime}
-                      droppedListAnime={droppedListAnime}
-                      pausedListAnime={pausedListAnime}
-                      repeatingListAnime={RepeatingListAnime}
+                      // completedListAnime={completedListAnime}
+                      // droppedListAnime={droppedListAnime}
+                      // pausedListAnime={pausedListAnime}
+                      // repeatingListAnime={RepeatingListAnime}
                       clicked={() => {
                         !tab2Click && setTab2Click(true);
                       }}
