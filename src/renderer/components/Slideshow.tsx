@@ -213,7 +213,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
 
   return (
     <>
-      {/* <h1>Discover</h1> */}
+      <h1>Discover</h1>
       {listAnimeData ? (
         <div className="slideshow-container">
           <div
