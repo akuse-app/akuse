@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,200;9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900;9..40,1000&display=swap');
 
 :root {
-  --color-0: #0c0c0c;
-  --color-1: #181818;
+  --color-0: #0A0A0A;
+  --color-1: #141414;
   --color-2: #202020;
   --color-3: #242424;
   --color-4: #393939;
-  --color-important: #ff6b6b;
+  --color-important: #FF4460;
   --color-dark-opacity: rgba(0, 0, 0, 0.6);
   --color-warning: #FF5454;
   --color-alert: #E5A639;
@@ -317,7 +317,7 @@ aside {
   width: max-content;
   height: calc(100% - 55px);
   padding: 10px;
-  background-color: var(--color-1);
+  background-color: var(--color-0);
   margin: 15px;
   border-radius: var(--border-radius);
   z-index: 15;
