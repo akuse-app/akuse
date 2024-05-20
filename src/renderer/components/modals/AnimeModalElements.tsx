@@ -124,7 +124,7 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
 }) => {
   return (
     <p className="additional-info">
-      {'Other titles: '}
+      {synonyms.length !== 0 && 'Other titles: '}
       {synonyms?.map((title, index) => (
         <span key={index}>
           {title}
@@ -145,7 +145,6 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
   const format = getParsedFormat(listAnimeData.media.format);
   const duration = listAnimeData.media.duration;
   const status = getParsedStatus(listAnimeData.media.status);
-  const episodes = getEpisodes(listAnimeData.media);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
 
   return (
@@ -166,7 +165,7 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
             icon={faFilm}
             style={{ marginRight: 7 }}
           />
-          {availableEpisodes}{' '}
+          {availableEpisodes || '?'}{' '}
           {status === 'Releasing' &&
             ` / ${listAnimeData.media.episodes || '?'}`}{' '}
           Episodes
@@ -246,7 +245,7 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
 
 interface AnimeModalWatchButtonsProps {
   listAnimeData: ListAnimeData;
-  localProgress?: number
+  localProgress?: number;
   onPlay: (episode: number) => void;
   loading: boolean;
 }
@@ -259,7 +258,9 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
 }) => {
   const logged = useContext(AuthContext);
 
-  const [progress, setProgress] = useState<number | undefined>(getProgress(listAnimeData.media))
+  const [progress, setProgress] = useState<number | undefined>(
+    getProgress(listAnimeData.media),
+  );
 
   // const progress = getProgress(listAnimeData.media);
   const episodes = getEpisodes(listAnimeData.media);
@@ -267,16 +268,59 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
 
   useEffect(() => {
-    if(localProgress) setProgress(localProgress)
-  }, [localProgress])
+    if (localProgress) setProgress(localProgress);
+  }, [localProgress]);
 
-  return loading ? (
-    <div className="watch-buttons">
-      <ButtonLoading />
-    </div>
-  ) : logged ? (
-    <div className="watch-buttons">
-      {progress === 0 && (
+  return (
+    listAnimeData.media.status !== 'NOT_YET_RELEASED' &&
+    (logged ? (
+      <div className="watch-buttons">
+        {progress === 0 && (
+          <ButtonMain
+            text="Watch now"
+            icon={faPlay}
+            tint="light"
+            shadow
+            onClick={() => onPlay(1)}
+          />
+        )}
+
+        {progress === availableEpisodes && timeUntilAiring ? (
+          <ButtonMain
+            text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
+            icon={faHourglass}
+            tint="light"
+            shadow
+            disabled
+          />
+        ) : (
+          progress === episodes && (
+            <ButtonMain
+              text="Watch again"
+              icon={faRotate}
+              tint="light"
+              shadow
+              onClick={() => onPlay(1)}
+            />
+          )
+        )}
+
+        {progress !== 0 &&
+          progress !== episodes &&
+          progress !== availableEpisodes && (
+            <ButtonMain
+              text={`Resume from Ep. ${progress! + 1}`}
+              icon={faPlay}
+              tint="light"
+              shadow
+              onClick={() => onPlay(progress! + 1)}
+            />
+          )}
+
+        <IsInListButton listAnimeData={listAnimeData} />
+      </div>
+    ) : (
+      <div className="watch-buttons">
         <ButtonMain
           text="Watch now"
           icon={faPlay}
@@ -284,52 +328,8 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
           shadow
           onClick={() => onPlay(1)}
         />
-      )}
-
-      {progress === availableEpisodes && timeUntilAiring ? (
-        <ButtonMain
-          text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
-          icon={faHourglass}
-          tint="light"
-          shadow
-          disabled
-        />
-      ) : (
-        progress === episodes && (
-          <ButtonMain
-            text="Watch again"
-            icon={faRotate}
-            tint="light"
-            shadow
-            onClick={() => onPlay(1)}
-          />
-        )
-      )}
-
-      {progress !== 0 &&
-        progress !== episodes &&
-        progress !== availableEpisodes && (
-          <ButtonMain
-            text={`Resume from Ep. ${progress! + 1}`}
-            icon={faPlay}
-            tint="light"
-            shadow
-            onClick={() => onPlay(progress! + 1)}
-          />
-        )}
-
-      <IsInListButton listAnimeData={listAnimeData} />
-    </div>
-  ) : (
-    <div className="watch-buttons">
-      <ButtonMain
-        text="Watch now"
-        icon={faPlay}
-        tint="light"
-        shadow
-        onClick={() => onPlay(1)}
-      />
-    </div>
+      </div>
+    ))
   );
 };
 

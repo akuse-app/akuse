@@ -119,7 +119,7 @@ export const getAvailableEpisodes = (animeEntry: Media) =>
  * @param {*} animeEntry
  * @returns anime mean score
  */
-export const getMeanScore = (animeEntry: Media) =>
+export const getParsedMeanScore = (animeEntry: Media) =>
   animeEntry.meanScore == null ? '?' : animeEntry.meanScore;
 
 /**

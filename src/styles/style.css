@@ -1492,9 +1492,14 @@ main .anime-entry .anime-title {
   overflow: hidden;
 }
 
-main .anime-entry .anime-title span {
+main .anime-entry .anime-title span.yes {
   font-size: 0.8rem;
   color: var(--color-success);
+}
+
+main .anime-entry .anime-title span.no {
+  font-size: 0.8rem;
+  color: var(--color-alert);
 }
 
 main .anime-entry .anime-info {

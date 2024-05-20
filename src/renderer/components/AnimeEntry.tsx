@@ -54,7 +54,16 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
             {listAnimeData ? (
               <>
                 {listAnimeData.media.status === 'RELEASING' && (
-                  <span>
+                  <span className='yes'>
+                    <FontAwesomeIcon
+                      className="i"
+                      icon={faCircleDot}
+                      style={{ marginRight: 5 }}
+                    />
+                  </span>
+                )}
+                {listAnimeData.media.status === 'NOT_YET_RELEASED' && (
+                  <span className='no'>
                     <FontAwesomeIcon
                       className="i"
                       icon={faCircleDot}

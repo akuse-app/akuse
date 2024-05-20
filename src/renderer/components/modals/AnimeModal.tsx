@@ -19,6 +19,7 @@ import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   capitalizeFirstLetter,
   getParsedFormat,
+  getParsedMeanScore,
   getParsedSeasonYear,
   getTitle,
   getUrlByCoverType,
@@ -287,7 +288,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                       icon={faStar}
                       style={{ marginRight: 7 }}
                     />
-                    {listAnimeData.media.meanScore}%
+                    {getParsedMeanScore(listAnimeData.media)}%
                   </li>
                   <AnimeModalStatus status={listAnimeData.media.status} />
                   <li>
