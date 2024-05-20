@@ -76,8 +76,8 @@ const Navbar = () => {
   const logged = useContext(AuthContext);
 
   return (
-    <aside id="nav-main">
-      <ul className="upper">
+    <nav id="nav-main">
+      <ul>
         <NavUpperItem
           text="Discover"
           icon={activeTab === 1 ? faCompassFull : faCompass}
@@ -101,9 +101,6 @@ const Navbar = () => {
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
         />
-      </ul>
-      <ul className="mid">
-        <div className="separe"></div>
         <NavUpperItem
           text="Settings"
           icon={faGear}
@@ -111,8 +108,7 @@ const Navbar = () => {
           active={activeTab === 4}
           onClick={() => setActiveTab(4)}
         />
-      </ul>
-      <ul className="lower">
+        <div className="separe" />
         <NavLowerItem
           text="Sponsor"
           icon={faHeartFull}
@@ -152,7 +148,7 @@ const Navbar = () => {
         <span>Log-Out</span>
       </li>
     </ul> */}
-    </aside>
+    </nav>
   );
 };
 

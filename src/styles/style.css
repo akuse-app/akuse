@@ -320,7 +320,7 @@ img {
 
 /* SIDE BAR */
 
-aside {
+nav {
   display: flex;
   position: fixed;
   bottom: 0;
@@ -331,15 +331,16 @@ aside {
   transform: translate(-50%, 0);
   border-radius: 9999999px;
   z-index: 15;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-aside h1 {
+nav h1 {
   margin-left: 10px;
   font-size: 1.4rem;
   color: var(--font-1);
 }
 
-aside ul {
+nav ul {
   display: flex;
   flex-direction: row;
   list-style-type: none;
@@ -347,26 +348,7 @@ aside ul {
   gap: 5px;
 }
 
-aside ul.mid {
-  /* margin-top: 15px; */
-}
-
-aside ul.mid .separe {
-  /* margin: auto; */
-  /* margin-bottom: 10px; */
-  /* width: 50%;
-  height: 4px; */
-  background-color: var(--font-3);
-  filter: brightness(0.5);
-  border-radius: var(--border-radius);
-}
-
-aside ul.lower {
-  /* position: absolute;
-  bottom: 10px; */
-}
-
-aside ul li {
+nav ul li {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -378,38 +360,47 @@ aside ul li {
   will-change: transform;
 }
 
+nav ul .separe {
+  width: 6px;
+  height: 6px;
+  margin: auto 10px;
+  background-color: var(--font-3);
+  filter: brightness(0.5);
+  border-radius: var(--border-radius);
+}
+
 /* toggler for login icon or user avatar */
-aside ul li#nav-login,
-aside ul li#nav-user {
+nav ul li#nav-login,
+nav ul li#nav-user {
   display: none;
 }
 
-aside ul li#nav-login.show-li,
-aside ul li#nav-user.show-li {
+nav ul li#nav-login.show-li,
+nav ul li#nav-user.show-li {
   display: flex;
 }
 
-aside ul li.active {
+nav ul li.active {
   color: var(--color-important);
 }
 
-aside ul li.active .i-wrapper {
+nav ul li.active .i-wrapper {
   background-color: var(--color-0);
 }
 
-aside ul li:hover {
+nav ul li:hover {
   transform: scale(1.2);
 }
 
-aside ul li:active {
+nav ul li:active {
   transform: scale(1);
 }
 
-aside ul li:hover:not(li.active) {
+nav ul li:hover:not(li.active) {
   color: var(--font-1);
 }
 
-aside ul li .i-wrapper {
+nav ul li .i-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -421,42 +412,22 @@ aside ul li .i-wrapper {
   /* transition: var(--transition); */
 }
 
-aside ul li .i-wrapper.nav-user {
+nav ul li .i-wrapper.nav-user {
   background-color: transparent;
 }
 
-aside ul li .i-wrapper img {
+nav ul li .i-wrapper img {
   max-width: 75%;
   border-radius: 100px;
 }
 
-aside ul li .i-wrapper .i {
+nav ul li .i-wrapper .i {
   font-size: 1.4rem;
 }
 
-aside ul li span {
+nav ul li span {
   display: none;
   font-size: 1.2rem;
-}
-
-nav {
-  padding-left: 250px;
-  width: calc(100% - 250px);
-  height: 80px;
-}
-
-nav ul {
-  display: flex;
-  gap: 40px;
-  padding-top: 30px;
-  list-style-type: none;
-  padding-left: 25px;
-}
-
-nav ul li {
-  color: var(--font-3);
-  font-size: 1.4rem;
-  font-weight: var(--font-weight);
 }
 
 .modal-page-shadow-background {
