@@ -1,14 +1,12 @@
 import './styles/Slideshow.css';
 
 import { IVideo } from '@consumet/extensions';
-import {
-  faArrowUpRightFromSquare,
-  faPlay,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import Skeleton from 'react-loading-skeleton';
 
 import { EPISODES_INFO_URL } from '../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../modules/providers/api';
@@ -21,10 +19,10 @@ import {
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../types/types';
+import { ButtonCircle, ButtonMain } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
 import VideoPlayer from './player/VideoPlayer';
-import { ButtonMain } from './Buttons';
-import Skeleton from 'react-loading-skeleton';
+import { IsInListButton } from './modals/AnimeModalElements';
 
 interface SlideProps {
   listAnimeData: ListAnimeData;
@@ -141,6 +139,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index }) => {
                   if (!hasModalBeenShowed) setHasModalBeenShowed(true);
                 }}
               />
+              <IsInListButton listAnimeData={listAnimeData} />
             </div>
           </div>
         </div>

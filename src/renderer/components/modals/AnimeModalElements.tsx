@@ -1,6 +1,7 @@
 import 'react-activity/dist/Dots.css';
 
 import {
+  faBookmark,
   faCircleCheck,
   faCircleDot,
   faClock,
@@ -14,6 +15,7 @@ import {
   faPlay,
   faRotate,
   faStopwatch,
+  faBookmark as faBookmarkFull,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
@@ -31,7 +33,11 @@ import {
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { MediaStatus } from '../../../types/anilistGraphQLTypes';
 import { AuthContext } from '../../App';
-import { ButtonMain, ButtonLoading } from '../Buttons';
+import { ButtonCircle, ButtonLoading, ButtonMain } from '../Buttons';
+import {
+  deleteAnimeFromList,
+  updateAnimeFromList,
+} from '../../../modules/anilist/anilistApi';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -160,7 +166,9 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
             icon={faFilm}
             style={{ marginRight: 7 }}
           />
-          {availableEpisodes} {status === 'Releasing' && ` / ${listAnimeData.media.episodes || '?'}`}{' '}
+          {availableEpisodes}{' '}
+          {status === 'Releasing' &&
+            ` / ${listAnimeData.media.episodes || '?'}`}{' '}
           Episodes
         </>
       )}
@@ -199,7 +207,7 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
       <div
         ref={descriptionRef}
         className={`description ${fullText ? '' : 'cropped'}`}
-        // onClick={handleToggleFullText}
+        onClick={handleToggleFullText}
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(
             parseDescription(listAnimeData.media.description ?? ''),
@@ -302,6 +310,8 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
             onClick={() => onPlay(progress! + 1)}
           />
         )}
+
+      <IsInListButton listAnimeData={listAnimeData} />
     </div>
   ) : (
     <div className="watch-buttons">
@@ -310,8 +320,46 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         icon={faPlay}
         tint="light"
         shadow
-        onClick={() => {}}
+        onClick={() => onPlay(1)}
       />
     </div>
+  );
+};
+
+interface IsInListButtonProps {
+  listAnimeData: ListAnimeData;
+}
+
+export const IsInListButton: React.FC<IsInListButtonProps> = ({
+  listAnimeData,
+}) => {
+  const [inList, setInList] = useState<boolean>(false);
+  const [listId, setListId] = useState<number | undefined>(
+    listAnimeData.media.mediaListEntry?.id,
+  );
+
+  const removeFromList = () => {
+    deleteAnimeFromList(listId).then((deleted) => {
+      if (deleted) setInList(false);
+    });
+  };
+
+  const addToList = () => {
+    updateAnimeFromList(listAnimeData.media.id, 'PLANNING').then((data) => {
+      if (data) {
+        setListId(data);
+        setInList(true);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setInList(!!listAnimeData.media.mediaListEntry);
+  }, []);
+
+  return inList ? (
+    <ButtonCircle icon={faBookmarkFull} tint="light" onClick={removeFromList} />
+  ) : (
+    <ButtonCircle icon={faBookmark} tint="light" onClick={addToList} />
   );
 };

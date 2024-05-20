@@ -401,7 +401,10 @@ export const getNextReleases = async (viewerId: number | null) => {
  * @param {*} args
  * @returns object with the searched filtered anime
  */
-export const searchFilteredAnime = async (args: string, viewerId: number | null): Promise<AnimeData> => {
+export const searchFilteredAnime = async (
+  args: string,
+  viewerId: number | null,
+): Promise<AnimeData> => {
   var query = `
       {
           Page(page: 1, perPage: 50) {
@@ -538,40 +541,56 @@ export const getSearchedAnimes = async (input: any) => {
 
 /* MUTATIONS */
 
+/**
+ * Updates a media entry list
+ *
+ * @param mediaId
+ * @param status
+ * @param scoreRaw
+ * @param progress
+ * @returns media list entry id
+ */
 export const updateAnimeFromList = async (
   mediaId: any,
-  status: any,
-  scoreRaw: any,
-  progress: any,
-) => {
-  var query = `
-          mutation($mediaId: Int, $progress: Int, $scoreRaw: Int, $status: MediaListStatus) {
-              SaveMediaListEntry(mediaId: $mediaId, progress: $progress, scoreRaw: $scoreRaw, status: $status) {
-                  score(format:POINT_10_DECIMAL)
+  status?: any,
+  scoreRaw?: any,
+  progress?: any,
+): Promise<number | null> => {
+  try {
+    var query = `
+          mutation($mediaId: Int${progress ? ', $progress: Int' : ''}${scoreRaw ? ', $scoreRaw: Int' : ''}${status ? ', $status: MediaListStatus' : ''}) {
+              SaveMediaListEntry(mediaId: $mediaId${progress ? ', progress: $progress' : ''}${scoreRaw ? ', scoreRaw: $scoreRaw' : ''}${status ? ', status: $status' : ''}) {
+                  id
               }
           }
       `;
 
-  var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  };
+    var headers = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
 
-  var variables = {
-    mediaId: mediaId,
-    status: status,
-    scoreRaw: scoreRaw,
-    progress: progress,
-  };
+    var variables: any = {
+      mediaId: mediaId,
+    };
 
-  const options = getOptions(query, variables);
-  await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+    if (status !== undefined) variables.status = status;
+    if (scoreRaw !== undefined) variables.scoreRaw = scoreRaw;
+    if (progress !== undefined) variables.progress = progress;
+
+    const options = getOptions(query, variables);
+    const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+    return respData.data.SaveMediaListEntry.id;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
 
-// NOT WORKING
-export const deleteAnimeFromList = async (id: any) => {
-  var query = `
+export const deleteAnimeFromList = async (id: any): Promise<boolean> => {
+  try {
+    var query = `
           mutation($id: Int){
               DeleteMediaListEntry(id: $id){
                   deleted
@@ -579,18 +598,24 @@ export const deleteAnimeFromList = async (id: any) => {
           }
       `;
 
-  var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  };
+    console.log('delte: ', id);
 
-  var variables = {
-    id: id,
-  };
+    var headers = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
 
-  const options = getOptions(query, variables);
-  await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+    var variables = {
+      id: id,
+    };
+
+    const options = getOptions(query, variables);
+    return await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 /**
@@ -599,7 +624,10 @@ export const deleteAnimeFromList = async (id: any) => {
  * @param {*} mediaId
  * @param {*} progress
  */
-export const updateAnimeProgress = async (mediaId: number, progress: number) => {
+export const updateAnimeProgress = async (
+  mediaId: number,
+  progress: number,
+) => {
   var query = `
           mutation($mediaId: Int, $progress: Int) {
               SaveMediaListEntry(mediaId: $mediaId, progress: $progress) {
