@@ -278,23 +278,22 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         />
       )}
 
-      {progress === episodes ? (
+      {progress === availableEpisodes && timeUntilAiring ? (
         <ButtonMain
-          text="Watch again"
-          icon={faRotate}
+          text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
+          icon={faHourglass}
           tint="light"
           shadow
-          onClick={() => onPlay(1)}
+          disabled
         />
       ) : (
-        progress === availableEpisodes &&
-        timeUntilAiring && (
+        progress === episodes && (
           <ButtonMain
-            text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
-            icon={faHourglass}
+            text="Watch again"
+            icon={faRotate}
             tint="light"
             shadow
-            onClick={() => onPlay(progress + 1)}
+            onClick={() => onPlay(1)}
           />
         )
       )}

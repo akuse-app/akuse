@@ -8,6 +8,7 @@ import Dots from 'react-activity/dist/Dots';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tint?: 'primary' | 'light' | 'dark';
   shadow?: boolean;
+  disabled?: boolean
 }
 
 interface ButtonMainProps extends ButtonProps {
@@ -28,11 +29,12 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
   icon = null,
   tint = 'primary',
   shadow = false,
+  disabled = false,
   ...rest
 }) => {
   return (
     <button
-      className={`bm primary ${tint} ${shadow ? 'shadow' : ''}`}
+      className={`bm primary ${tint} ${shadow ? 'shadow' : ''} ${disabled ? 'disabled' : ''}`}
       {...rest}
     >
       {icon && (
@@ -53,11 +55,12 @@ export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   tint = 'primary',
   shadow = false,
   small = false,
+  disabled = false,
   ...rest
 }) => {
   return (
     <button
-      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''}`}
+      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''}  ${disabled ? 'disabled' : ''}`}
       {...rest}
     >
       <FontAwesomeIcon className="i" icon={icon} />

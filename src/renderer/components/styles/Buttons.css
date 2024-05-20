@@ -36,6 +36,10 @@ button.bm:active:not(.disabled) {
   filter: brightness(1);
 }
 
+button.bm.disabled {
+  opacity: 0.5;
+}
+
 /* CIRCLE BUTTON */
 
 button.bc,
@@ -80,6 +84,10 @@ button.bc:hover:not(.disabled) {
 button.bc:active:not(.disabled) {
   transform: scale(1);
   filter: brightness(1);
+}
+
+button.bc.disabled {
+  opacity: 0.5;
 }
 
 /* COMMON */
