@@ -246,21 +246,29 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
 
 interface AnimeModalWatchButtonsProps {
   listAnimeData: ListAnimeData;
+  localProgress?: number
   onPlay: (episode: number) => void;
   loading: boolean;
 }
 
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
+  localProgress,
   onPlay,
   loading = false,
 }) => {
   const logged = useContext(AuthContext);
 
-  const progress = getProgress(listAnimeData.media);
+  const [progress, setProgress] = useState<number | undefined>(getProgress(listAnimeData.media))
+
+  // const progress = getProgress(listAnimeData.media);
   const episodes = getEpisodes(listAnimeData.media);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
   const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
+
+  useEffect(() => {
+    if(localProgress) setProgress(localProgress)
+  }, [localProgress])
 
   return loading ? (
     <div className="watch-buttons">

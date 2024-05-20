@@ -146,7 +146,7 @@ export const getScore = (animeEntry: Media) =>
  * @param {*} animeEntry
  * @returns anime progress
  */
-export const getProgress = (animeEntry: Media) =>
+export const getProgress = (animeEntry: Media): number | undefined =>
   animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
 
 /**

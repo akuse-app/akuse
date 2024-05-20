@@ -72,6 +72,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
   // other
+  const [localProgress, setLocalProgress] = useState<number>()
   const [alternativeBanner, setAlternativeBanner] = useState<
     string | undefined
   >(undefined);
@@ -180,6 +181,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     });
   };
 
+  const handleLocalProgressChange = (localProgress: number) => {
+    setLocalProgress(localProgress)
+  }
+
   const handleChangeLoading = (value: boolean) => {
     setLoading(value);
   };
@@ -194,6 +199,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           animeEpisodeNumber={animeEpisodeNumber}
           show={showPlayer}
           loading={loading}
+          onLocalProgressChange={handleLocalProgressChange}
           onChangeLoading={handleChangeLoading}
           onClose={() => {
             if (trailerRef.current) trailerRef.current.play();
@@ -212,6 +218,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             <div className="up">
               <AnimeModalWatchButtons
                 listAnimeData={listAnimeData}
+                localProgress={localProgress}
                 onPlay={playEpisode}
                 loading={false} // loading disabled
               />

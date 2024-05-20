@@ -30,6 +30,10 @@ interface VideoPlayerProps {
   animeEpisodeNumber: number;
   show: boolean;
   loading: boolean;
+  
+  // when progress updates from video player, 
+  // this helps displaying the correct progress value
+  onLocalProgressChange: (localprogress: number) => void
   onChangeLoading: (value: boolean) => void;
   onClose: () => void;
 }
@@ -41,6 +45,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   animeEpisodeNumber,
   show,
   loading,
+  onLocalProgressChange,
   onChangeLoading,
   onClose,
 }) => {
@@ -166,6 +171,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       ) {
         updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
         setProgressUpdated(true);
+        onLocalProgressChange(episodeNumber)
       }
     }
   };
