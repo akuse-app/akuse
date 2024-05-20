@@ -17,23 +17,23 @@ const Tab1: React.FC<Tab1Props> = ({
   nextReleasesAnime,
 }) => {
   return (
-    <div className="main-container">
-      <main>
-        <Slideshow
-          listAnimeData={trendingAnime}
-        />
+    <div className="body-container">
+      <div className="main-container">
+        <main>
+          <Slideshow listAnimeData={trendingAnime} />
 
-        <div className="section-container">
-          <AnimeSection
-            title="Continue Watching"
-            animeData={currentListAnime}
-          />
+          <div className="section-container">
+            <AnimeSection
+              title="Continue Watching"
+              animeData={currentListAnime}
+            />
 
-          <AnimeSection title="Trending Now" animeData={trendingAnime} />
-          <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
-          <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
-        </div>
-      </main>
+            <AnimeSection title="Trending Now" animeData={trendingAnime} />
+            <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
+            <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

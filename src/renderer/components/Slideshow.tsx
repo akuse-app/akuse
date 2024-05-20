@@ -189,7 +189,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
   }, [listAnimeData]);
 
   useEffect(() => {
-    const intervalId = setInterval(goToNext, 10000);
+    const intervalId = setInterval(goToNext, 20000);
 
     return () => clearInterval(intervalId);
   }, [animeData, currentIndex]);

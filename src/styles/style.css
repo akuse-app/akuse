@@ -318,7 +318,7 @@ aside {
   height: calc(100% - 55px);
   padding: 10px;
   background-color: var(--color-1);
-  margin: 0 15px 15px 15px;
+  margin: 15px;
   border-radius: var(--border-radius);
   z-index: 15;
 }
@@ -373,7 +373,7 @@ aside ul li {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--font-3);
+  color: var(--font-2);
   cursor: pointer;
   font-weight: var(--font-weight);
   display: flex;
@@ -1407,7 +1407,7 @@ main section .anime-list {
 
 main .anime-entry {
   position: relative;
-  width: 165px;
+  width: 175px;
   height: min-content;
   margin-top: 10px;
   /* must be in anime-entry or hover scaling won't work */
@@ -1441,7 +1441,7 @@ main .anime-entry .content {
 }
 
 main .anime-entry .anime-cover {
-  height: 247.5px;
+  height: 262.5px;
   position: relative;
   object-fit: cover;
   border-radius: var(--border-radius);
@@ -1511,12 +1511,22 @@ main .anime-entry .anime-info {
   font-weight: var(--font-weight);
 }
 
+main .anime-entry .anime-info .i {
+  font-size: 1.1rem;
+}
+
 main .anime-entry .anime-info .season-year {
+  display: flex;
+  justify-content: start;
+  align-items: center;
   height: 100%;
   width: 75%;
 }
 
 main .anime-entry .anime-info .episodes {
+  display: flex;
+  justify-content: end;
+  align-items: center;
   width: 100%;
   text-align: end;
 }

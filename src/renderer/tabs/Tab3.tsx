@@ -101,122 +101,124 @@ const Tab3 = () => {
   };
 
   return (
-    <div className="main-container">
-      <h1>Search</h1>
-      <main className="search">
-        <div className="filters-container">
-          <div className="filter">
-            <h2>
-              <FontAwesomeIcon className="i" icon={faHeading} /> Title
-            </h2>
-            <input
-              type="text"
-              id="search-page-filter-title"
-              placeholder="Search..."
-              value={selectedTitle}
-              onChange={handleTitleChange}
-            />
-          </div>
-          <div className={`filter ${selectedGenre === '' ? '' : 'active'}`}>
-            <h2>
-              <FontAwesomeIcon className="i" icon={faMasksTheater} /> Genre
-            </h2>
-            <select
-              id="search-page-filter-genre"
-              value={selectedGenre}
-              onChange={handleGenreChange}
-              className={selectedGenre === '' ? '' : 'active'}
-            >
-              {GENRES.map((genre) => (
-                <option key={genre.value} value={genre.value ?? ''}>
-                  {genre.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={`filter ${selectedSeason === '' ? '' : 'active'}`}>
-            <h2>
-              <FontAwesomeIcon className="i" icon={faLeaf} /> Season
-            </h2>
-            <div className="filter-divisor">
+    <div className="body-container">
+      <div className="main-container">
+        <h1>Search</h1>
+        <main className="search">
+          <div className="filters-container">
+            <div className="filter">
+              <h2>
+                <FontAwesomeIcon className="i" icon={faHeading} /> Title
+              </h2>
+              <input
+                type="text"
+                id="search-page-filter-title"
+                placeholder="Search..."
+                value={selectedTitle}
+                onChange={handleTitleChange}
+              />
+            </div>
+            <div className={`filter ${selectedGenre === '' ? '' : 'active'}`}>
+              <h2>
+                <FontAwesomeIcon className="i" icon={faMasksTheater} /> Genre
+              </h2>
               <select
-                id="search-page-filter-season"
-                value={selectedSeason}
-                onChange={handleSeasonChange}
-                className={selectedSeason === '' ? '' : 'active'}
+                id="search-page-filter-genre"
+                value={selectedGenre}
+                onChange={handleGenreChange}
+                className={selectedGenre === '' ? '' : 'active'}
               >
-                {SEASONS.map((season) => (
-                  <option key={season.value} value={season.value ?? ''}>
-                    {season.label}
+                {GENRES.map((genre) => (
+                  <option key={genre.value} value={genre.value ?? ''}>
+                    {genre.label}
                   </option>
                 ))}
               </select>
-              <input
-                type="number"
-                id="search-page-filter-year"
-                placeholder="Year"
-                value={selectedYear}
-                onChange={handleYearChange}
-              />
+            </div>
+            <div className={`filter ${selectedSeason === '' ? '' : 'active'}`}>
+              <h2>
+                <FontAwesomeIcon className="i" icon={faLeaf} /> Season
+              </h2>
+              <div className="filter-divisor">
+                <select
+                  id="search-page-filter-season"
+                  value={selectedSeason}
+                  onChange={handleSeasonChange}
+                  className={selectedSeason === '' ? '' : 'active'}
+                >
+                  {SEASONS.map((season) => (
+                    <option key={season.value} value={season.value ?? ''}>
+                      {season.label}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  id="search-page-filter-year"
+                  placeholder="Year"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                />
+              </div>
+            </div>
+            <div className={`filter ${selectedFormat === '' ? '' : 'active'}`}>
+              <h2>
+                <FontAwesomeIcon className="i" icon={faDisplay} /> Format
+              </h2>
+              <select
+                id="search-page-filter-format"
+                value={selectedFormat}
+                onChange={handleFormatChange}
+                className={selectedFormat === '' ? '' : 'active'}
+              >
+                {FORMATS.map((format) => (
+                  <option key={format.value} value={format.value ?? ''}>
+                    {format.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={`filter ${selectedSort === '' ? '' : 'active'}`}>
+              <h2>
+                <FontAwesomeIcon className="i" icon={faFilter} /> Sort
+              </h2>
+              <select
+                id="search-page-filter-sort"
+                value={selectedSort}
+                onChange={handleSortChange}
+                className={selectedSort === '' ? '' : 'active'}
+              >
+                {SORTS.map((sort) => (
+                  <option key={sort.value} value={sort.value ?? ''}>
+                    {sort.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="filter">
+              <button id="search-clear" onClick={handleClearClick}>
+                Clear
+              </button>
+            </div>
+            <div className="filter">
+              <button id="search-submit" onClick={handleSearchClick}>
+                Search
+              </button>
             </div>
           </div>
-          <div className={`filter ${selectedFormat === '' ? '' : 'active'}`}>
-            <h2>
-              <FontAwesomeIcon className="i" icon={faDisplay} /> Format
-            </h2>
-            <select
-              id="search-page-filter-format"
-              value={selectedFormat}
-              onChange={handleFormatChange}
-              className={selectedFormat === '' ? '' : 'active'}
-            >
-              {FORMATS.map((format) => (
-                <option key={format.value} value={format.value ?? ''}>
-                  {format.label}
-                </option>
-              ))}
-            </select>
+          <div className="entries-container">
+            {!searchedAnime ? (
+              <div className="activity-indicator">
+                <Dots />
+              </div>
+            ) : (
+              searchedAnime?.map((value, index) => (
+                <AnimeEntry key={index} listAnimeData={value} />
+              ))
+            )}
           </div>
-          <div className={`filter ${selectedSort === '' ? '' : 'active'}`}>
-            <h2>
-              <FontAwesomeIcon className="i" icon={faFilter} /> Sort
-            </h2>
-            <select
-              id="search-page-filter-sort"
-              value={selectedSort}
-              onChange={handleSortChange}
-              className={selectedSort === '' ? '' : 'active'}
-            >
-              {SORTS.map((sort) => (
-                <option key={sort.value} value={sort.value ?? ''}>
-                  {sort.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="filter">
-            <button id="search-clear" onClick={handleClearClick}>
-              Clear
-            </button>
-          </div>
-          <div className="filter">
-            <button id="search-submit" onClick={handleSearchClick}>
-              Search
-            </button>
-          </div>
-        </div>
-        <div className="entries-container">
-          {!searchedAnime ? (
-            <div className="activity-indicator">
-              <Dots />
-            </div>
-          ) : (
-            searchedAnime?.map((value, index) => (
-              <AnimeEntry key={index} listAnimeData={value} />
-            ))
-          )}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };

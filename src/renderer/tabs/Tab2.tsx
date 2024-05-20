@@ -7,21 +7,20 @@ interface Tab2Props {
   clicked: () => void;
 }
 
-const Tab2: React.FC<Tab2Props> = ({
-  planningListAnime,
-  clicked,
-}) => {
+const Tab2: React.FC<Tab2Props> = ({ planningListAnime, clicked }) => {
   useEffect(() => {
     clicked();
   });
 
   return (
-    <div className="main-container">
-      <main>
-        <div className="section-container">
-          <AnimeSection title="Your List" animeData={planningListAnime} />
-        </div>
-      </main>
+    <div className="body-container">
+      <div className="main-container">
+        <main>
+          <div className="section-container">
+            <AnimeSection title="Your List" animeData={planningListAnime} />
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

@@ -82,7 +82,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
   );
 };
 const Tab4: React.FC = () => {
-  const logged = useContext(AuthContext)
+  const logged = useContext(AuthContext);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
@@ -142,37 +142,41 @@ const Tab4: React.FC = () => {
   ];
 
   return (
-    <div className="main-container">
-      <div className="settings-page">
-        <h1>Settings</h1>
+    <div className="body-container">
+      <div className="main-container">
+        <div className="settings-page">
+          <h1>Settings</h1>
 
-        {logged  && <CheckboxElement
-          label="Update progress automatically"
-          checked={updateProgress}
-          onChange={handleUpdateProgressChange}
-        />}
-        <CheckboxElement
-          label="Watch dubbed"
-          checked={watchDubbed}
-          onChange={handleWatchDubbedChange}
-        />
-        <SelectElement
-          label="Select the language in which you want to watch the episodes"
-          value={selectedLanguage}
-          options={languageOptions}
-          onChange={handleLanguageChange}
-        />
-        <SelectElement
-          label="Select the duration of the intro skip (in seconds)"
-          value={skipTime}
-          options={skipTimeOptions}
-          onChange={handleSkipTimeChange}
-        />
-        <CheckboxElement
-          label="Display the video duration instead of the remaining time."
-          checked={showDuration}
-          onChange={handleShowDurationChange}
-        />
+          {logged && (
+            <CheckboxElement
+              label="Update progress automatically"
+              checked={updateProgress}
+              onChange={handleUpdateProgressChange}
+            />
+          )}
+          <CheckboxElement
+            label="Watch dubbed"
+            checked={watchDubbed}
+            onChange={handleWatchDubbedChange}
+          />
+          <SelectElement
+            label="Select the language in which you want to watch the episodes"
+            value={selectedLanguage}
+            options={languageOptions}
+            onChange={handleLanguageChange}
+          />
+          <SelectElement
+            label="Select the duration of the intro skip (in seconds)"
+            value={skipTime}
+            options={skipTimeOptions}
+            onChange={handleSkipTimeChange}
+          />
+          <CheckboxElement
+            label="Display the video duration instead of the remaining time."
+            checked={showDuration}
+            onChange={handleShowDurationChange}
+          />
+        </div>
       </div>
     </div>
   );
