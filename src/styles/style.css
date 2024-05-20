@@ -2,8 +2,10 @@
 
 :root {
   --color-0: #0f1115;
-  --color-1: #1A1D24; /* 1A1D24 */
-  --color-2: #22252E; /* 22252E */
+  --color-1: #1A1D24;
+  /* 1A1D24 */
+  --color-2: #22252E;
+  /* 22252E */
   --color-3: #2c2e3a;
   --color-4: #32333f;
   --color-important: #ff546d;
@@ -153,6 +155,7 @@ img {
 }
 
 .body-container {
+  width: 100%;
   height: 100%;
   z-index: 20;
   overflow: auto;
@@ -317,28 +320,16 @@ img {
 /* SIDE BAR */
 
 aside {
+  display: flex;
   position: fixed;
-  width: max-content;
-  height: calc(100% - 55px);
+  bottom: 0;
   padding: 10px;
   background-color: var(--color-0);
-  margin: 15px;
-  /* border-radius: var(--border-radius); */
+  margin: 15px 0;
+  left: 50%;
+  transform: translate(-50%, 0);
   border-radius: 9999999px;
   z-index: 15;
-}
-
-aside .big-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 80px;
-  margin-bottom: 40px;
-}
-
-aside .big-logo img {
-  width: 100%;
 }
 
 aside h1 {
@@ -349,29 +340,29 @@ aside h1 {
 
 aside ul {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   list-style-type: none;
   padding-left: 0;
   gap: 5px;
 }
 
 aside ul.mid {
-  margin-top: 15px;
+  /* margin-top: 15px; */
 }
 
 aside ul.mid .separe {
-  margin: auto;
-  margin-bottom: 10px;
-  width: 50%;
-  height: 4px;
+  /* margin: auto; */
+  /* margin-bottom: 10px; */
+  /* width: 50%;
+  height: 4px; */
   background-color: var(--font-3);
   filter: brightness(0.5);
   border-radius: var(--border-radius);
 }
 
 aside ul.lower {
-  position: absolute;
-  bottom: 10px;
+  /* position: absolute;
+  bottom: 10px; */
 }
 
 aside ul li {
@@ -752,8 +743,10 @@ nav ul li {
 .main-container {
   /* width: calc(100% - 50px);
     height: calc(100% - 50px); */
+  width: calc(100% - 50px);
   min-height: calc(100% - 85px);
-  margin: 0 0px 15px 80px;
+  margin: 0 0px 15px 15px;
+  margin: 0;
   background-color: var(--color-1);
   border-radius: var(--border-radius);
   padding: 25px;
@@ -859,11 +852,16 @@ main {
 }
 
 .anime-page .trailer {
-  width: 100%; /* Per riempire orizzontalmente il contenitore */
-  height: 100%; /* Per riempire verticalmente il contenitore */
-  object-fit: cover; /* Per adattare e ritagliare il video nel contenitore */
-  position: absolute; /* Per posizionare il video all'interno del contenitore */
-  top: 0; /* Per posizionare il video all'angolo superiore sinistro del contenitore */
+  width: 100%;
+  /* Per riempire orizzontalmente il contenitore */
+  height: 100%;
+  /* Per riempire verticalmente il contenitore */
+  object-fit: cover;
+  /* Per adattare e ritagliare il video nel contenitore */
+  position: absolute;
+  /* Per posizionare il video all'interno del contenitore */
+  top: 0;
+  /* Per posizionare il video all'angolo superiore sinistro del contenitore */
   left: 0;
   border-radius: var(--border-radius);
 }
