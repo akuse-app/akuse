@@ -365,8 +365,8 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
   }, []);
 
   return inList ? (
-    <ButtonCircle icon={faBookmarkFull} tint="light" onClick={removeFromList} />
+    <ButtonCircle icon={faBookmarkFull} tint="light" shadow onClick={removeFromList} />
   ) : (
-    <ButtonCircle icon={faBookmark} tint="light" onClick={addToList} />
+    <ButtonCircle icon={faBookmark} tint="light" shadow onClick={addToList} />
   );
 };
