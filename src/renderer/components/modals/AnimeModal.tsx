@@ -73,7 +73,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
 
   // other
-  const [localProgress, setLocalProgress] = useState<number>()
+  const [localProgress, setLocalProgress] = useState<number>();
   const [alternativeBanner, setAlternativeBanner] = useState<
     string | undefined
   >(undefined);
@@ -84,9 +84,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
-    if (show && trailerRef.current && canRePlayTrailer)
-      trailerRef.current.play();
-    setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
+    try {
+      if (show && trailerRef.current && canRePlayTrailer)
+        trailerRef.current.play();
+      setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
+    } catch (error) {
+      console.log(error);
+    }
   }, [show]);
 
   useEffect(() => {
@@ -141,8 +145,12 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const handleTrailerLoad = () => {
-    if (trailerRef.current) trailerRef.current.play();
-    setCanRePlayTrailer(true);
+    try {
+      if (trailerRef.current) trailerRef.current.play();
+      setCanRePlayTrailer(true);
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleTrailerError = () => {
@@ -183,12 +191,21 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const handleLocalProgressChange = (localProgress: number) => {
-    setLocalProgress(localProgress)
-  }
+    setLocalProgress(localProgress);
+  };
 
   const handleChangeLoading = (value: boolean) => {
     setLoading(value);
   };
+
+  const handlePlayerClose = () => {
+    try {
+      if (trailerRef.current) trailerRef.current.play();
+      setShowPlayer(false);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return ReactDOM.createPortal(
     <>
@@ -202,10 +219,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           loading={loading}
           onLocalProgressChange={handleLocalProgressChange}
           onChangeLoading={handleChangeLoading}
-          onClose={() => {
-            if (trailerRef.current) trailerRef.current.play();
-            setShowPlayer(false);
-          }}
+          onClose={handlePlayerClose}
         />
       )}
       <ModalPageShadow show={show} />

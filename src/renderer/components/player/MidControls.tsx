@@ -1,21 +1,34 @@
 import 'react-activity/dist/Dots.css';
 
-import { faPause, faPlay, faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPause,
+  faPlay,
+  faRotateLeft,
+  faRotateRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useRef, useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
-  playing: boolean
-  playVideo: () => void
-  pauseVideo: () => void
-  loading: boolean
-  onClick?: (event: any) => void
-  onDblClick?: (event: any) => void
+  playing: boolean;
+  playVideo: () => void;
+  pauseVideo: () => void;
+  loading: boolean;
+  onClick?: (event: any) => void;
+  onDblClick?: (event: any) => void;
 }
 
-const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pauseVideo, loading, onClick, onDblClick }) => {
+const MidControls: React.FC<SettingsProps> = ({
+  videoRef,
+  playing,
+  playVideo,
+  pauseVideo,
+  loading,
+  onClick,
+  onDblClick,
+}) => {
   const handlePlayPause = () => {
     if (videoRef.current) {
       playing ? pauseVideo() : playVideo();
@@ -23,14 +36,22 @@ const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pa
   };
 
   const handleFastRewind = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime -= 5;
+    try {
+      if (videoRef.current) {
+        videoRef.current.currentTime -= 5;
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const handleFastForward = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime += 5;
+    try {
+      if (videoRef.current) {
+        videoRef.current.currentTime += 5;
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -53,7 +74,10 @@ const MidControls: React.FC<SettingsProps> = ({ videoRef, playing, playVideo, pa
             </button>
           </div>
           <div>
-            <button className="b-player skip-forward" onClick={handleFastForward}>
+            <button
+              className="b-player skip-forward"
+              onClick={handleFastForward}
+            >
               <FontAwesomeIcon className="i" icon={faRotateRight} />
             </button>
             {/* <button className="b-player skip-forward-small">

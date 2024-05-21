@@ -88,8 +88,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       newOffsetX < 20
         ? 20
         : newOffsetX > timelineWidth - 20
-        ? timelineWidth - 20
-        : newOffsetX;
+          ? timelineWidth - 20
+          : newOffsetX;
 
     setOffsetX(clampedOffsetX);
     setPercent(newPercent);
@@ -105,13 +105,22 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 
     const newTime = percentage * videoRef.current.duration;
     setProgressBarWidth(`${((newTime ?? 0) / (duration ?? 0)) * 100}%`);
-    videoRef.current.currentTime = newTime;
+
+    try {
+      videoRef.current.currentTime = newTime;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSkipIntro = () => {
     if (!videoRef.current) return;
 
-    videoRef.current.currentTime += introSkip;
+    try {
+      videoRef.current.currentTime += introSkip;
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (

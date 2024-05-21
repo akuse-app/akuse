@@ -109,31 +109,43 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [video]);
 
   const playHlsVideo = (url: string) => {
-    if (Hls.isSupported() && videoRef.current) {
-      var hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(videoRef.current);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        if (videoRef.current) {
-          hls.currentLevel = hls.levels.length - 1;
-          playVideoAndSetTime();
-          setHlsData(hls);
-        }
-      });
+    try {
+      if (Hls.isSupported() && videoRef.current) {
+        var hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(videoRef.current);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          if (videoRef.current) {
+            hls.currentLevel = hls.levels.length - 1;
+            playVideoAndSetTime();
+            setHlsData(hls);
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const playVideo = () => {
-    if (videoRef.current) {
-      setPlaying(true);
-      videoRef.current.play();
+    try {
+      if (videoRef.current) {
+        setPlaying(true);
+        videoRef.current.play();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const pauseVideo = () => {
-    if (videoRef.current) {
-      setPlaying(false);
-      videoRef.current.pause();
+    try {
+      if (videoRef.current) {
+        setPlaying(false);
+        videoRef.current.pause();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -147,13 +159,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const playVideoAndSetTime = () => {
-    if (videoRef.current) {
-      setTimeout(() => {
-        playVideo();
-        setCurrentTime(videoRef.current?.currentTime);
-        setDuration(videoRef.current?.duration);
-        onChangeLoading(false);
-      }, 1000);
+    try {
+      if (videoRef.current) {
+        setTimeout(() => {
+          playVideo();
+          setCurrentTime(videoRef.current?.currentTime);
+          setDuration(videoRef.current?.duration);
+          onChangeLoading(false);
+        }, 1000);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -161,32 +177,36 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const cTime = videoRef.current?.currentTime;
     const dTime = videoRef.current?.duration;
 
-    if (cTime && dTime) {
-      setShowPauseInfo(false);
-      setCurrentTime(cTime);
-      setDuration(dTime);
-      setBuffered(videoRef.current?.buffered);
+    try {
+      if (cTime && dTime) {
+        setShowPauseInfo(false);
+        setCurrentTime(cTime);
+        setDuration(dTime);
+        setBuffered(videoRef.current?.buffered);
 
-      // automatically update progress
-      console.log((cTime * 100) / dTime)
-      if (
-        (cTime * 100) / dTime > 85 &&
-        (STORE.get('update_progress') as boolean) &&
-        !progressUpdated
-      ) {
-        // when updating progress, put the anime in current if it wasn't there
-        listAnimeData.media.mediaListEntry?.status === 'CURRENT'
-          ? updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
-          : updateAnimeFromList(
-              listAnimeData.media.id,
-              'CURRENT',
-              undefined,
-              episodeNumber,
-            );
+        // automatically update progress
+        // console.log((cTime * 100) / dTime);
+        if (
+          (cTime * 100) / dTime > 85 &&
+          (STORE.get('update_progress') as boolean) &&
+          !progressUpdated
+        ) {
+          // when updating progress, put the anime in current if it wasn't there
+          listAnimeData.media.mediaListEntry?.status === 'CURRENT'
+            ? updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
+            : updateAnimeFromList(
+                listAnimeData.media.id,
+                'CURRENT',
+                undefined,
+                episodeNumber,
+              );
 
-        setProgressUpdated(true);
-        onLocalProgressChange(episodeNumber);
+          setProgressUpdated(true);
+          onLocalProgressChange(episodeNumber);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -203,8 +223,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setShowPauseInfo(false);
 
     pauseInfoTimer = setTimeout(() => {
-      if (videoRef.current && videoRef.current.paused) {
-        !isSettingsShowed && setShowPauseInfo(true);
+      try {
+        if (videoRef.current && videoRef.current.paused) {
+          !isSettingsShowed && setShowPauseInfo(true);
+        }
+      } catch (error) {
+        console.log(error);
       }
     }, 7500);
 
@@ -291,8 +315,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowNextEpisodeButton(canNextEpisode(nextEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(nextEpisodeNumber));
       setProgressUpdated(false);
-      if (videoRef.current && reloadAtPreviousTime)
-        videoRef.current.currentTime = previousTime;
+
+      try {
+        if (videoRef.current && reloadAtPreviousTime)
+          videoRef.current.currentTime = previousTime;
+      } catch (error) {
+        console.log(error);
+      }
 
       onChangeLoading(false);
     };
