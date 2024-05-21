@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
+import { useContext } from 'react';
+
 import { ListAnimeData } from '../../types/anilistAPITypes';
+import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
 import Slideshow from '../components/Slideshow';
 
@@ -16,6 +19,8 @@ const Tab1: React.FC<Tab1Props> = ({
   mostPopularAnime,
   nextReleasesAnime,
 }) => {
+  const logged = useContext(AuthContext);
+
   return (
     <div className="body-container">
       <div className="main-container">
@@ -23,11 +28,12 @@ const Tab1: React.FC<Tab1Props> = ({
           <Slideshow listAnimeData={trendingAnime} />
 
           <div className="section-container">
-            <AnimeSection
-              title="Continue Watching"
-              animeData={currentListAnime}
-            />
-
+            {logged && (
+              <AnimeSection
+                title="Continue Watching"
+                animeData={currentListAnime}
+              />
+            )}
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
             <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
