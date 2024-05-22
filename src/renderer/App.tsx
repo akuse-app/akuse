@@ -154,6 +154,7 @@ export default function App() {
                   path="/tab2"
                   element={
                     <Tab2
+                     currentListAnime={currentListAnime}
                       planningListAnime={planningListAnime}
                       // completedListAnime={completedListAnime}
                       // droppedListAnime={droppedListAnime}
