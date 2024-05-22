@@ -1,5 +1,5 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
 import log from 'electron-log';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
@@ -8,20 +8,15 @@ import path from 'path';
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { clientData } from '../modules/clientData';
+import { getAccessToken } from '../modules/anilist/anilistApi';
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 const STORE = new Store();
 
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
+const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
 // autoUpdater.autoDownload = false;
 // autoUpdater.autoInstallOnAppQuit = true;
 // autoUpdater.autoRunAppAfterInstall = true;
@@ -35,12 +30,6 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -136,13 +125,12 @@ const createWindow = async () => {
   });
 
   // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
   new AppUpdater();
 };
 
-// ipcMain.on('open-login-url', () => {
-//   require('electron').shell.openExternal(authUrl)
-// })
+ipcMain.on('open-login-url', () => {
+  require('electron').shell.openExternal(authUrl)
+})
 
 ipcMain.on('open-sponsor-url', () => {
   require('electron').shell.openExternal(SPONSOR_URL);
@@ -171,3 +159,57 @@ app
     });
   })
   .catch(console.log);
+
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('akuse-react', process.execPath, [
+        path.resolve(process.argv[1]),
+      ]);
+    }
+  } else {
+    app.setAsDefaultProtocolClient('akuse-react');
+  }
+  
+  const gotTheLock = app.requestSingleInstanceLock();
+  
+  if (!gotTheLock) {
+    app.quit();
+  } else {
+    app.on('second-instance', async (event, commandLine, workingDirectory) => {
+      // Someone tried to run a second instance, we should focus our window.
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+      }
+
+      try {
+        let code = commandLine.find(el => el.includes('?code='))?.split('?code=')[1]
+
+        await handleLogin(code);
+
+        if(mainWindow) {
+          mainWindow.reload();
+        }
+      } catch (error: any) {
+        console.log('something went wrong second-instance', error.message);
+      }
+    });
+  }
+  
+  async function handleLogin(code: any) {
+    try {
+      const token = await getAccessToken(code)
+      STORE.set('access_token', token)
+      STORE.set('logged', true)
+    } catch (error: any) {
+      console.log("login failed with error: " + error.message);
+    }
+  }
+  
+  // Handle window controls via IPC
+  ipcMain.on('shell:open', () => {
+    const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
+    const pagePath = path.join('file://', pageDirectory, 'index.html');
+    shell.openExternal(pagePath);
+  });
+  

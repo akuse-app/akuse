@@ -53,8 +53,6 @@ async function searchEpisodeUrl(
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
 
-      console.log(data);
-
       return data.sources;
     }
   }
@@ -91,5 +89,5 @@ export const getAnimeEpisodeId = async (
     animeId,
     episode > 120 ? Math.floor(episode / 120) + 1 : 1,
   );
-  return data?.episodes?.[episode % 120 - 1]?.id ?? null;
+  return data?.episodes?.[(episode % 120) - 1]?.id ?? null;
 };

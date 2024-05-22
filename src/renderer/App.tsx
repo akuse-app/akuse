@@ -17,13 +17,18 @@ import {
 } from '../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData } from '../types/anilistAPITypes';
-import Navbar from './Navbar';
+import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
 import { setDefaultStoreVariables } from '../modules/storeVariables';
+import { ipcRenderer } from 'electron';
+
+ipcRenderer.on('console-log', (event, toPrint) => {
+  console.log(toPrint)
+})
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
@@ -126,7 +131,7 @@ export default function App() {
           highlightColor={style.getPropertyValue('--color-4')}
         >
           <MemoryRouter>
-            <Navbar />
+            <MainNavbar />
             <Routes>
               <Route
                 path="/"

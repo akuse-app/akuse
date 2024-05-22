@@ -1,0 +1,90 @@
+nav.main {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
+  background-color: var(--color-0);
+  margin: 15px 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 9999999px;
+  z-index: 15;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+nav.main ul {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  padding-left: 0;
+  gap: 5px;
+}
+
+nav.main ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--font-2);
+  cursor: pointer;
+  font-weight: var(--font-weight);
+  transition: var(--transition);
+  will-change: transform;
+}
+
+nav.main ul .separe {
+  width: 6px;
+  height: 6px;
+  margin: auto 10px;
+  background-color: var(--font-3);
+  filter: brightness(0.5);
+  border-radius: var(--border-radius);
+}
+
+/* toggler for login icon or user avatar */
+
+nav.main ul li.active {
+  color: var(--color-important);
+}
+
+nav.main ul li.active .i-wrapper {
+  background-color: var(--color-0);
+}
+
+nav.main ul li:hover {
+  transform: scale(1.2);
+}
+
+nav.main ul li:active {
+  transform: scale(1);
+}
+
+nav.main ul li:hover:not(li.active) {
+  color: var(--font-1);
+}
+
+nav.main ul li .i-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+}
+
+nav.main ul li .i-wrapper.nav-user {
+  background-color: transparent;
+}
+
+nav.main ul li .i-wrapper img {
+  max-width: 75%;
+  border-radius: 100px;
+}
+
+nav.main ul li .i-wrapper .i {
+  font-size: 1.4rem;
+}
+
+nav.main ul li span {
+  display: none;
+  font-size: 1.2rem;
+}

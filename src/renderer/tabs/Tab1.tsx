@@ -5,6 +5,8 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
 import Slideshow from '../components/Slideshow';
+import Heading from '../components/Heading';
+import UserNavbar from '../components/UserNavbar';
 
 interface Tab1Props {
   currentListAnime?: ListAnimeData[];
@@ -25,6 +27,10 @@ const Tab1: React.FC<Tab1Props> = ({
     <div className="body-container">
       <div className="main-container">
         <main>
+          <Heading text={`Welcome back, al`} />
+
+          <UserNavbar />
+
           <Slideshow listAnimeData={trendingAnime} />
 
           <div className="section-container">

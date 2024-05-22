@@ -183,8 +183,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Akuse",
+    "appId": "com.aleganza.akuse",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

@@ -17,6 +17,7 @@ import { animeDataToListAnimeData } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
+import Heading from '../components/Heading';
 
 const Tab3 = () => {
   const viewerId = useContext(ViewerIdContext);
@@ -103,7 +104,7 @@ const Tab3 = () => {
   return (
     <div className="body-container">
       <div className="main-container">
-        <h1>Search</h1>
+        <Heading text='Search' />
         <main className="search">
           <div className="filters-container">
             <div className="filter">

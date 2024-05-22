@@ -2,6 +2,7 @@ import Store from 'electron-store';
 import { ContentSteeringController } from 'hls.js';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { AuthContext } from '../App';
+import Heading from '../components/Heading';
 
 const STORE = new Store();
 
@@ -145,7 +146,7 @@ const Tab4: React.FC = () => {
     <div className="body-container">
       <div className="main-container">
         <div className="settings-page">
-          <h1>Settings</h1>
+        <Heading text='Settings' />
 
           {logged && (
             <CheckboxElement

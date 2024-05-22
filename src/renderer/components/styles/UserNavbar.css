@@ -1,0 +1,38 @@
+
+nav.user {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  height: 46px;
+}
+
+nav.user ul {
+  display: flex;
+  list-style-type: none;
+  padding-left: 0;
+  gap: 30px;
+}
+
+nav.user ul li {
+  display: flex;
+  align-items: center;
+  color: var(--font-2);
+  cursor: pointer;
+  font-weight: var(--font-weight);
+  transition: var(--transition);
+  will-change: transform;
+}
+
+nav.user ul li .i {
+  font-size: 1.5rem;
+}
+
+nav.user ul li:hover {
+  transform: scale(1.2);
+  color: var(--font-1);
+}
+
+nav.user ul li:active {
+  transform: scale(1);
+}
