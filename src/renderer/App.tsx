@@ -13,10 +13,11 @@ import {
   getNextReleases,
   getTrendingAnime,
   getViewerId,
+  getViewerInfo,
   getViewerList,
 } from '../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../modules/utils';
-import { ListAnimeData } from '../types/anilistAPITypes';
+import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
@@ -41,6 +42,7 @@ export default function App() {
   setDefaultStoreVariables();
 
   // tab1
+  const [userInfo, setUserInfo] = useState<UserInfo>()
   const [currentListAnime, setCurrentListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
@@ -80,6 +82,8 @@ export default function App() {
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
+
+        setUserInfo(await getViewerInfo(id))
         setCurrentListAnime(await getViewerList(id, 'CURRENT'));
       }
 
@@ -137,6 +141,7 @@ export default function App() {
                 path="/"
                 element={
                   <Tab1
+                    userInfo={userInfo}
                     currentListAnime={currentListAnime}
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}

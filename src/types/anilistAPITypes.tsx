@@ -1,5 +1,14 @@
 import { Media, PageInfo } from "./anilistGraphQLTypes"
 
+export type UserInfo = {
+  id: number
+  name: string
+  avatar?: {
+    large?: string
+    medium?: string
+  }
+}
+
 export type AnimeData = {
   media?: Media[]
   pageInfo?: PageInfo

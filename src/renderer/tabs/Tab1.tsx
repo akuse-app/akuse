@@ -1,14 +1,16 @@
+import { userInfo } from 'os';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 
-import { ListAnimeData } from '../../types/anilistAPITypes';
+import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
-import Slideshow from '../components/Slideshow';
 import Heading from '../components/Heading';
+import Slideshow from '../components/Slideshow';
 import UserNavbar from '../components/UserNavbar';
 
 interface Tab1Props {
+  userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
@@ -16,6 +18,7 @@ interface Tab1Props {
 }
 
 const Tab1: React.FC<Tab1Props> = ({
+  userInfo,
   currentListAnime,
   trendingAnime,
   mostPopularAnime,
@@ -27,9 +30,9 @@ const Tab1: React.FC<Tab1Props> = ({
     <div className="body-container">
       <div className="main-container">
         <main>
-          <Heading text={`Welcome back, al`} />
+          {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />}
 
-          <UserNavbar />
+          <UserNavbar avatar={userInfo?.avatar?.medium} />
 
           <Slideshow listAnimeData={trendingAnime} />
 

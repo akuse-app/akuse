@@ -28,6 +28,10 @@ nav.user ul li .i {
   font-size: 1.5rem;
 }
 
+nav.user ul img {
+  border-radius: 99999999px;
+}
+
 nav.user ul li:hover {
   transform: scale(1.2);
   color: var(--font-1);

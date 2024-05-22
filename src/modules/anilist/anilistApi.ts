@@ -138,7 +138,7 @@ export const getViewerInfo = async (viewerId: number | null) => {
                   id
                   name
                   avatar {
-                      large
+                      medium
                   }
               }
           }
@@ -157,7 +157,8 @@ export const getViewerInfo = async (viewerId: number | null) => {
   const options = getOptions(query, variables);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  return respData.data;
+  console.log(respData.data.User)
+  return respData.data.User;
 };
 
 /**
