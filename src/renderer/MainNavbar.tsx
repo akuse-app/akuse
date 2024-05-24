@@ -1,6 +1,10 @@
-import './styles/MainNavbar.css'
+import './styles/MainNavbar.css';
 
-import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faBookmark,
+  faCompass,
+  IconDefinition,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faBug,
@@ -9,6 +13,7 @@ import {
   faHeart as faHeartFull,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
+  faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
@@ -17,21 +22,13 @@ import { Link } from 'react-router-dom';
 
 import { AuthContext } from './App';
 
-interface LiProps {
+const Li: React.FC<{
   text: string;
   icon: IconDefinition;
   to: string;
   active: boolean;
   onClick: () => void;
-}
-
-const Li: React.FC<LiProps> = ({
-  text,
-  icon,
-  to,
-  active,
-  onClick,
-}) => {
+}> = ({ text, icon, to, active, onClick }) => {
   return (
     <Link to={to} className={active ? 'active' : ''} onClick={onClick}>
       <li className={active ? 'active' : ''} data-title={text}>
@@ -44,12 +41,27 @@ const Li: React.FC<LiProps> = ({
   );
 };
 
-const MainNavbar = () => {
+const LiLink: React.FC<{
+  text: string;
+  icon: IconDefinition;
+  onClick: () => void;
+}> = ({ text, icon, onClick }) => {
+  return (
+    <li data-title={text} onClick={onClick}>
+      <div className="i-wrapper">
+        <FontAwesomeIcon className="i" icon={icon} />
+      </div>
+      <span>{text}</span>
+    </li>
+  );
+};
+
+const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
   const [activeTab, setActiveTab] = useState(1);
   const logged = useContext(AuthContext);
 
   return (
-    <nav className='main'>
+    <nav className="main">
       <ul>
         <Li
           text="Discover"
@@ -81,6 +93,24 @@ const MainNavbar = () => {
           active={activeTab === 4}
           onClick={() => setActiveTab(4)}
         />
+        {logged ? (
+          <div
+            className="i-wrapper"
+            onClick={() => {
+              ipcRenderer.send('logout');
+            }}
+          >
+            <img src={avatar}></img>
+          </div>
+        ) : (
+          <LiLink
+            text="Settings"
+            icon={faRightToBracket}
+            onClick={() => {
+              ipcRenderer.send('open-login-url');
+            }}
+          />
+        )}
       </ul>
     </nav>
   );

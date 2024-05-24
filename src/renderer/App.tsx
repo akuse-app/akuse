@@ -137,7 +137,7 @@ export default function App() {
           highlightColor={style.getPropertyValue('--color-4')}
         >
           <MemoryRouter>
-            <MainNavbar />
+            <MainNavbar avatar={userInfo?.avatar?.medium} />
             <Routes>
               <Route
                 path="/"

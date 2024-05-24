@@ -16,7 +16,12 @@ const STORE = new Store();
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 // const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${(isAppImage || !(app.isPackaged)) ? clientData.redirectUriAppImage : clientData.redirectUri}&response_type=code`;
-const authUrl = 'https://anilist.co/api/v2/oauth/authorize?client_id=' + clientData.clientId + '&redirect_uri=' + clientData.redirectUri + '&response_type=code'
+const authUrl =
+  'https://anilist.co/api/v2/oauth/authorize?client_id=' +
+  clientData.clientId +
+  '&redirect_uri=' +
+  clientData.redirectUri +
+  '&response_type=code';
 // autoUpdater.autoDownload = false;
 // autoUpdater.autoInstallOnAppQuit = true;
 // autoUpdater.autoRunAppAfterInstall = true;
@@ -129,8 +134,16 @@ const createWindow = async () => {
 };
 
 ipcMain.on('open-login-url', () => {
-  require('electron').shell.openExternal(authUrl)
-})
+  require('electron').shell.openExternal(authUrl);
+});
+
+ipcMain.on('logout', () => {
+  STORE.set('logged', false);
+  STORE.delete('access_token');
+  console.log('Logged Out! Relaunching app...');
+
+  if (mainWindow) mainWindow.reload();
+});
 
 ipcMain.on('open-sponsor-url', () => {
   require('electron').shell.openExternal(SPONSOR_URL);
@@ -160,56 +173,57 @@ app
   })
   .catch(console.log);
 
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('akuse-react', process.execPath, [
-        path.resolve(process.argv[1]),
-      ]);
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('akuse-react', process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('akuse-react');
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', async (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
     }
-  } else {
-    app.setAsDefaultProtocolClient('akuse-react');
-  }
-  
-  const gotTheLock = app.requestSingleInstanceLock();
-  
-  if (!gotTheLock) {
-    app.quit();
-  } else {
-    app.on('second-instance', async (event, commandLine, workingDirectory) => {
-      // Someone tried to run a second instance, we should focus our window.
-      if (mainWindow) {
-        if (mainWindow.isMinimized()) mainWindow.restore();
-        mainWindow.focus();
-      }
 
-      try {
-        let code = commandLine.find(el => el.includes('?code='))?.split('?code=')[1]
-
-        await handleLogin(code);
-
-        if(mainWindow) {
-          mainWindow.reload();
-        }
-      } catch (error: any) {
-        console.log('something went wrong second-instance', error.message);
-      }
-    });
-  }
-  
-  async function handleLogin(code: any) {
     try {
-      const token = await getAccessToken(code)
-      STORE.set('access_token', token)
-      STORE.set('logged', true)
+      let code = commandLine
+        .find((el) => el.includes('?code='))
+        ?.split('?code=')[1];
+
+      await handleLogin(code);
+
+      if (mainWindow) {
+        mainWindow.reload();
+      }
     } catch (error: any) {
-      console.log("login failed with error: " + error.message);
+      console.log('something went wrong second-instance', error.message);
     }
-  }
-  
-  // Handle window controls via IPC
-  ipcMain.on('shell:open', () => {
-    const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
-    const pagePath = path.join('file://', pageDirectory, 'index.html');
-    shell.openExternal(pagePath);
   });
-  
+}
+
+async function handleLogin(code: any) {
+  try {
+    const token = await getAccessToken(code);
+    STORE.set('access_token', token);
+    STORE.set('logged', true);
+  } catch (error: any) {
+    console.log('login failed with error: ' + error.message);
+  }
+}
+
+// Handle window controls via IPC
+ipcMain.on('shell:open', () => {
+  const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
+  const pagePath = path.join('file://', pageDirectory, 'index.html');
+  shell.openExternal(pagePath);
+});

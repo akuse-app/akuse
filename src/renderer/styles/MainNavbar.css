@@ -14,7 +14,7 @@ nav.main {
 
 nav.main ul {
   display: flex;
-  flex-direction: row;
+  /* align-items: center; */
   list-style-type: none;
   padding-left: 0;
   gap: 5px;
@@ -29,6 +29,12 @@ nav.main ul li {
   font-weight: var(--font-weight);
   transition: var(--transition);
   will-change: transform;
+}
+
+nav.main ul img {
+  width: 35px;
+  height: 35px;
+  border-radius: 99999999px;
 }
 
 nav.main ul .separe {
@@ -62,7 +68,7 @@ nav.main ul li:hover:not(li.active) {
   color: var(--font-1);
 }
 
-nav.main ul li .i-wrapper {
+nav.main ul .i-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;

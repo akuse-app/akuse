@@ -24,6 +24,7 @@
   /* --border-radius: 8px; */
   --transition: 0.2s ease;
   --shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --shadow-cover: black 0px 30px 20px -20px
 }
 
 /* Scrollbar */
@@ -611,7 +612,7 @@ img {
   margin: 0;
   background-color: var(--color-1);
   border-radius: var(--border-radius);
-  padding: 25px 45px 100px 45px;
+  padding: 25px 45px;
 }
 
 main {
@@ -1310,6 +1311,7 @@ main .anime-entry .anime-cover {
   position: relative;
   object-fit: cover;
   border-radius: var(--border-radius);
+  box-shadow: var(--shadow-cover);
 }
 
 main .anime-entry .anime-cover img {

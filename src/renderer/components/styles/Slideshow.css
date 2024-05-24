@@ -18,10 +18,10 @@
   top: 0;
   bottom: 0;
   display: flex;
-  width: 100%;
+  width: 60%;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(0.13turn, #222222, transparent);
+  background: linear-gradient(0.25turn, var(--color-0), transparent);
   border-radius: var(--border-radius);
   transition: var(--transition);
 }
@@ -99,6 +99,7 @@
   width: 100%;
   flex-shrink: 0;
   margin-right: 25px;
+  box-shadow: var(--shadow-cover);
 }
 
 .dot-container {
@@ -111,14 +112,16 @@
   width: 10px;
   height: 10px;
   margin: 0 5px;
-  background-color: var(--color-4);
+  /* background-color: var(--color-4); */
+  background-color: var(--font-3);
   border-radius: 100%;
   display: inline-block;
   transition: var(--transition);
 }
 
 .dot.active {
-  width: 26px;
-  filter: brightness(1.75);
-  border-radius: var(--border-radius);
+  /* width: 26px; */
+  background-color: var(--font-1);
+  /* filter: brightness(1.75); */
+  /* border-radius: var(--border-radius); */
 }
