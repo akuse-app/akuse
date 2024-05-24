@@ -84,6 +84,32 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // const [videoLoading, setLoading] = useState<boolean>(loading);
 
   useEffect(() => {
+    const video = videoRef.current;
+
+    const handleSeeked = () => {
+      console.log('seeked')
+      onChangeLoading(false)
+      setPlaying(true)
+    };
+
+    const handleWaiting = () => {
+      console.log('waiting')
+      onChangeLoading(true)
+      setPlaying(false)
+    };
+
+    if (video) {
+      video.addEventListener('seeked', handleSeeked);
+      video.addEventListener('waiting', handleWaiting);
+
+      return () => {
+        video.removeEventListener('seeked', handleSeeked);
+        video.removeEventListener('waiting', handleWaiting);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
     onChangeLoading(loading);
   }, [loading]);
 
