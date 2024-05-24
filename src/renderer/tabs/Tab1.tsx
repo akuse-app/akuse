@@ -30,9 +30,9 @@ const Tab1: React.FC<Tab1Props> = ({
     <div className="body-container">
       <div className="main-container">
         <main>
-          {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />}
+          {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
 
-          <UserNavbar avatar={userInfo?.avatar?.medium} />
+          {/* <UserNavbar avatar={userInfo?.avatar?.medium} /> */}
 
           <Slideshow listAnimeData={trendingAnime} />
 

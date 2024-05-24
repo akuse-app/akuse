@@ -611,7 +611,7 @@ img {
   margin: 0;
   background-color: var(--color-1);
   border-radius: var(--border-radius);
-  padding: 25px 45px;
+  padding: 25px 45px 100px 45px;
 }
 
 main {
@@ -1249,8 +1249,8 @@ main section .scrollers {
 }
 
 main section .anime-list-wrapper {
-  padding: 25px;
-  margin: -25px;
+  padding: 50px;
+  margin: -50px;
   position: relative;
   overflow-x: hidden;
   overflow-y: visible;

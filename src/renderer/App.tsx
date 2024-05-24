@@ -84,7 +84,9 @@ export default function App() {
         setViewerId(id);
 
         setUserInfo(await getViewerInfo(id))
-        setCurrentListAnime(await getViewerList(id, 'CURRENT'));
+        const current = await getViewerList(id, 'CURRENT')
+        const rewatching = await getViewerList(id, 'REPEATING')
+        setCurrentListAnime(current.concat(rewatching));
       }
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));

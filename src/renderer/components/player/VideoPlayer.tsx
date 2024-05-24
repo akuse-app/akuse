@@ -87,15 +87,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const video = videoRef.current;
 
     const handleSeeked = () => {
-      console.log('seeked')
-      onChangeLoading(false)
-      setPlaying(true)
+      console.log('seeked');
+      onChangeLoading(false);
+      setPlaying(true);
     };
 
     const handleWaiting = () => {
-      console.log('waiting')
-      onChangeLoading(true)
-      setPlaying(false)
+      console.log('waiting');
+      onChangeLoading(true);
+      setPlaying(false);
     };
 
     if (video) {
@@ -218,14 +218,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           !progressUpdated
         ) {
           // when updating progress, put the anime in current if it wasn't there
-          listAnimeData.media.mediaListEntry?.status === 'CURRENT'
-            ? updateAnimeProgress(listAnimeData.media.id!, episodeNumber)
-            : updateAnimeFromList(
+          const status = listAnimeData.media.mediaListEntry?.status;
+
+          switch (status) {
+            case 'CURRENT': {
+              updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+              break;
+            }
+            case 'REPEATING':
+            case 'COMPLETED': {
+              updateAnimeFromList(
+                listAnimeData.media.id,
+                'REWATCHING',
+                undefined,
+                episodeNumber,
+              );
+            }
+            default: {
+              updateAnimeFromList(
                 listAnimeData.media.id,
                 'CURRENT',
                 undefined,
                 episodeNumber,
               );
+            }
+          }
 
           setProgressUpdated(true);
           onLocalProgressChange(episodeNumber);
@@ -328,8 +345,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeNumber(episode);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[episode].title?.en ??
-              `Episode ${episode}`
+          ? episodesInfo[episode].title?.en ?? `Episode ${episode}`
           : `Episode ${episode}`,
       );
       setEpisodeDescription(
