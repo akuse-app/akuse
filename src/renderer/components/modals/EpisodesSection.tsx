@@ -8,7 +8,7 @@ import EpisodeEntry from './EpisodeEntry';
 const EPISODES_PER_PAGE = 30;
 
 interface EpisodesSectionProps {
-  episodesInfo: EpisodeInfo[] | null;
+  episodesInfo?: EpisodeInfo[];
   episodesInfoHasFetched: boolean;
   listAnimeData: ListAnimeData;
   loading?: boolean
@@ -104,7 +104,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
                     : `Episode ${episode}`
                 }
                 description={
-                  episodesInfo ? episodesInfo[episode]?.summary ?? '' : ''
+                  episodesInfo ? episodesInfo[episode]?.summary ?? 'No description available.' : 'No description available.'
                 }
                 releaseDate={
                   episodesInfo

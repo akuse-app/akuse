@@ -65,7 +65,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // episodes info
   const [episodesInfoHasFetched, setEpisodesInfoHasFetched] =
     useState<boolean>(false);
-  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
+  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[]>();
 
   // player
   const [showPlayer, setShowPlayer] = useState<boolean>(false);

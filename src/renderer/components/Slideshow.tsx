@@ -36,7 +36,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
   const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[] | null>(null);
+  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[]>();
 
   // whether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);

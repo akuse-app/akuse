@@ -305,17 +305,17 @@
   align-items: center;
 }
 
-.up-controls .info {
+.up-controls .left .info {
   display: flex;
   flex-direction: column;
   cursor: pointer;
 }
 
-.up-controls .info:hover {
+.up-controls .left .info:hover {
   filter: brightness(0.80);
 }
 
-.up-controls .info:active {
+.up-controls .left .info:active {
   filter: brightness(0.70);
 }
 
@@ -337,18 +337,13 @@
   margin-left: 10px;
 }
 
-.up-controls .settings-content .dropdown {
-  display: none;
-  opacity: 0;
-  width: 400px;
-  /* height: 250px; */
+.up-controls .dropdown {
   position: absolute;
   top: 60px;
   right: 0;
-}
-
-.up-controls .settings-content .dropdown.settings-dropdown {
   display: block;
+  opacity: 0;
+  width: 400px;
   opacity: 0.85;
   list-style: none;
   overflow: hidden;
@@ -358,6 +353,98 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   transition: opacity 0.13s ease;
   pointer-events: auto;
+}
+
+.up-controls .other-episodes-content .dropdown {
+  width: 750px;
+  max-height: 473px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.up-controls .other-episodes-content .dropdown .episode {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 16px;
+}
+
+.up-controls .other-episodes-content .dropdown .episode:hover {
+  background-color: var(--color-3);
+}
+
+.up-controls .other-episodes-content .dropdown .episode.active {
+  background-color: var(--color-1);
+}
+
+.up-controls .other-episodes-content .dropdown .episode .title {
+  position: relative;
+  font-size: 1.3rem;
+  font-weight: var(--font-weight);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.up-controls .other-episodes-content .dropdown .episode .title span.number {
+  color: var(--font-3);
+}
+
+.up-controls .other-episodes-content .dropdown .episode .title span.main {
+  color: var(--font-1);
+  display: inline-flex;
+  width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.up-controls .other-episodes-content .dropdown .episode .title span.current-tag {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  font-size: 1rem;
+  color: var(--font-3);
+  text-transform: uppercase;
+}
+
+.up-controls .other-episodes-content .dropdown .episode .content {
+  width: 100%;
+  display: flex;
+  gap: 22px;
+  border-radius: var(--border-radius);
+}
+
+.up-controls .other-episodes-content .dropdown .episode .content.pressable {
+  cursor: pointer;
+}
+
+.up-controls .other-episodes-content .dropdown .episode .content img {
+  width: 270px;
+  height: 100%;
+  aspect-ratio: 1.78 / 1;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.up-controls .other-episodes-content .dropdown .episode .content .info {
+  display: flex;
+  gap: 20px;
+  color: var(--font-3);
+  font-size: 1rem;
+  font-weight: var(--font-weight);
+  line-height: 25px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .up-controls .settings-content .dropdown input[type='range'] {

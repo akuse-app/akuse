@@ -1,18 +1,26 @@
 import 'react-activity/dist/Dots.css';
 
-import { faAngleLeft, faBackward, faCompress, faExpand, faForward } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+  faBackward,
+  faCompress,
+  faExpand,
+  faForward,
+  faLayerGroup,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import Settings from './VideoSettings';
+import VideoSettings from './VideoSettings';
 import Hls from 'hls.js';
 import { EpisodeInfo } from '../../../types/types';
+import VideoEpisodesChange from './VideoEpisodesChange';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
-  hls?: Hls
+  hls?: Hls;
   listAnimeData: ListAnimeData;
-  episodesInfo: EpisodeInfo[] | null;
+  episodesInfo?: EpisodeInfo[];
   episodeNumber: number;
   episodeTitle: string;
   showPreviousEpisodeButton: boolean;
@@ -63,30 +71,20 @@ const TopControls: React.FC<TopControlsProps> = ({
       </div>
       <div className="center"></div>
       <div className="right">
-        <Settings
+        <VideoSettings
           videoRef={videoRef}
           hls={hls}
           onToggle={handleSettingsToggle}
           onChangeEpisode={onChangeEpisode}
         />
-        {showPreviousEpisodeButton && (
-          <button
-            className="b-player next show-next-episode-btn"
-            onClick={() => {
-              onChangeEpisode(-1);
-            }}
-          >
-            <FontAwesomeIcon className="i" icon={faBackward} />
-          </button>
-        )}
-        {showNextEpisodeButton && (
-          <button
-            className="b-player next show-next-episode-btn"
-            onClick={() => onChangeEpisode(1)}
-          >
-            <FontAwesomeIcon className="i" icon={faForward} />
-          </button>
-        )}
+        <VideoEpisodesChange
+          listAnimeData={listAnimeData}
+          episodeNumber={episodeNumber}
+          episodesInfo={episodesInfo}
+          showPreviousEpisodeButton={showPreviousEpisodeButton}
+          showNextEpisodeButton={showNextEpisodeButton}
+          onChangeEpisode={onChangeEpisode}
+        />
         <button className="b-player fullscreen" onClick={onFullScreentoggle}>
           <FontAwesomeIcon
             className="i"

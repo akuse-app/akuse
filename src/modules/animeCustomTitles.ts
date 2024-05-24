@@ -20,8 +20,5 @@ export const animeCustomTitles: AnimeCustomTitles = {
     '235': `Detective Conan Remastered`, // with this the remastered version is pulled before the default one
   },
   IT: {
-    '162670': `Dr. Stone 3 Part 2`,
-    '21778': `Così parlò Kishibe Rohan`, // italian title does not exist in anilist
-    '104578': `L'attacco dei Giganti 3 Parte 2`, // in anilist the italian title is mispelled (L'Attaco...)
   },
 };

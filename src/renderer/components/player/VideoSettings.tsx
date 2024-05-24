@@ -14,7 +14,6 @@ import Hls from 'hls.js';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../App';
-import { EpisodeInfo } from '../../../types/types';
 
 const STORE = new Store();
 
@@ -25,7 +24,8 @@ interface SettingsProps {
   onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({
+// component for the video player settings tab
+const VideoSettings: React.FC<SettingsProps> = ({
   videoRef,
   hls,
   onToggle,
@@ -110,7 +110,7 @@ const Settings: React.FC<SettingsProps> = ({
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
       {settings && (
-        <div className="dropdown settings-dropdown">
+        <div className="dropdown">
           <li className="quality">
             <span>
               <FontAwesomeIcon className="i" icon={faVideo} />
@@ -227,4 +227,4 @@ const Settings: React.FC<SettingsProps> = ({
   );
 };
 
-export default Settings;
+export default VideoSettings;
