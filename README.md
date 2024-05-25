@@ -1,3 +1,4 @@
+<h1 align="center">⚠ In developing! </h1>
 <p align="center">
     <img width="150px" src="https://github.com/akuse-app/Akuse/blob/react-port/assets/icon.png"/>
     <h1 align="center">Akuse</h1>
