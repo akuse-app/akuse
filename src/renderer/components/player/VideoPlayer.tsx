@@ -1,4 +1,4 @@
-import './styles/videoPlayer.css';
+import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
