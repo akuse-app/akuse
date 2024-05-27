@@ -26,6 +26,7 @@ const MidControls: React.FC<SettingsProps> = ({
   onClick,
   onDblClick,
 }) => {
+  
   const [playing, setPlaying] = useState(false);
 
   const handlePlayPause = () => {
