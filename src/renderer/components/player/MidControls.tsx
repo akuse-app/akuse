@@ -1,5 +1,4 @@
 import 'react-activity/dist/Dots.css';
-
 import {
   faPause,
   faPlay,
@@ -12,7 +11,6 @@ import Dots from 'react-activity/dist/Dots';
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
-  playing: boolean;
   playVideo: () => void;
   pauseVideo: () => void;
   loading: boolean;
@@ -22,16 +20,23 @@ interface SettingsProps {
 
 const MidControls: React.FC<SettingsProps> = ({
   videoRef,
-  playing,
   playVideo,
   pauseVideo,
   loading,
   onClick,
   onDblClick,
 }) => {
+  const [playing, setPlaying] = useState(false);
+
   const handlePlayPause = () => {
     if (videoRef.current) {
-      playing ? pauseVideo() : playVideo();
+      if (playing) {
+        pauseVideo();
+        setPlaying(false);
+      } else {
+        playVideo();
+        setPlaying(true);
+      }
     }
   };
 
