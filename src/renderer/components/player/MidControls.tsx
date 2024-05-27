@@ -1,4 +1,5 @@
 import 'react-activity/dist/Dots.css';
+
 import {
   faPause,
   faPlay,
@@ -11,6 +12,7 @@ import Dots from 'react-activity/dist/Dots';
 
 interface SettingsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
+  playing: boolean;
   playVideo: () => void;
   pauseVideo: () => void;
   loading: boolean;
@@ -20,34 +22,39 @@ interface SettingsProps {
 
 const MidControls: React.FC<SettingsProps> = ({
   videoRef,
+  playing,
   playVideo,
   pauseVideo,
   loading,
   onClick,
   onDblClick,
 }) => {
-  
-  const [playing, setPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+
+    const handlePlay = () => {
+      setIsPaused(false);
+    };
+
+    const handlePause = () => {
+      setIsPaused(true);
+    };
+
+    if (videoElement) {
+      videoElement.addEventListener('play', handlePlay);
+      videoElement.addEventListener('pause', handlePause);
+      return () => {
+        videoElement.removeEventListener('play', handlePlay);
+        videoElement.removeEventListener('pause', handlePause);
+      };
+    }
+  }, [videoRef]);
 
   const handlePlayPause = () => {
     if (videoRef.current) {
-      if (playing) {
-        pauseVideo();
-        setPlaying(false);
-      } else {
-        playVideo();
-        setPlaying(true);
-      }
-    }
-  };
-
-  const handleFastRewind = () => {
-    try {
-      if (videoRef.current) {
-        videoRef.current.currentTime -= 5;
-      }
-    } catch (error) {
-      console.log(error);
+      isPaused ? playVideo() : pauseVideo();
     }
   };
 
@@ -55,6 +62,18 @@ const MidControls: React.FC<SettingsProps> = ({
     try {
       if (videoRef.current) {
         videoRef.current.currentTime += 5;
+        setIsPaused(videoRef.current.paused);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleFastRewind = () => {
+    try {
+      if (videoRef.current) {
+        videoRef.current.currentTime -= 5;
+        setIsPaused(videoRef.current.paused);
       }
     } catch (error) {
       console.log(error);
@@ -72,23 +91,13 @@ const MidControls: React.FC<SettingsProps> = ({
           </button>
           <div className="b-player play-pause-center">
             <button className="b-player play-pause" onClick={handlePlayPause}>
-              <i className="fas fa-play"></i>
-              <FontAwesomeIcon
-                className="i"
-                icon={playing ? faPause : faPlay}
-              />
+              <FontAwesomeIcon className="i" icon={isPaused ? faPlay : faPause} />
             </button>
           </div>
           <div>
-            <button
-              className="b-player skip-forward"
-              onClick={handleFastForward}
-            >
+            <button className="b-player skip-forward" onClick={handleFastForward}>
               <FontAwesomeIcon className="i" icon={faRotateRight} />
             </button>
-            {/* <button className="b-player skip-forward-small">
-          <FontAwesomeIcon className="i" icon={faRotateRight} />
-        </button> */}
           </div>
         </>
       )}
