@@ -1,7 +1,10 @@
 import './styles/Slideshow.css';
 
 import { IVideo } from '@consumet/extensions';
-import { faArrowUpRightFromSquare, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowUpRightFromSquare,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 import React, { useEffect, useState } from 'react';
@@ -43,19 +46,23 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
   // whether the modal has been opened at least once (used to fetch episodes info only once when opening it)
   const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
 
-  const [shadowAnimationClasses, setShadowAnimationClasses] = useState<string>('')
+  const [shadowAnimationClasses, setShadowAnimationClasses] =
+    useState<string>('');
+  const [isFirstActivation, setIsFirstActivation] = useState(true);
 
   // smoother transitions between slides
   useEffect(() => {
-    if(isVisible) {
-      setShadowAnimationClasses('show-opacity')
-    } else {
-      setShadowAnimationClasses('show-opacity hide-opacity-long')
+    if (isVisible && !isFirstActivation) {
+      setShadowAnimationClasses('show-opacity');
+    } else if (!isVisible) {
+      setShadowAnimationClasses('show-opacity hide-opacity-long');
       setTimeout(() => {
-        setShadowAnimationClasses('hide-opacity-long')
-      }, 400)
+        setShadowAnimationClasses('hide-opacity-long');
+      }, 400);
     }
-  }, [isVisible])
+
+    setIsFirstActivation(false);
+  }, [isVisible]);
 
   const fetchEpisodesInfo = async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
@@ -116,7 +123,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
       )}
       <div className="slide">
         <div
-          className={`shadow-overlay fade-in ${shadowAnimationClasses}`}
+          className={`shadow-overlay ${shadowAnimationClasses}`}
           // style={{ display: isVisible ? 'block' : 'none' }}
         >
           {/* <div className="score">
