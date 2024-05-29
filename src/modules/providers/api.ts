@@ -5,6 +5,7 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
+import { animeCustomTitles } from '../animeCustomTitles';
 
 const STORE = new Store();
 
@@ -21,15 +22,36 @@ export const getUniversalEpisodeUrl = async (
 ): Promise<IVideo | null> => {
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
-  const animeTitles = getParsedAnimeTitles(listAnimeData.media);
+  var animeTitles;
+
+  const customTitle =
+    animeCustomTitles[STORE.get('source_flag') as string][
+      listAnimeData.media?.id!
+    ];
+
+  console.log(customTitle);
+
+  customTitle
+    ? (animeTitles = [customTitle.title])
+    : (animeTitles = getParsedAnimeTitles(listAnimeData.media));
 
   switch (lang) {
     case 'US': {
-      const data = await gogoanime(animeTitles, episode, dubbed);
+      const data = await gogoanime(
+        animeTitles,
+        customTitle ? customTitle.index : 0,
+        episode,
+        dubbed,
+      );
       return data ? getDefaultQualityVideo(data) : null;
     }
     case 'IT': {
-      const data = await animeunity(animeTitles, episode, dubbed);
+      const data = await animeunity(
+        animeTitles,
+        customTitle ? customTitle.index : 0,
+        episode,
+        dubbed,
+      );
       return data ? data[0] : null; // change when animeunity api updates
     }
   }

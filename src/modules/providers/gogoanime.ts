@@ -5,6 +5,7 @@ const consumet = new Gogoanime();
 
 export const getEpisodeUrl = async (
   animeTitles: string[],
+  index: number,
   episode: number,
   dubbed: boolean,
 ): Promise<IVideo[] | null> => {
@@ -14,7 +15,7 @@ export const getEpisodeUrl = async (
   );
 
   for (const animeSearch of animeTitles) {
-    const result = await searchEpisodeUrl(animeSearch, episode, dubbed);
+    const result = await searchEpisodeUrl(animeSearch, index, episode, dubbed);
     if (result) {
       return result;
     }
@@ -33,10 +34,12 @@ export const getEpisodeUrl = async (
  */
 async function searchEpisodeUrl(
   animeSearch: string,
+  index: number,
   episode: number,
   dubbed: boolean
 ): Promise<IVideo[] | null> {
   const animeId = await getAnimeId(
+    dubbed ? 0 : index,
     dubbed ? `${animeSearch} (Dub)` : animeSearch,
   );
 
@@ -61,10 +64,11 @@ async function searchEpisodeUrl(
  * @returns anime id if found, otherwise null
  */
 export const getAnimeId = async (
+  index: number,
   animeSearch: string,
 ): Promise<string | null> => {
   const data = await consumet.search(animeSearch);
-  return data.results[0]?.id ?? null;
+  return data.results[index]?.id ?? null;
 };
 
 /**

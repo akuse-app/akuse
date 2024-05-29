@@ -321,9 +321,9 @@ export const parseAirdate = (airdate: string) =>
 export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
   var animeTitles = getTitlesAndSynonyms(animeEntry);
 
-  const customTitle =
-    animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
-  if (customTitle) animeTitles.unshift(customTitle);
+  // const customTitle =
+  //   animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
+  // if (customTitle) animeTitles.unshift(customTitle);
 
   animeTitles.forEach((title) => {
     if (title.includes('Season '))
