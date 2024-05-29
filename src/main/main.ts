@@ -83,9 +83,9 @@ const createWindow = async () => {
     autoHideMenuBar: true,
     // titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#17191c',
+      color: '#1A1D24',
       symbolColor: '#eee',
-      height: 28,
+      height: 12,
     },
     icon: getAssetPath('icon.png'),
     webPreferences: {

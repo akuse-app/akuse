@@ -15,6 +15,7 @@ import VideoSettings from './VideoSettings';
 import Hls from 'hls.js';
 import { EpisodeInfo } from '../../../types/types';
 import VideoEpisodesChange from './VideoEpisodesChange';
+import { useState } from 'react';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -26,9 +27,11 @@ interface TopControlsProps {
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
   fullscreen: boolean;
-  onSettingsToggle: (isShowed: boolean) => void;
   onFullScreentoggle: () => void;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
+  onChangeEpisode: (
+    episode: number | null,
+    reloadAtPreviousTime?: boolean,
+  ) => void;
   onExit: () => void;
   onClick?: (event: any) => void;
   onDblClick?: (event: any) => void;
@@ -44,15 +47,18 @@ const TopControls: React.FC<TopControlsProps> = ({
   showPreviousEpisodeButton,
   showNextEpisodeButton,
   fullscreen,
-  onSettingsToggle,
   onFullScreentoggle,
   onChangeEpisode,
   onExit,
   onClick,
   onDblClick,
 }) => {
-  const handleSettingsToggle = (isShowed: boolean) => {
-    onSettingsToggle(isShowed);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [showEpisodesChange, setShowEpisodesChange] = useState<boolean>(false);
+
+  const closeOthers = () => {
+    setShowSettings(false);
+    setShowEpisodesChange(false);
   };
 
   return (
@@ -72,12 +78,21 @@ const TopControls: React.FC<TopControlsProps> = ({
       <div className="center"></div>
       <div className="right">
         <VideoSettings
+          show={showSettings}
+          onShow={(show) => {
+            closeOthers();
+            setShowSettings(show);
+          }}
           videoRef={videoRef}
           hls={hls}
-          onToggle={handleSettingsToggle}
           onChangeEpisode={onChangeEpisode}
         />
         <VideoEpisodesChange
+          show={showEpisodesChange}
+          onShow={(show) => {
+            closeOthers();
+            setShowEpisodesChange(show);
+          }}
           listAnimeData={listAnimeData}
           episodeNumber={episodeNumber}
           episodesInfo={episodesInfo}

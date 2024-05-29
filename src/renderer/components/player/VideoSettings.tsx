@@ -18,17 +18,22 @@ import { AuthContext } from '../../App';
 const STORE = new Store();
 
 interface SettingsProps {
+  show: boolean;
+  onShow: (show: boolean) => void;
   videoRef: React.RefObject<HTMLVideoElement>;
   hls?: Hls;
-  onToggle: (isShowed: boolean) => void;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
+  onChangeEpisode: (
+    episode: number | null,
+    reloadAtPreviousTime?: boolean,
+  ) => void;
 }
 
 // component for the video player settings tab
 const VideoSettings: React.FC<SettingsProps> = ({
+  show,
+  onShow,
   videoRef,
   hls,
-  onToggle,
   onChangeEpisode,
 }) => {
   const logged = useContext(AuthContext);
@@ -47,13 +52,9 @@ const VideoSettings: React.FC<SettingsProps> = ({
   const [skipTime, setSkipTime] = useState<number>(
     STORE.get('intro_skip_time') as number,
   );
-  const [settings, setSettings] = useState<boolean>(false);
 
-  const toggleSettings = () => {
-    const show = !settings;
-
-    setSettings(show);
-    onToggle(show);
+  const toggleShow = () => {
+    onShow(!show);
   };
 
   useEffect(() => {
@@ -89,14 +90,14 @@ const VideoSettings: React.FC<SettingsProps> = ({
     STORE.set('dubbed', !watchDubbed);
     setWatchDubbed(!watchDubbed);
 
-    onChangeEpisode(0, true);
+    onChangeEpisode(null, true);
   };
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     STORE.set('source_flag', event.target.value);
     setSelectedLanguage(event.target.value);
 
-    onChangeEpisode(0, true);
+    onChangeEpisode(null, true);
   };
 
   const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -106,17 +107,21 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   return (
     <div className="settings-content">
-      <button className="b-player settings" onClick={toggleSettings}>
+      <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
-      {settings && (
+      {show && (
         <div className="dropdown">
           <li className="quality">
             <span>
               <FontAwesomeIcon className="i" icon={faVideo} />
               Quality
             </span>
-            <select className="main-select-0" onChange={handleQualityChange} value={hlsData?.currentLevel}>
+            <select
+              className="main-select-0"
+              onChange={handleQualityChange}
+              value={hlsData?.currentLevel}
+            >
               {hlsData &&
                 hlsData?.levels?.map((level, index) => (
                   <option key={index} value={index}>

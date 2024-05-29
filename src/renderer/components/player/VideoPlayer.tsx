@@ -1,4 +1,4 @@
-import './styles/videoPlayer.css';
+import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
@@ -268,7 +268,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     pauseInfoTimer = setTimeout(() => {
       try {
         if (videoRef.current && videoRef.current.paused) {
-          !isSettingsShowed && setShowPauseInfo(true);
+          setShowPauseInfo(true);
         }
       } catch (error) {
         console.log(error);
@@ -280,8 +280,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setShowCursor(true);
 
     setShowPauseInfo(false);
-
-    if (isSettingsShowed) return;
 
     timer = setTimeout(() => {
       // setShowControls(false);
@@ -315,16 +313,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const changeEpisode = async (
-    episode: number,
+    episode: number | null, // null to play the current episode
     reloadAtPreviousTime?: boolean,
   ) => {
     onChangeLoading(true);
+
+    const episodeToPlay = episode || episodeNumber
 
     var previousTime = 0;
     if (reloadAtPreviousTime && videoRef.current)
       previousTime = videoRef.current?.currentTime;
 
-    getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+    getUniversalEpisodeUrl(listAnimeData, episodeToPlay).then((data) => {
       if (!data) {
         toast(`Source not found.`, {
           style: {
@@ -342,19 +342,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const setData = (value: IVideo) => {
       setVideoData(value);
-      setEpisodeNumber(episode);
+      setEpisodeNumber(episodeToPlay);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[episode].title?.en ?? `Episode ${episode}`
+          ? episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`
           : `Episode ${episode}`,
       );
       setEpisodeDescription(
-        episodesInfo ? episodesInfo[episode].summary ?? '' : '',
+        episodesInfo ? episodesInfo[episodeToPlay].summary ?? '' : '',
       );
       playHlsVideo(value.url);
       // loadSource(value.url, value.isM3U8 ?? false);
-      setShowNextEpisodeButton(canNextEpisode(episode));
-      setShowPreviousEpisodeButton(canPreviousEpisode(episode));
+      setShowNextEpisodeButton(canNextEpisode(episodeToPlay));
+      setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
       setProgressUpdated(false);
 
       try {
@@ -411,7 +411,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               fullscreen={fullscreen}
               onFullScreentoggle={toggleFullScreen}
               onChangeEpisode={changeEpisode}
-              onSettingsToggle={(isShowed) => setIsSettingsShowed(isShowed)}
               onExit={handleExit}
               onClick={togglePlayingWithoutPropagation}
               onDblClick={toggleFullScreenWithoutPropagation}

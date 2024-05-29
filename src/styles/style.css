@@ -1311,7 +1311,7 @@ main .anime-entry .anime-cover {
   position: relative;
   object-fit: cover;
   border-radius: var(--border-radius);
-  box-shadow: var(--shadow-cover);
+  /* box-shadow: var(--shadow-cover); */
 }
 
 main .anime-entry .anime-cover img {

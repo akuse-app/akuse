@@ -498,6 +498,10 @@
   transition: 0.1s ease-out;
 }
 
+.up-controls .b-player.active {
+  color: var(--font-1);
+}
+
 .mid-controls .b-player {
   color: var(--color-transparency);
   font-size: 4.6rem;
@@ -510,7 +514,6 @@
 .mid-controls .skip-forward-small span {
   font-size: 1rem;
 }
-
 
 .mid-controls .b-player i:hover {
   color: var(--font-1);

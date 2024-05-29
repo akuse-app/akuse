@@ -99,7 +99,7 @@
   width: 100%;
   flex-shrink: 0;
   margin-right: 25px;
-  box-shadow: var(--shadow-cover);
+  /* box-shadow: var(--shadow-cover); */
 }
 
 .dot-container {

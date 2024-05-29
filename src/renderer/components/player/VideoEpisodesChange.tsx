@@ -1,49 +1,47 @@
 import {
-  faLayerGroup,
   faBackward,
   faForward,
+  faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EpisodeInfo } from '../../../types/types';
 import { useEffect, useState } from 'react';
+
 import { getAvailableEpisodes } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import Heading from '../Heading';
+import { EpisodeInfo } from '../../../types/types';
 
 const Episode: React.FC<{
-  currentEpisode: number;
   episode: number;
   episodeInfo?: EpisodeInfo;
   media: ListAnimeData['media'];
   isOpen: boolean;
+  isCurrent: boolean;
   onClick: () => void;
   onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }> = ({
-  currentEpisode,
   episode,
   episodeInfo,
   media,
   isOpen,
+  isCurrent,
   onClick,
   onChangeEpisode,
 }) => (
   <div className={`episode ${isOpen ? 'active' : ''}`} onClick={onClick}>
     <div className="title">
       <span className="number">{episodeInfo ? `Ep: ${episode} - ` : ''}</span>
-      <span className='main'>
+      <span className="main">
         {episodeInfo && episodeInfo.title
           ? episodeInfo.title.en ?? `Episode ${episode}`
           : `Episode ${episode}`}
       </span>
-      {currentEpisode === episode && (
-        <span className="current-tag">Watching now</span>
-      )}
+      {isCurrent && <span className="current-tag">Watching now</span>}
     </div>
     {isOpen && (
       <div
-        className={`content ${currentEpisode !== episode ? 'pressable' : ''}`}
-        onClick={() => {
-          currentEpisode !== episode && onChangeEpisode(episode);
+        className={`content ${!isCurrent ? 'pressable' : ''}`}
+        onClickCapture={() => {
+          !isCurrent && onChangeEpisode(episode);
         }}
       >
         <img src={episodeInfo?.image ?? media.bannerImage ?? ''} alt="" />
@@ -56,6 +54,8 @@ const Episode: React.FC<{
 );
 
 const VideoEpisodesChange: React.FC<{
+  show: boolean;
+  onShow: (show: boolean) => void;
   listAnimeData: ListAnimeData;
   episodeNumber: number;
   episodesInfo?: EpisodeInfo[];
@@ -63,6 +63,8 @@ const VideoEpisodesChange: React.FC<{
   showNextEpisodeButton: boolean;
   onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
 }> = ({
+  show,
+  onShow,
   listAnimeData,
   episodeNumber,
   episodesInfo,
@@ -70,33 +72,31 @@ const VideoEpisodesChange: React.FC<{
   showNextEpisodeButton,
   onChangeEpisode,
 }) => {
-  const [showContent, setShowContent] = useState<boolean>(false);
   const [openEpisode, setOpenEpisode] = useState<number | null>(null);
 
   const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
 
+  const toggleShow = () => {
+    onShow(!show);
+  };
+
   return (
     <>
       <div className="other-episodes-content">
-        <button
-          className="b-player"
-          onClick={() => {
-            setShowContent(!showContent);
-          }}
-        >
+        <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
           <FontAwesomeIcon className="i" icon={faLayerGroup} />
         </button>
-        {showContent && (
+        {show && (
           <div className="dropdown other-episode">
             {Array.from({ length: episodes }, (_, index) => index + 1).map(
               (episode) => (
                 <Episode
                   key={episode}
-                  currentEpisode={episodeNumber}
                   episode={episode}
                   episodeInfo={episodesInfo ? episodesInfo[episode] : undefined}
                   media={listAnimeData.media}
                   isOpen={openEpisode === episode}
+                  isCurrent={episodeNumber === episode}
                   onClick={() =>
                     setOpenEpisode(openEpisode === episode ? null : episode)
                   }
