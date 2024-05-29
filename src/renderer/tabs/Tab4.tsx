@@ -143,7 +143,7 @@ const Tab4: React.FC = () => {
   ];
 
   return (
-    <div className="body-container">
+    <div className="body-container  show-tab">
       <div className="main-container">
         <div className="settings-page">
         <Heading text='Settings' />

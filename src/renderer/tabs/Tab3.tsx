@@ -6,6 +6,7 @@ import {
   faHeading,
   faLeaf,
   faMasksTheater,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
@@ -18,6 +19,7 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
 const Tab3 = () => {
   const viewerId = useContext(ViewerIdContext);
@@ -102,9 +104,9 @@ const Tab3 = () => {
   };
 
   return (
-    <div className="body-container">
+    <div className="body-container  show-tab">
       <div className="main-container">
-        <Heading text='Search' />
+        <Heading text="Search" />
         <main className="search">
           <div className="filters-container">
             <div className="filter">
@@ -196,12 +198,15 @@ const Tab3 = () => {
                 ))}
               </select>
             </div>
-            <div className="filter">
+            <div className="buttons">
+              {/* <div className="filter">
+                <button id="search-clear" onClick={handleClearClick}>
+                  Clear
+                </button>
+              </div> */}
               <button id="search-clear" onClick={handleClearClick}>
-                Clear
+                <FontAwesomeIcon className="i" icon={faTrashCan} />
               </button>
-            </div>
-            <div className="filter">
               <button id="search-submit" onClick={handleSearchClick}>
                 Search
               </button>

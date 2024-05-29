@@ -4,60 +4,28 @@
   --trailer-animation-transition: 1.5s ease;
 }
 
-/* LOADING PAGE */
-
-.loading-page-animation {
-  animation: loadingPage 1s ease-out;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes loadingPage {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-.loading-page-init-bar-animation {
-  animation: loadingPageInitBar var(--animation-transition);
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes loadingPageInitBar {
-  0% {
-    width: 0%;
-  }
-
-  100% {
-    width: 30%;
-  }
-}
-
-.loading-page-bar-animation {
-  animation: loadingPageBar var(--animation-transition);
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes loadingPageBar {
-  0% {
-    width: 30%;
-  }
-
-  100% {
-    width: 100%;
-  }
-}
-
 /* DOM ELEMENTS */
 
 .fade-in {
   opacity: 0;
+}
+
+.show-tab {
+  animation: showTab 0.2s ease-out;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes showTab {
+  0% {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .show-opacity {
@@ -228,38 +196,6 @@
 
   100% {
     opacity: 0;
-  }
-}
-
-.user-list-warn-on {
-  animation: userListWarnOn 0s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes userListWarnOn {
-  0% {
-    border: 2px solid var(--font-3);
-  }
-
-  100% {
-    border: 2px solid var(--color-warning);
-  }
-}
-
-.user-list-warn-off {
-  animation: userListWarnOff var(--animation-transition);
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-}
-
-@keyframes userListWarnOff {
-  0% {
-    border: 2px solid var(--color-warning);
-  }
-
-  100% {
-    border: 2px solid var(--font-3);
   }
 }
 

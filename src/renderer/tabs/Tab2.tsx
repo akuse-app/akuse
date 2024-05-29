@@ -15,7 +15,7 @@ const Tab2: React.FC<Tab2Props> = ({ currentListAnime, planningListAnime, clicke
   });
 
   return (
-    <div className="body-container">
+    <div className="body-container show-tab">
       <div className="main-container">
         <main>
         <Heading text='Library' />

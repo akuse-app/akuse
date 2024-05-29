@@ -53,9 +53,9 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
   // smoother transitions between slides
   useEffect(() => {
     if (isVisible && !isFirstActivation) {
-      setShadowAnimationClasses('show-opacity');
+      setShadowAnimationClasses('show-slide-opacity');
     } else if (!isVisible) {
-      setShadowAnimationClasses('show-opacity hide-opacity-long');
+      setShadowAnimationClasses('show-slide-opacity hide-opacity-long');
       setTimeout(() => {
         setShadowAnimationClasses('hide-opacity-long');
       }, 400);
@@ -126,16 +126,6 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           className={`shadow-overlay ${shadowAnimationClasses}`}
           // style={{ display: isVisible ? 'block' : 'none' }}
         >
-          {/* <div className="score">
-            <span style={{ color: '#e5a639' }}>
-              <FontAwesomeIcon
-                className="i"
-                icon={faStar}
-                style={{ marginRight: 7 }}
-              />
-              {listAnimeData.media.meanScore}%
-            </span>
-          </div> */}
           <div className={`content show`}>
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•

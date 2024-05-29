@@ -10,7 +10,7 @@
 .slideshow-wrapper {
   display: flex;
   padding-right: 25px;
-  transition: transform 0.5s ease;
+  transition: transform 1s ease;
 }
 
 .slideshow-container .shadow-overlay {
@@ -21,7 +21,7 @@
   width: 80%;
   height: 100%;
   z-index: 0;
-  background: linear-gradient(0.25turn, var(--color-0), transparent);
+  background: linear-gradient(0.25turn, var(--color-1), transparent);
   border-radius: var(--border-radius);
   transition: var(--transition);
 }

@@ -22,6 +22,8 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
   // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
   const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <>
       {listAnimeData && hasModalBeenShowed && (
@@ -39,10 +41,18 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
         }}
       >
         {listAnimeData ? (
-          <div className="anime-cover" style={{backgroundColor: listAnimeData.media.coverImage?.color}}>
+          <div
+            className="anime-cover"
+            style={{
+              backgroundColor: !imageLoaded
+                ? listAnimeData.media.coverImage?.color
+                : 'transparent',
+            }}
+          >
             <img
               src={listAnimeData.media.coverImage?.large}
               alt="anime cover"
+              onLoad={() => {setImageLoaded(true)}}
             />
           </div>
         ) : (
@@ -54,7 +64,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
             {listAnimeData ? (
               <>
                 {listAnimeData.media.status === 'RELEASING' && (
-                  <span className='yes'>
+                  <span className="yes">
                     <FontAwesomeIcon
                       className="i"
                       icon={faCircleDot}
@@ -63,7 +73,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
                   </span>
                 )}
                 {listAnimeData.media.status === 'NOT_YET_RELEASED' && (
-                  <span className='no'>
+                  <span className="no">
                     <FontAwesomeIcon
                       className="i"
                       icon={faCircleDot}

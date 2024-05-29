@@ -27,7 +27,7 @@ const Tab1: React.FC<Tab1Props> = ({
   const logged = useContext(AuthContext);
 
   return (
-    <div className="body-container">
+    <div className="body-container  show-tab">
       <div className="main-container">
         <main>
           {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
