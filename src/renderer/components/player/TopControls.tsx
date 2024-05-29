@@ -59,6 +59,7 @@ const TopControls: React.FC<TopControlsProps> = ({
   const closeOthers = () => {
     setShowSettings(false);
     setShowEpisodesChange(false);
+    if (videoRef.current) videoRef.current.focus();
   };
 
   return (

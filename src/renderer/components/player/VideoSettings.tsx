@@ -7,6 +7,8 @@ import {
   faSpinner,
   faVideo,
   faVolumeHigh,
+  faVolumeLow,
+  faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
@@ -53,6 +55,32 @@ const VideoSettings: React.FC<SettingsProps> = ({
     STORE.get('intro_skip_time') as number,
   );
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
+
+  useEffect(() => {
+    const handleVideoVolumeChange = () => {
+      if (videoRef.current) {
+        setIsMuted(videoRef.current.muted);
+        setVolume(videoRef.current.volume);
+      }
+    };
+
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.addEventListener('volumechange', handleVideoVolumeChange);
+    }
+
+    return () => {
+      if (videoElement) {
+        videoElement.removeEventListener(
+          'volumechange',
+          handleVideoVolumeChange,
+        );
+      }
+    };
+  }, []);
+
   const toggleShow = () => {
     onShow(!show);
   };
@@ -67,10 +95,26 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const volume = parseFloat(event.target.value);
+  const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.volume = volume;
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+      if (videoRef.current.muted) {
+        setVolume(0);
+      } else {
+        setVolume(videoRef.current.volume);
+      }
+    }
+  };
+
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Math.min(Math.max(parseFloat(event.target.value), 0), 1);
+    console.log(newVolume);
+    if (videoRef.current) {
+      videoRef.current.volume = newVolume;
+      videoRef.current.muted = newVolume === 0;
+      setVolume(newVolume);
+      setIsMuted(newVolume === 0);
     }
   };
 
@@ -107,7 +151,10 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   return (
     <div className="settings-content">
-      <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
+      <button
+        className={`b-player ${show ? 'active' : ''}`}
+        onClick={toggleShow}
+      >
         <FontAwesomeIcon className="i" icon={faGear} />
       </button>
       {show && (
@@ -131,16 +178,23 @@ const VideoSettings: React.FC<SettingsProps> = ({
             </select>
           </li>
           <li className="volume">
-            <span>
-              <FontAwesomeIcon className="i" icon={faVolumeHigh} />
+            <span onClick={toggleMute}>
+              {isMuted ? (
+                <FontAwesomeIcon className="i" icon={faVolumeXmark} />
+              ) : volume <= 0.3 ? (
+                <FontAwesomeIcon className="i" icon={faVolumeLow} />
+              ) : (
+                <FontAwesomeIcon className="i" icon={faVolumeHigh} />
+              )}
               Volume
             </span>
             <input
               type="range"
               min="0"
               max="1"
-              step="any"
+              step="0.1"
               defaultValue={1}
+              value={volume}
               onChange={handleVolumeChange}
             />
           </li>

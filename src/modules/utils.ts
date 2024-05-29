@@ -207,8 +207,8 @@ export const getTrailerUrl = (animeEntry: Media) =>
   animeEntry.trailer == null
     ? ''
     : animeEntry.trailer.site == 'youtube'
-    ? `https://www.youtube.com/embed/${animeEntry.trailer.id}`
-    : '';
+      ? `https://www.youtube.com/embed/${animeEntry.trailer.id}`
+      : '';
 
 /**
  * Removes unwanted spaces/new lines from anime description

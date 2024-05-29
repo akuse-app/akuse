@@ -83,6 +83,94 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // const [videoLoading, setLoading] = useState<boolean>(loading);
 
+  // keydown handlers
+
+  const handleVideoPlayerKeydown = async (
+    event: KeyboardEvent | React.KeyboardEvent<HTMLVideoElement>,
+  ) => {
+    if (event.keyCode === 229 || !videoRef?.current) return;
+
+    const video = videoRef.current;
+
+    switch (event.code) {
+      case 'Space': {
+        event.preventDefault();
+        togglePlaying();
+        break;
+      }
+      case 'ArrowLeft': {
+        event.preventDefault();
+        video.currentTime -= 5;
+        break;
+      }
+      case 'ArrowUp': {
+        event.preventDefault();
+        video.volume = Math.min(video.volume + 0.1, 1);
+        break;
+      }
+      case 'ArrowRight': {
+        event.preventDefault();
+        video.currentTime += 5;
+        break;
+      }
+      case 'ArrowDown': {
+        event.preventDefault();
+        video.volume = Math.max(video.volume - 0.1, 0);
+        break;
+      }
+      case 'F11': {
+        event.preventDefault();
+        toggleFullScreen();
+        break;
+      }
+    }
+    switch (event.key) {
+      case 'f': {
+        event.preventDefault();
+        toggleFullScreen();
+        break;
+      }
+      case 'm': {
+        event.preventDefault();
+        toggleMute();
+        break;
+      }
+      case 'p': {
+        event.preventDefault();
+        await changeEpisode(episodeNumber - 1);
+        break;
+      }
+      case 'n': {
+        event.preventDefault();
+        await changeEpisode(episodeNumber + 1);
+        break;
+      }
+    }
+  };
+
+  const handleKeydown = (event: React.KeyboardEvent<HTMLVideoElement>) => {
+    if (videoRef.current) {
+      handleVideoPlayerKeydown(event);
+    }
+  };
+
+  useEffect(() => {
+    const handleDocumentKeydown = (event: KeyboardEvent) => {
+      if (videoRef.current) {
+        console.log('ciao');
+        handleVideoPlayerKeydown(
+          event,
+        );
+      }
+    };
+
+    document.addEventListener('keydown', handleDocumentKeydown);
+
+    return () => {
+      document.removeEventListener('keydown', handleDocumentKeydown);
+    };
+  }, [handleVideoPlayerKeydown]);
+
   useEffect(() => {
     const video = videoRef.current;
 
@@ -181,7 +269,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const togglePlaying = () => {
-    playing ? pauseVideo() : playVideo();
+    try {
+      playing ? pauseVideo() : playVideo();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const playVideoAndSetTime = () => {
@@ -300,6 +392,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     toggleFullScreen();
   };
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+    }
+  };
+
   const toggleFullScreen = () => {
     if (document.fullscreenElement) {
       setFullscreen(false);
@@ -318,7 +416,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   ) => {
     onChangeLoading(true);
 
-    const episodeToPlay = episode || episodeNumber
+    const episodeToPlay = episode || episodeNumber;
 
     var previousTime = 0;
     if (reloadAtPreviousTime && videoRef.current)
@@ -383,6 +481,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           className={`container ${showControls ? 'show-controls' : ''} ${showPauseInfo ? 'show-pause-info' : ''}`}
           onMouseMove={handleMouseMove}
           ref={containerRef}
+          // onKeyDown={handleKeydown}
         >
           <div className="pause-info">
             <div className="content">
@@ -437,6 +536,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           <video
             id="video"
             ref={videoRef}
+            onKeyDown={handleKeydown}
             onTimeUpdate={handleTimeUpdate}
             onPause={handleVideoPause}
             crossOrigin="anonymous"
