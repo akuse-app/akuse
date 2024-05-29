@@ -282,8 +282,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setShowPauseInfo(false);
 
     timer = setTimeout(() => {
-      // setShowControls(false);
-      // setShowCursor(false);
+      setShowControls(false);
+      setShowCursor(false);
     }, 2000);
   };
 

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
 import {
+  getAvailableEpisodes,
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
@@ -12,11 +13,49 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeModal from './modals/AnimeModal';
 import Skeleton from 'react-loading-skeleton';
 
-interface AnimeEntryProps {
-  listAnimeData?: ListAnimeData;
-}
+const StatusDot: React.FC<{
+  listAnimeData?: ListAnimeData | undefined;
+}> = ({ listAnimeData }) => {
+  return (
+    <>
+      {(listAnimeData?.media.mediaListEntry?.status == 'CURRENT' ||
+        listAnimeData?.media.mediaListEntry?.status == 'REPEATING') &&
+      listAnimeData.media.mediaListEntry.progress !==
+        getAvailableEpisodes(listAnimeData.media) ? (
+        <span className="up_to_date">
+          <FontAwesomeIcon
+            className="i"
+            icon={faCircleDot}
+            style={{ marginRight: 5 }}
+          />
+        </span>
+      ) : (
+        listAnimeData?.media.status === 'RELEASING' && (
+          <span className="releasing">
+            <FontAwesomeIcon
+              className="i"
+              icon={faCircleDot}
+              style={{ marginRight: 5 }}
+            />
+          </span>
+        )
+      )}
+      {listAnimeData?.media.status === 'NOT_YET_RELEASED' && (
+        <span className="not_yet_released">
+          <FontAwesomeIcon
+            className="i"
+            icon={faCircleDot}
+            style={{ marginRight: 5 }}
+          />
+        </span>
+      )}
+    </>
+  );
+};
 
-const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
+const AnimeEntry: React.FC<{
+  listAnimeData?: ListAnimeData;
+}> = ({ listAnimeData }) => {
   // wether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
   // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
@@ -52,7 +91,9 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
             <img
               src={listAnimeData.media.coverImage?.large}
               alt="anime cover"
-              onLoad={() => {setImageLoaded(true)}}
+              onLoad={() => {
+                setImageLoaded(true);
+              }}
             />
           </div>
         ) : (
@@ -63,24 +104,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
           <div className="anime-title">
             {listAnimeData ? (
               <>
-                {listAnimeData.media.status === 'RELEASING' && (
-                  <span className="yes">
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={faCircleDot}
-                      style={{ marginRight: 5 }}
-                    />
-                  </span>
-                )}
-                {listAnimeData.media.status === 'NOT_YET_RELEASED' && (
-                  <span className="no">
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={faCircleDot}
-                      style={{ marginRight: 5 }}
-                    />
-                  </span>
-                )}
+                <StatusDot listAnimeData={listAnimeData} />
                 {getTitle(listAnimeData.media)}
               </>
             ) : (
