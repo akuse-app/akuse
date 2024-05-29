@@ -231,7 +231,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
       {listAnimeData ? (
         <div className="slideshow-container">
           <div
-            className="slideshow-wrapper"
+            className="slideshow-wrapper show-opacity"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {animeData &&

@@ -39,7 +39,7 @@ const AnimeEntry: React.FC<AnimeEntryProps> = ({ listAnimeData }) => {
         }}
       >
         {listAnimeData ? (
-          <div className="anime-cover">
+          <div className="anime-cover" style={{backgroundColor: listAnimeData.media.coverImage?.color}}>
             <img
               src={listAnimeData.media.coverImage?.large}
               alt="anime cover"

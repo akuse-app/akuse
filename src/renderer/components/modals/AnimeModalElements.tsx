@@ -271,65 +271,66 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
     if (localProgress) setProgress(localProgress);
   }, [localProgress]);
 
-  return (
-    listAnimeData.media.status !== 'NOT_YET_RELEASED' &&
-    (logged ? (
-      <div className="watch-buttons">
-        {progress === 0 && (
-          <ButtonMain
-            text="Watch now"
-            icon={faPlay}
-            tint="light"
-            shadow
-            onClick={() => onPlay(1)}
-          />
-        )}
-
-        {progress === availableEpisodes && timeUntilAiring ? (
-          <ButtonMain
-            text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
-            icon={faHourglass}
-            tint="light"
-            shadow
-            disabled
-          />
-        ) : (
-          progress === episodes && (
+  return logged ? (
+    <div className="watch-buttons">
+      {listAnimeData.media.status !== 'NOT_YET_RELEASED' && (
+        <>
+          {progress === 0 && (
             <ButtonMain
-              text="Watch again"
-              icon={faRotate}
+              text="Watch now"
+              icon={faPlay}
               tint="light"
               shadow
               onClick={() => onPlay(1)}
             />
-          )
-        )}
-
-        {progress !== 0 &&
-          progress !== episodes &&
-          progress !== availableEpisodes && (
-            <ButtonMain
-              text={`Resume from Ep. ${progress! + 1}`}
-              icon={faPlay}
-              tint="light"
-              shadow
-              onClick={() => onPlay(progress! + 1)}
-            />
           )}
 
-        <IsInListButton listAnimeData={listAnimeData} />
-      </div>
-    ) : (
-      <div className="watch-buttons">
-        <ButtonMain
-          text="Watch now"
-          icon={faPlay}
-          tint="light"
-          shadow
-          onClick={() => onPlay(1)}
-        />
-      </div>
-    ))
+          {progress === availableEpisodes && timeUntilAiring ? (
+            <ButtonMain
+              text={`${timeUntilAiring.days}d ${timeUntilAiring.hours}h ${timeUntilAiring.minutes}m`}
+              icon={faHourglass}
+              tint="light"
+              shadow
+              disabled
+            />
+          ) : (
+            progress === episodes && (
+              <ButtonMain
+                text="Watch again"
+                icon={faRotate}
+                tint="light"
+                shadow
+                onClick={() => onPlay(1)}
+              />
+            )
+          )}
+
+          {progress !== 0 &&
+            progress !== episodes &&
+            progress !== availableEpisodes && (
+              <ButtonMain
+                text={`Resume from Ep. ${progress! + 1}`}
+                icon={faPlay}
+                tint="light"
+                shadow
+                onClick={() => onPlay(progress! + 1)}
+              />
+            )}
+        </>
+      )}
+
+      <IsInListButton listAnimeData={listAnimeData} />
+    </div>
+  ) : (
+    <div className="watch-buttons">
+      <ButtonMain
+        text="Watch now"
+        icon={faPlay}
+        tint="light"
+        shadow
+        onClick={() => onPlay(1)}
+      />
+    </div>
   );
 };
 
@@ -365,7 +366,12 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
   }, []);
 
   return inList ? (
-    <ButtonCircle icon={faBookmarkFull} tint="light" shadow onClick={removeFromList} />
+    <ButtonCircle
+      icon={faBookmarkFull}
+      tint="light"
+      shadow
+      onClick={removeFromList}
+    />
   ) : (
     <ButtonCircle icon={faBookmark} tint="light" shadow onClick={addToList} />
   );
