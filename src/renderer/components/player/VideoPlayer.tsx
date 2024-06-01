@@ -137,12 +137,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'p': {
         event.preventDefault();
-        await changeEpisode(episodeNumber - 1);
+        canPreviousEpisode(episodeNumber) &&
+          (await changeEpisode(episodeNumber - 1));
         break;
       }
       case 'n': {
         event.preventDefault();
-        await changeEpisode(episodeNumber + 1);
+        canNextEpisode(episodeNumber) &&
+          (await changeEpisode(episodeNumber + 1));
         break;
       }
     }
@@ -158,9 +160,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handleDocumentKeydown = (event: KeyboardEvent) => {
       if (videoRef.current) {
         console.log('ciao');
-        handleVideoPlayerKeydown(
-          event,
-        );
+        handleVideoPlayerKeydown(event);
       }
     };
 

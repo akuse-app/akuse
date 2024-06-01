@@ -103,12 +103,18 @@ const Tab3 = () => {
     );
   };
 
+  const handleInputKeydown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.keyCode === 229) return;
+
+    if (event.code === 'Enter') handleSearchClick();
+  };
+
   return (
     <div className="body-container  show-tab">
       <div className="main-container">
         <Heading text="Search" />
         <main className="search">
-          <div className="filters-container">
+          <div className="filters-container" onKeyDown={handleInputKeydown}>
             <div className="filter">
               <h2>
                 <FontAwesomeIcon className="i" icon={faHeading} /> Title

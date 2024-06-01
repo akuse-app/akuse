@@ -22,7 +22,7 @@
   height: 100%;
   z-index: 0;
   background: linear-gradient(0.25turn, var(--color-1), transparent);
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
   transition: var(--transition);
 }
 
