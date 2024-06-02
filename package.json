@@ -243,7 +243,7 @@
         "Comment": "Simple and easy to use anime streaming desktop app without ads.",
         "Keywords": "anime",
         "Type": "Application",
-        "MimeType": "x-scheme-handler/akuse;"
+        "MimeType": "x-scheme-handler/akuse-react;"
       },
       "target": [
         {
