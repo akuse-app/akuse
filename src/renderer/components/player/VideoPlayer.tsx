@@ -177,7 +177,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handleSeeked = () => {
       console.log('seeked');
       onChangeLoading(false);
-      setPlaying(true);
+      if(!video?.paused) setPlaying(true);
     };
 
     const handleWaiting = () => {
