@@ -1,10 +1,9 @@
 .slideshow-container {
   position: relative;
-  /* overflow: hidden; */
   margin: auto;
   width: calc(100% + 25px);
   height: 491px; /* for skeleton */
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
 }
 
 .slideshow-wrapper {
@@ -20,9 +19,8 @@
   display: flex;
   width: 80%;
   height: 100%;
-  z-index: 0;
+  z-index: 1;
   background: linear-gradient(0.25turn, var(--color-1), transparent);
-  /* border-radius: var(--border-radius); */
   transition: var(--transition);
 }
 
@@ -30,7 +28,9 @@
   position: absolute;
   top: 20px;
   right: 20px;
+  z-index: 2; /* Assicurati che sia sopra l'immagine ingrandita */
 }
+
 .slideshow-container .content {
   position: absolute;
   bottom: 20px;
@@ -41,6 +41,7 @@
   height: max-content;
   padding-left: 20px;
   font-weight: var(--font-weight);
+  z-index: 2; /* Assicurati che sia sopra l'immagine ingrandita */
 }
 
 .slideshow-container .anime-title {
@@ -84,7 +85,11 @@
   width: 100%;
   height: 450px;
   object-fit: cover;
-  border-radius: var(--border-radius);
+  transition: transform 0.5s ease-out; /* Aggiungi transizione per l'effetto hover */
+}
+
+.slide:hover img {
+  transform: scale(1.05); /* Effetto di ingrandimento */
 }
 
 .slideshow-wrapper .buttons {
@@ -99,7 +104,8 @@
   width: 100%;
   flex-shrink: 0;
   margin-right: 25px;
-  /* box-shadow: var(--shadow-cover); */
+  overflow: hidden;
+  border-radius: var(--border-radius);
 }
 
 .dot-container {
@@ -112,7 +118,6 @@
   width: 10px;
   height: 10px;
   margin: 0 5px;
-  /* background-color: var(--color-4); */
   background-color: var(--font-3);
   border-radius: 100%;
   display: inline-block;
@@ -120,8 +125,5 @@
 }
 
 .dot.active {
-  /* width: 26px; */
   background-color: var(--font-1);
-  /* filter: brightness(1.75); */
-  /* border-radius: var(--border-radius); */
 }
