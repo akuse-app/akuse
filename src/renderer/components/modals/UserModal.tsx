@@ -29,7 +29,7 @@ const UserModal: React.FC<{ show: boolean; onClose: () => void }> = ({
             <div className="log-out-wrapper">
               <ButtonMain
                 text={'Log out'}
-                tint="warning"
+                tint="primary"
                 icon={faRightToBracket}
                 onClick={() => {
                   ipcRenderer.send('logout');

@@ -84,6 +84,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
+    if(!showPlayer) {
+      setPlayerIVideo(null)
+      console.log('fine')
+    }
+  }, [showPlayer])
+
+  useEffect(() => {
     try {
       if (show && trailerRef.current && canRePlayTrailer)
         trailerRef.current.play();
