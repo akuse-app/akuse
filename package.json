@@ -16,6 +16,10 @@
     "type": "git",
     "url": "https://github.com/akuse-app/Akuse"
   },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
   "license": "GPL-3.0-or-later",
   "author": {
     "name": "aleganza",
@@ -243,12 +247,7 @@
     },
     "extraResources": [
       "./assets/**"
-    ],
-    "publish": {
-      "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
-    }
+    ]
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"

@@ -26,10 +26,11 @@ import Tab4 from './tabs/Tab4';
 
 import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { ipcRenderer } from 'electron';
+import AutoUpdateModal from './components/modals/AutoUpdateModal';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
-  console.log(toPrint)
-})
+  console.log(toPrint);
+});
 
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
@@ -38,11 +39,16 @@ export const ViewerIdContext = createContext<number | null>(null);
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false)
 
   setDefaultStoreVariables();
 
+  ipcRenderer.on('auto-update', async () => {
+    setShowUpdateModal(true)
+  });
+
   // tab1
-  const [userInfo, setUserInfo] = useState<UserInfo>()
+  const [userInfo, setUserInfo] = useState<UserInfo>();
   const [currentListAnime, setCurrentListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
@@ -83,9 +89,9 @@ export default function App() {
         id = await getViewerId();
         setViewerId(id);
 
-        setUserInfo(await getViewerInfo(id))
-        const current = await getViewerList(id, 'CURRENT')
-        const rewatching = await getViewerList(id, 'REPEATING')
+        setUserInfo(await getViewerInfo(id));
+        const current = await getViewerList(id, 'CURRENT');
+        const rewatching = await getViewerList(id, 'REPEATING');
         setCurrentListAnime(current.concat(rewatching));
       }
 
@@ -136,6 +142,7 @@ export default function App() {
           baseColor={style.getPropertyValue('--color-3')}
           highlightColor={style.getPropertyValue('--color-4')}
         >
+          <AutoUpdateModal show={showUpdateModal} onClose={() => {setShowUpdateModal(false)}} />
           <MemoryRouter>
             <MainNavbar avatar={userInfo?.avatar?.medium} />
             <Routes>
@@ -156,7 +163,7 @@ export default function App() {
                   path="/tab2"
                   element={
                     <Tab2
-                     currentListAnime={currentListAnime}
+                      currentListAnime={currentListAnime}
                       planningListAnime={planningListAnime}
                       // completedListAnime={completedListAnime}
                       // droppedListAnime={droppedListAnime}

@@ -1,15 +1,13 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
-import { app, BrowserWindow, ipcMain, shell, dialog } from 'electron';
-import log from 'electron-log';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
+import { getAccessToken } from '../modules/anilist/anilistApi';
+import { clientData } from '../modules/clientData';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { clientData } from '../modules/clientData';
-import { getAccessToken } from '../modules/anilist/anilistApi';
 
 const STORE = new Store();
 
@@ -22,17 +20,9 @@ const authUrl =
   '&redirect_uri=' +
   clientData.redirectUri +
   '&response_type=code';
-// autoUpdater.autoDownload = false;
-// autoUpdater.autoInstallOnAppQuit = true;
-// autoUpdater.autoRunAppAfterInstall = true;
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoRunAppAfterInstall = true;
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -111,8 +101,7 @@ const createWindow = async () => {
 
       if (STORE.get('logged') !== true) STORE.set('logged', false);
 
-      // mainWindow.webContents.send('load-app');
-      // autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdates();
     }
   });
 
@@ -128,9 +117,6 @@ const createWindow = async () => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
-
-  // Remove this if your app does not use auto updates
-  new AppUpdater();
 };
 
 ipcMain.on('open-login-url', () => {
@@ -226,4 +212,33 @@ ipcMain.on('shell:open', () => {
   const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
   const pagePath = path.join('file://', pageDirectory, 'index.html');
   shell.openExternal(pagePath);
+});
+
+/* AUTO UPDATING */
+
+autoUpdater.on('update-available', (info) => {
+  if (!mainWindow) return;
+
+  mainWindow.webContents.send('console-log', info);
+
+  mainWindow.webContents.send('auto-update');
+  mainWindow.webContents.send('update-available-info', info);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  autoUpdater.quitAndInstall();
+});
+
+autoUpdater.on('download-progress', (info) => {
+  if (!mainWindow) return;
+  mainWindow.webContents.send('downloading', info);
+});
+
+autoUpdater.on('error', (info) => {
+  if (!mainWindow) return;
+  mainWindow.webContents.send('console', info);
+});
+
+ipcMain.on('download-update', () => {
+  let pth = autoUpdater.downloadUpdate();
 });

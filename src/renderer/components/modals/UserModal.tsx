@@ -25,15 +25,17 @@ const UserModal: React.FC<{ show: boolean; onClose: () => void }> = ({
           title="Log Out"
         >
           Are you sure you want to log out?
-          <div className="log-out-wrapper">
-            <ButtonMain
-              text={'Log out'}
-              tint="warning"
-              icon={faRightToBracket}
-              onClick={() => {
-                ipcRenderer.send('logout');
-              }}
-            />
+          <div className="user-modal-content">
+            <div className="log-out-wrapper">
+              <ButtonMain
+                text={'Log out'}
+                tint="warning"
+                icon={faRightToBracket}
+                onClick={() => {
+                  ipcRenderer.send('logout');
+                }}
+              />
+            </div>
           </div>
         </ModalPageSizeableContent>
       </ModalPage>

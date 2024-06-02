@@ -109,7 +109,7 @@ export const ModalPageSizeableContent: React.FC<{
       <button className="exit" onClick={closeModal}>
         <FontAwesomeIcon className="i" icon={faXmark} />
       </button>
-      <div className="content">{children}</div>
+      {children}
     </div>
   );
 };

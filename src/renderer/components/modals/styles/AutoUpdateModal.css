@@ -1,0 +1,50 @@
+.modal-page-wrapper .auto-update-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-page-wrapper .auto-update-modal-content .download-wrapper {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
+
+.modal-page-wrapper .auto-update-modal-content .heading {
+  position: relative;
+  gap: 10px;
+  font-size: 1.2rem;
+}
+
+.modal-page-wrapper .auto-update-modal-content .heading span {
+  color: var(--font-2);
+  font-weight: bold
+}
+
+.modal-page-wrapper .auto-update-modal-content .heading span.date {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1rem;
+}
+
+.modal-page-wrapper .auto-update-modal-content .progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-3);
+  border-radius: var(--border-radius);
+}
+
+.modal-page-wrapper .auto-update-modal-content .mb {
+  display: flex;
+  justify-content: end;
+  width: 100%;
+  font-weight: bold;
+}
+
+.modal-page-wrapper .auto-update-modal-content .downloaded {
+  width: 35%;
+  height: 100%;
+  background-color: var(--font-3);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}

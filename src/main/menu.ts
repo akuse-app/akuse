@@ -251,13 +251,13 @@ export default class MenuBuilder {
                   },
                 },
                 // remove when prod
-                // {
-                //   label: 'Toggle &Developer Tools',
-                //   accelerator: 'Alt+Ctrl+I',
-                //   click: () => {
-                //     this.mainWindow.webContents.toggleDevTools();
-                //   },
-                // },
+                {
+                  label: 'Toggle &Developer Tools',
+                  accelerator: 'Alt+Ctrl+I',
+                  click: () => {
+                    this.mainWindow.webContents.toggleDevTools();
+                  },
+                },
               ],
       },
       {
