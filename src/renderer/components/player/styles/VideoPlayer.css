@@ -82,6 +82,10 @@
   cursor: pointer;
 }
 
+.video-timeline:active {
+  cursor: grabbing;
+}
+
 .video-timer .separator {
   margin: 0;
 }
