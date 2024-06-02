@@ -3,15 +3,10 @@
   "version": "0.7.2",
   "description": "Anime streaming client for PC",
   "keywords": [
-    "electron",
-    "boilerplate",
-    "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
+    "akuse",
+    "anime",
+    "streaming",
+    "desktop"
   ],
   "homepage": "https://github.com/aleganza/akuse#readme",
   "bugs": {
@@ -225,6 +220,14 @@
       "target": [
         "nsis"
       ]
+    },
+    "nsis": {
+      "deleteAppDataOnUninstall": true,
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "license": "LICENSE"
     },
     "linux": {
       "target": [

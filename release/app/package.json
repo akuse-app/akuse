@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
-  "license": "MIT",
+  "name": "akuse-beta",
+  "version": "0.7.2",
+  "description": "Anime streaming client for PC",
+  "license": "GPL-3.0-or-later",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "aleganza",
+    "email": "ganzarolli.alessio@gmail.com",
+    "url": "https://github.com/aleganza"
   },
   "main": "./dist/main/main.js",
   "scripts": {
