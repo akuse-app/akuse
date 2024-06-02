@@ -235,10 +235,26 @@
       "license": "LICENSE"
     },
     "linux": {
+      "artifactName": "${os}-${name}-${version}.${ext}",
+      "category": "AudioVideo;Video",
+      "description": "Simple and easy to use anime streaming desktop app without ads.",
+      "desktop": {
+        "Name": "Akuse",
+        "Comment": "Simple and easy to use anime streaming desktop app without ads.",
+        "Keywords": "anime",
+        "Type": "Application",
+        "MimeType": "x-scheme-handler/akuse;"
+      },
       "target": [
-        "AppImage"
-      ],
-      "category": "Development"
+        {
+          "arch": "x64",
+          "target": "AppImage"
+        },
+        {
+          "arch": "x64",
+          "target": "deb"
+        }
+      ]
     },
     "directories": {
       "app": "release/app",
