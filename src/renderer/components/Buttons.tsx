@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  tint?: 'primary' | 'light' | 'dark';
+  tint?: 'primary' | 'light' | 'dark' | 'warning';
   shadow?: boolean;
   disabled?: boolean
 }

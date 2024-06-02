@@ -21,6 +21,7 @@ import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from './App';
+import UserModal from './components/modals/UserModal';
 
 const Li: React.FC<{
   text: string;
@@ -57,8 +58,10 @@ const LiLink: React.FC<{
 };
 
 const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
-  const [activeTab, setActiveTab] = useState(1);
   const logged = useContext(AuthContext);
+
+  const [activeTab, setActiveTab] = useState(1);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   return (
     <nav className="main">
@@ -94,17 +97,20 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           onClick={() => setActiveTab(4)}
         />
         {logged ? (
-          <div
-            className="i-wrapper"
-            onClick={() => {
-              ipcRenderer.send('logout');
-            }}
-          >
-            <img src={avatar}></img>
-          </div>
+          <>
+            <UserModal show={showModal} onClose={() => setShowModal(false)} />
+            <div
+              className="img-wrapper"
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              <img src={avatar}></img>
+            </div>
+          </>
         ) : (
           <LiLink
-            text="Settings"
+            text="Log-In"
             icon={faRightToBracket}
             onClick={() => {
               ipcRenderer.send('open-login-url');

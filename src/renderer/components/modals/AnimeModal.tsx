@@ -1,4 +1,4 @@
-import './styles/AnimeModal.css'
+import './styles/AnimeModal.css';
 
 import { IVideo } from '@consumet/extensions';
 import {
@@ -76,9 +76,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   // other
   const [localProgress, setLocalProgress] = useState<number>();
-  const [alternativeBanner, setAlternativeBanner] = useState<
-    string | undefined
-  >(undefined);
+  const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -92,15 +90,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
     } catch (error) {
       console.log(error);
-    }
-  }, [show]);
-
-  useEffect(() => {
-    if (show) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
     }
   }, [show]);
 
@@ -118,13 +107,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
     if (!modalRef.current?.contains(event.target as Node)) {
-      closeModal();
-    }
-  };
-
-  // close modal by pressing ESC
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
       closeModal();
     }
   };
@@ -151,7 +133,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       if (trailerRef.current) trailerRef.current.play();
       setCanRePlayTrailer(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -205,9 +187,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       if (trailerRef.current) trailerRef.current.play();
       setShowPlayer(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return ReactDOM.createPortal(
     <>
@@ -225,7 +207,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         />
       )}
       <ModalPageShadow show={show} />
-      <ModalPage show={show}>
+      <ModalPage show={show} closeModal={closeModal}>
         <div className="anime-page" onClick={handleClickOutside}>
           <div className="content-wrapper" ref={modalRef}>
             <button className="exit" onClick={closeModal}>

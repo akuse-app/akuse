@@ -68,22 +68,33 @@ nav.main ul li:hover:not(li.active) {
   color: var(--font-1);
 }
 
-nav.main ul .i-wrapper {
+nav.main ul .i-wrapper,
+nav.main ul .img-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 50px;
   height: 50px;
   border-radius: 100%;
+  transition: var(--transition);
+  cursor: pointer;
 }
 
 nav.main ul li .i-wrapper.nav-user {
   background-color: transparent;
 }
 
-nav.main ul li .i-wrapper img {
+nav.main ul li .img-wrapper img {
   max-width: 75%;
   border-radius: 100px;
+}
+
+nav.main ul .img-wrapper:hover {
+  transform: scale(1.2);
+}
+
+nav.main ul .img-wrapper:active {
+  transform: scale(1);
 }
 
 nav.main ul li .i-wrapper .i {

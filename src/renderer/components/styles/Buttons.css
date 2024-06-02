@@ -26,6 +26,11 @@ button.bm.dark {
   background-color: var(--color-3);
 }
 
+button.bm.warning {
+  color: var(--color-1);
+  background-color: var(--color-warning);
+}
+
 button.bm:hover:not(.disabled) {
   transform: scale(1.05);
   filter: brightness(1.2);
@@ -74,6 +79,11 @@ button.bc.light {
 button.bc.dark {
   color: var(--font-2);
   background-color: var(--color-3);
+}
+
+button.bc.warning {
+  color: var(--color-1);
+  background-color: var(--color-warning);
 }
 
 button.bc:hover:not(.disabled) {

@@ -23,3 +23,40 @@
   align-items: center;
   justify-content: center;
 }
+
+.modal-page-wrapper .sizeable-content {
+  position: relative;
+  width: auto;
+  height: auto;
+  min-width: 30px;
+  min-height: 40px;
+  background-color: var(--color-1);
+  border-radius: var(--border-radius);
+  padding: 20px;
+}
+
+.modal-page-wrapper .sizeable-content h1 {
+  font-size: 1.6rem;
+}
+
+.modal-page-wrapper .sizeable-content .exit {
+  position: absolute;
+  top: 22px;
+  right: 20px;
+  color: var(--font-2);
+  font-size: 1.4rem;
+  /* cursor: pointer; */
+  background-color: transparent;
+  border: none;
+  outline: none;
+  transition: var(--transition);
+  z-index: 22;
+}
+
+.modal-page-wrapper .sizeable-content .exit:hover {
+  color: var(--font-1);
+}
+
+.modal-page-wrapper .sizeable-content .content {
+  color: var(--font-3);
+}
