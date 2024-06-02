@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import './styles/Modal.css'
 
-interface ModalPageProps {
+import { useEffect, useState } from 'react';
+import { Property } from 'csstype';
+export const ModalPage: React.FC<{
   show: boolean;
   children: React.ReactNode;
-}
-
-export const ModalPage: React.FC<ModalPageProps> = ({ show, children }) => {
-  const [animation, setAnimation] = useState<boolean>(show)
+}> = ({ show, children }) => {
+  const [animation, setAnimation] = useState<boolean>(show);
   const [isVisible, setIsVisible] = useState<boolean>(show);
 
   useEffect(() => {
     if (show) {
       setIsVisible(true);
-      setAnimation(true)
+      setAnimation(true);
     } else {
-      setAnimation(false)
+      setAnimation(false);
       const timeout = setTimeout(() => {
         setIsVisible(false);
       }, 400);
@@ -34,20 +33,18 @@ export const ModalPage: React.FC<ModalPageProps> = ({ show, children }) => {
   );
 };
 
-interface ModalPageShadowProps {
+export const ModalPageShadow: React.FC<{
   show: boolean;
-}
-
-export const ModalPageShadow: React.FC<ModalPageShadowProps> = ({ show }) => {
-  const [animation, setAnimation] = useState<boolean>(show)
+}> = ({ show }) => {
+  const [animation, setAnimation] = useState<boolean>(show);
   const [isVisible, setIsVisible] = useState<boolean>(show);
 
   useEffect(() => {
     if (show) {
       setIsVisible(true);
-      setAnimation(true)
+      setAnimation(true);
     } else {
-      setAnimation(false)
+      setAnimation(false);
       const timeout = setTimeout(() => {
         setIsVisible(false);
       }, 400);
@@ -61,5 +58,17 @@ export const ModalPageShadow: React.FC<ModalPageShadowProps> = ({ show }) => {
       className={`modal-page-shadow-background ${animation ? 'show-page' : 'hide-page'}-shadow-background`}
       style={{ display: isVisible ? 'flex' : 'none' }}
     />
+  );
+};
+
+export const ModalPageSizeableContent: React.FC<{
+  width: Property.Width<string | number>;
+  height: Property.Height<string | number>;
+}> = ({ width, height }) => {
+  return (
+    <div
+      className="sizeable-content"
+      style={{ width: width, height: height }}
+    ></div>
   );
 };

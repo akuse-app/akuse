@@ -99,6 +99,7 @@
     "electron-log": "^4.4.8",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.1.4",
+    "genversion": "^3.2.0",
     "hls.js": "^1.5.8",
     "path": "^0.12.7",
     "react": "^18.3.1",

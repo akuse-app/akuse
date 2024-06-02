@@ -1,3 +1,5 @@
+import './styles/AnimeModal.css'
+
 import { IVideo } from '@consumet/extensions';
 import {
   faCircleExclamation,

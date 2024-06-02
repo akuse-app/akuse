@@ -1,4 +1,4 @@
-import './styles/Buttons.css';
+import './styles/AnimeSection.css';
 
 import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
 import { useRef, useState } from 'react';

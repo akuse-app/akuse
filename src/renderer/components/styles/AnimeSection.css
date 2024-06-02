@@ -1,0 +1,21 @@
+main section .anime-list-wrapper {
+  padding: 50px;
+  margin: -50px;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  /* disable if drag n scroll is enabled */
+  scroll-behavior: smooth;
+  /* disable if drag n scroll is enabled */
+}
+
+main section .anime-list {
+  float: left;
+  width: max-content;
+  gap: 25px;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  z-index: 2;
+}
