@@ -159,7 +159,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     const handleDocumentKeydown = (event: KeyboardEvent) => {
       if (videoRef.current) {
-        console.log('ciao');
         handleVideoPlayerKeydown(event);
       }
     };
@@ -292,6 +291,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleTimeUpdate = () => {
+    if(!videoRef.current?.paused) setPlaying(true)
+
     const cTime = videoRef.current?.currentTime;
     const dTime = videoRef.current?.duration;
 
