@@ -192,6 +192,12 @@
       "node_modules",
       "package.json"
     ],
+    "protocols": {
+      "name": "akuse-react",
+      "schemes": [
+        "akuse-react"
+      ]
+    },
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
       "target": {
