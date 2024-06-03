@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-
+const DiscordRPC = require('discord-rpc')
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import { getAccessToken } from '../modules/anilist/anilistApi';
 import { clientData } from '../modules/clientData';
@@ -250,3 +250,42 @@ autoUpdater.on('error', (info) => {
 ipcMain.on('download-update', () => {
   let pth = autoUpdater.downloadUpdate();
 });
+
+/* DISCORD RPC */
+
+const clientId = '1212475013408628818';
+
+const RPC = new DiscordRPC.Client({ transport: 'ipc' });
+DiscordRPC.register(clientId);
+
+// const startTimestamp = new Date();
+
+async function setActivity() {
+  if (!RPC || !mainWindow) {
+    return;
+  }
+
+  RPC.setActivity({
+    details: 'Watch anime without ads.',
+    startTimestamp: Date.now(),
+    largeImageKey: 'icon',
+    largeImageText: 'Akuse',
+    instance: false,
+    buttons: [
+      {
+        label: 'Download app',
+        url: 'https://github.com/akuse-app/Akuse/releases/latest',
+      },
+    ],
+  });
+}
+
+RPC.on('ready', () => {
+  setActivity();
+
+  setInterval(() => {
+    setActivity();
+  }, 15 * 1000);
+});
+
+RPC.login({ clientId }).catch(console.error);

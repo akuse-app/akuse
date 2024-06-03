@@ -244,4 +244,3 @@ rpc.on('ready', () => {
 });
 
 rpc.login({ clientId }).catch(console.error);
-
