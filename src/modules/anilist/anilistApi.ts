@@ -10,6 +10,8 @@ import { MediaListStatus } from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import { getOptions, makeRequest } from '../requests';
+import isAppImage from '../packaging/isAppImage';
+import { app, ipcRenderer } from 'electron';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -84,18 +86,19 @@ const MEDIA_DATA: string = `
  * @param {*} code
  * @returns access token
  */
-export const getAccessToken = async (code: any): Promise<string> => {
+export const getAccessToken = async (code: string): Promise<string> => {
   const url = 'https://anilist.co/api/v2/oauth/token';
+
   const data = {
     grant_type: 'authorization_code',
     client_id: CLIENT_DATA.clientId,
     client_secret: CLIENT_DATA.clientSecret,
-    redirect_uri: CLIENT_DATA.redirectUri,
+    redirect_uri:'https://anilist.co/api/v2/oauth/pin',
     code: code,
   };
 
   const respData = await makeRequest(METHOD, url, HEADERS, data);
-
+  console.log(respData)
   return respData.access_token;
 };
 
@@ -157,7 +160,7 @@ export const getViewerInfo = async (viewerId: number | null) => {
   const options = getOptions(query, variables);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  console.log(respData.data.User)
+  console.log(respData.data.User);
   return respData.data.User;
 };
 
@@ -583,7 +586,9 @@ export const updateAnimeFromList = async (
     const options = getOptions(query, variables);
     const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-    console.log(`Anime list updated (status: ${status},score: ${scoreRaw},progress: ${progress}) for list ${mediaId}`);
+    console.log(
+      `Anime list updated (status: ${status},score: ${scoreRaw},progress: ${progress}) for list ${mediaId}`,
+    );
 
     return respData.data.SaveMediaListEntry.id;
   } catch (error) {

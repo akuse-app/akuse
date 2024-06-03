@@ -30,6 +30,7 @@
   height: auto;
   min-width: 30px;
   min-height: 40px;
+  font-size: 1rem;
   background-color: var(--color-1);
   border-radius: var(--border-radius);
   padding: 20px;

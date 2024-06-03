@@ -1,26 +1,23 @@
 import './styles/MainNavbar.css';
 
-import {
-  faBookmark,
-  faCompass,
-  IconDefinition,
-} from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
-  faBug,
   faCompass as faCompassFull,
   faGear,
-  faHeart as faHeartFull,
+  faLaptopCode,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
   faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import isAppImage from '../modules/packaging/isAppImage';
 import { AuthContext } from './App';
+import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
 
 const Li: React.FC<{
@@ -61,7 +58,15 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
   const logged = useContext(AuthContext);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
+  const [showAuthCodeModal, setShowAuthCodeModal] = useState<boolean>(false);
+  const [isPackaged, setIsPackaged] = useState<boolean>(false);
+
+  useEffect(() => {
+    ipcRenderer.invoke('get-is-packaged').then((packaged) => {
+      setIsPackaged(packaged);
+    });
+  }, []);
 
   return (
     <nav className="main">
@@ -98,11 +103,14 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
         />
         {logged ? (
           <>
-            <UserModal show={showModal} onClose={() => setShowModal(false)} />
+            <UserModal
+              show={showUserModal}
+              onClose={() => setShowUserModal(false)}
+            />
             <div
               className="img-wrapper"
               onClick={() => {
-                setShowModal(true);
+                setShowUserModal(true);
               }}
             >
               <img src={avatar}></img>
@@ -116,6 +124,19 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
               ipcRenderer.send('open-login-url');
             }}
           />
+        )}
+        {(isAppImage || !isPackaged) && !logged && (
+          <>
+            <AuthCodeModal
+              show={showAuthCodeModal}
+              onClose={() => setShowAuthCodeModal(false)}
+            />
+            <LiLink
+              text="Insert auth code"
+              icon={faLaptopCode}
+              onClick={() => setShowAuthCodeModal(true)}
+            />
+          </>
         )}
       </ul>
     </nav>

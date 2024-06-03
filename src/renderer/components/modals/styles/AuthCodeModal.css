@@ -1,0 +1,32 @@
+.modal-page-wrapper .auth-code-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.modal-page-wrapper .auth-code-modal-content input {
+  border: none;
+  outline: none;
+  height: 40px;
+  padding-left: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--font-2);
+  background-color: var(--color-2);
+  border-radius: var(--border-radius);
+  transition: 0.2s ease-out;
+}
+
+.modal-page-wrapper .auth-code-modal-content input::placeholder {
+  color: var(--font-3);
+}
+
+.modal-page-wrapper .auth-code-modal-content input:focus {
+  background-color: var(--color-3);
+}
+
+.modal-page-wrapper .log-in-wrapper {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}

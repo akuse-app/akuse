@@ -6,6 +6,7 @@ import path from 'path';
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import { getAccessToken } from '../modules/anilist/anilistApi';
 import { clientData } from '../modules/clientData';
+import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -13,14 +14,7 @@ const STORE = new Store();
 
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
-const isAppImage = process.env.SNAP_NAME === undefined && process.env.FLATPAK_PATH === undefined && process.env.APPIMAGE !== undefined && process.env.APPIMAGE !== null;
 const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientData.clientId}&redirect_uri=${isAppImage || !app.isPackaged ? 'https://anilist.co/api/v2/oauth/pin' : clientData.redirectUri}&response_type=code`;
-// const authUrl =
-//   'https://anilist.co/api/v2/oauth/authorize?client_id=' +
-//   clientData.clientId +
-//   '&redirect_uri=' +
-//   clientData.redirectUri +
-//   '&response_type=code';
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 autoUpdater.autoRunAppAfterInstall = true;
@@ -120,6 +114,11 @@ const createWindow = async () => {
   });
 };
 
+ipcMain.handle('get-is-packaged', async () => {
+  console.log(app.isPackaged);
+  return app.isPackaged;
+});
+
 ipcMain.on('open-login-url', () => {
   require('electron').shell.openExternal(authUrl);
 });
@@ -130,6 +129,14 @@ ipcMain.on('logout', () => {
   console.log('Logged Out! Relaunching app...');
 
   if (mainWindow) mainWindow.reload();
+});
+
+ipcMain.on('handle-login', async (event, code) => {
+  await handleLogin(code);
+
+  if (mainWindow) {
+    mainWindow.reload();
+  }
 });
 
 ipcMain.on('open-sponsor-url', () => {
