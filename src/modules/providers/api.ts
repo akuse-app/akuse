@@ -2,10 +2,10 @@ import { IVideo } from '@consumet/extensions';
 import Store from 'electron-store';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
+import { animeCustomTitles } from '../animeCustomTitles';
 import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
-import { animeCustomTitles } from '../animeCustomTitles';
 
 const STORE = new Store();
 
@@ -22,24 +22,26 @@ export const getUniversalEpisodeUrl = async (
 ): Promise<IVideo | null> => {
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
-  var animeTitles;
 
   const customTitle =
     animeCustomTitles[STORE.get('source_flag') as string][
       listAnimeData.media?.id!
     ];
 
-  console.log(customTitle);
+  const animeTitles = getParsedAnimeTitles(listAnimeData.media);
+  if (customTitle) animeTitles.unshift(customTitle.title);
 
-  customTitle
-    ? (animeTitles = [customTitle.title])
-    : (animeTitles = getParsedAnimeTitles(listAnimeData.media));
+  // customTitle
+  //   ? (animeTitles = [customTitle.title])
+  //   : (animeTitles = getParsedAnimeTitles(listAnimeData.media));
+
+  console.log(lang + ' ' + dubbed + ' ' + customTitle?.title)
 
   switch (lang) {
     case 'US': {
       const data = await gogoanime(
         animeTitles,
-        customTitle ? customTitle.index : 0,
+        customTitle && !dubbed ? customTitle.index : 0,
         episode,
         dubbed,
       );
@@ -48,7 +50,7 @@ export const getUniversalEpisodeUrl = async (
     case 'IT': {
       const data = await animeunity(
         animeTitles,
-        customTitle ? customTitle.index : 0,
+        customTitle && !dubbed ? customTitle.index : 0,
         episode,
         dubbed,
       );

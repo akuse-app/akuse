@@ -86,7 +86,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   useEffect(() => {
     if(!showPlayer) {
       setPlayerIVideo(null)
-      console.log('fine')
     }
   }, [showPlayer])
 

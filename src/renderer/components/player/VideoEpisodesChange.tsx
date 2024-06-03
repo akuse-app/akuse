@@ -17,7 +17,7 @@ const Episode: React.FC<{
   isOpen: boolean;
   isCurrent: boolean;
   onClick: () => void;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
+  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => Promise<boolean>;
 }> = ({
   episode,
   episodeInfo,
@@ -61,7 +61,7 @@ const VideoEpisodesChange: React.FC<{
   episodesInfo?: EpisodeInfo[];
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => void;
+  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => Promise<boolean>;
 }> = ({
   show,
   onShow,

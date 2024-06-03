@@ -31,7 +31,7 @@ interface TopControlsProps {
   onChangeEpisode: (
     episode: number | null,
     reloadAtPreviousTime?: boolean,
-  ) => void;
+  ) => Promise<boolean>;
   onExit: () => void;
   onClick?: (event: any) => void;
   onDblClick?: (event: any) => void;

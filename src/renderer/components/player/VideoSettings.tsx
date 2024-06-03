@@ -14,8 +14,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
-
+import 'react-activity/dist/Dots.css';
 import { AuthContext } from '../../App';
+import { Dots } from 'react-activity';
 
 const STORE = new Store();
 
@@ -27,7 +28,7 @@ interface SettingsProps {
   onChangeEpisode: (
     episode: number | null,
     reloadAtPreviousTime?: boolean,
-  ) => void;
+  ) => Promise<boolean>;
 }
 
 // component for the video player settings tab
@@ -57,6 +58,10 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+
+  // loading
+  const [changeEpisodeLoading, setChangeEpisodeLoading] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const handleVideoVolumeChange = () => {
@@ -130,18 +135,36 @@ const VideoSettings: React.FC<SettingsProps> = ({
     setUpdateProgress(!updateProgress);
   };
 
-  const handleWatchDubbedChange = () => {
+  const handleWatchDubbedChange = async () => {
+    const previous = STORE.get('dubbed');
     STORE.set('dubbed', !watchDubbed);
-    setWatchDubbed(!watchDubbed);
 
-    onChangeEpisode(null, true);
+    setChangeEpisodeLoading(true);
+
+    if (await onChangeEpisode(null, true)) {
+      setWatchDubbed(!watchDubbed);
+      setChangeEpisodeLoading(false);
+    } else {
+      STORE.set('dubbed', previous);
+      setChangeEpisodeLoading(false);
+    }
   };
 
-  const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleLanguageChange = async (
+    event: ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const previous = STORE.get('source_flag');
     STORE.set('source_flag', event.target.value);
-    setSelectedLanguage(event.target.value);
 
-    onChangeEpisode(null, true);
+    setChangeEpisodeLoading(true);
+
+    if (await onChangeEpisode(null, true)) {
+      setSelectedLanguage(event.target.value);
+      setChangeEpisodeLoading(false);
+    } else {
+      STORE.set('source_flag', previous);
+      setChangeEpisodeLoading(false);
+    }
   };
 
   const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -257,28 +280,40 @@ const VideoSettings: React.FC<SettingsProps> = ({
               <FontAwesomeIcon className="i" icon={faHeadphones} />
               Dub
             </span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={watchDubbed}
-                onChange={handleWatchDubbedChange}
-              />
-              <span className="slider round"></span>
-            </label>
+            {changeEpisodeLoading ? (
+              <div className="activity-indicator">
+                <Dots />
+              </div>
+            ) : (
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={watchDubbed}
+                  onChange={handleWatchDubbedChange}
+                />
+                <span className="slider round"></span>
+              </label>
+            )}
           </li>
           <li className="language">
             <span>
               <FontAwesomeIcon className="i" icon={faLanguage} />
               Language
             </span>
-            <select
-              className="main-select-0"
-              value={selectedLanguage}
-              onChange={handleLanguageChange}
-            >
-              <option value="US">English</option>
-              <option value="IT">Italian</option>
-            </select>
+            {changeEpisodeLoading ? (
+              <div className="activity-indicator">
+                <Dots />
+              </div>
+            ) : (
+              <select
+                className="main-select-0"
+                value={selectedLanguage}
+                onChange={handleLanguageChange}
+              >
+                <option value="US">English</option>
+                <option value="IT">Italian</option>
+              </select>
+            )}
           </li>
         </div>
       )}

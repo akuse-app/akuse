@@ -176,7 +176,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handleSeeked = () => {
       console.log('seeked');
       onChangeLoading(false);
-      if(!video?.paused) setPlaying(true);
+      if (!video?.paused) setPlaying(true);
     };
 
     const handleWaiting = () => {
@@ -291,7 +291,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleTimeUpdate = () => {
-    if(!videoRef.current?.paused) setPlaying(true)
+    if (!videoRef.current?.paused) {
+      setPlaying(true);
+      onChangeLoading(false)
+    }
 
     const cTime = videoRef.current?.currentTime;
     const dTime = videoRef.current?.duration;
@@ -414,7 +417,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const changeEpisode = async (
     episode: number | null, // null to play the current episode
     reloadAtPreviousTime?: boolean,
-  ) => {
+  ): Promise<boolean> => {
     onChangeLoading(true);
 
     const episodeToPlay = episode || episodeNumber;
@@ -422,22 +425,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     var previousTime = 0;
     if (reloadAtPreviousTime && videoRef.current)
       previousTime = videoRef.current?.currentTime;
-
-    getUniversalEpisodeUrl(listAnimeData, episodeToPlay).then((data) => {
-      if (!data) {
-        toast(`Source not found.`, {
-          style: {
-            color: style.getPropertyValue('--font-2'),
-            backgroundColor: style.getPropertyValue('--color-3'),
-          },
-          icon: '❌',
-        });
-
-        return;
-      }
-
-      setData(data);
-    });
 
     const setData = (value: IVideo) => {
       setVideoData(value);
@@ -465,6 +452,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       onChangeLoading(false);
     };
+
+    const data = await getUniversalEpisodeUrl(listAnimeData, episodeToPlay);
+    if (!data) {
+      toast(`Source not found.`, {
+        style: {
+          color: style.getPropertyValue('--font-2'),
+          backgroundColor: style.getPropertyValue('--color-3'),
+        },
+        icon: '❌',
+      });
+
+      onChangeLoading(false);
+      return false;
+    }
+
+    setData(data);
+    return true;
   };
 
   const canPreviousEpisode = (episode: number): boolean => {

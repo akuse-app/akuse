@@ -348,13 +348,13 @@
   display: block;
   opacity: 0;
   width: 400px;
-  opacity: 0.85;
+  opacity: 0.95;
+  backdrop-filter: blur(50px);
   list-style: none;
   overflow: hidden;
   border-radius: var(--border-radius);
-  pointer-events: none;
-  background-color: var(--color-2);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  background-color: #22252ee6;
+  /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); */
   transition: opacity 0.13s ease;
   pointer-events: auto;
 }
@@ -374,7 +374,7 @@
 }
 
 .up-controls .other-episodes-content .dropdown .episode:hover {
-  background-color: var(--color-3);
+  background-color: var(--color-1);
 }
 
 .up-controls .other-episodes-content .dropdown .episode.active {
@@ -457,6 +457,7 @@
 
 .up-controls .settings-content .dropdown li {
   /* width: calc(100% - 30px); */
+  position: relative;
   display: flex;
   align-items: center;
   font-size: 1.2rem;
@@ -477,12 +478,18 @@
 }
 
 .up-controls .settings-content .dropdown li select {
-  background-color: var(--color-2);
+  background-color: transparent;
 }
 
 .up-controls .settings-content .dropdown li:hover {
   color: var(--font-1);
-  background-color: var(--color-4);
+  background-color: var(--color-1);
+}
+
+.up-controls .settings-content .dropdown li .activity-indicator {
+  position: absolute;
+  /* top: 0; */
+  right: 25px;
 }
 
 .mid-controls .play-pause-center {
