@@ -62,15 +62,16 @@ To start, run:
 ```
 npm start
 ```
+
 ## 🛠️ How to build
 
 - [Linux read here](./LINUX_BUILD.md)
 
-## ⚠ How to Log-In in development & AppImage
+## ⚠ How to Log-In in AppImage & Development
 
-In development and AppImage, the Log-In redirect doesn't work since the app is not packed/installed and the Redirect Uri doesn't find it on your machine. If you need to work with an authenticated instance. 
-### Follow  steps:
+In AppImage and in a Development environment, the Log-In redirect doesn't work since the app is not packed/installed. If you need to work with an authenticated instance, follow these steps:
 1. open the app using one of the method e.g.
+
     ```
     npm start
     ```
@@ -78,21 +79,13 @@ In development and AppImage, the Log-In redirect doesn't work since the app is n
     ```
     ./path/to/app.AppImage
     ```
-2. Now click on the login button and authenticate in the browser. you will get redirect to website like this:-
+    
+2. Now click on the login button and authenticate in the browser. Next, copy the code you are given, go back to Akuse and click the navbar element with a laptop icon. Here you can paste your code.
 
-    ![1709734157317](image/README/1709734157317.png)
+3. Finally, paste your code and push the button. If the code you entered is correct, you are now Logged-in, othwerise repeat these steps and see what has gone wrong.
 
-    copy this code in the input box and close the tab.
-3. Now close the app and run it with flag `--login` followd by code e.g:- 
-    - developement mode 
-      ```js
-        npm start -- --login def50200211627a77c5ecb3ac3f9eef26d955...........
-      ```
-    - AppImage
-      ```js
-        ./path/to/akuse.AppImage --login def50200211627a77c5ecb3ac3f9eef26d955...........
-      ```
 **NOTE:** This is not needed in Installed App.
+
 ## ⌨ Shortcuts
 
 - Pages
@@ -108,11 +101,12 @@ In development and AppImage, the Log-In redirect doesn't work since the app is n
   - F11: fullscreen toggler
   - F: fullscreen toggler
   - M: mute/unmute video
+  - P: play previous episode
   - N: play next episode
 
 ## 🐛 Known Issues
 
-- If Log-In doesn't work, make sure you have set a default browser.
+- If Log-In in installed apps doesn't work, make sure you have set a default browser.
 - Some anime may don't work because of different names as compared to AniList: feel free to open a new issue if you find some of them so they can be fixed.
 
 ## 🌟 Contributors
@@ -134,5 +128,7 @@ In development and AppImage, the Log-In redirect doesn't work since the app is n
 - For internet violations, please contact the source website. The developer is not legally responsible.
 
 ## 📜 License
+
+Licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
 
 Licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
