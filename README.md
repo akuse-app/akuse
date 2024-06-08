@@ -28,13 +28,12 @@ git clone https://github.com/akuse-app/Akuse.git
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
 As Redirect Uri, you can insert `akuse://index,https://anilist.co/api/v2/oauth/pin` (these are two space seprated uri) and it should work.
-Now go inside the src/modules folder and create a clientData.js file with a structure like this:
+Now go inside the src/modules folder and create a clientData.ts file with a structure like this:
 
 ```
 module.exports = {
     clientId: ,
     redirectUri: "",
-    redirectUriAppImage:"",
     clientSecret: ""
 }
 ```
@@ -46,7 +45,6 @@ Fill it with the data retrieved from the creation of your AniList API Client.
 module.exports = {
     clientId: 12345,
     redirectUri: "akuse://index",
-    redirectUriAppImage: "https://anilist.co/api/v2/oauth/pin",
     clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
 }
 ```
