@@ -288,7 +288,7 @@ async function setActivity() {
     buttons: [
       {
         label: 'Download app',
-        url: 'https://github.com/akuse-app/Akuse/releases/latest',
+        url: 'https://github.com/akuse-app/akuse/releases/latest',
       },
     ],
   });

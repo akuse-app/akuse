@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/akuse-app/Akuse"
+    "url": "https://github.com/akuse-app/akuse"
   },
   "publish": {
     "provider": "github",
@@ -184,7 +184,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "Akuse",
+    "productName": "akuse",
     "appId": "com.aleganza.akuse",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
@@ -246,7 +246,7 @@
       "category": "AudioVideo;Video",
       "description": "Simple and easy to use anime streaming desktop app without ads.",
       "desktop": {
-        "Name": "Akuse",
+        "Name": "akuse",
         "Comment": "Simple and easy to use anime streaming desktop app without ads.",
         "Keywords": "anime",
         "Type": "Application",

@@ -52,7 +52,7 @@ const AutoUpdateModal: React.FC<{ show: boolean; onClose: () => void }> = ({
             </div>
 
             <p>
-              A new version of Akuse is available. Update and wait for it to
+              A new version of akuse is available. Update and wait for it to
               finish to download the latest changes.
             </p>
 

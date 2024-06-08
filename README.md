@@ -1,7 +1,7 @@
 <h1 align="center">⚠ In development! </h1>
 <p align="center">
-    <img width="150px" src="https://github.com/akuse-app/Akuse/blob/react-port/assets/icon.png"/>
-    <h1 align="center">Akuse</h1>
+    <img width="150px" src="https://github.com/akuse-app/akuse/blob/react-port/assets/icon.png"/>
+    <h1 align="center">akuse</h1>
 </p>
 
 <p align="center">Simple and easy to use anime streaming desktop app without ads.</p>
@@ -20,10 +20,10 @@
 
 ## ⚙️ Running locally for development
 
-Start cloning Akuse:
+Start cloning akuse:
 
 ```
-git clone https://github.com/akuse-app/Akuse.git
+git clone https://github.com/akuse-app/akuse.git
 ```
 
 Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
@@ -82,7 +82,7 @@ In AppImage and in a Development environment, the Log-In redirect doesn't work s
     ./path/to/app.AppImage
     ```
     
-2. Now click on the login button and authenticate in the browser. Next, copy the code you are given, go back to Akuse and click the navbar element with a laptop icon. Here you can paste your code.
+2. Now click on the login button and authenticate in the browser. Next, copy the code you are given, go back to akuse and click the navbar element with a laptop icon. Here you can paste your code.
 
 3. Finally, paste your code and push the button. If the code you entered is correct, you are now Logged-in, othwerise repeat these steps and see what has gone wrong.
 
@@ -122,10 +122,10 @@ In AppImage and in a Development environment, the Log-In redirect doesn't work s
 
 ## 📢 Disclaimer
 
-- Akuse helps users find anime by simply scraping links from various websites.
-- Akuse or its developers do not host the content found on Akuse. All images and anime information found in the app are retrieved from AniList public API.
-- Additionally, all anime links found on Akuse are from various third party anime hosting websites.
-- Akuse or its owner are not responsible for the misuse of any content inside or outside the app and shall not be responsible for the dissemination of any content within the app.
+- akuse helps users find anime by simply scraping links from various websites.
+- akuse or its developers do not host the content found on akuse. All images and anime information found in the app are retrieved from AniList public API.
+- Additionally, all anime links found on akuse are from various third party anime hosting websites.
+- akuse or its owner are not responsible for the misuse of any content inside or outside the app and shall not be responsible for the dissemination of any content within the app.
 - By using this app, you agree that the app developer is not responsible for the content within the app. Nevertheless, they may or may not come from legitimate sources.
 - For internet violations, please contact the source website. The developer is not legally responsible.
 
