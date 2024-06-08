@@ -97,7 +97,6 @@ export const getAccessToken = async (code: string): Promise<string> => {
       isAppImage || !app.isPackaged
         ? 'https://anilist.co/api/v2/oauth/pin'
         : clientData.redirectUri,
-    // redirect_uri:'https://anilist.co/api/v2/oauth/pin',
     code: code,
   };
 
@@ -164,7 +163,6 @@ export const getViewerInfo = async (viewerId: number | null) => {
   const options = getOptions(query, variables);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  console.log(respData.data.User);
   return respData.data.User;
 };
 

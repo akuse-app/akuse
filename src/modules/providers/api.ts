@@ -35,7 +35,7 @@ export const getUniversalEpisodeUrl = async (
   //   ? (animeTitles = [customTitle.title])
   //   : (animeTitles = getParsedAnimeTitles(listAnimeData.media));
 
-  console.log(lang + ' ' + dubbed + ' ' + customTitle?.title)
+  console.log(lang + ' ' + dubbed + ' ' + customTitle?.title);
 
   switch (lang) {
     case 'US': {
@@ -54,7 +54,7 @@ export const getUniversalEpisodeUrl = async (
         episode,
         dubbed,
       );
-      return data ? data[0] : null; // change when animeunity api updates
+      return data ? getDefaultQualityVideo(data) : null; // change when animeunity api updates
     }
   }
 
