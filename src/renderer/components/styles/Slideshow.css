@@ -20,7 +20,7 @@
   width: 80%;
   height: 100%;
   z-index: 1;
-  background: linear-gradient(0.25turn, var(--color-1), transparent);
+  background: linear-gradient(0.25turn, var(--color-1b), transparent);
   transition: var(--transition);
 }
 
