@@ -111,6 +111,9 @@ img {
   z-index: 20;
   overflow-x: hidden;
   overflow-y: auto;
+
+  /* window controls */
+  padding-top: 22px;
 }
 
 .auto-update-page {
