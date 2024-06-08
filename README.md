@@ -16,7 +16,7 @@
     </a>
 </p>
 
-<img title="img" alt="img" src="https://i.imgur.com/8IVaUfo.jpg">
+<img title="img" alt="img" src="https://i.imgur.com/jk5Q8rc.png">
 
 ## ⚙️ Running locally for development
 
