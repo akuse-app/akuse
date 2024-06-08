@@ -93,12 +93,16 @@ export const getAccessToken = async (code: string): Promise<string> => {
     grant_type: 'authorization_code',
     client_id: CLIENT_DATA.clientId,
     client_secret: CLIENT_DATA.clientSecret,
-    redirect_uri:'https://anilist.co/api/v2/oauth/pin',
+    redirect_uri:
+      isAppImage || !app.isPackaged
+        ? 'https://anilist.co/api/v2/oauth/pin'
+        : clientData.redirectUri,
+    // redirect_uri:'https://anilist.co/api/v2/oauth/pin',
     code: code,
   };
 
   const respData = await makeRequest(METHOD, url, HEADERS, data);
-  console.log(respData)
+  console.log(respData);
   return respData.access_token;
 };
 
