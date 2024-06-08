@@ -31,22 +31,26 @@ As Redirect Uri, you can insert `akuse://index,https://anilist.co/api/v2/oauth/p
 Now go inside the src/modules folder and create a clientData.ts file with a structure like this:
 
 ```
-module.exports = {
-    clientId: ,
-    redirectUri: "",
-    clientSecret: ""
-}
+import { ClientData } from "../types/types";
+
+export const clientData: ClientData = {
+  clientId: ,
+  redirectUri: "",
+  clientSecret: "",
+};
 ```
 
 Fill it with the data retrieved from the creation of your AniList API Client.
 
 ```bash
 # Example:
-module.exports = {
-    clientId: 12345,
-    redirectUri: "akuse://index",
-    clientSecret: "iA04TKLO3k3LaVWhxucJwck0glR6uhiv"
-}
+import { ClientData } from "../types/types";
+
+export const clientData: ClientData = {
+  clientId: 12345,
+  redirectUri: 'akuse://index',
+  clientSecret: 'iA04TKLO3k3LaVWhxucJwck0glR6uhiv',
+};
 ```
 
 Next, install its dependencies (make sure npm is installed on your machine):
