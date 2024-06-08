@@ -169,12 +169,12 @@ app
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient('akuse-react', process.execPath, [
+    app.setAsDefaultProtocolClient('akuse', process.execPath, [
       path.resolve(process.argv[1]),
     ]);
   }
 } else {
-  app.setAsDefaultProtocolClient('akuse-react');
+  app.setAsDefaultProtocolClient('akuse');
 }
 
 const gotTheLock = app.requestSingleInstanceLock();

@@ -194,9 +194,9 @@
       "package.json"
     ],
     "protocols": {
-      "name": "akuse-react",
+      "name": "akuse",
       "schemes": [
-        "akuse-react"
+        "akuse"
       ]
     },
     "afterSign": ".erb/scripts/notarize.js",
@@ -250,7 +250,7 @@
         "Comment": "Simple and easy to use anime streaming desktop app without ads.",
         "Keywords": "anime",
         "Type": "Application",
-        "MimeType": "x-scheme-handler/akuse-react;"
+        "MimeType": "x-scheme-handler/akuse;"
       },
       "target": [
         {
