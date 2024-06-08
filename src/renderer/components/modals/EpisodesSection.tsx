@@ -11,7 +11,7 @@ interface EpisodesSectionProps {
   episodesInfo?: EpisodeInfo[];
   episodesInfoHasFetched: boolean;
   listAnimeData: ListAnimeData;
-  loading?: boolean
+  loading?: boolean;
   onPlay: (episode: number) => void;
 }
 
@@ -62,62 +62,69 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   return (
     <div className="episodes-section">
       <div className="episodes-scroller">
-        <div className="episodes-options">
-          <h2>Episodes</h2>
-          <div className="right">
-            {episodes > EPISODES_PER_PAGE && (
-              <select
-                className="main-select-0"
-                onChange={handleChange}
-                value={activeSection}
-              >
-                {pages.map((page, index) => (
-                  <option key={index} value={index}>
-                    {`${page[0]} - ${page.slice(-1)}`}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div>
-
-        <div className="episodes">
-          {pages.length !== 0 &&
-            pages[activeSection].map((episode, index) => (
-              <EpisodeEntry
-                onPress={() => {
-                  onPlay(episode);
-                }}
-                key={index}
-                hasInfoLoaded={episodesInfoHasFetched}
-                number={episodesInfo ? `Ep: ${episode} - ` : ''}
-                cover={
-                  episodesInfo
-                    ? episodesInfo[episode]?.image ??
-                      listAnimeData.media.bannerImage ??
-                      ''
-                    : listAnimeData.media.bannerImage ?? ''
-                }
-                title={
-                  episodesInfo && episodesInfo[episode]?.title
-                    ? episodesInfo[episode]?.title?.en ?? `Episode ${episode}`
-                    : `Episode ${episode}`
-                }
-                description={
-                  episodesInfo ? episodesInfo[episode]?.summary ?? 'No description available.' : 'No description available.'
-                }
-                releaseDate={
-                  episodesInfo
-                    ? parseAirdate(episodesInfo[episode]?.airdate || '') ?? ''
-                    : ''
-                }
-                duration={
-                  episodesInfo ? `${episodesInfo[episode]?.length}min` ?? '' : ''
-                }
-                loading={loading}
-              />
-            ))}
-        </div>
+        {pages.length !== 0 && (
+          <>
+            <div className="episodes-options">
+              <h2>Episodes</h2>
+              <div className="right">
+                {episodes > EPISODES_PER_PAGE && (
+                  <select
+                    className="main-select-0"
+                    onChange={handleChange}
+                    value={activeSection}
+                  >
+                    {pages.map((page, index) => (
+                      <option key={index} value={index}>
+                        {`${page[0]} - ${page.slice(-1)}`}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+            <div className="episodes">
+              {pages[activeSection].map((episode, index) => (
+                <EpisodeEntry
+                  onPress={() => {
+                    onPlay(episode);
+                  }}
+                  key={index}
+                  hasInfoLoaded={episodesInfoHasFetched}
+                  number={episodesInfo ? `Ep: ${episode} - ` : ''}
+                  cover={
+                    episodesInfo
+                      ? episodesInfo[episode]?.image ??
+                        listAnimeData.media.bannerImage ??
+                        ''
+                      : listAnimeData.media.bannerImage ?? ''
+                  }
+                  title={
+                    episodesInfo && episodesInfo[episode]?.title
+                      ? episodesInfo[episode]?.title?.en ?? `Episode ${episode}`
+                      : `Episode ${episode}`
+                  }
+                  description={
+                    episodesInfo
+                      ? episodesInfo[episode]?.summary ??
+                        'No description available.'
+                      : 'No description available.'
+                  }
+                  releaseDate={
+                    episodesInfo
+                      ? parseAirdate(episodesInfo[episode]?.airdate || '') ?? ''
+                      : ''
+                  }
+                  duration={
+                    episodesInfo
+                      ? `${episodesInfo[episode]?.length}min` ?? ''
+                      : ''
+                  }
+                  loading={loading}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
