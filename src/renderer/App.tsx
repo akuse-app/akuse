@@ -27,6 +27,7 @@ import Tab4 from './tabs/Tab4';
 import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
+import WindowControls from './WindowControls';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -39,12 +40,12 @@ export const ViewerIdContext = createContext<number | null>(null);
 export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
-  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false)
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   setDefaultStoreVariables();
 
   ipcRenderer.on('auto-update', async () => {
-    setShowUpdateModal(true)
+    setShowUpdateModal(true);
   });
 
   // tab1
@@ -142,8 +143,14 @@ export default function App() {
           baseColor={style.getPropertyValue('--color-3')}
           highlightColor={style.getPropertyValue('--color-4')}
         >
-          <AutoUpdateModal show={showUpdateModal} onClose={() => {setShowUpdateModal(false)}} />
+          <AutoUpdateModal
+            show={showUpdateModal}
+            onClose={() => {
+              setShowUpdateModal(false);
+            }}
+          />
           <MemoryRouter>
+            <WindowControls />
             <MainNavbar avatar={userInfo?.avatar?.medium} />
             <Routes>
               <Route

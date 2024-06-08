@@ -1,0 +1,42 @@
+.controls {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 22px;
+  background-color: var(--color-0);
+}
+
+.controls .drag {
+  -webkit-app-region: drag;
+  width: 100%;
+  height: 100%;
+}
+
+.controls .elements {
+  display: flex;
+  width: auto;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+.controls .elements .element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 100%;
+  color: var(--font-3);
+  font-size: 0.9rem;
+  padding: 0 4px;
+}
+
+.controls .elements .element:hover {
+  color: var(--font-2);
+  background-color: var(--color-1);
+}
+
+.controls .elements .element.warning:hover {
+  color: var(--font-1);
+  background-color: var(--color-warning);
+}

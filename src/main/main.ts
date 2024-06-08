@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-const DiscordRPC = require('discord-rpc')
+const DiscordRPC = require('discord-rpc');
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import { getAccessToken } from '../modules/anilist/anilistApi';
 import { clientData } from '../modules/clientData';
@@ -66,12 +66,12 @@ const createWindow = async () => {
     minWidth: 1280,
     minHeight: 720,
     autoHideMenuBar: true,
-    // titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#1A1D24',
-      symbolColor: '#eee',
-      height: 12,
-    },
+    titleBarStyle: 'hidden',
+    // titleBarOverlay: {
+    //   color: '#1A1D24',
+    //   symbolColor: '#eee',
+    //   height: 12,
+    // },
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -220,6 +220,20 @@ ipcMain.on('shell:open', () => {
   const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
   const pagePath = path.join('file://', pageDirectory, 'index.html');
   shell.openExternal(pagePath);
+});
+
+// controls handlers
+
+ipcMain.on('minimize-window', () => {
+  mainWindow?.minimize();
+});
+
+ipcMain.on('toggle-maximize-window', () => {
+  mainWindow?.isMaximized() ? mainWindow.unmaximize() : mainWindow?.maximize();
+});
+
+ipcMain.on('close-window', () => {
+  mainWindow?.close();
 });
 
 /* AUTO UPDATING */
