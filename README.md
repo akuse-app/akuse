@@ -132,5 +132,3 @@ In AppImage and in a Development environment, the Log-In redirect doesn't work s
 ## 📜 License
 
 Licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
-
-Licensed under [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html#license-text).
