@@ -15,7 +15,7 @@
     </a>
 </p>
 
-<img title="img" alt="img" src="https://i.imgur.com/jk5Q8rc.png">
+<img title="img" alt="img" src="./assets/screenshot.jpg">
 
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
