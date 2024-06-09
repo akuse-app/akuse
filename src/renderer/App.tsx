@@ -68,9 +68,9 @@ export default function App() {
   const [planningListAnime, setPlanningListAnimeListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
-  // const [completedListAnime, setCompletedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
+  const [completedListAnime, setCompletedListAnimeListAnime] = useState<
+    ListAnimeData[] | undefined
+  >(undefined);
   // const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
   //   ListAnimeData[] | undefined
   // >(undefined);
@@ -112,9 +112,9 @@ export default function App() {
         setPlanningListAnimeListAnime(
           await getViewerList(viewerId, 'PLANNING'),
         );
-        // setCompletedListAnimeListAnime(
-        //   await getViewerList(viewerId, 'COMPLETED'),
-        // );
+        setCompletedListAnimeListAnime(
+          await getViewerList(viewerId, 'COMPLETED'),
+        );
         // setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
         // setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
         // setRepeatingListAnimeListAnime(
@@ -172,7 +172,7 @@ export default function App() {
                     <Tab2
                       currentListAnime={currentListAnime}
                       planningListAnime={planningListAnime}
-                      // completedListAnime={completedListAnime}
+                      completedListAnime={completedListAnime}
                       // droppedListAnime={droppedListAnime}
                       // pausedListAnime={pausedListAnime}
                       // repeatingListAnime={RepeatingListAnime}

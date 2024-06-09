@@ -6,22 +6,32 @@ import Heading from '../components/Heading';
 interface Tab2Props {
   currentListAnime?: ListAnimeData[];
   planningListAnime?: ListAnimeData[];
+  completedListAnime?: ListAnimeData[];
   clicked: () => void;
 }
 
-const Tab2: React.FC<Tab2Props> = ({ currentListAnime, planningListAnime, clicked }) => {
+const Tab2: React.FC<Tab2Props> = ({ currentListAnime, planningListAnime, completedListAnime, clicked }) => {
   useEffect(() => {
     clicked();
   });
+
+  const isEmpty = !(currentListAnime?.length || planningListAnime?.length || completedListAnime?.length);
 
   return (
     <div className="body-container show-tab">
       <div className="main-container">
         <main>
-        <Heading text='Library' />
+          <Heading text='Library' />
           <div className="section-container">
-            <AnimeSection title="Continue Watching" animeData={currentListAnime} />
-            <AnimeSection title="Your List" animeData={planningListAnime} />
+            {isEmpty ? (
+              <p>Nothing to see here...</p>
+            ) : (
+              <>
+                {(currentListAnime?.length ?? 0) > 0 && <AnimeSection title="Continue Watching" animeData={currentListAnime} />}
+                {(planningListAnime?.length ?? 0) > 0 && <AnimeSection title="Your List" animeData={planningListAnime} />}
+                {(completedListAnime?.length ?? 0) > 0 && <AnimeSection title="Completed" animeData={completedListAnime} />}
+              </>
+            )}
           </div>
         </main>
       </div>
