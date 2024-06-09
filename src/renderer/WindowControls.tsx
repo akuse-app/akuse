@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
 import { faExpand, faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+const isMac = process.platform === 'darwin';
+
 const Element: React.FC<{
   icon: IconDefinition;
   ipcChannel: string;
@@ -27,7 +29,7 @@ const Element: React.FC<{
 
 const WindowControls = () => {
   return (
-    <div className="controls">
+    <div className={`controls ${isMac ? 'mac' : ''}`}>
       <div className="drag" />
       <div className="elements">
         <Element icon={faMinus} ipcChannel="minimize-window" />

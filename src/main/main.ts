@@ -66,12 +66,7 @@ const createWindow = async () => {
     minWidth: 1280,
     minHeight: 720,
     autoHideMenuBar: true,
-    titleBarStyle: 'hidden',
-    // titleBarOverlay: {
-    //   color: '#1A1D24',
-    //   symbolColor: '#eee',
-    //   height: 12,
-    // },
+    frame: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
