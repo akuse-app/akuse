@@ -83,7 +83,9 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 
     let timelineWidth = videoTimelineRef.current.clientWidth;
     const newOffsetX = event.nativeEvent.offsetX;
-    const newPercent = Math.floor((newOffsetX / timelineWidth) * duration);
+    let newPercent = Math.floor((newOffsetX / timelineWidth) * duration);
+    if (newPercent < 0) newPercent = 0;
+    if (newPercent > duration) newPercent = duration;
     const clampedOffsetX =
       newOffsetX < 20
         ? 20
@@ -103,7 +105,9 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     const offsetX = event.clientX - rect.left;
     const percentage = offsetX / timeline.clientWidth;
 
-    const newTime = percentage * videoRef.current.duration;
+    let newTime = percentage * videoRef.current.duration;
+    if (newTime < 0) newTime = 0;
+    if (newTime > videoRef.current.duration) newTime = videoRef.current.duration;
     setProgressBarWidth(`${((newTime ?? 0) / (duration ?? 0)) * 100}%`);
 
     try {
