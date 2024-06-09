@@ -1,4 +1,3 @@
-<h1 align="center">⚠ In development! </h1>
 <p align="center">
     <img width="120px" src="https://github.com/akuse-app/akuse/blob/react-port/assets/icon.png"/>
     <h1 align="center">akuse</h1>
@@ -18,93 +17,96 @@
 
 <img title="img" alt="img" src="https://i.imgur.com/jk5Q8rc.png">
 
-## ⚙️ Running locally for development
+<details>
+  <summary><h2>⚙️ Running locally for development</h2></summary>
 
-Start cloning akuse:
 
-```
-git clone https://github.com/akuse-app/akuse.git
-```
+  Start cloning akuse:
 
-Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
-As Redirect Uri, you can insert `akuse://index,https://anilist.co/api/v2/oauth/pin` (these are two space seprated uri) and it should work.
-Now go inside the src/modules folder and create a clientData.ts file with a structure like this:
+  ```
+  git clone https://github.com/akuse-app/akuse.git
+  ```
+  
+  Next, go to [this link](https://anilist.co/settings/developer) and create a new AniList API Client.
+  As Redirect Uri, you can insert `akuse://index,https://anilist.co/api/v2/oauth/pin` (these are two space seprated uri) and it should work.
+  Now go inside the src/modules folder and create a clientData.ts file with a structure like this:
+  
+  ```bash
+  import { ClientData } from "../types/types";
+  
+  export const clientData: ClientData = {
+    clientId: ,
+    redirectUri: "",
+    clientSecret: "",
+  };
+  ```
+  
+  Fill it with the data retrieved from the creation of your AniList API Client.
+  
+  ```bash
+  # Example:
+  import { ClientData } from "../types/types";
+  
+  export const clientData: ClientData = {
+    clientId: 12345,
+    redirectUri: 'akuse://index',
+    clientSecret: 'iA04TKLO3k3LaVWhxucJwck0glR6uhiv',
+  };
+  ```
+  
+  Next, install its dependencies (make sure npm is installed on your machine):
+  
+  ```
+  npm install
+  ```
+  
+  To start, run:
+  
+  ```
+  npm start
+  ```
+</details>
+<details>
+  <summary><h2>⚠ How to Log-In in AppImage & Development</h2></summary>
+  
 
-```
-import { ClientData } from "../types/types";
+  In AppImage and in a Development environment, the Log-In redirect doesn't work since the app is not packed/installed. If you need to work with an authenticated instance, follow these steps:
+  1. open the app using one of the method e.g.
+  
+      ```
+      npm start
+      ```
+        or
+      ```
+      ./path/to/app.AppImage
+      ```
+      
+  2. Now click on the login button and authenticate in the browser. Next, copy the code you are given, go back to akuse and click the navbar element with a laptop icon. Here you can paste your code.
+  
+  3. Finally, paste your code and push the button. If the code you entered is correct, you are now Logged-in, othwerise repeat these steps and see what has gone wrong.
+  
+  **NOTE:** This is not needed in Installed App.
+</details>
+<details>
+  <summary><h2>⌨ Shortcuts</h2></summary>
 
-export const clientData: ClientData = {
-  clientId: ,
-  redirectUri: "",
-  clientSecret: "",
-};
-```
 
-Fill it with the data retrieved from the creation of your AniList API Client.
-
-```bash
-# Example:
-import { ClientData } from "../types/types";
-
-export const clientData: ClientData = {
-  clientId: 12345,
-  redirectUri: 'akuse://index',
-  clientSecret: 'iA04TKLO3k3LaVWhxucJwck0glR6uhiv',
-};
-```
-
-Next, install its dependencies (make sure npm is installed on your machine):
-
-```
-npm install
-```
-
-To start, run:
-
-```
-npm start
-```
-
-## 🛠️ How to build
-
-- [Linux read here](./LINUX_BUILD.md)
-
-## ⚠ How to Log-In in AppImage & Development
-
-In AppImage and in a Development environment, the Log-In redirect doesn't work since the app is not packed/installed. If you need to work with an authenticated instance, follow these steps:
-1. open the app using one of the method e.g.
-
-    ```
-    npm start
-    ```
-      OR
-    ```
-    ./path/to/app.AppImage
-    ```
-    
-2. Now click on the login button and authenticate in the browser. Next, copy the code you are given, go back to akuse and click the navbar element with a laptop icon. Here you can paste your code.
-
-3. Finally, paste your code and push the button. If the code you entered is correct, you are now Logged-in, othwerise repeat these steps and see what has gone wrong.
-
-**NOTE:** This is not needed in Installed App.
-
-## ⌨ Shortcuts
-
-- Pages
-  - F1: go to Discover page
-  - F2: go to Library page
-  - F3: go to Search page
-- Video player
-  - Space: play/pause video
-  - Left arrow: fast rewind (5s)
-  - Right arrow: fast forward (5s)
-  - Upper arrow: increase volume
-  - Lower arrow: decrease volume
-  - F11: fullscreen toggler
-  - F: fullscreen toggler
-  - M: mute/unmute video
-  - P: play previous episode
-  - N: play next episode
+  - Pages
+    - F1: go to Discover page
+    - F2: go to Library page
+    - F3: go to Search page
+  - Video player
+    - Space: play/pause video
+    - Left arrow: fast rewind (5s)
+    - Right arrow: fast forward (5s)
+    - Upper arrow: increase volume
+    - Lower arrow: decrease volume
+    - F11: fullscreen toggler
+    - F: fullscreen toggler
+    - M: mute/unmute video
+    - P: play previous episode
+    - N: play next episode
+</details>
 
 ## 🐛 Known Issues
 
