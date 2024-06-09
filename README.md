@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="120px" src="https://github.com/akuse-app/akuse/blob/react-port/assets/icon.png"/>
+    <img width="120px" src="./assets/icon.png"/>
     <h1 align="center">akuse</h1>
 </p>
 
