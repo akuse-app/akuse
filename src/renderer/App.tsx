@@ -28,6 +28,7 @@ import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
+import { OS } from '../modules/os';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -150,7 +151,7 @@ export default function App() {
             }}
           />
           <MemoryRouter>
-            <WindowControls />
+            {!OS.isMac && <WindowControls />}
             <MainNavbar avatar={userInfo?.avatar?.medium} />
             <Routes>
               <Route

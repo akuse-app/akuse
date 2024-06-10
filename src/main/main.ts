@@ -67,7 +67,7 @@ const createWindow = async () => {
     minWidth: 1280,
     minHeight: 720,
     autoHideMenuBar: true,
-    frame: OS.isMac ? true : false,
+    frame: OS.isMac,
     titleBarStyle: 'hidden',
     icon: getAssetPath('icon.png'),
     webPreferences: {
