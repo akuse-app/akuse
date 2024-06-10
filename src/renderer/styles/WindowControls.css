@@ -11,10 +11,6 @@
   z-index: 880;
 }
 
-.controls.mac {
-  flex-direction: row-reverse;
-}
-
 .controls .drag {
   -webkit-app-region: drag;
   width: 100%;
@@ -29,10 +25,6 @@
   height: 100%;
   top: 0;
   right: 0;
-}
-
-.controls.mac .elements  {
-  flex-direction: row-reverse;
 }
 
 .controls .elements .element {

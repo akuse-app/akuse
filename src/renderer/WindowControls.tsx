@@ -28,8 +28,12 @@ const Element: React.FC<{
 };
 
 const WindowControls = () => {
+  if (isMac) {
+    return null;
+  }
+
   return (
-    <div className={`controls ${isMac ? 'mac' : ''}`}>
+    <div className={'controls'}>
       <div className="drag" />
       <div className="elements">
         <Element icon={faMinus} ipcChannel="minimize-window" />
