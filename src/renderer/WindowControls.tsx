@@ -3,8 +3,7 @@ import './styles/WindowControls.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
 import { faExpand, faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
-
-const isMac = process.platform === 'darwin';
+import { OS } from '../modules/os';
 
 const Element: React.FC<{
   icon: IconDefinition;
@@ -28,7 +27,7 @@ const Element: React.FC<{
 };
 
 const WindowControls = () => {
-  if (isMac) {
+  if (OS.isMac) {
     return null;
   }
 

@@ -9,6 +9,7 @@ import { clientData } from '../modules/clientData';
 import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { OS } from '../modules/os';
 
 const STORE = new Store();
 
@@ -66,6 +67,7 @@ const createWindow = async () => {
     minWidth: 1280,
     minHeight: 720,
     autoHideMenuBar: true,
+    frame: OS.isMac ? true : false,
     titleBarStyle: 'hidden',
     icon: getAssetPath('icon.png'),
     webPreferences: {
