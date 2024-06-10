@@ -1,8 +1,10 @@
 .controls {
   position: fixed;
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
   width: 100%;
-  height: 22px;
+  height: var(--height-window-controls);
   background-color: var(--color-0);
 
   /* player is 900 :) */
@@ -17,6 +19,8 @@
 
 .controls .elements {
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
   width: auto;
   height: 100%;
   top: 0;

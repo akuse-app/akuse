@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
@@ -9,6 +9,7 @@ import { clientData } from '../modules/clientData';
 import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { OS } from '../modules/os';
 
 const STORE = new Store();
 
@@ -66,12 +67,8 @@ const createWindow = async () => {
     minWidth: 1280,
     minHeight: 720,
     autoHideMenuBar: true,
+    frame: OS.isMac,
     titleBarStyle: 'hidden',
-    // titleBarOverlay: {
-    //   color: '#1A1D24',
-    //   symbolColor: '#eee',
-    //   height: 12,
-    // },
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -204,6 +201,37 @@ if (!gotTheLock) {
     }
   });
 }
+
+// Handle the protocol. In this case, we choose to show an Error Box.
+app.on('open-url', async (event, url) => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
+
+  try {
+    let code = url;
+    
+    if (code.includes('?code=')) {
+      code = code.split('?code=')[1];
+      
+      await handleLogin(code);
+      
+      if (mainWindow) {
+        mainWindow.reload();
+      }
+    } else {
+      throw new Error('Login code not found in deep link url');
+    }
+  } catch (error: any) {
+    // the commandLine is array of strings in which last element is deep link url
+    dialog.showErrorBox(
+      'Login failed',
+      'An error occurred while trying to log in.',
+    );
+    console.log('login failed error:', error.message);
+  }
+});
 
 async function handleLogin(code: any) {
   try {

@@ -19,7 +19,7 @@ type AnimeCustomTitles = {
 export const animeCustomTitles: AnimeCustomTitles = {
   US: {
     '113415': { title: `Jujutsu Kaisen Tv`, index: 0 },
-    '150672': { title: 'Oshi No Ko', index: 0 },
+    '150672': { title: `"Oshi No Ko"`, index: 0 },
     '11061': { title: `Hunter X Hunter 2011`, index: 0 },
     '43': { title: `Ghost in the Shell`, index: 0 },
     '235': { title: `Detective Conan Remastered`, index: 0 },

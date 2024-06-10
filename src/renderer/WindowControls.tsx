@@ -1,8 +1,9 @@
-import { IconDefinition, faSquare } from '@fortawesome/free-regular-svg-icons';
 import './styles/WindowControls.css';
+
+import { faSquare, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
-import { faExpand, faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const Element: React.FC<{
   icon: IconDefinition;
@@ -27,12 +28,17 @@ const Element: React.FC<{
 
 const WindowControls = () => {
   return (
-    <div className="controls">
+    <div className={'controls'}>
       <div className="drag" />
       <div className="elements">
         <Element icon={faMinus} ipcChannel="minimize-window" />
         <Element icon={faSquare} ipcChannel="toggle-maximize-window" />
-        <Element icon={faTimes} ipcChannel="close-window" warning size="1.1rem" />
+        <Element
+          icon={faTimes}
+          ipcChannel="close-window"
+          warning
+          size="1.1rem"
+        />
       </div>
     </div>
   );
