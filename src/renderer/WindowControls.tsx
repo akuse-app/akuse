@@ -3,6 +3,7 @@ import './styles/WindowControls.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
 import { faExpand, faMinus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { OS } from '../modules/os';
 
 const Element: React.FC<{
   icon: IconDefinition;
@@ -26,8 +27,12 @@ const Element: React.FC<{
 };
 
 const WindowControls = () => {
+  if (OS.isMac) {
+    return null;
+  }
+
   return (
-    <div className="controls">
+    <div className={'controls'}>
       <div className="drag" />
       <div className="elements">
         <Element icon={faMinus} ipcChannel="minimize-window" />

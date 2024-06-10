@@ -26,7 +26,9 @@
   /* --border-radius: 8px; */
   --transition: 0.2s ease;
   --shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-  --shadow-cover: black 0px 30px 20px -20px
+  --shadow-cover: black 0px 30px 20px -20px;
+
+  --height-window-controls: 25px;
 }
 
 /* Scrollbar */
