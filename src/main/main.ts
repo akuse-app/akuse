@@ -4,14 +4,15 @@ import { autoUpdater } from 'electron-updater';
 import path from 'path';
 const DiscordRPC = require('discord-rpc');
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
-import { getAccessToken } from '../modules/anilist/anilistApi';
+import { fetchAccessToken } from '../modules/anilist/anilistApi';
 import { clientData } from '../modules/clientData';
 import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { OS } from '../modules/os';
+import { setupStore, STORE } from '../modules/storeVariables';
 
-const STORE = new Store();
+setupStore();
 
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
@@ -90,8 +91,6 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
       mainWindow.maximize();
-
-      if (STORE.get('logged') !== true) STORE.set('logged', false);
 
       autoUpdater.checkForUpdates();
     }
@@ -235,7 +234,7 @@ app.on('open-url', async (event, url) => {
 
 async function handleLogin(code: any) {
   try {
-    const token = await getAccessToken(code);
+    const token = await fetchAccessToken(code);
     STORE.set('access_token', token);
     STORE.set('logged', true);
   } catch (error: any) {
@@ -291,6 +290,17 @@ autoUpdater.on('error', (info) => {
 
 ipcMain.on('download-update', () => {
   let pth = autoUpdater.downloadUpdate();
+});
+
+ipcMain.handle('getStoreValue', (_, key) => {
+  const value = STORE.get(key);
+  console.log('store - get', key, value);
+  return value;
+});
+
+ipcMain.handle('setStoreValue', (_, key, value) => {
+  console.log('store - set', key, value);
+  return STORE.set(key, value);
 });
 
 /* DISCORD RPC */

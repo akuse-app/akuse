@@ -3,7 +3,6 @@ import '../styles/animations.css';
 import '../styles/style.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import Store from 'electron-store';
 import { createContext, useEffect, useState } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -24,26 +23,23 @@ import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
-import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
+import { useStorage } from './hooks/storage';
 import { OS } from '../modules/os';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
 });
 
-const store = new Store();
 export const AuthContext = createContext<boolean>(false);
 export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
-  const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
+  const { logged } = useStorage();
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-
-  setDefaultStoreVariables();
 
   ipcRenderer.on('auto-update', async () => {
     setShowUpdateModal(true);
@@ -128,12 +124,12 @@ export default function App() {
   };
 
   useEffect(() => {
-    fetchTab1AnimeData();
+    void fetchTab1AnimeData();
   }, []);
 
   useEffect(() => {
     if (tab2Click) {
-      fetchTab2AnimeData();
+      void fetchTab2AnimeData();
     }
   }, [tab2Click, viewerId]);
 
