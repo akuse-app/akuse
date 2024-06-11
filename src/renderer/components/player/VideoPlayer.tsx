@@ -2,7 +2,6 @@ import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
-import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -19,8 +18,8 @@ import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
+import { useStorage } from '../../hooks/storage';
 
-const STORE = new Store();
 const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
@@ -56,6 +55,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [hlsData, setHlsData] = useState<Hls>();
+
+  const { updateProgress } = useStorage();
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);
@@ -100,7 +101,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'ArrowLeft': {
         event.preventDefault();
-        video.currentTime -= 5;
+        handleSeekBackward();
         break;
       }
       case 'ArrowUp': {
@@ -110,7 +111,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'ArrowRight': {
         event.preventDefault();
-        video.currentTime += 5;
+        handleSeekForward();
         break;
       }
       case 'ArrowDown': {
@@ -145,6 +146,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         event.preventDefault();
         canNextEpisode(episodeNumber) &&
           (await changeEpisode(episodeNumber + 1));
+        break;
+      }
+      case 'o': {
+        event.preventDefault();
+        togglePictureInPicture();
         break;
       }
     }
@@ -290,10 +296,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  const handleTimeUpdate = () => {
+  const handleTimeUpdate = async () => {
     if (!videoRef.current?.paused) {
       setPlaying(true);
-      onChangeLoading(false)
+      onChangeLoading(false);
     }
 
     const cTime = videoRef.current?.currentTime;
@@ -308,22 +314,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         // automatically update progress
         // console.log((cTime * 100) / dTime);
-        if (
-          (cTime * 100) / dTime > 85 &&
-          (STORE.get('update_progress') as boolean) &&
-          !progressUpdated
-        ) {
+        if ((cTime * 100) / dTime > 85 && updateProgress && !progressUpdated) {
           // when updating progress, put the anime in current if it wasn't there
           const status = listAnimeData.media.mediaListEntry?.status;
 
           switch (status) {
             case 'CURRENT': {
-              updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+              await updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
               break;
             }
             case 'REPEATING':
             case 'COMPLETED': {
-              updateAnimeFromList(
+              await updateAnimeFromList(
                 listAnimeData.media.id,
                 'REWATCHING',
                 undefined,
@@ -331,7 +333,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               );
             }
             default: {
-              updateAnimeFromList(
+              await updateAnimeFromList(
                 listAnimeData.media.id,
                 'CURRENT',
                 undefined,
@@ -479,6 +481,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
 
+  const handleSeekForward = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime += 5;
+    }
+  };
+
+  const handleSeekBackward = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime -= 5;
+    }
+  };
+
+  const togglePictureInPicture = async () => {
+    if (document.pictureInPictureEnabled) {
+      if (!document.pictureInPictureElement) {
+      await videoRef.current?.requestPictureInPicture();
+      } else {
+        await document.exitPictureInPicture();
+      }
+    }
+  };
+
   return ReactDOM.createPortal(
     show && (
       <>
@@ -536,13 +560,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               buffered={buffered}
               onClick={togglePlayingWithoutPropagation}
               onDblClick={toggleFullScreenWithoutPropagation}
+              togglePictureInPicture={togglePictureInPicture}
             />
           </div>
           <video
             id="video"
             ref={videoRef}
             onKeyDown={handleKeydown}
-            onTimeUpdate={handleTimeUpdate}
+            onTimeUpdate={() => {void handleTimeUpdate()}}
             onPause={handleVideoPause}
             crossOrigin="anonymous"
           ></video>

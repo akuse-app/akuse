@@ -546,8 +546,17 @@
   transform: scale(0.95);
 }
 
-.skip-button {
+.bottom-buttons {
+  left: 0;
   right: 0;
   bottom: 80px;
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  button {
+    margin: 0;
+  }
 }

@@ -11,14 +11,12 @@ import {
   faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Store from 'electron-store';
 import Hls from 'hls.js';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import 'react-activity/dist/Dots.css';
-import { AuthContext } from '../../App';
 import { Dots } from 'react-activity';
-
-const STORE = new Store();
+import { LanguageOptions } from '../../../modules/storeVariables';
+import { useStorage } from '../../hooks/storage';
 
 interface SettingsProps {
   show: boolean;
@@ -39,22 +37,16 @@ const VideoSettings: React.FC<SettingsProps> = ({
   hls,
   onChangeEpisode,
 }) => {
-  const logged = useContext(AuthContext);
-
   const [hlsData, setHlsData] = useState<Hls>();
 
-  const [updateProgress, setUpdateProgress] = useState<boolean>(
-    STORE.get('update_progress') as boolean,
-  );
-  const [watchDubbed, setWatchDubbed] = useState<boolean>(
-    STORE.get('dubbed') as boolean,
-  );
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    STORE.get('source_flag') as string,
-  );
-  const [skipTime, setSkipTime] = useState<number>(
-    STORE.get('intro_skip_time') as number,
-  );
+  const {
+    logged,
+    updateProgress,
+    watchDubbed,
+    selectedLanguage,
+    skipTime,
+    updateStorage,
+  } = useStorage();
 
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
@@ -63,14 +55,14 @@ const VideoSettings: React.FC<SettingsProps> = ({
   const [changeEpisodeLoading, setChangeEpisodeLoading] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    const handleVideoVolumeChange = () => {
-      if (videoRef.current) {
-        setIsMuted(videoRef.current.muted);
-        setVolume(videoRef.current.volume);
-      }
-    };
+  const handleVideoVolumeChange = () => {
+    if (videoRef.current) {
+      setIsMuted(videoRef.current.muted);
+      setVolume(videoRef.current.volume);
+    }
+  };
 
+  useEffect(() => {
     const videoElement = videoRef.current;
     if (videoElement) {
       videoElement.addEventListener('volumechange', handleVideoVolumeChange);
@@ -130,22 +122,20 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleUpdateProgressChange = () => {
-    STORE.set('update_progress', !updateProgress);
-    setUpdateProgress(!updateProgress);
+  const handleUpdateProgressChange = async () => {
+    await updateStorage('update_progress', !updateProgress);
   };
 
   const handleWatchDubbedChange = async () => {
-    const previous = STORE.get('dubbed');
-    STORE.set('dubbed', !watchDubbed);
-
+    const previous = watchDubbed;
+    await updateStorage('dubbed', !watchDubbed);
     setChangeEpisodeLoading(true);
 
     if (await onChangeEpisode(null, true)) {
-      setWatchDubbed(!watchDubbed);
+      await updateStorage('dubbed', !watchDubbed);
       setChangeEpisodeLoading(false);
     } else {
-      STORE.set('dubbed', previous);
+      await updateStorage('dubbed', previous);
       setChangeEpisodeLoading(false);
     }
   };
@@ -153,23 +143,21 @@ const VideoSettings: React.FC<SettingsProps> = ({
   const handleLanguageChange = async (
     event: ChangeEvent<HTMLSelectElement>,
   ) => {
-    const previous = STORE.get('source_flag');
-    STORE.set('source_flag', event.target.value);
-
+    const previous = selectedLanguage;
+    await updateStorage('source_flag', event.target.value as LanguageOptions);
     setChangeEpisodeLoading(true);
 
     if (await onChangeEpisode(null, true)) {
-      setSelectedLanguage(event.target.value);
+      await updateStorage('source_flag', event.target.value as LanguageOptions);
       setChangeEpisodeLoading(false);
     } else {
-      STORE.set('source_flag', previous);
+      await updateStorage('source_flag', previous);
       setChangeEpisodeLoading(false);
     }
   };
 
-  const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('intro_skip_time', parseInt(event.target.value));
-    setSkipTime(parseInt(event.target.value));
+  const handleSkipTimeChange = async (event: ChangeEvent<HTMLSelectElement>) => {
+    await updateStorage('intro_skip_time', parseInt(event.target.value));
   };
 
   return (
@@ -216,7 +204,6 @@ const VideoSettings: React.FC<SettingsProps> = ({
               min="0"
               max="1"
               step="0.1"
-              defaultValue={1}
               value={volume}
               onChange={handleVolumeChange}
             />
@@ -226,13 +213,15 @@ const VideoSettings: React.FC<SettingsProps> = ({
               <FontAwesomeIcon className="i" icon={faClock} />
               Speed
             </span>
-            <select className="main-select-0" onChange={handleSpeedChange}>
+            <select
+              defaultValue={1}
+              className="main-select-0"
+              onChange={handleSpeedChange}
+            >
               <option value="0.25">0.25</option>
               <option value="0.50">0.50</option>
               <option value="0.75">0.75</option>
-              <option value="1" selected>
-                Normal
-              </option>
+              <option value="1">Normal</option>
               <option value="1.25">1.25</option>
               <option value="1.50">1.50</option>
               <option value="1.75">1.75</option>
