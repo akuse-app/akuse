@@ -11,7 +11,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
@@ -40,9 +39,9 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import { useStorage } from '../../hooks/storage';
 
 const modalsRoot = document.getElementById('modals-root');
-const STORE = new Store();
 const style = getComputedStyle(document.body);
 
 interface AnimeModalProps {
@@ -59,9 +58,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
 
+  const {trailerVolumeOn, updateStorage} = useStorage();
+
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);
-  const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(false);
   const [canRePlayTrailer, setCanRePlayTrailer] = useState<boolean>(false);
 
   // episodes info
@@ -79,21 +79,25 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  const handleTrailerVolumeOn = async () => {
+    await updateStorage('trailer_volume_on', true);
+  };
+
   useEffect(() => {
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
   }, []);
 
   useEffect(() => {
-    if(!showPlayer) {
-      setPlayerIVideo(null)
+    if (!showPlayer) {
+      setPlayerIVideo(null);
     }
-  }, [showPlayer])
+  }, [showPlayer]);
 
   useEffect(() => {
     try {
       if (show && trailerRef.current && canRePlayTrailer)
         trailerRef.current.play();
-      setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
+      void handleTrailerVolumeOn();
     } catch (error) {
       console.log(error);
     }
@@ -152,8 +156,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
     if (trailerRef.current) {
       trailerRef.current.volume = volumeOn ? 1 : 0;
-      setTrailerVolumeOn(volumeOn);
-      STORE.set('trailer_volume_on', volumeOn);
+      void updateStorage('trailer_volume_on', volumeOn);
     }
   };
 
@@ -239,7 +242,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 </div>
               )}
 
-              {trailer && (
+              {trailer && listAnimeData.media.trailer?.id && (
                 <div
                   className={`trailer-wrapper ${
                     canRePlayTrailer ? 'show-opacity' : ''

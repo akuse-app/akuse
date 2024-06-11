@@ -33,7 +33,6 @@ ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
 });
 
-export const AuthContext = createContext<boolean>(false);
 export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
@@ -47,6 +46,7 @@ export default function App() {
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [animeLoaded, setAnimeLoaded] = useState<boolean>(false);
   const [currentListAnime, setCurrentListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
@@ -80,24 +80,30 @@ export default function App() {
 
   const style = getComputedStyle(document.body);
 
-  const fetchTab1AnimeData = async () => {
+  const fetchTab1AnimeData = async (loggedIn: boolean) => {
     try {
       var id = null;
-      if (logged) {
+      if (loggedIn) {
         id = await getViewerId();
         setViewerId(id);
 
-        setUserInfo(await getViewerInfo(id));
+        const info = await getViewerInfo(id);
+        setUserInfo(info);
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
         setCurrentListAnime(current.concat(rewatching));
       }
 
-      setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
-      setMostPopularAnime(
-        animeDataToListAnimeData(await getMostPopularAnime(id)),
-      );
-      setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
+      if (!animeLoaded) {
+        setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
+        setMostPopularAnime(
+          animeDataToListAnimeData(await getMostPopularAnime(id)),
+        );
+        setNextReleasesAnime(
+          animeDataToListAnimeData(await getNextReleases(id)),
+        );
+        setAnimeLoaded(true);
+      }
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -124,8 +130,8 @@ export default function App() {
   };
 
   useEffect(() => {
-    void fetchTab1AnimeData();
-  }, []);
+    void fetchTab1AnimeData(logged);
+  }, [logged]);
 
   useEffect(() => {
     if (tab2Click) {
@@ -134,7 +140,6 @@ export default function App() {
   }, [tab2Click, viewerId]);
 
   return (
-    <AuthContext.Provider value={logged}>
       <ViewerIdContext.Provider value={viewerId}>
         <SkeletonTheme
           baseColor={style.getPropertyValue('--color-3')}
@@ -186,6 +191,5 @@ export default function App() {
           </MemoryRouter>
         </SkeletonTheme>
       </ViewerIdContext.Provider>
-    </AuthContext.Provider>
   );
 }

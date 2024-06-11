@@ -1,5 +1,4 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
-import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 const DiscordRPC = require('discord-rpc');
@@ -10,9 +9,7 @@ import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { OS } from '../modules/os';
-import { setupStore, STORE } from '../modules/storeVariables';
-
-setupStore();
+import { STORE } from '../modules/storeVariables';
 
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 

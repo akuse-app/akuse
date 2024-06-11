@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
 import { STORAGE } from '../../modules/storage';
 import {
-  DEFAULTS,
   LanguageOptions,
+  STORE_SCHEMA,
   StoreKeys,
 } from '../../modules/storeVariables';
 
 export const useStorage = () => {
-  const [logged, setLogged] = useState<boolean>(DEFAULTS.logged);
-  const [accessToken, setAccessToken] = useState<string>(DEFAULTS.access_token);
+  const [logged, setLogged] = useState<boolean>(STORE_SCHEMA.logged.default);
+  const [accessToken, setAccessToken] = useState<string>(STORE_SCHEMA.access_token);
   const [updateProgress, setUpdateProgress] = useState<boolean>(
-    DEFAULTS.update_progress,
+    STORE_SCHEMA.update_progress,
   );
-  const [watchDubbed, setWatchDubbed] = useState<boolean>(DEFAULTS.dubbed);
+  const [watchDubbed, setWatchDubbed] = useState<boolean>(STORE_SCHEMA.dubbed);
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageOptions>(
-    DEFAULTS.source_flag,
+    STORE_SCHEMA.source_flag,
   );
-  const [skipTime, setSkipTime] = useState<number>(DEFAULTS.intro_skip_time);
+  const [skipTime, setSkipTime] = useState<number>(STORE_SCHEMA.intro_skip_time);
   const [showDuration, setShowDuration] = useState<boolean>(
-    DEFAULTS.show_duration,
+    STORE_SCHEMA.show_duration,
   );
   const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(
-    DEFAULTS.trailer_volume_on,
+    STORE_SCHEMA.trailer_volume_on,
   );
 
   const loadStorage = async () => {

@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
   getAvailableEpisodes,
@@ -32,12 +32,12 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { MediaStatus } from '../../../types/anilistGraphQLTypes';
-import { AuthContext } from '../../App';
 import { ButtonCircle, ButtonLoading, ButtonMain } from '../Buttons';
 import {
   deleteAnimeFromList,
   updateAnimeFromList,
 } from '../../../modules/anilist/anilistApi';
+import { useStorage } from '../../hooks/storage';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -256,7 +256,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   onPlay,
   loading = false,
 }) => {
-  const logged = useContext(AuthContext);
+  const { logged } = useStorage();
 
   const [progress, setProgress] = useState<number | undefined>(
     getProgress(listAnimeData.media),

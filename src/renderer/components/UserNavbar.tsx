@@ -7,8 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
-import { useContext } from 'react';
-import { AuthContext } from '../App';
+import { useStorage } from '../hooks/storage';
 
 interface LiProps {
   text: string;
@@ -32,8 +31,7 @@ interface UserNavbarProps {
 }
 
 const UserNavbar: React.FC<UserNavbarProps> = ({ avatar }) => {
-  const logged = useContext(AuthContext);
-
+  const { logged } = useStorage();
   return (
     <nav className="user">
       <ul>

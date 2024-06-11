@@ -1,5 +1,3 @@
-import Store from 'electron-store';
-
 import {
   AnimeData,
   CurrentListAnime,
@@ -12,8 +10,8 @@ import { clientData } from '../clientData';
 import { getOptions, makeRequest } from '../requests';
 import isAppImage from '../packaging/isAppImage';
 import { app, ipcRenderer } from 'electron';
+import { STORAGE } from '../storage';
 
-const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
 const PAGES: number = 20;
 const METHOD: string = 'POST';
@@ -86,7 +84,7 @@ const MEDIA_DATA: string = `
  * @param {*} code
  * @returns access token
  */
-export const getAccessToken = async (code: string): Promise<string> => {
+export const fetchAccessToken = async (code: string): Promise<string> => {
   const url = 'https://anilist.co/api/v2/oauth/token';
 
   const data = {
@@ -120,7 +118,7 @@ export const getViewerId = async (): Promise<number> => {
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
@@ -151,7 +149,7 @@ export const getViewerInfo = async (viewerId: number | null) => {
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
@@ -197,7 +195,7 @@ export const getViewerList = async (
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
@@ -230,7 +228,7 @@ export const getFollowingUsers = async (viewerId: any) => {
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
@@ -259,7 +257,7 @@ export const getAnimeInfo = async (animeId: any) => {
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
@@ -301,7 +299,7 @@ export const getTrendingAnime = async (
 
   if (viewerId) {
     var headers: any = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -344,7 +342,7 @@ export const getMostPopularAnime = async (
 
   if (viewerId) {
     var headers: any = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -384,7 +382,7 @@ export const getNextReleases = async (viewerId: number | null) => {
 
   if (viewerId) {
     var headers: any = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -428,7 +426,7 @@ export const searchFilteredAnime = async (
 
   if (viewerId) {
     var headers: any = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -498,7 +496,7 @@ export const getAnimesByGenre = async (genre: any, viewerId: number | null) => {
 
   if (viewerId) {
     var headers: any = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -572,7 +570,7 @@ export const updateAnimeFromList = async (
       `;
 
     var headers = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -612,7 +610,7 @@ export const deleteAnimeFromList = async (id: any): Promise<boolean> => {
     console.log('delte: ', id);
 
     var headers = {
-      Authorization: 'Bearer ' + STORE.get('access_token'),
+      Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
@@ -649,7 +647,7 @@ export const updateAnimeProgress = async (
       `;
 
   var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+    Authorization: 'Bearer ' + (await STORAGE.getAccessToken()),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
