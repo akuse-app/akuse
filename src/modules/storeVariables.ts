@@ -48,7 +48,8 @@ export const STORE_SCHEMA: Record<StoreKeys, any> = {
 }
 
 // one store to rule them all. Use STORE in the main proccess and call STORAGE on the renderer side
-export const STORE: Store<Record<StoreKeys, unknown>> = new Store({
+type StoreType = Record<StoreKeys, unknown>;
+export const STORE: Store<StoreType> = new Store({
   // NOTE Not ready to use this yet as it will break the app
   // schema: STORE_SCHEMA,
 });

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '../../../modules/utils';
 import { faExternalLink, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
-import { useStorage } from '../../hooks/storage';
+import { useStorageContext } from '../../contexts/storage';
 
 interface BottomControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -27,7 +27,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   togglePictureInPicture,
 }) => {
   const videoTimelineRef = useRef<HTMLDivElement>(null);
-  const { skipTime, showDuration, updateStorage } = useStorage();
+  const { skipTime, showDuration, updateStorage } = useStorageContext();
 
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 

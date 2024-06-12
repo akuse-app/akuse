@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import isAppImage from '../modules/packaging/isAppImage';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
-import { useStorage } from './hooks/storage';
+import { useStorageContext } from './contexts/storage';
 
 const Li: React.FC<{
   text: string;
@@ -55,7 +55,7 @@ const LiLink: React.FC<{
 };
 
 const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
-  const {logged} = useStorage();
+  const {logged} = useStorageContext();
 
   const [activeTab, setActiveTab] = useState(1);
   const [showUserModal, setShowUserModal] = useState<boolean>(false);

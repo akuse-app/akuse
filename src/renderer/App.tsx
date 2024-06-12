@@ -26,8 +26,8 @@ import Tab4 from './tabs/Tab4';
 import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
-import { useStorage } from './hooks/storage';
 import { OS } from '../modules/os';
+import { useStorageContext } from './contexts/storage';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -36,7 +36,7 @@ ipcRenderer.on('console-log', (event, toPrint) => {
 export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
-  const { logged } = useStorage();
+  const { logged } = useStorageContext();
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 

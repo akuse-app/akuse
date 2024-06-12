@@ -18,7 +18,7 @@ import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
-import { useStorage } from '../../hooks/storage';
+import { useStorageContext } from '../../contexts/storage';
 
 const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
@@ -56,7 +56,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const [hlsData, setHlsData] = useState<Hls>();
 
-  const { updateProgress } = useStorage();
+  const { updateProgress } = useStorageContext();
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);

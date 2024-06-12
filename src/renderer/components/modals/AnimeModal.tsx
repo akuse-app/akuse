@@ -39,7 +39,7 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
-import { useStorage } from '../../hooks/storage';
+import { useStorageContext } from '../../contexts/storage';
 
 const modalsRoot = document.getElementById('modals-root');
 const style = getComputedStyle(document.body);
@@ -58,7 +58,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
 
-  const {trailerVolumeOn, updateStorage} = useStorage();
+  const {trailerVolumeOn, updateStorage} = useStorageContext();
 
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);

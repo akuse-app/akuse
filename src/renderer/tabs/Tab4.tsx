@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import Heading from '../components/Heading';
-import { useStorage } from '../hooks/storage';
+import { useStorageContext } from '../contexts/storage';
 
 // Interfaccia per definire la struttura delle opzioni del select
 interface Option {
@@ -87,7 +87,7 @@ const Tab4: React.FC = () => {
     skipTime,
     showDuration,
     updateStorage,
-  } = useStorage();
+  } = useStorageContext();
 
   const handleUpdateProgressChange = () => {
     void updateStorage('update_progress', !updateProgress);

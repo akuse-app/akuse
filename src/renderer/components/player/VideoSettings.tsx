@@ -16,7 +16,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import 'react-activity/dist/Dots.css';
 import { Dots } from 'react-activity';
 import { LanguageOptions } from '../../../modules/storeVariables';
-import { useStorage } from '../../hooks/storage';
+import { useStorageContext } from '../../contexts/storage';
 
 interface SettingsProps {
   show: boolean;
@@ -46,7 +46,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
     selectedLanguage,
     skipTime,
     updateStorage,
-  } = useStorage();
+  } = useStorageContext();
 
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);

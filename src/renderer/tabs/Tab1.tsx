@@ -2,8 +2,7 @@ import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
-import UserNavbar from '../components/UserNavbar';
-import { useStorage } from '../hooks/storage';
+import { useStorageContext } from '../contexts/storage';
 
 interface Tab1Props {
   userInfo?: UserInfo;
@@ -20,7 +19,7 @@ const Tab1: React.FC<Tab1Props> = ({
   mostPopularAnime,
   nextReleasesAnime,
 }) => {
-  const { logged } = useStorage();
+  const { logged } = useStorageContext();
 
   return (
     <div className="body-container  show-tab">

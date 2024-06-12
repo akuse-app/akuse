@@ -37,7 +37,7 @@ import {
   deleteAnimeFromList,
   updateAnimeFromList,
 } from '../../../modules/anilist/anilistApi';
-import { useStorage } from '../../hooks/storage';
+import { useStorageContext } from '../../contexts/storage';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -256,7 +256,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   onPlay,
   loading = false,
 }) => {
-  const { logged } = useStorage();
+  const { logged } = useStorageContext();
 
   const [progress, setProgress] = useState<number | undefined>(
     getProgress(listAnimeData.media),
