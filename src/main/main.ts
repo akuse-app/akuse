@@ -1,7 +1,10 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-const DiscordRPC = require('discord-rpc');
 import { OPEN_NEW_ISSUE_URL, SPONSOR_URL } from '../constants/utils';
 import { fetchAccessToken } from '../modules/anilist/anilistApi';
 import { clientData } from '../modules/clientData';
@@ -10,6 +13,8 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { OS } from '../modules/os';
 import { STORE } from '../modules/storeVariables';
+
+const DiscordRPC = require('../../release/app/node_modules/discord-rpc');
 
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
@@ -150,6 +155,7 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
+  // eslint-disable-next-line promise/always-return
   .then(() => {
     createWindow();
     app.on('activate', () => {
@@ -175,7 +181,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on('second-instance', async (event, commandLine, workingDirectory) => {
+  app.on('second-instance', async (_, commandLine) => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
@@ -235,7 +241,7 @@ async function handleLogin(code: any) {
     STORE.set('access_token', token);
     STORE.set('logged', true);
   } catch (error: any) {
-    console.log('login failed with error: ' + error.message);
+    console.log(`login failed with error: ${error.message}`);
   }
 }
 
@@ -252,9 +258,9 @@ ipcMain.on('minimize-window', () => {
   mainWindow?.minimize();
 });
 
-ipcMain.on('toggle-maximize-window', () => {
-  mainWindow?.isMaximized() ? mainWindow.unmaximize() : mainWindow?.maximize();
-});
+ipcMain.on('toggle-maximize-window', () =>
+  mainWindow?.isMaximized() ? mainWindow.unmaximize() : mainWindow?.maximize(),
+);
 
 ipcMain.on('close-window', () => {
   mainWindow?.close();
@@ -272,6 +278,7 @@ autoUpdater.on('update-available', (info) => {
 });
 
 autoUpdater.on('update-downloaded', (info) => {
+  console.log('update downloaded', info);
   autoUpdater.quitAndInstall();
 });
 
@@ -286,7 +293,13 @@ autoUpdater.on('error', (info) => {
 });
 
 ipcMain.on('download-update', () => {
-  let pth = autoUpdater.downloadUpdate();
+  autoUpdater.downloadUpdate();
+});
+
+ipcMain.handle('getStore', () => {
+  const value = STORE.store;
+  console.log('store - get state', JSON.stringify(value));
+  return value;
 });
 
 ipcMain.handle('getStoreValue', (_, key) => {

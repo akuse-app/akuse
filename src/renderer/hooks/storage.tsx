@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { STORAGE } from '../../modules/storage';
 import {
   LanguageOptions,
   STORE_SCHEMA,
+  StorageContextType,
   StoreKeys,
-  StoreType,
 } from '../../modules/storeVariables';
-import { StorageContextType } from '../contexts/storage';
 
 // Maybe combine this hook with context so we only have one place to update the storage and not on every hook render call
 export const useStorage = (): StorageContextType => {
@@ -27,67 +26,73 @@ export const useStorage = (): StorageContextType => {
     STORE_SCHEMA.trailer_volume_on,
   );
 
-  const loadStorage = async () => {
-    const _logged = await STORAGE.getLogged();
-    if (_logged !== logged) setLogged(_logged);
+  const loadStorage = useCallback(async () => {
+    const store = await STORAGE.getStore();
+    if (store.logged !== logged) setLogged(store.logged);
 
-    const _accessToken = await STORAGE.getAccessToken();
-    if (_accessToken !== accessToken) setAccessToken(_accessToken);
+    if (store.access_token !== accessToken) setAccessToken(store.access_token);
 
-    const _updateProgress = await STORAGE.getUpdateProgress();
-    if (_updateProgress !== updateProgress) setUpdateProgress(_updateProgress);
+    if (store.update_progress !== updateProgress)
+      setUpdateProgress(store.update_progress);
 
-    const _watchDubbed = await STORAGE.getDubbed();
-    if (_watchDubbed !== watchDubbed) setWatchDubbed(_watchDubbed);
+    if (store.dubbed !== watchDubbed) setWatchDubbed(store.dubbed);
 
-    const _selectedLanguage = await STORAGE.getSourceFlag();
-    if (_selectedLanguage !== selectedLanguage)
-      setSelectedLanguage(_selectedLanguage);
+    if (store.source_flag !== selectedLanguage)
+      setSelectedLanguage(store.source_flag);
 
-    const _skipTime = await STORAGE.getIntroSkipTime();
-    if (_skipTime !== skipTime) setSkipTime(_skipTime);
+    if (store.intro_skip_time !== skipTime) setSkipTime(store.intro_skip_time);
 
-    const _showDuration = await STORAGE.getShowDuration();
-    if (_showDuration !== showDuration) setShowDuration(_showDuration);
+    if (store.show_duration !== showDuration)
+      setShowDuration(store.show_duration);
 
-    const _trailerVolumeOn = await STORAGE.getTrailerVolumeOn();
-    if (_trailerVolumeOn !== trailerVolumeOn)
-      setTrailerVolumeOn(_trailerVolumeOn);
-  };
+    if (store.trailer_volume_on !== trailerVolumeOn)
+      setTrailerVolumeOn(store.trailer_volume_on);
 
-  const updateStorage = async (key: StoreKeys, value: any) => {
-    let _value = null;
+    console.log('store - loaded');
+  }, [
+    accessToken,
+    logged,
+    selectedLanguage,
+    showDuration,
+    skipTime,
+    trailerVolumeOn,
+    updateProgress,
+    watchDubbed,
+  ]);
+
+  const updateStorage = useCallback(async (key: StoreKeys, value: any) => {
+    let newValue = null;
     switch (key) {
       case 'logged':
-        _value = await STORAGE.getLogged();
+        newValue = await STORAGE.getLogged();
         setLogged(value);
         break;
       case 'access_token':
-        _value = await STORAGE.getAccessToken();
+        newValue = await STORAGE.getAccessToken();
         setAccessToken(value);
         break;
       case 'update_progress':
-        _value = await STORAGE.getUpdateProgress();
+        newValue = await STORAGE.getUpdateProgress();
         setUpdateProgress(value);
         break;
       case 'dubbed':
-        _value = await STORAGE.getDubbed();
+        newValue = await STORAGE.getDubbed();
         setWatchDubbed(value);
         break;
       case 'source_flag':
-        _value = await STORAGE.getSourceFlag();
+        newValue = await STORAGE.getSourceFlag();
         setSelectedLanguage(value);
         break;
       case 'intro_skip_time':
-        _value = await STORAGE.getIntroSkipTime();
+        newValue = await STORAGE.getIntroSkipTime();
         setSkipTime(value);
         break;
       case 'show_duration':
-        _value = await STORAGE.getShowDuration();
+        newValue = await STORAGE.getShowDuration();
         setShowDuration(value);
         break;
       case 'trailer_volume_on':
-        _value = await STORAGE.getTrailerVolumeOn();
+        newValue = await STORAGE.getTrailerVolumeOn();
         setTrailerVolumeOn(value);
         break;
       default:
@@ -95,12 +100,13 @@ export const useStorage = (): StorageContextType => {
 
     await STORAGE.set(key, value);
     console.log(
-      `store - ${key} updated to ${value} ${_value !== value ? `(was ${_value})` : ''}`,
+      `store - ${key} updated to ${value} ${newValue !== value ? `(was ${newValue})` : ''}`,
     );
-  };
+  }, []);
 
   useEffect(() => {
-    void loadStorage();
+    loadStorage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

@@ -1,12 +1,13 @@
-import '..//styles/components.css';
+import '../styles/components.css';
 import '../styles/animations.css';
 import '../styles/style.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { createContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
+import { ipcRenderer } from 'electron';
 import {
   getMostPopularAnime,
   getNextReleases,
@@ -23,17 +24,15 @@ import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
-import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import { useStorageContext } from './contexts/storage';
+import { ViewerIdContext } from './contexts/viewer';
 
-ipcRenderer.on('console-log', (event, toPrint) => {
+ipcRenderer.on('console-log', (_event, toPrint) => {
   console.log(toPrint);
 });
-
-export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
   const { logged } = useStorageContext();
@@ -80,36 +79,41 @@ export default function App() {
 
   const style = getComputedStyle(document.body);
 
-  const fetchTab1AnimeData = async (loggedIn: boolean) => {
-    try {
-      var id = null;
-      if (loggedIn) {
-        id = await getViewerId();
-        setViewerId(id);
+  const fetchTab1AnimeData = useCallback(
+    async (loggedIn: boolean) => {
+      try {
+        let id = null;
+        if (loggedIn) {
+          id = await getViewerId();
+          setViewerId(id);
 
-        const info = await getViewerInfo(id);
-        setUserInfo(info);
-        const current = await getViewerList(id, 'CURRENT');
-        const rewatching = await getViewerList(id, 'REPEATING');
-        setCurrentListAnime(current.concat(rewatching));
+          const info = await getViewerInfo(id);
+          setUserInfo(info);
+          const current = await getViewerList(id, 'CURRENT');
+          const rewatching = await getViewerList(id, 'REPEATING');
+          setCurrentListAnime(current.concat(rewatching));
+        }
+
+        if (!animeLoaded) {
+          setTrendingAnime(
+            animeDataToListAnimeData(await getTrendingAnime(id)),
+          );
+          setMostPopularAnime(
+            animeDataToListAnimeData(await getMostPopularAnime(id)),
+          );
+          setNextReleasesAnime(
+            animeDataToListAnimeData(await getNextReleases(id)),
+          );
+          setAnimeLoaded(true);
+        }
+      } catch (error) {
+        console.log(`Tab1 error: ${error}`);
       }
+    },
+    [animeLoaded],
+  );
 
-      if (!animeLoaded) {
-        setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
-        setMostPopularAnime(
-          animeDataToListAnimeData(await getMostPopularAnime(id)),
-        );
-        setNextReleasesAnime(
-          animeDataToListAnimeData(await getNextReleases(id)),
-        );
-        setAnimeLoaded(true);
-      }
-    } catch (error) {
-      console.log('Tab1 error: ' + error);
-    }
-  };
-
-  const fetchTab2AnimeData = async () => {
+  const fetchTab2AnimeData = useCallback(async () => {
     try {
       if (viewerId) {
         setPlanningListAnimeListAnime(
@@ -125,71 +129,69 @@ export default function App() {
         // );
       }
     } catch (error) {
-      console.log('Tab2 error: ' + error);
+      console.log(`Tab2 error: ${error}`);
     }
-  };
+  }, [viewerId]);
 
   useEffect(() => {
-    void fetchTab1AnimeData(logged);
-  }, [logged]);
+    fetchTab1AnimeData(logged);
+  }, [fetchTab1AnimeData, logged]);
 
   useEffect(() => {
     if (tab2Click) {
-      void fetchTab2AnimeData();
+      fetchTab2AnimeData();
     }
-  }, [tab2Click, viewerId]);
+  }, [fetchTab2AnimeData, tab2Click, viewerId]);
 
   return (
-      <ViewerIdContext.Provider value={viewerId}>
-        <SkeletonTheme
-          baseColor={style.getPropertyValue('--color-3')}
-          highlightColor={style.getPropertyValue('--color-4')}
-        >
-          <AutoUpdateModal
-            show={showUpdateModal}
-            onClose={() => {
-              setShowUpdateModal(false);
-            }}
-          />
-          <MemoryRouter>
-            {!OS.isMac && <WindowControls />}
-            <MainNavbar avatar={userInfo?.avatar?.medium} />
-            <Routes>
+    <ViewerIdContext.Provider value={viewerId}>
+      <SkeletonTheme
+        baseColor={style.getPropertyValue('--color-3')}
+        highlightColor={style.getPropertyValue('--color-4')}
+      >
+        <AutoUpdateModal
+          show={showUpdateModal}
+          onClose={() => {
+            setShowUpdateModal(false);
+          }}
+        />
+        <MemoryRouter>
+          {!OS.isMac && <WindowControls />}
+          <MainNavbar avatar={userInfo?.avatar?.medium} />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Tab1
+                  userInfo={userInfo}
+                  currentListAnime={currentListAnime}
+                  trendingAnime={trendingAnime}
+                  mostPopularAnime={mostPopularAnime}
+                  nextReleasesAnime={nextReleasesAnime}
+                />
+              }
+            />
+            {logged && (
               <Route
-                path="/"
+                path="/tab2"
                 element={
-                  <Tab1
-                    userInfo={userInfo}
+                  <Tab2
                     currentListAnime={currentListAnime}
-                    trendingAnime={trendingAnime}
-                    mostPopularAnime={mostPopularAnime}
-                    nextReleasesAnime={nextReleasesAnime}
+                    planningListAnime={planningListAnime}
+                    // completedListAnime={completedListAnime}
+                    // droppedListAnime={droppedListAnime}
+                    // pausedListAnime={pausedListAnime}
+                    // repeatingListAnime={RepeatingListAnime}
+                    clicked={() => !tab2Click && setTab2Click(true)}
                   />
                 }
               />
-              {logged && (
-                <Route
-                  path="/tab2"
-                  element={
-                    <Tab2
-                      currentListAnime={currentListAnime}
-                      planningListAnime={planningListAnime}
-                      // completedListAnime={completedListAnime}
-                      // droppedListAnime={droppedListAnime}
-                      // pausedListAnime={pausedListAnime}
-                      // repeatingListAnime={RepeatingListAnime}
-                      clicked={() => {
-                        !tab2Click && setTab2Click(true);
-                      }}
-                    />
-                  }
-                />
-              )}
-              <Route path="/tab3" element={<Tab3 />} />
-              <Route path="/tab4" element={<Tab4 />} />
-            </Routes>
-          </MemoryRouter>
-        </SkeletonTheme>
-      </ViewerIdContext.Provider>
+            )}
+            <Route path="/tab3" element={<Tab3 />} />
+            <Route path="/tab4" element={<Tab4 />} />
+          </Routes>
+        </MemoryRouter>
+      </SkeletonTheme>
+    </ViewerIdContext.Provider>
   );
 }

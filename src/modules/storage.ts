@@ -1,7 +1,12 @@
 // only use on renderer side
 
-import { ipcRenderer } from "electron";
-import { LanguageOptions, StoreKeys } from './storeVariables';
+import { ipcRenderer } from 'electron';
+import { LanguageOptions, StoreKeys, StoreType } from './storeVariables';
+
+const getStore = async (): Promise<StoreType> => {
+  const store: StoreType = await ipcRenderer.invoke('getStore');
+  return store;
+};
 
 const getLogged = async (): Promise<boolean> => {
   const logged = await ipcRenderer.invoke('getStoreValue', 'logged');
@@ -57,6 +62,7 @@ const set = async (key: StoreKeys, value: any): Promise<void> => {
 };
 
 export const STORAGE = {
+  getStore,
   set,
   getLogged,
   getAccessToken,

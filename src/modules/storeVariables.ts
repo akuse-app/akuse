@@ -10,7 +10,19 @@ export type StoreKeys =
   | 'show_duration'
   | 'trailer_volume_on';
 
-export type LanguageOptions = 'IT' | 'US'; 
+export type StorageContextType = {
+  logged: boolean;
+  accessToken: string;
+  updateProgress: boolean;
+  watchDubbed: boolean;
+  selectedLanguage: string;
+  skipTime: number;
+  showDuration: boolean;
+  trailerVolumeOn: boolean;
+  updateStorage: (key: StoreKeys, value: any) => Promise<void>;
+};
+
+export type LanguageOptions = 'IT' | 'US';
 
 export const STORE_SCHEMA: Record<StoreKeys, any> = {
   logged: {
@@ -48,7 +60,7 @@ export const STORE_SCHEMA: Record<StoreKeys, any> = {
 }
 
 // one store to rule them all. Use STORE in the main proccess and call STORAGE on the renderer side
-type StoreType = Record<StoreKeys, unknown>;
+export type StoreType = Record<StoreKeys, any>;
 export const STORE: Store<StoreType> = new Store({
   // NOTE Not ready to use this yet as it will break the app
   // schema: STORE_SCHEMA,
