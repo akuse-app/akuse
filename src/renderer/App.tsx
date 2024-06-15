@@ -28,7 +28,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import { useStorageContext } from './contexts/storage';
-import { ViewerIdContext } from './contexts/viewer';
+import { useViewerContext } from './contexts/viewer';
 
 ipcRenderer.on('console-log', (_event, toPrint) => {
   console.log(toPrint);
@@ -36,7 +36,7 @@ ipcRenderer.on('console-log', (_event, toPrint) => {
 
 export default function App() {
   const { logged } = useStorageContext();
-  const [viewerId, setViewerId] = useState<number | null>(null);
+  const { viewerId, setViewerId } = useViewerContext();
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   ipcRenderer.on('auto-update', async () => {
@@ -144,54 +144,52 @@ export default function App() {
   }, [fetchTab2AnimeData, tab2Click, viewerId]);
 
   return (
-    <ViewerIdContext.Provider value={viewerId}>
-      <SkeletonTheme
-        baseColor={style.getPropertyValue('--color-3')}
-        highlightColor={style.getPropertyValue('--color-4')}
-      >
-        <AutoUpdateModal
-          show={showUpdateModal}
-          onClose={() => {
-            setShowUpdateModal(false);
-          }}
-        />
-        <MemoryRouter>
-          {!OS.isMac && <WindowControls />}
-          <MainNavbar avatar={userInfo?.avatar?.medium} />
-          <Routes>
+    <SkeletonTheme
+      baseColor={style.getPropertyValue('--color-3')}
+      highlightColor={style.getPropertyValue('--color-4')}
+    >
+      <AutoUpdateModal
+        show={showUpdateModal}
+        onClose={() => {
+          setShowUpdateModal(false);
+        }}
+      />
+      <MemoryRouter>
+        {!OS.isMac && <WindowControls />}
+        <MainNavbar avatar={userInfo?.avatar?.medium} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Tab1
+                userInfo={userInfo}
+                currentListAnime={currentListAnime}
+                trendingAnime={trendingAnime}
+                mostPopularAnime={mostPopularAnime}
+                nextReleasesAnime={nextReleasesAnime}
+              />
+            }
+          />
+          {logged && (
             <Route
-              path="/"
+              path="/tab2"
               element={
-                <Tab1
-                  userInfo={userInfo}
+                <Tab2
                   currentListAnime={currentListAnime}
-                  trendingAnime={trendingAnime}
-                  mostPopularAnime={mostPopularAnime}
-                  nextReleasesAnime={nextReleasesAnime}
+                  planningListAnime={planningListAnime}
+                  // completedListAnime={completedListAnime}
+                  // droppedListAnime={droppedListAnime}
+                  // pausedListAnime={pausedListAnime}
+                  // repeatingListAnime={RepeatingListAnime}
+                  clicked={() => !tab2Click && setTab2Click(true)}
                 />
               }
             />
-            {logged && (
-              <Route
-                path="/tab2"
-                element={
-                  <Tab2
-                    currentListAnime={currentListAnime}
-                    planningListAnime={planningListAnime}
-                    // completedListAnime={completedListAnime}
-                    // droppedListAnime={droppedListAnime}
-                    // pausedListAnime={pausedListAnime}
-                    // repeatingListAnime={RepeatingListAnime}
-                    clicked={() => !tab2Click && setTab2Click(true)}
-                  />
-                }
-              />
-            )}
-            <Route path="/tab3" element={<Tab3 />} />
-            <Route path="/tab4" element={<Tab4 />} />
-          </Routes>
-        </MemoryRouter>
-      </SkeletonTheme>
-    </ViewerIdContext.Provider>
+          )}
+          <Route path="/tab3" element={<Tab3 />} />
+          <Route path="/tab4" element={<Tab4 />} />
+        </Routes>
+      </MemoryRouter>
+    </SkeletonTheme>
   );
 }

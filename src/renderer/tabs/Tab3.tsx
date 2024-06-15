@@ -16,13 +16,13 @@ import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
 import { searchFilteredAnime } from '../../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
-import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { useViewerContext } from '../contexts/viewer';
 
 const Tab3 = () => {
-  const viewerId = useContext(ViewerIdContext);
+  const { viewerId } = useViewerContext();
 
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
