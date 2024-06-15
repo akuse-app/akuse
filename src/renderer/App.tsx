@@ -5,7 +5,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import { useCallback, useEffect, useState } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import { ipcRenderer } from 'electron';
 import {
@@ -28,15 +28,17 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import { useStorageContext } from './contexts/storage';
-import { useViewerContext } from './contexts/viewer';
+import { useUIContext } from './contexts/ui';
 
 ipcRenderer.on('console-log', (_event, toPrint) => {
   console.log(toPrint);
 });
 
 export default function App() {
-  const { logged } = useStorageContext();
-  const { viewerId, setViewerId } = useViewerContext();
+  const { pathname } = useLocation();
+  const { logged, accessToken } = useStorageContext();
+  const { viewerId, setViewerId, hasListUpdated, setHasListUpdated } =
+    useUIContext();
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
   ipcRenderer.on('auto-update', async () => {
@@ -60,7 +62,6 @@ export default function App() {
   >(undefined);
 
   // tab2
-  const [tab2Click, setTab2Click] = useState<boolean>(false);
   const [planningListAnime, setPlanningListAnimeListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
@@ -84,25 +85,27 @@ export default function App() {
       try {
         let id = null;
         if (loggedIn) {
-          id = await getViewerId();
+          id = await getViewerId(accessToken);
           setViewerId(id);
 
-          const info = await getViewerInfo(id);
+          const info = await getViewerInfo(accessToken, id);
           setUserInfo(info);
-          const current = await getViewerList(id, 'CURRENT');
-          const rewatching = await getViewerList(id, 'REPEATING');
+          const current = await getViewerList(accessToken, id, 'CURRENT');
+          const rewatching = await getViewerList(accessToken, id, 'REPEATING');
           setCurrentListAnime(current.concat(rewatching));
         }
 
         if (!animeLoaded) {
           setTrendingAnime(
-            animeDataToListAnimeData(await getTrendingAnime(id)),
+            animeDataToListAnimeData(await getTrendingAnime(accessToken, id)),
           );
           setMostPopularAnime(
-            animeDataToListAnimeData(await getMostPopularAnime(id)),
+            animeDataToListAnimeData(
+              await getMostPopularAnime(accessToken, id),
+            ),
           );
           setNextReleasesAnime(
-            animeDataToListAnimeData(await getNextReleases(id)),
+            animeDataToListAnimeData(await getNextReleases(accessToken, id)),
           );
           setAnimeLoaded(true);
         }
@@ -110,14 +113,14 @@ export default function App() {
         console.log(`Tab1 error: ${error}`);
       }
     },
-    [animeLoaded],
+    [accessToken, animeLoaded],
   );
 
   const fetchTab2AnimeData = useCallback(async () => {
     try {
       if (viewerId) {
         setPlanningListAnimeListAnime(
-          await getViewerList(viewerId, 'PLANNING'),
+          await getViewerList(accessToken, viewerId, 'PLANNING'),
         );
         // setCompletedListAnimeListAnime(
         //   await getViewerList(viewerId, 'COMPLETED'),
@@ -131,17 +134,27 @@ export default function App() {
     } catch (error) {
       console.log(`Tab2 error: ${error}`);
     }
-  }, [viewerId]);
+  }, [accessToken, viewerId]);
 
   useEffect(() => {
-    fetchTab1AnimeData(logged);
-  }, [fetchTab1AnimeData, logged]);
-
-  useEffect(() => {
-    if (tab2Click) {
-      fetchTab2AnimeData();
+    if (pathname === '/') {
+      void fetchTab1AnimeData(logged);
     }
-  }, [fetchTab2AnimeData, tab2Click, viewerId]);
+  }, [logged, pathname]);
+
+  useEffect(() => {
+    if (pathname === '/tab2') {
+      void fetchTab2AnimeData();
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (hasListUpdated) {
+      void fetchTab1AnimeData(logged);
+      void fetchTab2AnimeData();
+      setHasListUpdated(false);
+    }
+  }, [hasListUpdated, logged, pathname]);
 
   return (
     <SkeletonTheme
@@ -154,42 +167,39 @@ export default function App() {
           setShowUpdateModal(false);
         }}
       />
-      <MemoryRouter>
-        {!OS.isMac && <WindowControls />}
-        <MainNavbar avatar={userInfo?.avatar?.medium} />
-        <Routes>
+      {!OS.isMac && <WindowControls />}
+      <MainNavbar avatar={userInfo?.avatar?.medium} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Tab1
+              userInfo={userInfo}
+              currentListAnime={currentListAnime}
+              trendingAnime={trendingAnime}
+              mostPopularAnime={mostPopularAnime}
+              nextReleasesAnime={nextReleasesAnime}
+            />
+          }
+        />
+        {logged && (
           <Route
-            path="/"
+            path="/tab2"
             element={
-              <Tab1
-                userInfo={userInfo}
+              <Tab2
                 currentListAnime={currentListAnime}
-                trendingAnime={trendingAnime}
-                mostPopularAnime={mostPopularAnime}
-                nextReleasesAnime={nextReleasesAnime}
+                planningListAnime={planningListAnime}
+                // completedListAnime={completedListAnime}
+                // droppedListAnime={droppedListAnime}
+                // pausedListAnime={pausedListAnime}
+                // repeatingListAnime={RepeatingListAnime}
               />
             }
           />
-          {logged && (
-            <Route
-              path="/tab2"
-              element={
-                <Tab2
-                  currentListAnime={currentListAnime}
-                  planningListAnime={planningListAnime}
-                  // completedListAnime={completedListAnime}
-                  // droppedListAnime={droppedListAnime}
-                  // pausedListAnime={pausedListAnime}
-                  // repeatingListAnime={RepeatingListAnime}
-                  clicked={() => !tab2Click && setTab2Click(true)}
-                />
-              }
-            />
-          )}
-          <Route path="/tab3" element={<Tab3 />} />
-          <Route path="/tab4" element={<Tab4 />} />
-        </Routes>
-      </MemoryRouter>
+        )}
+        <Route path="/tab3" element={<Tab3 />} />
+        <Route path="/tab4" element={<Tab4 />} />
+      </Routes>
     </SkeletonTheme>
   );
 }

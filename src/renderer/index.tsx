@@ -1,15 +1,18 @@
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { StorageProvider } from './contexts/storage';
-import { ViewerProvider } from './contexts/viewer';
+import { UIProvider } from './contexts/ui';
+import { MemoryRouter } from 'react-router-dom';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
 root.render(
   <StorageProvider>
-    <ViewerProvider>
-      <App />
-    </ViewerProvider>
+    <UIProvider>
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    </UIProvider>
   </StorageProvider>,
 );
 

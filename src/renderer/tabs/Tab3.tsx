@@ -9,7 +9,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
@@ -19,10 +19,12 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { useViewerContext } from '../contexts/viewer';
+import { useUIContext } from '../contexts/ui';
+import { useStorageContext } from '../contexts/storage';
 
 const Tab3 = () => {
-  const { viewerId } = useViewerContext();
+  const { accessToken } = useStorageContext();
+  const { viewerId } = useUIContext();
 
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -99,7 +101,9 @@ const Tab3 = () => {
 
     const parsedArgs = args.concat('type: ANIME').join(', ');
     setSearchedAnime(
-      animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)),
+      animeDataToListAnimeData(
+        await searchFilteredAnime(parsedArgs, accessToken, viewerId),
+      ),
     );
   };
 

@@ -56,7 +56,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const [hlsData, setHlsData] = useState<Hls>();
 
-  const { updateProgress } = useStorageContext();
+  const { accessToken, updateProgress } = useStorageContext();
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);
@@ -320,12 +320,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
           switch (status) {
             case 'CURRENT': {
-              await updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+              await updateAnimeProgress(
+                accessToken,
+                listAnimeData.media.id!,
+                episodeNumber,
+              );
               break;
             }
             case 'REPEATING':
             case 'COMPLETED': {
               await updateAnimeFromList(
+                accessToken,
                 listAnimeData.media.id,
                 'REWATCHING',
                 undefined,
@@ -334,6 +339,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             }
             default: {
               await updateAnimeFromList(
+                accessToken,
                 listAnimeData.media.id,
                 'CURRENT',
                 undefined,
