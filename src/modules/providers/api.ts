@@ -1,13 +1,11 @@
 import { IVideo } from '@consumet/extensions';
-import Store from 'electron-store';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { animeCustomTitles } from '../animeCustomTitles';
 import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
-
-const STORE = new Store();
+import { STORAGE } from '../storage';
 
 /**
  * Gets the episode url and isM3U8 flag, with stored language and dubbed
@@ -20,11 +18,11 @@ export const getUniversalEpisodeUrl = async (
   listAnimeData: ListAnimeData,
   episode: number,
 ): Promise<IVideo | null> => {
-  const lang = (await STORE.get('source_flag')) as string;
-  const dubbed = (await STORE.get('dubbed')) as boolean;
+  const lang = await STORAGE.getSourceFlag();
+  const dubbed = await STORAGE.getDubbed();
 
   const customTitle =
-    animeCustomTitles[STORE.get('source_flag') as string][
+    animeCustomTitles[lang][
       listAnimeData.media?.id!
     ];
 

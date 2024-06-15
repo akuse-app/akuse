@@ -1,11 +1,9 @@
-import Store from 'electron-store';
 import { useEffect, useRef, useState } from 'react';
 
 import { formatTime } from '../../../modules/utils';
-import { faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faExternalLink, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
-
-const STORE = new Store();
+import { useStorageContext } from '../../contexts/storage';
 
 interface BottomControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -15,6 +13,7 @@ interface BottomControlsProps {
   buffered?: TimeRanges;
   onClick?: (event: any) => void;
   onDblClick?: (event: any) => void;
+  togglePictureInPicture?: () => void;
 }
 
 const BottomControls: React.FC<BottomControlsProps> = ({
@@ -25,8 +24,10 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   buffered,
   onClick,
   onDblClick,
+  togglePictureInPicture,
 }) => {
   const videoTimelineRef = useRef<HTMLDivElement>(null);
+  const { skipTime, showDuration, updateStorage } = useStorageContext();
 
   const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
 
@@ -38,13 +39,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 
   const [offsetX, setOffsetX] = useState(0);
   const [percent, setPercent] = useState(0);
-
-  const [introSkip, setIntroSkip] = useState<number>(
-    STORE.get('intro_skip_time') as number,
-  );
-  const [showDuration, setShowDuration] = useState<boolean>(
-    STORE.get('show_duration') as boolean,
-  );
 
   useEffect(() => {
     setVideoCurrentTime(formatTime(videoRef.current?.currentTime ?? 0));
@@ -68,13 +62,16 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     window.addEventListener('mouseup', () => {
       setIsMouseDown(false);
     });
-  });
+
+    return () => {
+      window.removeEventListener('mouseup', () => {
+        setIsMouseDown(false);
+      });
+    };
+  }, []);
 
   const handleShowDuration = () => {
-    const show = !showDuration;
-
-    STORE.set('show_duration', show);
-    setShowDuration(show);
+    void updateStorage('show_duration', !showDuration);
   };
 
   // Funzione per calcolare il tempo in base alla posizione sull'asse X
@@ -107,7 +104,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
 
     let newTime = percentage * videoRef.current.duration;
     if (newTime < 0) newTime = 0;
-    if (newTime > videoRef.current.duration) newTime = videoRef.current.duration;
+    if (newTime > videoRef.current.duration)
+      newTime = videoRef.current.duration;
     setProgressBarWidth(`${((newTime ?? 0) / (duration ?? 0)) * 100}%`);
 
     try {
@@ -121,9 +119,9 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     if (!videoRef.current) return;
 
     try {
-      videoRef.current.currentTime += introSkip;
+      videoRef.current.currentTime += skipTime;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -133,12 +131,18 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       onClick={onClick}
       onDoubleClick={onDblClick}
     >
-      <div className="skip-button">
+      <div className="bottom-buttons">
         <ButtonMain
-          text={introSkip}
+          text={skipTime}
           icon={faPlus}
           tint="light"
           onClick={handleSkipIntro}
+        />
+        <ButtonMain
+          text={'PIP'}
+          icon={faExternalLink}
+          tint="light"
+          onClick={togglePictureInPicture}
         />
       </div>
       <p className="current-time">{videoCurrentTime}</p>

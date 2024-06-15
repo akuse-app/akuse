@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   getAvailableEpisodes,
@@ -32,12 +32,13 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { MediaStatus } from '../../../types/anilistGraphQLTypes';
-import { AuthContext } from '../../App';
 import { ButtonCircle, ButtonLoading, ButtonMain } from '../Buttons';
 import {
   deleteAnimeFromList,
   updateAnimeFromList,
 } from '../../../modules/anilist/anilistApi';
+import { useStorageContext } from '../../contexts/storage';
+import { useUIContext } from '../../contexts/ui';
 
 interface AnimeModalStatusProps {
   status: MediaStatus | undefined;
@@ -247,16 +248,18 @@ interface AnimeModalWatchButtonsProps {
   listAnimeData: ListAnimeData;
   localProgress?: number;
   onPlay: (episode: number) => void;
-  loading: boolean;
+  onClose: () => void;
+  // loading: boolean;
 }
 
 export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   listAnimeData,
   localProgress,
   onPlay,
-  loading = false,
+  onClose,
+  // loading = false,
 }) => {
-  const logged = useContext(AuthContext);
+  const { logged } = useStorageContext();
 
   const [progress, setProgress] = useState<number | undefined>(
     getProgress(listAnimeData.media),
@@ -319,7 +322,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         </>
       )}
 
-      <IsInListButton listAnimeData={listAnimeData} />
+      <IsInListButton listAnimeData={listAnimeData} onClose={onClose} />
     </div>
   ) : (
     <div className="watch-buttons">
@@ -336,43 +339,65 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
 
 interface IsInListButtonProps {
   listAnimeData: ListAnimeData;
+  onClose?: () => void;
 }
 
 export const IsInListButton: React.FC<IsInListButtonProps> = ({
   listAnimeData,
+  onClose,
 }) => {
+  const { accessToken } = useStorageContext();
+  const { setHasListUpdated } = useUIContext();
+
   const [inList, setInList] = useState<boolean>(false);
   const [listId, setListId] = useState<number | undefined>(
     listAnimeData.media.mediaListEntry?.id,
   );
 
-  const removeFromList = () => {
-    deleteAnimeFromList(listId).then((deleted) => {
-      if (deleted) setInList(false);
-    });
-  };
-
-  const addToList = () => {
-    updateAnimeFromList(listAnimeData.media.id, 'PLANNING').then((data) => {
-      if (data) {
-        setListId(data);
-        setInList(true);
+  const removeFromList = useCallback(async () => {
+    const deleted = await deleteAnimeFromList(accessToken, listId);
+    if (deleted) {
+      setHasListUpdated(true);
+      setInList(false);
+      setListId(undefined);
+      if (onClose) {
+        onClose();
       }
-    });
-  };
+    }
+  }, [accessToken, listId, onClose]);
+
+  const addToList = useCallback(async () => {
+    const data = await updateAnimeFromList(
+      accessToken,
+      listAnimeData.media.id,
+      'PLANNING',
+    );
+    if (data) {
+      setHasListUpdated(true);
+      setInList(true);
+      setListId(data);
+    }
+  }, [accessToken, listAnimeData.media.id]);
 
   useEffect(() => {
-    setInList(!!listAnimeData.media.mediaListEntry);
-  }, []);
+    if (inList !== !!listId) {
+      setInList(!!listId);
+    }
+  }, [inList, listId]);
 
   return inList ? (
     <ButtonCircle
       icon={faBookmarkFull}
       tint="light"
       shadow
-      onClick={removeFromList}
+      onClick={() => void removeFromList()}
     />
   ) : (
-    <ButtonCircle icon={faBookmark} tint="light" shadow onClick={addToList} />
+    <ButtonCircle
+      icon={faBookmark}
+      tint="light"
+      shadow
+      onClick={() => void addToList()}
+    />
   );
 };

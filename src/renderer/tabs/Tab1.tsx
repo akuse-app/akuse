@@ -1,16 +1,11 @@
-import { userInfo } from 'os';
-import { useEffect } from 'react';
-import { useContext } from 'react';
-
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
-import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
-import UserNavbar from '../components/UserNavbar';
+import { useStorageContext } from '../contexts/storage';
 
 interface Tab1Props {
-  userInfo?: UserInfo
+  userInfo?: UserInfo;
   currentListAnime?: ListAnimeData[];
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
@@ -24,13 +19,19 @@ const Tab1: React.FC<Tab1Props> = ({
   mostPopularAnime,
   nextReleasesAnime,
 }) => {
-  const logged = useContext(AuthContext);
+  const { logged } = useStorageContext();
 
   return (
     <div className="body-container  show-tab">
       <div className="main-container">
         <main>
-          {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
+          {logged ? (
+            userInfo?.name ? (
+              <Heading text={`Welcome back, ${userInfo?.name}`} />
+            ) : (
+              <Heading text={`Welcome back`} />
+            )
+          ) : null}
 
           {/* <UserNavbar avatar={userInfo?.avatar?.medium} /> */}
 

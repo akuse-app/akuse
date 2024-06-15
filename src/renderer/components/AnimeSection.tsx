@@ -73,7 +73,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       )}
       <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
-          {(animeData ? animeData : Array(20).fill(undefined)).map(
+          {(animeData?.length ? animeData : Array(20).fill(undefined)).map(
             (listAnimeData, index) => (
               <AnimeEntry key={index} listAnimeData={listAnimeData} />
             ),

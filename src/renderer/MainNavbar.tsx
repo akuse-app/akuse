@@ -16,9 +16,9 @@ import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import isAppImage from '../modules/packaging/isAppImage';
-import { AuthContext } from './App';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
+import { useStorageContext } from './contexts/storage';
 
 const Li: React.FC<{
   text: string;
@@ -55,7 +55,7 @@ const LiLink: React.FC<{
 };
 
 const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
-  const logged = useContext(AuthContext);
+  const {logged} = useStorageContext();
 
   const [activeTab, setActiveTab] = useState(1);
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
@@ -66,6 +66,12 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
     ipcRenderer.invoke('get-is-packaged').then((packaged) => {
       setIsPackaged(packaged);
     });
+
+    return () => {
+      ipcRenderer.removeListener('get-is-packaged', (packaged) => {
+        setIsPackaged(packaged);
+      });
+    }
   }, []);
 
   return (

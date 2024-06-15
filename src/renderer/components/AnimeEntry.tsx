@@ -1,9 +1,9 @@
 import './styles/AnimeEntry.css';
 
 import { faCalendar, faCircleDot } from '@fortawesome/free-regular-svg-icons';
-import { faHourglass1, faTv } from '@fortawesome/free-solid-svg-icons';
+import { faTv } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import {
   getAvailableEpisodes,
@@ -14,7 +14,6 @@ import {
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeModal from './modals/AnimeModal';
 import Skeleton from 'react-loading-skeleton';
-import { AnimeModalWatchButtons } from './modals/AnimeModalElements';
 
 const StatusDot: React.FC<{
   listAnimeData?: ListAnimeData | undefined;

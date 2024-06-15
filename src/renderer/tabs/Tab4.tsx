@@ -1,10 +1,6 @@
-import Store from 'electron-store';
-import { ContentSteeringController } from 'hls.js';
-import React, { ChangeEvent, useContext, useState } from 'react';
-import { AuthContext } from '../App';
+import React, { ChangeEvent } from 'react';
 import Heading from '../components/Heading';
-
-const STORE = new Store();
+import { useStorageContext } from '../contexts/storage';
 
 // Interfaccia per definire la struttura delle opzioni del select
 interface Option {
@@ -82,48 +78,36 @@ const SelectElement: React.FC<SelectElementProps> = ({
     </Element>
   );
 };
-const Tab4: React.FC = () => {
-  const logged = useContext(AuthContext);
 
-  const [updateProgress, setUpdateProgress] = useState<boolean>(
-    STORE.get('update_progress') as boolean,
-  );
-  const [watchDubbed, setWatchDubbed] = useState<boolean>(
-    STORE.get('dubbed') as boolean,
-  );
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    STORE.get('source_flag') as string,
-  );
-  const [skipTime, setSkipTime] = useState<number>(
-    STORE.get('intro_skip_time') as number,
-  );
-  const [showDuration, setShowDuration] = useState<boolean>(
-    STORE.get('show_duration') as boolean,
-  );
+const Tab4: React.FC = () => {
+  const {
+    logged,
+    updateProgress,
+    watchDubbed,
+    selectedLanguage,
+    skipTime,
+    showDuration,
+    updateStorage,
+  } = useStorageContext();
 
   const handleUpdateProgressChange = () => {
-    STORE.set('update_progress', !updateProgress);
-    setUpdateProgress(!updateProgress);
+    void updateStorage('update_progress', !updateProgress);
   };
 
   const handleWatchDubbedChange = () => {
-    STORE.set('dubbed', !watchDubbed);
-    setWatchDubbed(!watchDubbed);
+    void updateStorage('dubbed', !watchDubbed);
   };
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('source_flag', event.target.value);
-    setSelectedLanguage(event.target.value);
+    void updateStorage('source_flag', event.target.value);
   };
 
   const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('intro_skip_time', parseInt(event.target.value));
-    setSkipTime(parseInt(event.target.value));
+    void updateStorage('intro_skip_time', parseInt(event.target.value));
   };
 
   const handleShowDurationChange = () => {
-    STORE.set('dubbed', !showDuration);
-    setShowDuration(!showDuration);
+    void updateStorage('show_duration', !showDuration);
   };
 
   const languageOptions: Option[] = [
@@ -146,7 +130,7 @@ const Tab4: React.FC = () => {
     <div className="body-container  show-tab">
       <div className="main-container">
         <div className="settings-page">
-        <Heading text='Settings' />
+          <Heading text="Settings" />
 
           {logged && (
             <CheckboxElement

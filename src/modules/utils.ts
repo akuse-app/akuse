@@ -1,10 +1,7 @@
-import Store from 'electron-store';
-
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
 import { animeCustomTitles } from '../modules/animeCustomTitles';
 
-const STORE = new Store();
 const MONTHS = {
   '1': 'January',
   '2': 'February',
@@ -320,10 +317,6 @@ export const parseAirdate = (airdate: string) =>
  */
 export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
   var animeTitles = getTitlesAndSynonyms(animeEntry);
-
-  // const customTitle =
-  //   animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
-  // if (customTitle) animeTitles.unshift(customTitle);
 
   animeTitles.forEach((title) => {
     if (title.includes('Season '))

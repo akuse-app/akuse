@@ -11,8 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import Store from 'electron-store';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -40,9 +39,9 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import { useStorageContext } from '../../contexts/storage';
 
 const modalsRoot = document.getElementById('modals-root');
-const STORE = new Store();
 const style = getComputedStyle(document.body);
 
 interface AnimeModalProps {
@@ -59,9 +58,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
 
+  const { trailerVolumeOn, updateStorage } = useStorageContext();
+
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);
-  const [trailerVolumeOn, setTrailerVolumeOn] = useState<boolean>(false);
   const [canRePlayTrailer, setCanRePlayTrailer] = useState<boolean>(false);
 
   // episodes info
@@ -79,25 +79,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!episodesInfoHasFetched) fetchEpisodesInfo();
-  }, []);
-
-  useEffect(() => {
-    if(!showPlayer) {
-      setPlayerIVideo(null)
-    }
-  }, [showPlayer])
-
-  useEffect(() => {
-    try {
-      if (show && trailerRef.current && canRePlayTrailer)
-        trailerRef.current.play();
-      setTrailerVolumeOn(STORE.get('trailer_volume_on') as boolean);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [show]);
+  const handleTrailerVolumeOn = useCallback(async () => {
+    await updateStorage('trailer_volume_on', true);
+  }, [updateStorage]);
 
   const closeModal = () => {
     if (trailerRef.current) {
@@ -117,7 +101,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   };
 
-  const fetchEpisodesInfo = async () => {
+  const fetchEpisodesInfo = useCallback(async () => {
     axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
       if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
       data.data.images &&
@@ -126,7 +110,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         );
       setEpisodesInfoHasFetched(true);
     });
-  };
+  }, [listAnimeData.media.id]);
 
   const handleTrailerPlay = () => {
     if (trailerRef.current) {
@@ -152,8 +136,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
     if (trailerRef.current) {
       trailerRef.current.volume = volumeOn ? 1 : 0;
-      setTrailerVolumeOn(volumeOn);
-      STORE.set('trailer_volume_on', volumeOn);
+      void updateStorage('trailer_volume_on', volumeOn);
     }
   };
 
@@ -197,144 +180,166 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   };
 
-  return ReactDOM.createPortal(
-    <>
-      {showPlayer && (
-        <VideoPlayer
-          video={playerIVideo}
-          listAnimeData={listAnimeData}
-          episodesInfo={episodesInfo}
-          animeEpisodeNumber={animeEpisodeNumber}
-          show={showPlayer}
-          loading={loading}
-          onLocalProgressChange={handleLocalProgressChange}
-          onChangeLoading={handleChangeLoading}
-          onClose={handlePlayerClose}
-        />
-      )}
-      <ModalPageShadow show={show} />
-      <ModalPage show={show} closeModal={closeModal}>
-        <div className="anime-page" onClick={handleClickOutside}>
-          <div className="content-wrapper" ref={modalRef}>
-            <button className="exit" onClick={closeModal}>
-              <FontAwesomeIcon className="i" icon={faXmark} />
-            </button>
+  useEffect(() => {
+    if (!episodesInfoHasFetched) fetchEpisodesInfo();
+  }, [episodesInfoHasFetched, fetchEpisodesInfo]);
 
-            <div className="up">
-              <AnimeModalWatchButtons
-                listAnimeData={listAnimeData}
-                localProgress={localProgress}
-                onPlay={playEpisode}
-                loading={false} // loading disabled
-              />
+  useEffect(() => {
+    if (!showPlayer) {
+      setPlayerIVideo(null);
+    }
+  }, [showPlayer]);
 
-              {canRePlayTrailer && (
-                <div className="trailer-volume show-trailer">
-                  <ButtonCircle
-                    icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
-                    tint="light"
-                    shadow
-                    onClick={toggleTrailerVolume}
-                  />
+  useEffect(() => {
+    try {
+      if (show && trailerRef.current && canRePlayTrailer) {
+        trailerRef.current.play();
+        void handleTrailerVolumeOn();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [canRePlayTrailer, handleTrailerVolumeOn, show, trailerRef.current]);
+
+    return ReactDOM.createPortal(
+      <>
+        {showPlayer && (
+          <VideoPlayer
+            video={playerIVideo}
+            listAnimeData={listAnimeData}
+            episodesInfo={episodesInfo}
+            animeEpisodeNumber={animeEpisodeNumber}
+            show={showPlayer}
+            loading={loading}
+            onLocalProgressChange={handleLocalProgressChange}
+            onChangeLoading={handleChangeLoading}
+            onClose={handlePlayerClose}
+          />
+        )}
+        <ModalPageShadow show={show} />
+        <ModalPage show={show} closeModal={closeModal}>
+          <div className="anime-page" onClick={handleClickOutside}>
+            <div className="content-wrapper" ref={modalRef}>
+              <button className="exit" onClick={closeModal}>
+                <FontAwesomeIcon className="i" icon={faXmark} />
+              </button>
+
+              <div className="up">
+                <AnimeModalWatchButtons
+                  listAnimeData={listAnimeData}
+                  localProgress={localProgress}
+                  onPlay={playEpisode}
+                  onClose={closeModal}
+                  // loading={false} // loading disabled
+                />
+
+                {canRePlayTrailer && (
+                  <div className="trailer-volume show-trailer">
+                    <ButtonCircle
+                      icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
+                      tint="light"
+                      shadow
+                      onClick={toggleTrailerVolume}
+                    />
+                  </div>
+                )}
+
+                {trailer && listAnimeData.media.trailer?.id && (
+                  <div
+                    className={`trailer-wrapper ${
+                      canRePlayTrailer ? 'show-opacity' : ''
+                    }`}
+                  >
+                    <video
+                      ref={trailerRef}
+                      src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
+                      className="trailer"
+                      preload="none"
+                      loop
+                      playsInline
+                      autoPlay
+                      onPlay={handleTrailerPlay}
+                      onLoadedMetadata={handleTrailerLoad}
+                      onError={handleTrailerError}
+                    />
+                  </div>
+                )}
+
+                <div className="banner-wrapper">
+                  {(alternativeBanner || listAnimeData.media.bannerImage) &&
+                  episodesInfoHasFetched ? (
+                    <img
+                      src={alternativeBanner || listAnimeData.media.bannerImage}
+                      className="banner"
+                      alt="Banner"
+                    />
+                  ) : null}
                 </div>
-              )}
-
-              {trailer && (
-                <div
-                  className={`trailer-wrapper ${
-                    canRePlayTrailer ? 'show-opacity' : ''
-                  }`}
-                >
-                  <video
-                    ref={trailerRef}
-                    src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
-                    className="trailer"
-                    preload="none"
-                    loop
-                    playsInline
-                    autoPlay
-                    onPlay={handleTrailerPlay}
-                    onLoadedMetadata={handleTrailerLoad}
-                    onError={handleTrailerError}
-                  />
-                </div>
-              )}
-
-              <div className="banner-wrapper">
-                {(alternativeBanner || listAnimeData.media.bannerImage) &&
-                episodesInfoHasFetched ? (
-                  <img
-                    src={alternativeBanner || listAnimeData.media.bannerImage}
-                    className="banner"
-                    alt="Banner"
-                  />
-                ) : null}
               </div>
-            </div>
 
-            <div className="content">
-              <div className="left">
-                <h1 className="title">{getTitle(listAnimeData.media)}</h1>
-                <ul className="info">
-                  {listAnimeData.media.isAdult && (
-                    <li style={{ color: '#ff6b6b' }}>
+              <div className="content">
+                <div className="left">
+                  <h1 className="title">{getTitle(listAnimeData.media)}</h1>
+                  <ul className="info">
+                    {listAnimeData.media.isAdult && (
+                      <li style={{ color: '#ff6b6b' }}>
+                        <FontAwesomeIcon
+                          className="i"
+                          icon={faCircleExclamation}
+                          style={{ marginRight: 7 }}
+                        />
+                        Adults
+                      </li>
+                    )}
+                    <li style={{ color: '#e5a639' }}>
                       <FontAwesomeIcon
                         className="i"
-                        icon={faCircleExclamation}
+                        icon={faStar}
                         style={{ marginRight: 7 }}
                       />
-                      Adults
+                      {getParsedMeanScore(listAnimeData.media)}%
                     </li>
-                  )}
-                  <li style={{ color: '#e5a639' }}>
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={faStar}
-                      style={{ marginRight: 7 }}
-                    />
-                    {getParsedMeanScore(listAnimeData.media)}%
-                  </li>
-                  <AnimeModalStatus status={listAnimeData.media.status} />
-                  <li>
-                    <FontAwesomeIcon
-                      className="i"
-                      icon={faTv}
-                      style={{ marginRight: 7 }}
-                    />
-                    {getParsedFormat(listAnimeData.media.format)}
-                  </li>
-                  <AnimeModalEpisodes listAnimeData={listAnimeData} />
-                </ul>
-                <AnimeModalDescription listAnimeData={listAnimeData} />
+                    <AnimeModalStatus status={listAnimeData.media.status} />
+                    <li>
+                      <FontAwesomeIcon
+                        className="i"
+                        icon={faTv}
+                        style={{ marginRight: 7 }}
+                      />
+                      {getParsedFormat(listAnimeData.media.format)}
+                    </li>
+                    <AnimeModalEpisodes listAnimeData={listAnimeData} />
+                  </ul>
+                  <AnimeModalDescription listAnimeData={listAnimeData} />
+                </div>
+                <div className="right">
+                  <p className="additional-info">
+                    {'Released on: '}
+                    <span>
+                      {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
+                      {getParsedSeasonYear(listAnimeData.media)}
+                    </span>
+                  </p>
+                  <AnimeModalGenres genres={listAnimeData.media.genres ?? []} />
+                  <AnimeModalOtherTitles
+                    synonyms={listAnimeData.media.synonyms ?? []}
+                  />
+                </div>
               </div>
-              <div className="right">
-                <p className="additional-info">
-                  {'Released on: '}
-                  <span>
-                    {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
-                    {getParsedSeasonYear(listAnimeData.media)}
-                  </span>
-                </p>
-                <AnimeModalGenres genres={listAnimeData.media.genres ?? []} />
-                <AnimeModalOtherTitles
-                  synonyms={listAnimeData.media.synonyms ?? []}
-                />
-              </div>
+              <EpisodesSection
+                episodesInfo={episodesInfo}
+                episodesInfoHasFetched={episodesInfoHasFetched}
+                listAnimeData={listAnimeData}
+                loading={loading}
+                onPlay={playEpisode}
+              />
             </div>
-            <EpisodesSection
-              episodesInfo={episodesInfo}
-              episodesInfoHasFetched={episodesInfoHasFetched}
-              listAnimeData={listAnimeData}
-              loading={loading}
-              onPlay={playEpisode}
-            />
           </div>
-        </div>
-      </ModalPage>
-      <Toaster />
-    </>,
-    modalsRoot!,
-  );
+        </ModalPage>
+        <Toaster />
+      </>,
+      modalsRoot!,
+    );
 };
 
 export default AnimeModal;

@@ -1,25 +1,67 @@
 import Store from 'electron-store';
-const STORE = new Store();
 
-export const setDefaultStoreVariables = () => {
-  if (!STORE.has('update_progress')) STORE.set('update_progress', false);
-  if (!STORE.has('dubbed')) STORE.set('dubbed', false);
-  if (!STORE.has('source_flag')) STORE.set('source_flag', 'US');
-  if (!STORE.has('intro_skip_time')) STORE.set('intro_skip_time', 85);
-  if (!STORE.has('show_duration')) STORE.set('show_duration', true);
-  if (!STORE.has('trailer_volume_on')) STORE.set('trailer_volume_on', false);
-}
+export type StoreKeys =
+  | 'logged'
+  | 'access_token'
+  | 'update_progress'
+  | 'dubbed'
+  | 'source_flag'
+  | 'intro_skip_time'
+  | 'show_duration'
+  | 'trailer_volume_on';
 
-export const getSourceFlag = async (): Promise<'IT' | 'US' | null> => {
-  switch (STORE.get('source_flag')) {
-    case 'US': {
-      return 'US';
-    }
-    case 'IT': {
-      return 'IT';
-    }
-    default: {
-      return null;
-    }
-  }
+export type StorageContextType = {
+  logged: boolean;
+  accessToken: string;
+  updateProgress: boolean;
+  watchDubbed: boolean;
+  selectedLanguage: string;
+  skipTime: number;
+  showDuration: boolean;
+  trailerVolumeOn: boolean;
+  updateStorage: (key: StoreKeys, value: any) => Promise<void>;
 };
+
+export type LanguageOptions = 'IT' | 'US';
+
+export const STORE_SCHEMA: Record<StoreKeys, any> = {
+  logged: {
+    type: 'boolean',
+    default: false,
+  },
+  access_token: {
+    type: 'string',
+    default: '',
+  },
+  update_progress: {
+    type: 'boolean',
+    default: false,
+  },
+  dubbed: {
+    type: 'boolean',
+    default: false,
+  },
+  source_flag: {
+    type: 'string',
+    default: 'US',
+  },
+  intro_skip_time: {
+    type: 'number',
+    default: 85,
+  },
+  show_duration: {
+    type: 'boolean',
+    default: true,
+  },
+  trailer_volume_on: {
+    type: 'boolean',
+    default: false,
+  },
+};
+
+// one store to rule them all. Use STORE in the main proccess and call STORAGE on the renderer side
+export type StoreType = Record<StoreKeys, any>;
+export const STORE: Store<StoreType> = new Store({
+  // NOTE Not ready to use this yet as it will break the app
+  // schema: STORE_SCHEMA,
+});
