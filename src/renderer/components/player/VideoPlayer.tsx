@@ -56,7 +56,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const [hlsData, setHlsData] = useState<Hls>();
 
-  const { accessToken, updateProgress } = useStorageContext();
+  const { accessToken, skipTime, updateProgress } = useStorageContext();
 
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);
@@ -93,66 +93,62 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const video = videoRef.current;
 
-    switch (event.code) {
-      case 'Space': {
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        handleExit();
+        break;
+      case ' ':
         event.preventDefault();
         togglePlaying();
         break;
-      }
-      case 'ArrowLeft': {
+      case 'ArrowLeft':
         event.preventDefault();
         handleSeekBackward();
         break;
-      }
-      case 'ArrowUp': {
+      case 'ArrowUp':
         event.preventDefault();
         video.volume = Math.min(video.volume + 0.1, 1);
         break;
-      }
-      case 'ArrowRight': {
+      case 'ArrowRight':
         event.preventDefault();
         handleSeekForward();
         break;
-      }
-      case 'ArrowDown': {
+      case 'ArrowDown':
         event.preventDefault();
         video.volume = Math.max(video.volume - 0.1, 0);
         break;
-      }
-      case 'F11': {
+      case 'F11':
         event.preventDefault();
         toggleFullScreen();
         break;
-      }
-    }
-    switch (event.key) {
-      case 'f': {
+      case 'f':
         event.preventDefault();
         toggleFullScreen();
         break;
-      }
-      case 'm': {
+      case 'm':
         event.preventDefault();
         toggleMute();
         break;
-      }
-      case 'p': {
+      case 'p':
         event.preventDefault();
         canPreviousEpisode(episodeNumber) &&
           (await changeEpisode(episodeNumber - 1));
         break;
-      }
-      case 'n': {
+      case 'n':
         event.preventDefault();
         canNextEpisode(episodeNumber) &&
           (await changeEpisode(episodeNumber + 1));
         break;
-      }
-      case 'o': {
+      case 'o':
         event.preventDefault();
         togglePictureInPicture();
         break;
-      }
+      case 's':
+        event.preventDefault();
+        handleSkip();
+        break;
+      default:
     }
   };
 
@@ -225,7 +221,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
     }
-  }, [video]);
+  }, [animeEpisodeNumber, episodesInfo, video]);
 
   const playHlsVideo = (url: string) => {
     try {
@@ -496,6 +492,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleSeekBackward = () => {
     if (videoRef.current) {
       videoRef.current.currentTime -= 5;
+    }
+  };
+
+  const handleSkip = () => {
+    if (!videoRef.current) return;
+    try {
+      videoRef.current.currentTime += skipTime;
+    } catch (error) {
+      console.log(error);
     }
   };
 

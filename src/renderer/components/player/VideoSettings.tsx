@@ -76,7 +76,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
         );
       }
     };
-  }, []);
+  }, [handleVideoVolumeChange]);
 
   const toggleShow = () => {
     onShow(!show);
@@ -156,7 +156,9 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleSkipTimeChange = async (event: ChangeEvent<HTMLSelectElement>) => {
+  const handleSkipTimeChange = async (
+    event: ChangeEvent<HTMLSelectElement>,
+  ) => {
     await updateStorage('intro_skip_time', parseInt(event.target.value));
   };
 
