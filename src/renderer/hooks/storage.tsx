@@ -7,7 +7,6 @@ import {
   StoreKeys,
 } from '../../modules/storeVariables';
 
-// Maybe combine this hook with context so we only have one place to update the storage and not on every hook render call
 export const useStorage = (): StorageContextType => {
   const [logged, setLogged] = useState<boolean>(STORE_SCHEMA.logged.default);
   const [accessToken, setAccessToken] = useState<string>(
