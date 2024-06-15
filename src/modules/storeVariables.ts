@@ -57,7 +57,7 @@ export const STORE_SCHEMA: Record<StoreKeys, any> = {
     type: 'boolean',
     default: false,
   },
-}
+};
 
 // one store to rule them all. Use STORE in the main proccess and call STORAGE on the renderer side
 export type StoreType = Record<StoreKeys, any>;

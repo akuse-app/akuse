@@ -18,8 +18,11 @@ export function useStorageContext() {
   return useContext(StorageContext);
 }
 
-export function StorageProvider({children}: {children: ReactNode}): ReactElement {
-
+export function StorageProvider({
+  children,
+}: {
+  children: ReactNode;
+}): ReactElement {
   const store = useStorage();
 
   return (

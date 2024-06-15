@@ -10,7 +10,9 @@ import {
 // Maybe combine this hook with context so we only have one place to update the storage and not on every hook render call
 export const useStorage = (): StorageContextType => {
   const [logged, setLogged] = useState<boolean>(STORE_SCHEMA.logged.default);
-  const [accessToken, setAccessToken] = useState<string>(STORE_SCHEMA.access_token);
+  const [accessToken, setAccessToken] = useState<string>(
+    STORE_SCHEMA.access_token,
+  );
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE_SCHEMA.update_progress,
   );
@@ -18,7 +20,9 @@ export const useStorage = (): StorageContextType => {
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageOptions>(
     STORE_SCHEMA.source_flag,
   );
-  const [skipTime, setSkipTime] = useState<number>(STORE_SCHEMA.intro_skip_time);
+  const [skipTime, setSkipTime] = useState<number>(
+    STORE_SCHEMA.intro_skip_time,
+  );
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE_SCHEMA.show_duration,
   );

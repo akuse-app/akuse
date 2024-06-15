@@ -71,5 +71,5 @@ export const STORAGE = {
   getSourceFlag,
   getIntroSkipTime,
   getShowDuration,
-  getTrailerVolumeOn
-}
+  getTrailerVolumeOn,
+};
