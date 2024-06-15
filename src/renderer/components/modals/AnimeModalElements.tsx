@@ -339,7 +339,7 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
 
 interface IsInListButtonProps {
   listAnimeData: ListAnimeData;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const IsInListButton: React.FC<IsInListButtonProps> = ({
@@ -360,9 +360,11 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
       setHasListUpdated(true);
       setInList(false);
       setListId(undefined);
-      onClose();
+      if (onClose) {
+        onClose();
+      }
     }
-  }, [accessToken, listId]);
+  }, [accessToken, listId, onClose]);
 
   const addToList = useCallback(async () => {
     const data = await updateAnimeFromList(

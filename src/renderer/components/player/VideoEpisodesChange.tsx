@@ -4,7 +4,7 @@ import {
   faLayerGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { getAvailableEpisodes } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';

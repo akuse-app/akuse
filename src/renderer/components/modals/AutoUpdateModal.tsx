@@ -2,14 +2,14 @@ import './styles/AutoUpdateModal.css';
 
 import ReactDOM from 'react-dom';
 import { ModalPage, ModalPageShadow, ModalPageSizeableContent } from './Modal';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ButtonMain } from '../Buttons';
 import {
   faCloudDownload,
   faFileDownload,
 } from '@fortawesome/free-solid-svg-icons';
 import DOMPurify from 'dompurify';
-import { ipcRenderer } from 'electron';
+import { IpcRendererEvent, ipcRenderer } from 'electron';
 
 const modalsRoot = document.getElementById('modals-root');
 
@@ -25,16 +25,35 @@ const AutoUpdateModal: React.FC<{ show: boolean; onClose: () => void }> = ({
   const [totalMB, setTotalMB] = useState<string>('');
   const [downloadedBarWidth, setDownloadedBarWidth] = useState<string>('0%');
 
-  ipcRenderer.on('update-available-info', async (event, info) => {
+  const updateAvailableInfoListener = async (
+    event: IpcRendererEvent,
+    info: any,
+  ) => {
     setVersion(info.version);
     setNotes(info.releaseNotes);
-  });
+  };
 
-  ipcRenderer.on('downloading', async (event, info) => {
+  const updateDownloadingListener = async (
+    event: IpcRendererEvent,
+    info: any,
+  ) => {
     setProgressMB(((info.percent * info.total) / 100 / 1024 / 1024).toFixed(2));
     setTotalMB((info.total / 1024 / 1024).toFixed(2));
     setDownloadedBarWidth(`${info.percent} "%"`);
-  });
+  };
+
+  useEffect(() => {
+    ipcRenderer.on('update-available-info', updateAvailableInfoListener);
+    ipcRenderer.on('downloading', updateDownloadingListener);
+
+    return () => {
+      ipcRenderer.removeListener(
+        'update-available-info',
+        updateAvailableInfoListener,
+      );
+      ipcRenderer.removeListener('downloading', updateDownloadingListener);
+    };
+  }, []);
 
   return ReactDOM.createPortal(
     <>

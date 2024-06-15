@@ -66,6 +66,12 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
     ipcRenderer.invoke('get-is-packaged').then((packaged) => {
       setIsPackaged(packaged);
     });
+
+    return () => {
+      ipcRenderer.removeListener('get-is-packaged', (packaged) => {
+        setIsPackaged(packaged);
+      });
+    }
   }, []);
 
   return (

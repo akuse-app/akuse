@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';

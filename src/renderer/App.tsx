@@ -41,10 +41,6 @@ export default function App() {
     useUIContext();
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
 
-  ipcRenderer.on('auto-update', async () => {
-    setShowUpdateModal(true);
-  });
-
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
   const [animeLoaded, setAnimeLoaded] = useState<boolean>(false);
@@ -155,6 +151,18 @@ export default function App() {
       setHasListUpdated(false);
     }
   }, [hasListUpdated, logged, pathname]);
+
+  useEffect(() => {
+    ipcRenderer.on('auto-update', () => {
+      setShowUpdateModal(true);
+    });
+
+    return () => {
+      ipcRenderer.removeListener('auto-update', () => {
+        setShowUpdateModal(true);
+      });
+    };
+  }, []);
 
   return (
     <SkeletonTheme

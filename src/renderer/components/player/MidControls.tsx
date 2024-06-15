@@ -7,7 +7,6 @@ import {
   faRotateRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 interface SettingsProps {
