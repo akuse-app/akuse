@@ -23,8 +23,7 @@
   "plugins": ["@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "extraFileExtensions": [".ejs"],
-    "project": ["tsconfig.json"]
+    "extraFileExtensions": [".ejs"]
   },
   "ignorePatterns": [
     "node_modules",
