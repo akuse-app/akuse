@@ -36,6 +36,7 @@
     "import/extensions": "off",
     "no-console": "off",
     "no-void": ["error", { "allowAsStatement": true }],
+    "vars-on-top": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-filename-extension": ["off", { "extensions": [".jsx", ".tsx"] }],
     "react/function-component-definition": "off", // TODO Change to your preference
