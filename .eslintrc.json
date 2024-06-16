@@ -27,7 +27,7 @@
     "project": ["tsconfig.json"]
   },
   "ignorePatterns": [
-    "**/node_modules/*",
+    "node_modules",
     "release/app/dist",
     "release/build",
     ".erb/dll"
