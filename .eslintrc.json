@@ -40,6 +40,7 @@
     "react/jsx-filename-extension": ["off", { "extensions": [".jsx", ".tsx"] }],
     "react/function-component-definition": "off", // TODO Change to your preference
     "react/require-default-props": "off",
+    "react/no-array-index-key": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react/prop-types": "off" // TODO Change React.FC<TYPE_HERE> calls to use (props: TYPE_HERE) => {} instead to fix
   }
