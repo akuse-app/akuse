@@ -7,6 +7,12 @@
   "singleQuote": true,
   "overrides": [
     {
+      "files": "*.ejs",
+      "options": {
+        "parser": "html"
+      }
+    },
+    {
       "files": "*.md",
       "options": {
         "trailingComma": "none"
