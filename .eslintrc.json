@@ -44,6 +44,7 @@
     "react/no-array-index-key": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "react/prop-types": "off", // TODO Change React.FC<TYPE_HERE> calls to use (props: TYPE_HERE) => {} instead to fix,
+    "jsx-a11y/media-has-caption": "off",
     "jsx-a11y/click-events-have-key-events": "warn",
     "jsx-a11y/no-static-element-interactions": "warn"
   }
