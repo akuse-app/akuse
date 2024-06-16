@@ -1,5 +1,8 @@
 {
   // "editor.formatOnSave": true, // TODO uncommment when all errors are fixed
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
   "files.associations": {
     ".eslintrc": "jsonc",
     ".prettierrc": "jsonc",
