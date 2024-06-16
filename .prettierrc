@@ -3,7 +3,7 @@
   "endOfLine": "lf",
   "trailingComma": "none",
   "arrowParens": "avoid",
-  "semi": false,
+  "semi": true,
   "singleQuote": true,
   "overrides": [
     {

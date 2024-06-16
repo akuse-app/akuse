@@ -7,16 +7,16 @@
   },
   "files.watcherExclude": {
     "**/node_modules/**": true,
+    ".erb/dll": true,
     "release/build": true,
     "release/app/dist": true
   },
-
   "search.exclude": {
     ".git": true,
     ".eslintcache": true,
     ".erb/dll": true,
     "release/{build,app/dist}": true,
-    "node_modules": true,
+    "**/node_modules/**": true,
     "npm-debug.log.*": true,
     "test/**/__snapshots__": true,
     "package-lock.json": true,

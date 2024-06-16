@@ -139,6 +139,7 @@
     "eslint-config-erb": "^4.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-import-resolver-webpack": "^0.13.8",
+    "eslint-plugin-compat": "^5.0.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^28.6.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
