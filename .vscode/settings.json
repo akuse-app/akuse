@@ -1,20 +1,15 @@
 {
+  // "editor.formatOnSave": true, // TODO uncommment when all errors are fixed
   "files.associations": {
     ".eslintrc": "jsonc",
     ".prettierrc": "jsonc",
     ".eslintignore": "ignore"
   },
-  
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "html",
-    "typescriptreact"
-  ],
-
-  "javascript.validate.enable": false,
-  "javascript.format.enable": false,
-  "typescript.format.enable": false,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "release/build": true,
+    "release/app/dist": true
+  },
 
   "search.exclude": {
     ".git": true,

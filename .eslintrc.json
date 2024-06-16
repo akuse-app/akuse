@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "settings": {
+    "import/core-modules": ["electron"],
+    "import/resolver": {
+      "node": {
+        "extensions": [".ejs", ".js", ".jsx", ".ts", ".tsx"]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "plugin:jest/recommended",
+    "plugin:promise/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "erb" // extends eslint-config-airbnb, eslint-plugin-compat  eslint-plugin-prettier
+  ],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "extraFileExtensions": [".ejs"],
+    "project": ["tsconfig.json"]
+  },
+  "ignorePatterns": [
+    "**/node_modules/*",
+    "release/app/dist",
+    "release/build",
+    ".erb/dll"
+  ],
+  "rules": {
+    "curly": "warn",
+    "import/extensions": "off",
+    "no-console": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": ["off", { "extensions": [".jsx", ".tsx"] }],
+    "react/function-component-definition": "off", // TODO Change to your preference
+    "@typescript-eslint/no-explicit-any": "off",
+    "react/prop-types": "off" // TODO Change React.FC<TYPE_HERE> calls to use (props: TYPE_HERE) => {} instead to fix
+  }
+}
