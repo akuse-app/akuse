@@ -7,6 +7,7 @@ import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import { ipcRenderer } from 'electron';
 
 import {
   updateAnimeFromList,
@@ -63,6 +64,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
   const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
+  const [activity, setActivity] = useState<boolean>(false);
+
+  if(!activity && episodeTitle){
+    setActivity(true);
+    ipcRenderer.send("update-presence", {
+      details: `Watching ${listAnimeData.media.title?.english}`,
+      state: `${episodeTitle} [${episodeNumber}/${listAnimeData.media.episodes}]`,
+      startTimestamp: Date.now(),
+      largeImageKey: listAnimeData.media.coverImage?.large || "icon",
+      largeImageText: listAnimeData.media.title?.english || "Akuse",
+      smallImageKey: 'icon',
+      buttons: [{label: "Download app", url: "https://github.com/akuse-app/akuse/releases/latest"}]})
+  }
+  
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -443,6 +458,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
       setProgressUpdated(false);
 
+      setActivity(false);
+
       try {
         if (videoRef.current && reloadAtPreviousTime)
           videoRef.current.currentTime = previousTime;
@@ -478,6 +495,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const canNextEpisode = (episode: number): boolean => {
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
+
 
   return ReactDOM.createPortal(
     show && (
