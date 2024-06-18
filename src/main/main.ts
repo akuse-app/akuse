@@ -313,7 +313,7 @@ async function setActivity(details?: string, state?: string, startTimestamp?: nu
     startTimestamp: startTimestamp || Date.now(),
     largeImageKey: largeImageKey || 'icon',
     largeImageText: largeImageText || 'Akuse',
-    smallImageKey: smallImageKey || 'icon',
+    smallImageKey: 'icon',
     instance: instance || false,
     buttons: buttons || [
       {
@@ -330,5 +330,6 @@ RPC.on('ready', () => {
 RPC.login({ clientId }).catch(console.error);
 
 ipcMain.on('update-presence', (event, data) => {
+  console.log("update presence fired")
   setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.instance, data.buttons);
 })

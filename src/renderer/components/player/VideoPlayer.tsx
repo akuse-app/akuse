@@ -404,6 +404,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       document.exitFullscreen();
     }
     onClose();
+    ipcRenderer.send("update-presence", {
+      details: `Watch anime without ads.`,
+      state: `Browsing the homepage`,
+      startTimestamp: Date.now(),
+      largeImageKey: "icon",
+      largeImageText: "Akuse",
+      instance: true,
+      buttons: [
+        {
+          label: 'Download app',
+          url: 'https://github.com/akuse-app/akuse/releases/latest',
+        },
+      ],
+    })
   };
 
   const toggleFullScreenWithoutPropagation = (event: any) => {

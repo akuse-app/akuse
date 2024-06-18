@@ -48,6 +48,7 @@ export default function App() {
   ipcRenderer.on('auto-update', async () => {
     setShowUpdateModal(true);
   });
+  ipcRenderer.send("update-presence", {})
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
