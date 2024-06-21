@@ -640,6 +640,14 @@ main .entries-container .anime-entry {
   height: 150px;
   object-fit: cover;
   border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.user-page .user-info .user-avatar:hover img {
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid #f1f2f6;
+  transform: scale(.9,.9);
 }
 
 .user-page .user-info .user-stats {

@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../App';
 import Heading from '../components/Heading';
-import AnimeEntry from '../components/AnimeEntry';
 import UserModal from '../components/modals/UserModal';
+import React, { useContext, useEffect, useState } from 'react';
+import AnimeEntryDetailed from '../components/AnimeEntryDetailed';
 
 interface Tab5Props {
   detailedUserInfo?: any;
@@ -53,7 +53,12 @@ const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
             <div className="user-page">
               <Heading text="User" />
               <div className="user-info">
-                <div className="user-avatar">
+                <div
+                  className="user-avatar"
+                  onClick={() => {
+                    setShowUserModal(true);
+                  }}
+                >
                   <img
                     src={detailedUserInfo?.user?.avatar?.large}
                     alt="avatar"
@@ -61,14 +66,6 @@ const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
                 </div>
                 <div className="user-name">
                   <p>{detailedUserInfo?.user?.name}</p>
-                  <div
-                    className="user-logout"
-                    onClick={() => {
-                      setShowUserModal(true);
-                    }}
-                  >
-                    Logout
-                  </div>
                 </div>
                 <div className="user-stats">
                   <div>
@@ -85,7 +82,11 @@ const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
                     <h2>Total Anime</h2>
                   </div>
                   <div>
-                    <h1>{detailedUserInfo?.user?.statistics?.anime?.meanScore.toFixed(2)}</h1>
+                    <h1>
+                      {detailedUserInfo?.user?.statistics?.anime?.meanScore.toFixed(
+                        2,
+                      )}
+                    </h1>
                     <h2>Average Score</h2>
                   </div>
                   {time?.days ? (
@@ -113,9 +114,7 @@ const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
                         className={`${listFilter === item.name}`}
                       >
                         <h1>{item.name}</h1>
-                        <div
-                          style={{ fontSize: '0.8rem' }}
-                        >
+                        <div style={{ fontSize: '0.8rem' }}>
                           ({item.entries?.length})
                         </div>
                       </li>
@@ -126,10 +125,10 @@ const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
                   {detailedUserInfo?.lists.length !== 0 ? (
                     filterMedia(listFilter)?.map((item: any, index: any) => {
                       return (
-                        <div className="entries-container">
+                        <div className="entries-container" key={index}>
                           {item?.entries.map((item: any) => {
                             return (
-                              <AnimeEntry
+                              <AnimeEntryDetailed
                                 key={item.mediaId}
                                 listAnimeData={item}
                               />
