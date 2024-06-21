@@ -471,6 +471,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
       setProgressUpdated(false);
 
+      setActivity(false);
+
       try {
         if (videoRef.current && reloadAtPreviousTime)
           videoRef.current.currentTime = previousTime;
@@ -506,6 +508,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const canNextEpisode = (episode: number): boolean => {
     return episode !== getAvailableEpisodes(listAnimeData.media);
   };
+
 
   return ReactDOM.createPortal(
     show && (
