@@ -158,7 +158,7 @@ const AnimeEntryDetailed: React.FC<{
                 listAnimeData.media.episodes === null ? (
                   listAnimeData.progress
                 ) : (
-                  `${listAnimeData.progress} / ${listAnimeData.media.episodes}`
+                  `${listAnimeData.progress}/${listAnimeData.media.episodes}`
                 )
               ) : (
                 <Skeleton />
@@ -169,7 +169,7 @@ const AnimeEntryDetailed: React.FC<{
                 listAnimeData.score === 0 ? (
                   0 / 10
                 ) : (
-                  `${listAnimeData.score} / 10`
+                  `${listAnimeData.score}/10`
                 )
               ) : (
                 <Skeleton />
