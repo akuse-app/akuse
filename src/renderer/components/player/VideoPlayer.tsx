@@ -61,6 +61,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // const [title, setTitle] = useState<string>(animeTitle); // may be needed in future features
   const [videoData, setVideoData] = useState<IVideo | null>(null);
   const [episodeNumber, setEpisodeNumber] = useState<number>(0);
+  let [nextEpisodeNumber, setNextEpisodeNumber] = useState<number>(animeEpisodeNumber + 1); //!! NEEDED FOR NEXT EPISODE CACHING !!
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
   const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
@@ -89,6 +90,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     useState<boolean>(true);
   const [showPreviousEpisodeButton, setShowPreviousEpisodeButton] =
     useState<boolean>(true);
+  const [nextEpisodeData, setNextEpisodeData] = useState<IVideo | null>(null);
 
   // timeline
   const [currentTime, setCurrentTime] = useState<number>();
@@ -292,11 +294,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const playVideoAndSetTime = () => {
     try {
       if (videoRef.current) {
-        setTimeout(() => {
+        setTimeout(async () => {
           playVideo();
           setCurrentTime(videoRef.current?.currentTime);
           setDuration(videoRef.current?.duration);
           onChangeLoading(false);
+          let nextEpisode = await getUniversalEpisodeUrl(listAnimeData, nextEpisodeNumber);
+          console.log(nextEpisode?.url)
+          if(nextEpisode){
+            setNextEpisodeData(nextEpisode);
+            setNextEpisodeNumber(nextEpisodeNumber + 1);
+          }
+
         }, 1000);
       }
     } catch (error) {
@@ -453,6 +462,36 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     var previousTime = 0;
     if (reloadAtPreviousTime && videoRef.current)
       previousTime = videoRef.current?.currentTime;
+
+        //If the next episode data is availabe, skip to it
+        if(nextEpisodeData){
+          setVideoData(nextEpisodeData);
+          setEpisodeNumber(episodeToPlay);
+          setEpisodeTitle(
+            episodesInfo
+              ? episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`
+              : `Episode ${episode}`,
+          );
+          setEpisodeDescription(
+            episodesInfo ? episodesInfo[episodeToPlay].summary ?? '' : '',
+          );
+          playHlsVideo(nextEpisodeData.url);
+          // loadSource(value.url, value.isM3U8 ?? false);
+          setShowNextEpisodeButton(canNextEpisode(episodeToPlay));
+          setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
+          setProgressUpdated(false);
+    
+          setActivity(false);
+    
+          try {
+            if (videoRef.current && reloadAtPreviousTime)
+              videoRef.current.currentTime = previousTime;
+          } catch (error) {
+            console.log(error);
+          }
+          
+          return true;
+        }
 
     const setData = (value: IVideo) => {
       setVideoData(value);
