@@ -19,6 +19,7 @@ import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
+import { ipcRenderer } from 'electron';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -63,6 +64,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
   const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
+  const [activity, setActivity] = useState<boolean>(false);
+
+  if(!activity && episodeTitle){
+    setActivity(true);
+    ipcRenderer.send("update-presence", {
+      details: `Watching ${listAnimeData.media.title?.english}`,
+      state: `${episodeTitle} [${episodeNumber}/${listAnimeData.media.episodes}]`,
+      startTimestamp: Date.now(),
+      largeImageKey: listAnimeData.media.coverImage?.large || "icon",
+      largeImageText: listAnimeData.media.title?.english || "Akuse",
+      smallImageKey: 'icon',
+      buttons: [{label: "Download app", url: "https://github.com/akuse-app/akuse/releases/latest"}]})
+  }
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -389,6 +403,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       document.exitFullscreen();
     }
     onClose();
+    ipcRenderer.send("update-presence", {
+      details: `Watch anime without ads.`,
+      state: `Browsing the homepage`,
+      startTimestamp: Date.now(),
+      largeImageKey: "icon",
+      largeImageText: "Akuse",
+      instance: true,
+      buttons: [
+        {
+          label: 'Download app',
+          url: 'https://github.com/akuse-app/akuse/releases/latest',
+        },
+      ],
+    })
   };
 
   const toggleFullScreenWithoutPropagation = (event: any) => {
