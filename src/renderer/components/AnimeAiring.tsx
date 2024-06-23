@@ -1,7 +1,7 @@
-import './styles/AnimeEntry.css';
+import './styles/AnimeAiring.css';
 
 import { faCalendar, faCircleDot } from '@fortawesome/free-regular-svg-icons';
-import { faStar, faThList, faTv } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faStar, faThList, faTv } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
@@ -10,6 +10,8 @@ import {
   getParsedFormat,
   getParsedSeasonYear,
   getTitle,
+  isAired,
+  timeStamptoHour,
 } from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeModal from './modals/AnimeModal';
@@ -55,8 +57,8 @@ const StatusDot: React.FC<{
   );
 };
 
-const AnimeEntryDetailed: React.FC<{
-  listAnimeData?: ListAnimeData;
+const AnimeAiring: React.FC<{
+  listAnimeData?: any;
 }> = ({ listAnimeData }) => {
   // wether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -116,7 +118,7 @@ const AnimeEntryDetailed: React.FC<{
           </div>
 
           <div className="anime-info">
-            <div className="season-year">
+            <div className="airing-date">
               {listAnimeData && (
                 <FontAwesomeIcon
                   className="i"
@@ -125,68 +127,29 @@ const AnimeEntryDetailed: React.FC<{
                 />
               )}
               {listAnimeData ? (
-                getParsedSeasonYear(listAnimeData?.media)
+                timeStamptoHour(listAnimeData.airingAt)
               ) : (
                 <Skeleton />
-              )}
-            </div>
-            <div className="episodes">
-              {listAnimeData ? (
-                getParsedFormat(listAnimeData?.media.format)
-              ) : (
-                <Skeleton />
-              )}
-              {listAnimeData && (
-                <FontAwesomeIcon
-                  className="i"
-                  icon={faTv}
-                  style={{ marginLeft: 5 }}
-                />
               )}
             </div>
           </div>
           <div className="anime-info">
-            <div className="listed-episodes">
+          <div className="airing-episode">
               {listAnimeData && (
                 <FontAwesomeIcon
                   className="i"
-                  icon={faThList}
+                  icon={faPlay}
                   style={{ marginRight: 5 }}
                 />
               )}
-              {listAnimeData ? (
-                listAnimeData.media.episodes === null ? (
-                  listAnimeData.progress
-                ) : (
-                  `${listAnimeData.progress}/${listAnimeData.media.episodes}`
-                )
-              ) : (
-                <Skeleton />
-              )}
-            </div>
-            <div className="anime-score">
-              {listAnimeData ? (
-                listAnimeData.score === 0 ? (
-                  0 / 10
-                ) : (
-                  `${listAnimeData.score}/10`
-                )
-              ) : (
-                <Skeleton />
-              )}
-              {listAnimeData && (
-                <FontAwesomeIcon
-                  className="i"
-                  icon={faStar}
-                  style={{ marginLeft: 5 }}
-                />
-              )}
+              Episode {listAnimeData ? listAnimeData.episode : <Skeleton />}
             </div>
           </div>
         </div>
       </div>
+      {/* <p className={`${isAired(listAnimeData.airingAt) ? 'aired-line' : 'un-aired-line'}`}></p> */}
     </>
   );
 };
 
-export default AnimeEntryDetailed;
+export default AnimeAiring;

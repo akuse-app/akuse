@@ -1,19 +1,17 @@
 import './styles/MainNavbar.css';
 
 import {
-  faBookmark,
   faCompass,
   IconDefinition,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faBookmark as faBookmarkFull,
+  faCalendarWeek,
   faCompass as faCompassFull,
   faGear,
   faLaptopCode,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
   faRightToBracket,
-  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
@@ -63,7 +61,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
   const logged = useContext(AuthContext);
 
   const [activeTab, setActiveTab] = useState(1);
-
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
   const [showAuthCodeModal, setShowAuthCodeModal] = useState<boolean>(false);
   const [isPackaged, setIsPackaged] = useState<boolean>(false);
 
@@ -97,15 +95,27 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
         />
+        <Li
+          text="Schedule"
+          icon={faCalendarWeek}
+          to="/tab5"
+          active={activeTab === 5}
+          onClick={() => setActiveTab(5)}
+        />
         {logged ? (
           <>
-            <Link
-              to="/tab4"
+            <UserModal
+              show={showUserModal}
+              onClose={() => setShowUserModal(false)}
+            />
+            <div
               className="img-wrapper"
-              onClick={() => setActiveTab(4)}
+              onClick={() => {
+                setShowUserModal(true);
+              }}
             >
               <img src={avatar}></img>
-            </Link>
+            </div>
           </>
         ) : (
           <LiLink

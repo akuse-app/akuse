@@ -17,13 +17,13 @@ import {
   getViewerInfo,
   getViewerList,
 } from '../modules/anilist/anilistApi';
-import { animeDataToListAnimeData } from '../modules/utils';
+import { animeDataToListAnimeData, getAiringSchedule } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
-import Tab4 from './tabs/Tab4';
+import Tab5 from './tabs/Tab5';
 
 import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { ipcRenderer } from 'electron';
@@ -31,6 +31,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import { MediaListCollection } from '../types/anilistGraphQLTypes';
+
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -67,10 +68,9 @@ export default function App() {
     ListAnimeData[] | undefined
   >(undefined);
 
-  // tab4
-  const [tab4Click, setTab4Click] = useState<boolean>(false);
-  const [detailedUserInfo, setDetailedUserInfo] =
-    useState<MediaListCollection>();
+  // tab5
+  const [tab5Click, setTab5Click] = useState<boolean>(false);
+  const [schedule, setSchedule] = useState<any>();
 
   const style = getComputedStyle(document.body);
 
@@ -97,15 +97,9 @@ export default function App() {
     }
   };
 
-  const fetchTab4AnimeData = async () => {
+  const fetchTab5AnimeData = async () => {
     try {
-      var id = null;
-      if (logged) {
-        id = await getViewerId();
-        setViewerId(id);
-
-        setDetailedUserInfo(await getUserInfo(id));
-      }
+      setSchedule(await getAiringSchedule());
     } catch (error) {
       console.log('Tab4 error: ' + error);
     }
@@ -116,10 +110,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (tab4Click) {
-      fetchTab4AnimeData();
-    }
-  }, [tab4Click, viewerId]);
+    fetchTab5AnimeData();
+  }, []);
 
   return (
     <AuthContext.Provider value={logged}>
@@ -152,19 +144,17 @@ export default function App() {
               />
               <Route path="/tab2" element={<Tab2 />} />
               <Route path="/tab3" element={<Tab3 />} />
-              {logged && (
-                <Route
-                  path="/tab4"
-                  element={
-                    <Tab4
-                      detailedUserInfo={detailedUserInfo}
-                      clicked={() => {
-                        !tab4Click && setTab4Click(true);
-                      }}
-                    />
-                  }
-                />
-              )}
+              <Route
+                path="/tab5"
+                element={
+                  <Tab5
+                    schedule={schedule}
+                    clicked={() => {
+                      !tab5Click && setTab5Click(true);
+                    }}
+                  />
+                }
+              />
             </Routes>
           </MemoryRouter>
         </SkeletonTheme>
