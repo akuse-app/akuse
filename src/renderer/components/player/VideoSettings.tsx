@@ -1,22 +1,11 @@
-import { faClock } from '@fortawesome/free-regular-svg-icons';
-import {
-  faGear,
-  faHeadphones,
-  faLanguage,
-  faRotateRight,
-  faSpinner,
-  faVideo,
-  faVolumeHigh,
-  faVolumeLow,
-  faVolumeXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import React, { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faGear, faHeadphones, faLanguage, faRotateRight, faSpinner, faVideo, faUserGroup, faVolumeHigh, faVolumeLow, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import Store from 'electron-store';
 import Hls from 'hls.js';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
-import 'react-activity/dist/Dots.css';
-import { AuthContext } from '../../App';
 import { Dots } from 'react-activity';
+import { AuthContext } from '../../App';
+import SocketService from '../../../constants/socketserver'; // Adjust the import path as necessary
 
 const STORE = new Store();
 
@@ -43,12 +32,19 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   const [hlsData, setHlsData] = useState<Hls>();
 
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
   );
   const [watchDubbed, setWatchDubbed] = useState<boolean>(
     STORE.get('dubbed') as boolean,
   );
+  const [watchParty, setWatchPart] = useState<boolean>(
+    STORE.get('watch_party') as boolean,
+  )
+  const [watchPartyCode, setWatchPartyCode] = useState<string>("");
+  const [codeToJoin, setCodeToJoin] = useState<string>("");
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     STORE.get('source_flag') as string,
   );
@@ -86,13 +82,17 @@ const VideoSettings: React.FC<SettingsProps> = ({
     };
   }, []);
 
-  const toggleShow = () => {
-    onShow(!show);
-  };
-
   useEffect(() => {
     setHlsData(hls);
   }, [hls]);
+
+  useEffect(() => {
+    setSocketService(SocketService.getInstance("http://localhost:3000"));
+  }, []);
+
+  const toggleShow = () => {
+    onShow(!show);
+  };
 
   const handleQualityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (hlsData) {
@@ -149,6 +149,56 @@ const VideoSettings: React.FC<SettingsProps> = ({
       setChangeEpisodeLoading(false);
     }
   };
+  const handleWatchParty = async () => {
+    if (socketService) {  
+      socketService.getSocket()?.on('connect', () => {
+        console.log('Connected to server');
+        // Add any additional logic here after successful connection
+      });
+
+      socketService.getSocket()?.emit('generateRoomCode');
+  
+      socketService.getSocket()?.on('roomCodeGenerated', (roomCode: string) => {
+        console.log('Room code:', roomCode);
+        setWatchPartyCode(roomCode);
+      });
+  
+      socketService.getSocket()?.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+  
+      socketService.getSocket()?.on('connect_error', (error: any) => {
+        console.error('Connection error:', error);
+      });
+    } else {
+      console.log('Socket service not available.');
+    }
+  };
+  
+
+  const handleJoinAttempt = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (socketService) {
+        socketService.getSocket()?.connect();
+        socketService.emit('joinRoom', codeToJoin);
+
+        socketService.getSocket()?.on('roomJoined', () => {
+          console.log('Room joined');
+        });
+
+        socketService.getSocket()?.on('roomJoinFailed', () => {
+          console.log('Room join failed or room does not exist.');
+        });
+      }
+    }
+  };
+
+  const handleCodeChange = async(
+    event : ChangeEvent<HTMLInputElement>,
+  ) => {
+    setCodeToJoin(event.target.value);
+    console.log(codeToJoin)
+  }
 
   const handleLanguageChange = async (
     event: ChangeEvent<HTMLSelectElement>,
@@ -166,6 +216,10 @@ const VideoSettings: React.FC<SettingsProps> = ({
       setChangeEpisodeLoading(false);
     }
   };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(watchPartyCode);
+  }
 
   const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     STORE.set('intro_skip_time', parseInt(event.target.value));
@@ -295,6 +349,36 @@ const VideoSettings: React.FC<SettingsProps> = ({
               </label>
             )}
           </li>
+          <li>
+            <span>
+              <FontAwesomeIcon className="i" icon={faUserGroup} />
+              Start Watch Party
+            </span>
+            {watchPartyCode.length == 10 ? (
+              <label onClick={handleCopyToClipboard}>{watchPartyCode}</label>
+            ) : <label className="switch">
+            <input
+              type="checkbox"
+              checked={watchParty}
+              onChange={handleWatchParty}
+            />
+            <span className="slider round"></span>
+          </label>}
+          </li>
+          {watchPartyCode.length != 10 && (
+            <li>
+            <span>
+              <FontAwesomeIcon className="i" icon={faUserGroup} />
+              Join Watch Party
+            </span>
+            <input 
+              type="text"
+              className="watch-party-input"
+              onChange={handleCodeChange}
+              onKeyDown={handleJoinAttempt}
+              />
+          </li>
+          )}
           <li className="language">
             <span>
               <FontAwesomeIcon className="i" icon={faLanguage} />

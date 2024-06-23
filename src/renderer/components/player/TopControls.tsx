@@ -7,6 +7,7 @@ import {
   faExpand,
   faForward,
   faLayerGroup,
+  faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -15,7 +16,8 @@ import VideoSettings from './VideoSettings';
 import Hls from 'hls.js';
 import { EpisodeInfo } from '../../../types/types';
 import VideoEpisodesChange from './VideoEpisodesChange';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import SocketService from '../../../constants/socketserver';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -55,6 +57,18 @@ const TopControls: React.FC<TopControlsProps> = ({
 }) => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [showEpisodesChange, setShowEpisodesChange] = useState<boolean>(false);
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+  const [watchPartyTotalUsers, setWatchPartyTotalUsers] = useState<number>(0);
+
+  useEffect(() => {
+    setSocketService(SocketService.getInstance("http://localhost:3000"))
+    if(socketService){
+      socketService.emit("getRoom")
+      socketService.on("roomUsers", (totalUsers : any) => {
+        setWatchPartyTotalUsers(totalUsers);
+      })
+    }
+  })
 
   const closeOthers = () => {
     setShowSettings(false);
@@ -78,6 +92,12 @@ const TopControls: React.FC<TopControlsProps> = ({
       </div>
       <div className="center"></div>
       <div className="right">
+        {watchPartyTotalUsers > 0 && (
+          <span>
+          <FontAwesomeIcon className="i" icon={faUserGroup} style={{marginRight: '5px'}} />
+          {watchPartyTotalUsers}
+          </span>
+        )}
         <VideoSettings
           show={showSettings}
           onShow={(show) => {

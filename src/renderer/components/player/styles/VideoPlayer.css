@@ -551,3 +551,9 @@
   bottom: 80px;
   position: absolute;
 }
+
+.watch-party-input{
+  background-color: var(--color-1);
+  border: 1px solid #545454;
+  color: var(--font-2);
+}

@@ -9,6 +9,7 @@ import {
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
   faRightToBracket,
+  faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
@@ -19,6 +20,7 @@ import isAppImage from '../modules/packaging/isAppImage';
 import { AuthContext } from './App';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
+import WatchPartyModal from './components/modals/WatchPartyModal';
 
 const Li: React.FC<{
   text: string;
@@ -59,6 +61,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
 
   const [activeTab, setActiveTab] = useState(1);
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
+  const [showWatchPartyModal, setShowWatchPartyModal] = useState<boolean>(false);
   const [showAuthCodeModal, setShowAuthCodeModal] = useState<boolean>(false);
   const [isPackaged, setIsPackaged] = useState<boolean>(false);
 
@@ -100,6 +103,17 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           to="/tab4"
           active={activeTab === 4}
           onClick={() => setActiveTab(4)}
+        />
+        <WatchPartyModal
+          show={showWatchPartyModal}
+          onClose={() => setShowWatchPartyModal(false)}
+          />
+        <LiLink
+          text="Watch Party"
+          icon={faUserGroup}
+          onClick={() => {
+            setShowWatchPartyModal(true);
+          }}
         />
         {logged ? (
           <>

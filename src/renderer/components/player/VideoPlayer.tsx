@@ -7,6 +7,7 @@ import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
+import SocketService from '../../../constants/socketserver';
 
 import {
   updateAnimeFromList,
@@ -63,6 +64,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [episodeTitle, setEpisodeTitle] = useState<string>('');
   const [episodeDescription, setEpisodeDescription] = useState<string>('');
   const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
+
+  //Watch party
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -157,6 +161,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   useEffect(() => {
+    setSocketService(SocketService.getInstance("http://localhost:3000"));
+    
+    if(socketService){
+      console.log("Socket service initialized");
+      socketService.getSocket()?.on('pausePlayback', () => {
+        console.log("A user has paused the playback");
+      })
+
+      socketService.getSocket()?.on('resumePlayback', () => {
+        console.log("A user has resumed the playback");
+      })
+    }
+
+  });
+
+  useEffect(() => {
     const handleDocumentKeydown = (event: KeyboardEvent) => {
       if (videoRef.current) {
         handleVideoPlayerKeydown(event);
@@ -245,6 +265,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       try {
         setPlaying(true);
         videoRef.current.play();
+        if(socketService){
+          socketService.getSocket()?.emit('resume_playback');
+        }
       } catch (error) {
         console.log(error);
       }
@@ -256,6 +279,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       try {
         setPlaying(false);
         videoRef.current.pause();
+        if(socketService){
+          socketService.getSocket()?.emit('pause_playback');
+        }
       } catch (error) {
         console.log(error);
       }
@@ -389,6 +415,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       document.exitFullscreen();
     }
     onClose();
+    console.log("close");
+    if(socketService){
+      socketService.emit('leaveRoom');
+      socketService.getSocket()?.on('roomLeft', () => {
+        console.log('Room left');
+      })
+      socketService.getSocket()?.on('disconnect', () => {
+        console.log('Disconnected from server');
+      })
+    }
   };
 
   const toggleFullScreenWithoutPropagation = (event: any) => {

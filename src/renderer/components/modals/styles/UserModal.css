@@ -3,3 +3,63 @@
   justify-content: end;
   margin-top: 20px;
 }
+
+.watch-party-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.watch-party-create{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+.watch-party-create input{
+  background-color: var(--color-3);
+  border: 1px solid var(--color-important);
+  height: 35px;
+  width: 100%;
+  height: 30px;
+}
+
+.watch-party-create button{
+  position: absolute;
+  right: 0;
+  top: 7px;
+  height: 20px;
+  background-color: var(--color-important);
+  border: none;
+  box-shadow: none;
+  transition: 0.2s ease-in-out all;
+}
+.watch-party-create button:hover{
+  color: white;
+  transition: 0.2s ease-in-out all;
+}
+
+.watch-party-join{
+  position: relative;
+}
+.watch-party-join input{
+  background-color: var(--color-3);
+  border: 1px solid var(--color-important);
+  height: 35px;
+  width: 100%;
+  height: 30px;
+}
+
+.watch-party-join button{
+  position: absolute;
+  right: 0;
+  top: 7px;
+  height: 20px;
+  background-color: var(--color-important);
+  border: none;
+  box-shadow: none;
+  transition: 0.2s ease-in-out all;
+}
+.watch-party-join button:hover{
+  color: white;
+  transition: 0.2s ease-in-out all;
+}
