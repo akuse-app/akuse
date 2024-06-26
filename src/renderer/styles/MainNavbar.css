@@ -105,3 +105,30 @@ nav.main ul li span {
   display: none;
   font-size: 1.2rem;
 }
+
+.watch-party-container{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon-container{
+  position: relative;
+  display: inline-block;
+}
+
+.badge{
+  position: absolute;
+  top: -25px;
+  right: -50px;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+}

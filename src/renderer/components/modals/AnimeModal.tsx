@@ -40,6 +40,7 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import SocketService from '../../../constants/socketserver';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -78,6 +79,21 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [localProgress, setLocalProgress] = useState<number>();
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  // watch party
+
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+  const [code, setCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSocketService(SocketService.getInstance("http://localhost:3000"))
+    if(socketService){
+      socketService.emit("getRoomCode")
+      socketService.on("roomCode", (code: string) => {  
+        setCode(code)
+      })
+    }
+  })
 
   useEffect(() => {
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
@@ -159,11 +175,13 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const playEpisode = async (episode: number) => {
     if (trailerRef.current) trailerRef.current.pause();
+
     setShowPlayer(true);
     setLoading(true);
     setAnimeEpisodeNumber(episode);
 
     getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+      
       if (!data) {
         toast(`Source not found.`, {
           style: {
@@ -175,6 +193,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         setLoading(false);
 
         return;
+      }
+      if(socketService && code){
+        socketService.getSocket()?.emit("load_episode", data.url);
+        console.log(`Loading: ${data.url}`)
       }
       setPlayerIVideo(data);
     });

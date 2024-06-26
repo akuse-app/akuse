@@ -21,6 +21,7 @@ import { AuthContext } from './App';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
 import WatchPartyModal from './components/modals/WatchPartyModal';
+import SocketService from '../constants/socketserver';
 
 const Li: React.FC<{
   text: string;
@@ -64,6 +65,19 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
   const [showWatchPartyModal, setShowWatchPartyModal] = useState<boolean>(false);
   const [showAuthCodeModal, setShowAuthCodeModal] = useState<boolean>(false);
   const [isPackaged, setIsPackaged] = useState<boolean>(false);
+  const [watchPartyUsers, setWatchPartyUsers] = useState<number>(0);
+
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+
+  useEffect(() => {
+    setSocketService(SocketService.getInstance("http://localhost:3000"))
+    if(socketService){
+      socketService.emit("getRoom")
+      socketService.on("roomUsers", (totalUsers : any) => {
+        setWatchPartyUsers(totalUsers);
+      })
+    }
+  })
 
   useEffect(() => {
     ipcRenderer.invoke('get-is-packaged').then((packaged) => {
@@ -108,13 +122,20 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           show={showWatchPartyModal}
           onClose={() => setShowWatchPartyModal(false)}
           />
-        <LiLink
-          text="Watch Party"
-          icon={faUserGroup}
-          onClick={() => {
-            setShowWatchPartyModal(true);
-          }}
-        />
+        <div className="watch-party-container">
+          {watchPartyUsers > 0 && (
+            <div className="icon-container">
+              <span className="badge">1</span>
+            </div>
+          )}
+          <LiLink
+            text="Watch Party"
+            icon={faUserGroup}
+            onClick={() => {
+              setShowWatchPartyModal(true);
+            }}
+          />
+        </div>
         {logged ? (
           <>
             <UserModal

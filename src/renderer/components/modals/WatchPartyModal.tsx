@@ -7,6 +7,7 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { ipcRenderer } from 'electron';
 import { useEffect, useRef, useState } from 'react';
 import SocketService from '../../../constants/socketserver';
+import toast from 'react-hot-toast';
 
 const modalsRoot = document.getElementById('modals-root');
 
@@ -22,6 +23,9 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
   const [joinStatus, setJoinStatus] = useState<string | null>(null); // Track join status
   const [joinErrorMessage, setJoinErrorMessage] = useState<string | null>(null); // Track join error message
 
+  const style = getComputedStyle(document.body);
+
+
   useEffect(() => {
     setSocketService(SocketService.getInstance("http://localhost:3000"));
   }, []);
@@ -30,10 +34,27 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
     if(socketService){
       socketService.emit("generateRoomCode");
       socketService.on("roomCodeGenerated", (roomCode: string) => {
+        toast(`Watch party created!`, {
+          style: {
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+            zIndex: 10000
+          },
+          icon: '🎉',
+        });
         setCode(roomCode);
         navigator.clipboard.writeText(roomCode);
         setCreateDisabled(true);
       });
+    }else{
+      toast(`Socket service not available.`, {
+        style: {
+          color: style.getPropertyValue('--font-2'),
+          backgroundColor: style.getPropertyValue('--color-3'),
+          zIndex: 1
+        },
+        icon: '❌',
+      })
     }
   };
 
@@ -43,7 +64,14 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
       socketService.on("roomJoined", () => {
         setJoinStatus("Room joined successfully.");
         setJoinErrorMessage(null); // Clear any previous error message
-        console.log("Room joined");
+        toast("Room joined", {
+          style: {
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+            zIndex: 100000
+          },
+          icon: '✅',
+        })
       });
       socketService.on("roomJoinFailed", () => {
         setJoinStatus(null); // Clear previous join status
@@ -60,7 +88,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
         <ModalPageSizeableContent
           width={300}
           closeModal={onClose}
-          title="Watch Party"
+          title="🎉 Watch Party"
         >
           Press "Create" to create a party.
           <div className="user-modal-content">
