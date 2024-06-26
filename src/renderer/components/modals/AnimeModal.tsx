@@ -176,30 +176,52 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const playEpisode = async (episode: number) => {
     if (trailerRef.current) trailerRef.current.pause();
 
-    setShowPlayer(true);
-    setLoading(true);
-    setAnimeEpisodeNumber(episode);
+    if(socketService && code){
+      socketService.getSocket()?.emit("load_episode", listAnimeData, episode);
+      console.log(`Loading: ${listAnimeData.media.title?.english} ep: ${episode} from watch party.`)
 
-    getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+      setShowPlayer(true);
+      setLoading(true);
+      setAnimeEpisodeNumber(episode);
+
+      getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+        
+        if (!data) {
+          toast(`Source not found.`, {
+            style: {
+              color: style.getPropertyValue('--font-2'),
+              backgroundColor: style.getPropertyValue('--color-3'),
+            },
+            icon: '❌',
+          });
+          setLoading(false);
+        }
+        setPlayerIVideo(data);
+      });
+    }else{
+     
+      setShowPlayer(true);
+      setLoading(true);
+      setAnimeEpisodeNumber(episode);
+  
+      getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
+        
+        if (!data) {
+          toast(`Source not found.`, {
+            style: {
+              color: style.getPropertyValue('--font-2'),
+              backgroundColor: style.getPropertyValue('--color-3'),
+            },
+            icon: '❌',
+          });
+          setLoading(false);
+  
+          return;
+        }
+        setPlayerIVideo(data);
+      });
       
-      if (!data) {
-        toast(`Source not found.`, {
-          style: {
-            color: style.getPropertyValue('--font-2'),
-            backgroundColor: style.getPropertyValue('--color-3'),
-          },
-          icon: '❌',
-        });
-        setLoading(false);
-
-        return;
-      }
-      if(socketService && code){
-        socketService.getSocket()?.emit("load_episode", data.url);
-        console.log(`Loading: ${data.url}`)
-      }
-      setPlayerIVideo(data);
-    });
+    }
   };
 
   const handleLocalProgressChange = (localProgress: number) => {
