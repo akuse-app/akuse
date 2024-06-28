@@ -297,33 +297,33 @@ ipcMain.on('download-update', async () => {
 
 /* DISCORD RPC */
 
-const clientId = '1212475013408628818';
+const clientId = '1256111110151475241';
 
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
 DiscordRPC.register(clientId);
-
-//const startTimestamp = new Date();
 
 async function setActivity(details?: string, state?: string, startTimestamp?: number, largeImageKey?: string, largeImageText?: string, smallImageKey?: string, instance?: boolean, buttons?: any[]) {
   if (!RPC || !mainWindow) {
     return;
   }
 
-  RPC.setActivity({
-    details: details || 'Watch anime without ads.',
+  let presence = {
+    details: details || '🌸 Watch anime without ads.',
     state: state || 'Browsing the homepage.',
     startTimestamp: startTimestamp || Date.now(),
     largeImageKey: largeImageKey || 'icon',
-    largeImageText: largeImageText || 'Akuse',
-    smallImageKey: 'icon',
+    largeImageText: largeImageText || 'akuse',
+    smallImageKey: smallImageKey,
     instance: instance || false,
     buttons: buttons || [
       {
-        label: 'Download app',
+        label: 'Download akuse',
         url: 'https://github.com/akuse-app/akuse/releases/latest',
       },
     ],
-  });
+  }
+
+  RPC.setActivity(presence);
 }
 
 RPC.on('ready', () => {
@@ -332,6 +332,5 @@ RPC.on('ready', () => {
 RPC.login({ clientId }).catch(console.error);
 
 ipcMain.on('update-presence', (event, data) => {
-  console.log("update presence fired")
-  setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.instance, data.buttons);
+  setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.smallImageKey, data.instance, data.buttons);
 })
