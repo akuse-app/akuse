@@ -1,185 +1,152 @@
-import Store from 'electron-store';
-import { ContentSteeringController } from 'hls.js';
-import React, { ChangeEvent, useContext, useState } from 'react';
 import { AuthContext } from '../App';
 import Heading from '../components/Heading';
+import UserModal from '../components/modals/UserModal';
+import React, { useContext, useEffect, useState } from 'react';
+import AnimeEntryDetailed from '../components/AnimeEntryDetailed';
 
-const STORE = new Store();
-
-// Interfaccia per definire la struttura delle opzioni del select
-interface Option {
-  value: string;
-  label: string;
+interface Tab5Props {
+  detailedUserInfo?: any;
+  clicked: () => void;
 }
 
-// Props per il componente Element
-interface ElementProps {
-  label: string;
-  children: React.ReactNode;
+function convertMinutesToDays(minutes: any) {
+  const hours: any = minutes / 60;
+  const days: any = hours / 24;
+
+  if (days >= 1) {
+    return days % 1 === 0
+      ? { days: `${parseInt(days)}` }
+      : { days: `${days.toFixed(1)}` };
+  } else {
+    return hours % 1 === 0
+      ? { hours: `${parseInt(hours)}` }
+      : { hours: `${hours.toFixed(1)}` };
+  }
 }
 
-// Componente generico per gli elementi
-const Element: React.FC<ElementProps> = ({ label, children }) => {
-  return (
-    <div className="element">
-      <div className="toggler">
-        <p>{label}</p>
-        {children}
-      </div>
-    </div>
-  );
-};
+const Tab4: React.FC<Tab5Props> = ({ detailedUserInfo, clicked }) => {
+  useEffect(() => {
+    clicked();
+  });
 
-// Props per il componente CheckboxElement
-interface CheckboxElementProps {
-  label: string;
-  checked: boolean;
-  onChange: () => void;
-}
+  const filterMedia = (status: any) => {
+    if (status === 'all') {
+      return detailedUserInfo?.lists;
+    }
+    return detailedUserInfo?.lists.filter((m: any) => m.name === status);
+  };
 
-// Componente per gestire gli elementi con i checkbox
-const CheckboxElement: React.FC<CheckboxElementProps> = ({
-  label,
-  checked,
-  onChange,
-}) => {
-  return (
-    <Element label={label}>
-      <label className="switch">
-        <input type="checkbox" checked={checked} onChange={onChange} />
-        <span className="slider round"></span>
-      </label>
-    </Element>
-  );
-};
+  const [listFilter, setListFilter] = useState('Completed');
+  const [showUserModal, setShowUserModal] = useState<boolean>(false);
 
-// Props per il componente SelectElement
-interface SelectElementProps {
-  label: string;
-  value: number | string;
-  options: Option[];
-  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-}
-
-// Componente per gestire gli elementi con i select
-const SelectElement: React.FC<SelectElementProps> = ({
-  label,
-  value,
-  options,
-  onChange,
-}) => {
-  return (
-    <Element label={label}>
-      <label>
-        <select className="main-select-0" value={value} onChange={onChange}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-    </Element>
-  );
-};
-const Tab4: React.FC = () => {
   const logged = useContext(AuthContext);
-
-  const [updateProgress, setUpdateProgress] = useState<boolean>(
-    STORE.get('update_progress') as boolean,
+  const time = convertMinutesToDays(
+    detailedUserInfo?.user?.statistics?.anime?.minutesWatched,
   );
-  const [watchDubbed, setWatchDubbed] = useState<boolean>(
-    STORE.get('dubbed') as boolean,
-  );
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    STORE.get('source_flag') as string,
-  );
-  const [skipTime, setSkipTime] = useState<number>(
-    STORE.get('intro_skip_time') as number,
-  );
-  const [showDuration, setShowDuration] = useState<boolean>(
-    STORE.get('show_duration') as boolean,
-  );
-
-  const handleUpdateProgressChange = () => {
-    STORE.set('update_progress', !updateProgress);
-    setUpdateProgress(!updateProgress);
-  };
-
-  const handleWatchDubbedChange = () => {
-    STORE.set('dubbed', !watchDubbed);
-    setWatchDubbed(!watchDubbed);
-  };
-
-  const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('source_flag', event.target.value);
-    setSelectedLanguage(event.target.value);
-  };
-
-  const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('intro_skip_time', parseInt(event.target.value));
-    setSkipTime(parseInt(event.target.value));
-  };
-
-  const handleShowDurationChange = () => {
-    STORE.set('dubbed', !showDuration);
-    setShowDuration(!showDuration);
-  };
-
-  const languageOptions: Option[] = [
-    { value: 'US', label: 'English' },
-    { value: 'IT', label: 'Italian' },
-  ];
-
-  const skipTimeOptions: Option[] = [
-    { value: '60', label: '60' },
-    { value: '65', label: '65' },
-    { value: '70', label: '70' },
-    { value: '75', label: '75' },
-    { value: '80', label: '80' },
-    { value: '85', label: '85' },
-    { value: '90', label: '90' },
-    { value: '95', label: '95' },
-  ];
 
   return (
-    <div className="body-container  show-tab">
-      <div className="main-container">
-        <div className="settings-page">
-        <Heading text='Settings' />
-
+    <>
+      <UserModal show={showUserModal} onClose={() => setShowUserModal(false)} />
+      <div className="body-container  show-tab">
+        <div className="main-container">
           {logged && (
-            <CheckboxElement
-              label="Update progress automatically"
-              checked={updateProgress}
-              onChange={handleUpdateProgressChange}
-            />
+            <div className="user-page">
+              <Heading text="User" />
+              <div className="user-info">
+                <div
+                  className="user-avatar"
+                  onClick={() => {
+                    setShowUserModal(true);
+                  }}
+                >
+                  <img
+                    src={detailedUserInfo?.user?.avatar?.large}
+                    alt="avatar"
+                  />
+                </div>
+                <div className="user-name">
+                  <p>{detailedUserInfo?.user?.name}</p>
+                </div>
+                <div className="user-stats">
+                  <div>
+                    <h1>
+                      {
+                        detailedUserInfo?.user?.statistics?.anime
+                          ?.episodesWatched
+                      }
+                    </h1>
+                    <h2>Total Episodes</h2>
+                  </div>
+                  <div>
+                    <h1>{detailedUserInfo?.user?.statistics?.anime?.count}</h1>
+                    <h2>Total Anime</h2>
+                  </div>
+                  <div>
+                    <h1>
+                      {detailedUserInfo?.user?.statistics?.anime?.meanScore.toFixed(
+                        2,
+                      )}
+                    </h1>
+                    <h2>Average Score</h2>
+                  </div>
+                  {time?.days ? (
+                    <div>
+                      <h1>{time.days}</h1>
+                      <h2>Days Watched</h2>
+                    </div>
+                  ) : (
+                    <div>
+                      <h1>{time.hours}</h1>
+                      <h2>hours</h2>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="anime-content">
+                <div className="filters-content">
+                  <ul>
+                    {detailedUserInfo?.lists?.map((item: any) => (
+                      <li
+                        key={item.name}
+                        onClick={() => {
+                          setListFilter(item.name);
+                        }}
+                        className={`${listFilter === item.name}`}
+                      >
+                        <h1>{item.name}</h1>
+                        <div style={{ fontSize: '0.8rem' }}>
+                          ({item.entries?.length})
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <main className="content-wrapper">
+                  {detailedUserInfo?.lists.length !== 0 ? (
+                    filterMedia(listFilter)?.map((item: any, index: any) => {
+                      return (
+                        <div className="entries-container" key={index}>
+                          {item?.entries.map((item: any) => {
+                            return (
+                              <AnimeEntryDetailed
+                                key={item.mediaId}
+                                listAnimeData={item}
+                              />
+                            );
+                          })}
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div></div>
+                  )}
+                </main>
+              </div>
+            </div>
           )}
-          <CheckboxElement
-            label="Watch dubbed"
-            checked={watchDubbed}
-            onChange={handleWatchDubbedChange}
-          />
-          <SelectElement
-            label="Select the language in which you want to watch the episodes"
-            value={selectedLanguage}
-            options={languageOptions}
-            onChange={handleLanguageChange}
-          />
-          <SelectElement
-            label="Select the duration of the intro skip (in seconds)"
-            value={skipTime}
-            options={skipTimeOptions}
-            onChange={handleSkipTimeChange}
-          />
-          <CheckboxElement
-            label="Display the video duration instead of the remaining time."
-            checked={showDuration}
-            onChange={handleShowDurationChange}
-          />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

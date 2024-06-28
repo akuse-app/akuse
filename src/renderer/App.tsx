@@ -12,6 +12,7 @@ import {
   getMostPopularAnime,
   getNextReleases,
   getTrendingAnime,
+  getUserInfo,
   getViewerId,
   getViewerInfo,
   getViewerList,
@@ -29,6 +30,7 @@ import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
+import { MediaListCollection } from '../types/anilistGraphQLTypes';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -51,6 +53,7 @@ export default function App() {
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
+
   const [currentListAnime, setCurrentListAnime] = useState<
     ListAnimeData[] | undefined
   >(undefined);
@@ -64,23 +67,10 @@ export default function App() {
     ListAnimeData[] | undefined
   >(undefined);
 
-  // tab2
-  const [tab2Click, setTab2Click] = useState<boolean>(false);
-  const [planningListAnime, setPlanningListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  // const [completedListAnime, setCompletedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [pausedListAnime, setPausedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [RepeatingListAnime, setRepeatingListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
+  // tab4
+  const [tab4Click, setTab4Click] = useState<boolean>(false);
+  const [detailedUserInfo, setDetailedUserInfo] =
+    useState<MediaListCollection>();
 
   const style = getComputedStyle(document.body);
 
@@ -107,23 +97,17 @@ export default function App() {
     }
   };
 
-  const fetchTab2AnimeData = async () => {
+  const fetchTab4AnimeData = async () => {
     try {
-      if (viewerId) {
-        setPlanningListAnimeListAnime(
-          await getViewerList(viewerId, 'PLANNING'),
-        );
-        // setCompletedListAnimeListAnime(
-        //   await getViewerList(viewerId, 'COMPLETED'),
-        // );
-        // setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
-        // setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
-        // setRepeatingListAnimeListAnime(
-        //   await getViewerList(viewerId, 'REPEATING'),
-        // );
+      var id = null;
+      if (logged) {
+        id = await getViewerId();
+        setViewerId(id);
+
+        setDetailedUserInfo(await getUserInfo(id));
       }
     } catch (error) {
-      console.log('Tab2 error: ' + error);
+      console.log('Tab4 error: ' + error);
     }
   };
 
@@ -132,10 +116,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (tab2Click) {
-      fetchTab2AnimeData();
+    if (tab4Click) {
+      fetchTab4AnimeData();
     }
-  }, [tab2Click, viewerId]);
+  }, [tab4Click, viewerId]);
 
   return (
     <AuthContext.Provider value={logged}>
@@ -166,26 +150,21 @@ export default function App() {
                   />
                 }
               />
+              <Route path="/tab2" element={<Tab2 />} />
+              <Route path="/tab3" element={<Tab3 />} />
               {logged && (
                 <Route
-                  path="/tab2"
+                  path="/tab4"
                   element={
-                    <Tab2
-                      currentListAnime={currentListAnime}
-                      planningListAnime={planningListAnime}
-                      // completedListAnime={completedListAnime}
-                      // droppedListAnime={droppedListAnime}
-                      // pausedListAnime={pausedListAnime}
-                      // repeatingListAnime={RepeatingListAnime}
+                    <Tab4
+                      detailedUserInfo={detailedUserInfo}
                       clicked={() => {
-                        !tab2Click && setTab2Click(true);
+                        !tab4Click && setTab4Click(true);
                       }}
                     />
                   }
                 />
               )}
-              <Route path="/tab3" element={<Tab3 />} />
-              <Route path="/tab4" element={<Tab4 />} />
             </Routes>
           </MemoryRouter>
         </SkeletonTheme>

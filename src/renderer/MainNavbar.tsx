@@ -1,6 +1,10 @@
 import './styles/MainNavbar.css';
 
-import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faBookmark,
+  faCompass,
+  IconDefinition,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
@@ -9,6 +13,7 @@ import {
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
   faRightToBracket,
+  faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
@@ -58,7 +63,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
   const logged = useContext(AuthContext);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [showUserModal, setShowUserModal] = useState<boolean>(false);
+
   const [showAuthCodeModal, setShowAuthCodeModal] = useState<boolean>(false);
   const [isPackaged, setIsPackaged] = useState<boolean>(false);
 
@@ -78,43 +83,29 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           active={activeTab === 1}
           onClick={() => setActiveTab(1)}
         />
-        {logged && (
-          <Li
-            text="Library"
-            icon={activeTab === 2 ? faBookmarkFull : faBookmark}
-            to="/tab2"
-            active={activeTab === 2}
-            onClick={() => setActiveTab(2)}
-          />
-        )}
         <Li
           text="Search"
-          icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
-          to="/tab3"
-          active={activeTab === 3}
-          onClick={() => setActiveTab(3)}
+          icon={activeTab === 2 ? faMagnifyingGlassPlus : faMagnifyingGlass}
+          to="/tab2"
+          active={activeTab === 2}
+          onClick={() => setActiveTab(2)}
         />
         <Li
           text="Settings"
           icon={faGear}
-          to="/tab4"
-          active={activeTab === 4}
-          onClick={() => setActiveTab(4)}
+          to="/tab3"
+          active={activeTab === 3}
+          onClick={() => setActiveTab(3)}
         />
         {logged ? (
           <>
-            <UserModal
-              show={showUserModal}
-              onClose={() => setShowUserModal(false)}
-            />
-            <div
+            <Link
+              to="/tab4"
               className="img-wrapper"
-              onClick={() => {
-                setShowUserModal(true);
-              }}
+              onClick={() => setActiveTab(4)}
             >
               <img src={avatar}></img>
-            </div>
+            </Link>
           </>
         ) : (
           <LiLink
