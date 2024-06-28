@@ -247,7 +247,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 >
                   <video
                     ref={trailerRef}
-                    src={`https://yewtu.be/latest_version?id=${listAnimeData.media.trailer?.id}`}
+                    src={`https://inv.tux.pizza/latest_version?id=${listAnimeData.media.trailer?.id}&itag=18`}
                     className="trailer"
                     preload="none"
                     loop

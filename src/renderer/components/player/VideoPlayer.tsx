@@ -405,7 +405,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onClose();
 
     ipcRenderer.send("update-presence", {
-      details: `Watch anime without ads.`,
+      details: `🌸 Watch anime without ads.`,
       state: getRandomDiscordPhrase(),
       startTimestamp: Date.now(),
       largeImageKey: "icon",
