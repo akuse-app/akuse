@@ -201,6 +201,7 @@
     },
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
+      "artifactName": "${os}-akuse-${version}.${ext}",
       "target": {
         "target": "default",
         "arch": [
@@ -229,6 +230,7 @@
       ]
     },
     "win": {
+      "artifactName": "${os}-akuse-${version}.${ext}",
       "target": [
         "nsis"
       ]
@@ -242,7 +244,7 @@
       "license": "LICENSE"
     },
     "linux": {
-      "artifactName": "${os}-${name}-${version}.${ext}",
+      "artifactName": "${os}-akuse-${version}.${ext}",
       "category": "AudioVideo;Video",
       "description": "Simple and easy to use anime streaming desktop app without ads.",
       "desktop": {

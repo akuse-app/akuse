@@ -33,7 +33,7 @@ const AutoUpdateModal: React.FC<{ show: boolean; onClose: () => void }> = ({
   ipcRenderer.on('downloading', async (event, info) => {
     setProgressMB(((info.percent * info.total) / 100 / 1024 / 1024).toFixed(2));
     setTotalMB((info.total / 1024 / 1024).toFixed(2));
-    setDownloadedBarWidth(`${info.percent} "%"`);
+    setDownloadedBarWidth(`"${info.percent}%"`);
   });
 
   return ReactDOM.createPortal(

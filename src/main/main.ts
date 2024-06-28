@@ -211,12 +211,12 @@ app.on('open-url', async (event, url) => {
 
   try {
     let code = url;
-    
+
     if (code.includes('?code=')) {
       code = code.split('?code=')[1];
-      
+
       await handleLogin(code);
-      
+
       if (mainWindow) {
         mainWindow.reload();
       }
@@ -245,7 +245,7 @@ async function handleLogin(code: any) {
 
 // Handle window controls via IPC
 ipcMain.on('shell:open', () => {
-  const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked');
+  const pageDirectory = __dirname.replace('app.asar', 'app.asar.unpacked')
   const pagePath = path.join('file://', pageDirectory, 'index.html');
   shell.openExternal(pagePath);
 });
@@ -286,11 +286,13 @@ autoUpdater.on('download-progress', (info) => {
 
 autoUpdater.on('error', (info) => {
   if (!mainWindow) return;
-  mainWindow.webContents.send('console', info);
+  mainWindow.webContents.send('console-log', info);
 });
 
-ipcMain.on('download-update', () => {
-  let pth = autoUpdater.downloadUpdate();
+ipcMain.on('download-update', async () => {
+  let pth = await autoUpdater.downloadUpdate();
+  if (!mainWindow) return;
+  mainWindow.webContents.send('console-log', pth);
 });
 
 /* DISCORD RPC */
