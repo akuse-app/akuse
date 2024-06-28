@@ -10,6 +10,7 @@ import isAppImage from '../modules/packaging/isAppImage';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { OS } from '../modules/os';
+import { getRandomDiscordPhrase } from '../modules/utils';
 
 const STORE = new Store();
 
@@ -307,9 +308,10 @@ async function setActivity(details?: string, state?: string, startTimestamp?: nu
     return;
   }
 
-  let presence = {
+
+  RPC.setActivity({
     details: details || '🌸 Watch anime without ads.',
-    state: state || 'Browsing the homepage.',
+    state: state || getRandomDiscordPhrase(),
     startTimestamp: startTimestamp || Date.now(),
     largeImageKey: largeImageKey || 'icon',
     largeImageText: largeImageText || 'akuse',
@@ -321,9 +323,7 @@ async function setActivity(details?: string, state?: string, startTimestamp?: nu
         url: 'https://github.com/akuse-app/akuse/releases/latest',
       },
     ],
-  }
-
-  RPC.setActivity(presence);
+  });
 }
 
 RPC.on('ready', () => {

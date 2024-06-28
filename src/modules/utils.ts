@@ -1,10 +1,6 @@
-import Store from 'electron-store';
-
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
-import { animeCustomTitles } from '../modules/animeCustomTitles';
 
-const STORE = new Store();
 const MONTHS = {
   '1': 'January',
   '2': 'February',
@@ -28,6 +24,25 @@ const MONTHS = {
   '11': 'November',
   '12': 'December',
 };
+
+const DISCORD_PHRASES: string[] = [
+  'Fighting Titans to protect humanity.',
+  'Honing Nen abilities.',
+  'Getting the Hunter License.',
+  'Looking for the One Piece.',
+  'Training to become the Hokage.',
+  'On a mission with the Hashira Pillars.',
+  'Enjoying some apples with Ryuk.',
+  'Exploring The Abyss.',
+  'Training with Saitama.',
+  'Rebuilding civilization after the Pietrification.',
+  'Playing poker with my Stand.',
+  'Watching a movie with Makima.',
+  'Attempting to summon Mahoraga.',
+];
+
+export const getRandomDiscordPhrase = (): string =>
+  DISCORD_PHRASES[Math.floor(Math.random() * DISCORD_PHRASES.length)];
 
 export const animeDataToListAnimeData = (
   animeData: AnimeData,

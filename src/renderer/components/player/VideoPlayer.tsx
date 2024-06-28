@@ -13,7 +13,7 @@ import {
   updateAnimeProgress,
 } from '../../../modules/anilist/anilistApi';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
-import { getAvailableEpisodes } from '../../../modules/utils';
+import { getAvailableEpisodes, getRandomDiscordPhrase } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
@@ -70,7 +70,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setActivity(true);
     ipcRenderer.send("update-presence", {
       details: `Watching ${listAnimeData.media.title?.english}`,
-      state: `${episodeTitle} [${episodeNumber}/${listAnimeData.media.episodes}]`,
+      state: episodeTitle,
       startTimestamp: Date.now(),
       largeImageKey: listAnimeData.media.coverImage?.large || "icon",
       largeImageText: listAnimeData.media.title?.english || "akuse",
@@ -406,7 +406,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     ipcRenderer.send("update-presence", {
       details: `Watch anime without ads.`,
-      state: `Browsing the homepage.`,
+      state: getRandomDiscordPhrase(),
       startTimestamp: Date.now(),
       largeImageKey: "icon",
       largeImageText: "akuse",
