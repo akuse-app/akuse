@@ -27,12 +27,25 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
 
 
   useEffect(() => {
-    setSocketService(SocketService.getInstance("http://localhost:3000"));
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"));
   }, []);
 
   const handleCreateParty = () => {
     if(socketService){
       socketService.emit("generateRoomCode");
+      setInterval(() => {
+        socketService.emit("getRoom"); //Make sure the user is still in the room (returns the code or false, if false we set the code variable to null)
+      }, 1000)
+
+      socketService.on("roomCode", (roomCode: string) => {
+        if(roomCode == null){
+          setCode(null);
+        }else{
+          setCode(roomCode);
+          setJoinStatus("true");
+        }
+      })
+
       socketService.on("roomCodeGenerated", (roomCode: string) => {
         toast(`Watch party created!`, {
           style: {
@@ -42,6 +55,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
           },
           icon: '🎉',
         });
+        
         setCode(roomCode);
         navigator.clipboard.writeText(roomCode);
         setCreateDisabled(true);
@@ -53,7 +67,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
           backgroundColor: style.getPropertyValue('--color-3'),
           zIndex: 1
         },
-        icon: '❌',
+        icon: '✅',
       })
     }
   };
@@ -68,7 +82,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
           style: {
             color: style.getPropertyValue('--font-2'),
             backgroundColor: style.getPropertyValue('--color-3'),
-            zIndex: 100000
+            zIndex: 10000
           },
           icon: '✅',
         })
@@ -101,6 +115,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
                         disabled={true}
                         />
                     <button onClick={handleCreateParty} disabled={createDisabled}>Create</button>
+                    {code && <p className="watch-party-code">Party: {code}</p>}
                 </div>
                 Input a code and press "Join".
                 <div className="watch-party-join">
@@ -110,7 +125,7 @@ const WatchPartyModal: React.FC<{ show: boolean; onClose: () => void }> = ({
                         value={joinCode}
                         onChange={(e) => setJoinCode(e.target.value)}
                         />
-                    <button onClick={handleJoinParty}>Join</button>
+                      <button onClick={handleJoinParty}>Join</button>
                     {joinStatus && <p className="join-status">{joinStatus}</p>}
                     {joinErrorMessage && <p className="join-error">{joinErrorMessage}</p>}
                 </div>

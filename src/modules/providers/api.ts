@@ -27,7 +27,6 @@ export const getUniversalEpisodeUrl = async (
     animeCustomTitles[STORE.get('source_flag') as string][
       listAnimeData.media?.id!
     ];
-
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
   if (customTitle) animeTitles.unshift(customTitle.title);
 

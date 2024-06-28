@@ -67,6 +67,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   //Watch party
   const [socketService, setSocketService] = useState<SocketService | null>(null);
+  const [allPlayersLoaded, setAllPlayersLoaded] = useState<boolean>(false);
 
   // controls
   const [showControls, setShowControls] = useState<boolean>(false);
@@ -80,6 +81,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [showPreviousEpisodeButton, setShowPreviousEpisodeButton] =
     useState<boolean>(true);
 
+  const [watchPartyUsers, setWatchPartyUsers] = useState<number>(0);
   // timeline
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
@@ -159,22 +161,51 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       handleVideoPlayerKeydown(event);
     }
   };
-
   useEffect(() => {
-    setSocketService(SocketService.getInstance("http://localhost:3000"));
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"));
     
     if(socketService){
-      console.log("Socket service initialized");
-      socketService.getSocket()?.on('pausePlayback', () => {
-        console.log("A user has paused the playback");
-      })
-
-      socketService.getSocket()?.on('resumePlayback', () => {
-        console.log("A user has resumed the playback");
+      socketService.emit("getRoom")
+      socketService.on("roomUsers", (totalUsers : any) => {
+        setWatchPartyUsers(totalUsers);
       })
     }
-
   });
+
+  useEffect(() => {
+    const socket = socketService?.getSocket();
+    
+    const handlePausePlayback = () => {
+      console.log("A user has paused the playback");
+      setPlaying(false);
+      videoRef.current?.pause();
+    };
+  
+    const handleResumePlayback = () => {
+      console.log("A user has resumed the playback");
+      setPlaying(true);
+      videoRef.current?.play();
+    };
+  
+    if (socket) {
+      socket.on('pausePlayback', handlePausePlayback);
+      socket.on('resumePlayback', handleResumePlayback);
+      socket.on('allPlayersLoaded', handleAllPlayersLoaded);
+    }
+  
+    return () => {
+      // Clean up event listeners when component unmounts or socket service changes
+      socket?.off('pausePlayback', handlePausePlayback);
+      socket?.off('resumePlayback', handleResumePlayback);
+    };
+  }, [socketService]); // Ensure useEffect runs when socketService changes
+
+  const handleAllPlayersLoaded = () => {
+    console.log("All players loaded.");
+    setPlaying(true);
+    videoRef.current?.play();
+    setAllPlayersLoaded(true);
+  }
 
   useEffect(() => {
     const handleDocumentKeydown = (event: KeyboardEvent) => {
@@ -218,12 +249,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     onChangeLoading(loading);
+    socketService?.getSocket()?.emit('load_episode', { data : listAnimeData, episode: episodeNumber });
+    
+    if(loading == false && watchPartyUsers > 1){
+      if(allPlayersLoaded) return;
+      setPlaying(false);
+      videoRef.current?.pause();
+      toast(`Waiting for all players to load. (auto resume waiting.)`, {
+        style: {
+          color: style.getPropertyValue('--font-2'),
+          backgroundColor: style.getPropertyValue('--color-3'),
+          zIndex: 10000
+        },
+        icon: '🎉',
+      });
+      socketService?.getSocket()?.emit('loaded_episode'); //DO NOT REMOVE, THIS WILL CAUSE INFINITE RESTARTING OF THE EPISODE!!!
+    }
   }, [loading]);
 
   useEffect(() => {
     if (video !== null) {
       playHlsVideo(video.url);
       // loadSource(video.url, video.isM3U8 ?? false);
+      console.log(episodesInfo)
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
@@ -265,9 +313,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       try {
         setPlaying(true);
         videoRef.current.play();
-        if(socketService){
-          socketService.getSocket()?.emit('resume_playback');
-        }
+        socketService?.getSocket()?.emit("resume_playback")
       } catch (error) {
         console.log(error);
       }
@@ -279,9 +325,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       try {
         setPlaying(false);
         videoRef.current.pause();
-        if(socketService){
-          socketService.getSocket()?.emit('pause_playback');
-        }
+        socketService?.getSocket()?.emit("pause_playback")
       } catch (error) {
         console.log(error);
       }
@@ -419,10 +463,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if(socketService){
       socketService.emit('leaveRoom');
       socketService.getSocket()?.on('roomLeft', () => {
-        console.log('Room left');
-      })
-      socketService.getSocket()?.on('disconnect', () => {
-        console.log('Disconnected from server');
+        toast("You have left the watch party.", {
+          style:{ 
+            color: style.getPropertyValue('--font-2'),
+            backgroundColor: style.getPropertyValue('--color-3'),
+            zIndex: 10000
+          },
+          icon: '👋',
+        })
       })
     }
   };

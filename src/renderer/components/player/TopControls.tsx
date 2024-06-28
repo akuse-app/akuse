@@ -61,7 +61,7 @@ const TopControls: React.FC<TopControlsProps> = ({
   const [watchPartyTotalUsers, setWatchPartyTotalUsers] = useState<number>(0);
 
   useEffect(() => {
-    setSocketService(SocketService.getInstance("http://localhost:3000"))
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"))
     if(socketService){
       socketService.emit("getRoom")
       socketService.on("roomUsers", (totalUsers : any) => {

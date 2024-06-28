@@ -57,6 +57,14 @@ class SocketService {
     }
   }
 
+  public once(event: string, callback: SocketEvents[keyof SocketEvents]) {
+    if (this.socket) {
+      this.socket.once(event, callback);
+    }else{
+      console.error('Socket is not connected');
+    }
+  }
+
   // Other methods as needed
 
 }

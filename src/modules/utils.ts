@@ -75,7 +75,9 @@ export const getTitle = (animeEntry: Media): string => {
  * @returns anime titles
  */
 export const getTitlesAndSynonyms = (animeEntry: Media): string[] => {
-  var animeTitles: string[] = [];
+  var animeTitles: string[] = []; 
+
+  console.log(animeEntry);
 
   if (!animeEntry.title) return animeTitles;
 
@@ -319,6 +321,7 @@ export const parseAirdate = (airdate: string) =>
  * @returns parsed anime titles
  */
 export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
+  console.log(animeEntry)
   var animeTitles = getTitlesAndSynonyms(animeEntry);
 
   // const customTitle =

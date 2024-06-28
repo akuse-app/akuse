@@ -86,14 +86,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [code, setCode] = useState<string | null>(null);
 
   useEffect(() => {
-    setSocketService(SocketService.getInstance("http://localhost:3000"))
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"))
     if(socketService){
       socketService.emit("getRoomCode")
       socketService.on("roomCode", (code: string) => {  
         setCode(code)
       })
     }
-  })
+  }, [])
 
   useEffect(() => {
     if (!episodesInfoHasFetched) fetchEpisodesInfo();
@@ -175,30 +175,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const playEpisode = async (episode: number) => {
     if (trailerRef.current) trailerRef.current.pause();
-
-    if(socketService && code){
-      socketService.getSocket()?.emit("load_episode", listAnimeData, episode);
-      console.log(`Loading: ${listAnimeData.media.title?.english} ep: ${episode} from watch party.`)
-
-      setShowPlayer(true);
-      setLoading(true);
-      setAnimeEpisodeNumber(episode);
-
-      getUniversalEpisodeUrl(listAnimeData, episode).then((data) => {
-        
-        if (!data) {
-          toast(`Source not found.`, {
-            style: {
-              color: style.getPropertyValue('--font-2'),
-              backgroundColor: style.getPropertyValue('--color-3'),
-            },
-            icon: '❌',
-          });
-          setLoading(false);
-        }
-        setPlayerIVideo(data);
-      });
-    }else{
      
       setShowPlayer(true);
       setLoading(true);
@@ -219,9 +195,15 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           return;
         }
         setPlayerIVideo(data);
+
+        if(socketService && code && listAnimeData.media){
+          console.log(listAnimeData.media)
+          socketService.getSocket()?.emit("load_episode", { animeData: listAnimeData, episode: episode }, code);
+          console.log(`Loading: ${listAnimeData.media.title?.english} ep: ${episode} from watch party.`)
+        }
+
       });
-      
-    }
+
   };
 
   const handleLocalProgressChange = (localProgress: number) => {

@@ -29,6 +29,14 @@ import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
+import SocketService from '../constants/socketserver';
+import { getUniversalEpisodeUrl } from '../modules/providers/api';
+import toast from 'react-hot-toast';
+import { IVideo } from '@consumet/extensions';
+import VideoPlayer from './components/player/VideoPlayer';
+import { EpisodeInfo } from '../types/types';
+import axios from 'axios';
+import { EPISODES_INFO_URL } from '../constants/utils';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -37,11 +45,93 @@ ipcRenderer.on('console-log', (event, toPrint) => {
 const store = new Store();
 export const AuthContext = createContext<boolean>(false);
 export const ViewerIdContext = createContext<number | null>(null);
+const style = getComputedStyle(document.body);
 
-export default function App() {
+let dataAnime : ListAnimeData = {} as ListAnimeData;
+
+
+export default function App(){
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+
+  const [showPlayer, setShowPlayer] = useState<boolean>(false);
+  const [playerIVideo, setPlayerIVideo] = useState<IVideo | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [animeEpisodeNumber, setAnimeEpisodeNumber] = useState<number>(0);  
+  const [episodesInfo, setEpisodesInfo] = useState<EpisodeInfo[]>([] as EpisodeInfo[]);
+  const [listAnimeData, setListAnimeData] = useState<ListAnimeData>({} as ListAnimeData);
+  const [episode, setEpisode] = useState<number>(0);
+  const [localProgress, setLocalProgress] = useState<number>(0);
+
+  const fetchEpisodesInfo = async () => {
+    console.log(dataAnime)
+    if(dataAnime.media){
+      axios.get(`${EPISODES_INFO_URL}${dataAnime.media.id}`).then((data) => {
+        if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
+      });
+      return
+    }else console.log(`dataAnime.media not found.`)
+  };
+
+  useEffect(() => {
+    const socket = socketService?.getSocket();
+  
+    if (socket) {
+      socket.on('loadEpisode', async (data: any) => {
+        const { animeData, episode } = data;
+  
+        try {
+          // Update state with animeData
+          setListAnimeData(data.data);
+          dataAnime = data.data as ListAnimeData;
+          // Fetch episode info
+          await fetchEpisodesInfo();
+  
+          // Set episode number and initialize player
+          setEpisode(episode)
+
+  
+          // Fetch universal episode URL
+          const urlData = await getUniversalEpisodeUrl(data.data, episode);
+          
+          if (!urlData) {
+            toast(`Source not found.`, {
+              style: {
+                color: style.getPropertyValue('--font-2'),
+                backgroundColor: style.getPropertyValue('--color-3'),
+              },
+              icon: '❌',
+            });
+            setLoading(false);
+            return;
+          }
+          setAnimeEpisodeNumber(episode);
+          setShowPlayer(true);
+          setLoading(true);
+          // Set player with video URL
+          setPlayerIVideo(urlData);
+        } catch (error) {
+          console.error('Error handling loadEpisode event:', error);
+          // Handle error if necessary
+        }
+      });
+    }
+  
+    // Clean up event listener on component unmount
+    return () => {
+      socket?.off('loadEpisode');
+    };
+  }, [socketService]); // Ensure useEffect runs when socketService changes
+  
+
+  useEffect(() => {
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"))
+  })
+
+  
 
   setDefaultStoreVariables();
 
@@ -83,6 +173,23 @@ export default function App() {
   // >(undefined);
 
   const style = getComputedStyle(document.body);
+
+  const handleLocalProgressChange = (localProgress: number) => {
+    setLocalProgress(localProgress);
+  };
+
+  const handleChangeLoading = (value: boolean) => {
+    setLoading(value);
+  };
+
+  const handlePlayerClose = () => {
+    try {
+      setShowPlayer(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   const fetchTab1AnimeData = async () => {
     try {
@@ -138,6 +245,20 @@ export default function App() {
   }, [tab2Click, viewerId]);
 
   return (
+    <>
+      {showPlayer && listAnimeData && (
+        <VideoPlayer
+          video={playerIVideo}
+          listAnimeData={listAnimeData}
+          episodesInfo={episodesInfo}
+          animeEpisodeNumber={animeEpisodeNumber}
+          show={showPlayer}
+          loading={loading}
+          onLocalProgressChange={handleLocalProgressChange}
+          onChangeLoading={handleChangeLoading}
+          onClose={handlePlayerClose}
+        />
+      )}
     <AuthContext.Provider value={logged}>
       <ViewerIdContext.Provider value={viewerId}>
         <SkeletonTheme
@@ -191,5 +312,6 @@ export default function App() {
         </SkeletonTheme>
       </ViewerIdContext.Provider>
     </AuthContext.Provider>
+    </>
   );
 }

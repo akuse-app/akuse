@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '../../../modules/utils';
 import { faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
+import SocketService from '../../../constants/socketserver';
 
 const STORE = new Store();
 
@@ -36,6 +37,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [progressBarWidth, setProgressBarWidth] = useState<string>('0%');
   const [bufferedBarWidth, setBufferedBarWidth] = useState<string>('0%');
 
+  const [socketService, setSocketService] = useState<SocketService | null>(null);
+
   const [offsetX, setOffsetX] = useState(0);
   const [percent, setPercent] = useState(0);
 
@@ -45,6 +48,25 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
+
+  const currentTimeRef = useRef<number>(0);
+
+  useEffect(() => {
+    const service = SocketService.getInstance("http://212.71.238.205:3000");
+    setSocketService(service);
+
+    service?.getSocket()?.on('setRoomTimestamp', (timestamp: number) => {
+      currentTimeRef.current = timestamp;
+      setVideoCurrentTime(formatTime(timestamp));  
+      setRemainingTime(formatTime((duration ?? 0) - timestamp));
+      setVideoDuration(formatTime(duration ?? 0));
+      setProgressBarWidth(`${((timestamp ?? 0) / (duration ?? 0)) * 100}%`);
+
+      if (videoRef.current) {
+        videoRef.current.currentTime = timestamp; // Seek the video
+      }
+    });
+  }, []);
 
   useEffect(() => {
     setVideoCurrentTime(formatTime(videoRef.current?.currentTime ?? 0));
@@ -67,6 +89,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   useEffect(() => {
     window.addEventListener('mouseup', () => {
       setIsMouseDown(false);
+      socketService?.getSocket()?.emit('set_timestamp', videoRef.current?.currentTime)
     });
   });
 

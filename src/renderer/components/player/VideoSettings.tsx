@@ -87,7 +87,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
   }, [hls]);
 
   useEffect(() => {
-    setSocketService(SocketService.getInstance("http://localhost:3000"));
+    setSocketService(SocketService.getInstance("http://212.71.238.205:3000"));
   }, []);
 
   const toggleShow = () => {

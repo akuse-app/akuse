@@ -14,6 +14,7 @@
   position: relative;
   margin-top: 5px;
   margin-bottom: 25px;
+  border-radius: 5px;
 }
 .watch-party-create input{
   background-color: var(--color-3);
@@ -21,17 +22,20 @@
   height: 35px;
   width: 100%;
   height: 30px;
+  border-radius: 5px;
 }
 
 .watch-party-create button{
   position: absolute;
-  right: 0;
-  top: 7px;
-  height: 20px;
+  right: -6px;
+  top: 1px;
+  height: 33px;
+  width: 50px;
   background-color: var(--color-important);
   border: none;
   box-shadow: none;
   transition: 0.2s ease-in-out all;
+  border-radius: 5px;
 }
 .watch-party-create button:hover{
   color: white;
@@ -47,17 +51,20 @@
   height: 35px;
   width: 100%;
   height: 30px;
+  border-radius: 5px;
 }
 
 .watch-party-join button{
   position: absolute;
-  right: 0;
-  top: 7px;
-  height: 20px;
+  right: -6px;
+  top: 1px;
+  height: 33px;
+  width: 50px;
   background-color: var(--color-important);
   border: none;
   box-shadow: none;
   transition: 0.2s ease-in-out all;
+  border-radius: 5px;
 }
 .watch-party-join button:hover{
   color: white;
