@@ -30,8 +30,9 @@ export const animeCustomTitles: AnimeCustomTitles = {
     '11061': { title: `Hunter X Hunter (2011)`, index: 1 },
     '16498': {
       title: ` Shingeki no Kyojin
-    `,
+      `,
       index: 1,
     },
+    '113415': { title: `Jujutsu Kaisen`, index: 5 }, // VERY unstable :(
   },
 };
