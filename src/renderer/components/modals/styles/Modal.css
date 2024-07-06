@@ -8,7 +8,9 @@
   height: 100%;
   z-index: 19;
   background-color: var(--color-dark-opacity);
-  backdrop-filter: blur(2px);
+
+  /* too laggy :( */
+  /* backdrop-filter: blur(2px); */
 }
 
 .modal-page-wrapper {
