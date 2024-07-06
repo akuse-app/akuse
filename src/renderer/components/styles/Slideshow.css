@@ -72,9 +72,10 @@
 }
 
 .slideshow-container .anime-description {
-  font-size: 0.8rem;
-  color: var(--font-3);
+  font-size: 0.9rem;
+  color: var(--font-2);
   display: -webkit-box;
+  line-height: 20px;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
