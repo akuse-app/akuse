@@ -181,8 +181,8 @@
   height: 100%;
   position: absolute;
   opacity: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  /* box-shadow: inset 0px -40px 100px -40px #000000, inset 0px 40px 100px -40px #000000; */
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0px -60px 60px rgba(0, 0, 0, 0.5), inset 0px 60px 60px rgba(0, 0, 0, 0.5);
   transition: 0.3s;
   cursor: none;
 }
@@ -349,7 +349,7 @@
   opacity: 0;
   width: 400px;
   opacity: 0.95;
-  backdrop-filter: blur(50px);
+  /* backdrop-filter: blur(50px); */
   list-style: none;
   overflow: hidden;
   border-radius: var(--border-radius);
