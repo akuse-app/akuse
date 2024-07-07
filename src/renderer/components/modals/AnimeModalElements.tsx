@@ -40,13 +40,9 @@ import {
   updateAnimeFromList,
 } from '../../../modules/anilist/anilistApi';
 
-interface AnimeModalStatusProps {
+export const AnimeModalStatus: React.FC<{
   status: MediaStatus | undefined;
-}
-
-export const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({
-  status,
-}) => {
+}> = ({ status }) => {
   const style = getComputedStyle(document.body);
   const parsedStatus = getParsedStatus(status);
 
@@ -96,13 +92,9 @@ export const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({
   );
 };
 
-interface AnimeModalGenresProps {
+export const AnimeModalGenres: React.FC<{
   genres: string[];
-}
-
-export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
-  genres,
-}) => {
+}> = ({ genres }) => {
   return (
     <p className="additional-info">
       {'Genres: '}
@@ -116,13 +108,9 @@ export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
   );
 };
 
-interface AnimeModalOtherTitlesProps {
+export const AnimeModalOtherTitles: React.FC<{
   synonyms: string[];
-}
-
-export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
-  synonyms,
-}) => {
+}> = ({ synonyms }) => {
   return (
     <p className="additional-info">
       {synonyms.length !== 0 && 'Other titles: '}
@@ -136,13 +124,9 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
   );
 };
 
-interface AnimeModalEpisodesProps {
+export const AnimeModalEpisodes: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
-  listAnimeData,
-}) => {
+}> = ({ listAnimeData }) => {
   const format = getParsedFormat(listAnimeData.media.format);
   const duration = listAnimeData.media.duration;
   const status = getParsedStatus(listAnimeData.media.status);
@@ -176,13 +160,9 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
   );
 };
 
-interface AnimeModalDescriptionProps {
+export const AnimeModalDescription: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
-  listAnimeData,
-}) => {
+}> = ({ listAnimeData }) => {
   const descriptionRef = useRef<HTMLDivElement>(null);
 
   const [fullText, setFullText] = useState<boolean>(false);
@@ -244,19 +224,12 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
   );
 };
 
-interface AnimeModalWatchButtonsProps {
+export const AnimeModalWatchButtons: React.FC<{
   listAnimeData: ListAnimeData;
   localProgress?: number;
   onPlay: (episode: number) => void;
   loading: boolean;
-}
-
-export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
-  listAnimeData,
-  localProgress,
-  onPlay,
-  loading = false,
-}) => {
+}> = ({ listAnimeData, localProgress, onPlay, loading = false }) => {
   const logged = useContext(AuthContext);
 
   const [progress, setProgress] = useState<number | undefined>(
@@ -335,13 +308,9 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   );
 };
 
-interface IsInListButtonProps {
+export const IsInListButton: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const IsInListButton: React.FC<IsInListButtonProps> = ({
-  listAnimeData,
-}) => {
+}> = ({ listAnimeData }) => {
   const [inList, setInList] = useState<boolean>(false);
   const [listId, setListId] = useState<number | undefined>(
     listAnimeData.media.mediaListEntry?.id,
@@ -367,8 +336,8 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
   }, []);
 
   return inList ? (
-    <ButtonCircle icon={faCheck} tint="empty" shadow onClick={removeFromList} />
+    <ButtonCircle icon={faCheck} tint="empty" shadow tooltipText='Remove from list' onClick={removeFromList} />
   ) : (
-    <ButtonCircle icon={faBookmark} tint="empty" shadow onClick={addToList} />
+    <ButtonCircle icon={faBookmark} tint="empty" shadow tooltipText='Add to list' onClick={addToList} />
   );
 };

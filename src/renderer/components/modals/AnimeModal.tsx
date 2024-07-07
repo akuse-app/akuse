@@ -84,10 +84,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
-    if(!showPlayer) {
-      setPlayerIVideo(null)
+    if (!showPlayer) {
+      setPlayerIVideo(null);
     }
-  }, [showPlayer])
+  }, [showPlayer]);
 
   useEffect(() => {
     try {
@@ -234,6 +234,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
                     tint="empty"
                     shadow
+                    tooltipText={trailerVolumeOn ? 'Volume off' : 'Volume on'}
                     onClick={toggleTrailerVolume}
                   />
                 </div>

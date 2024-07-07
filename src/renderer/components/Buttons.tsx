@@ -8,7 +8,7 @@ import Dots from 'react-activity/dist/Dots';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tint?: 'primary' | 'light' | 'dark' | 'warning' | 'empty';
   shadow?: boolean;
-  disabled?: boolean
+  disabled?: boolean;
 }
 
 interface ButtonMainProps extends ButtonProps {
@@ -48,6 +48,7 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
 interface ButtonCircleProps extends ButtonProps {
   icon: IconDefinition;
   small?: boolean;
+  tooltipText?: string; // Nuova prop per il testo del tooltip
 }
 
 export const ButtonCircle: React.FC<ButtonCircleProps> = ({
@@ -56,14 +57,18 @@ export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   shadow = false,
   small = false,
   disabled = false,
+  tooltipText, // Destructure della prop aggiunta
   ...rest
 }) => {
   return (
     <button
-      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''}  ${disabled ? 'disabled' : ''}`}
+      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''} ${disabled ? 'disabled' : ''}`}
       {...rest}
     >
-      <FontAwesomeIcon className="i" icon={icon} />
+      <div className="tooltip">
+        <FontAwesomeIcon className="i" icon={icon} />
+        {tooltipText && <span className="tooltip-text">{tooltipText}</span>}
+      </div>
     </button>
   );
 };

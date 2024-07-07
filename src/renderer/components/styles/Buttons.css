@@ -99,3 +99,38 @@ button.bm.disabled,
 button.bc.disabled {
   opacity: 0.5;
 }
+
+/* button circle hover tooltip */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  white-space: nowrap;
+  width: auto;
+  background-color: var(--font-1);
+  color: black;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 14px;
+  position: absolute;
+  z-index: 1;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  will-change: transform;
+  /* transform: translateY(210px); */
+  transition: opacity 0.3s;
+}
+
+button.bc:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  /* transform: translateY(0); */
+}
