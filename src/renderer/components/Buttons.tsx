@@ -4,6 +4,9 @@ import 'react-activity/dist/Dots.css';
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dots from 'react-activity/dist/Dots';
+import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tint?: 'primary' | 'light' | 'dark' | 'warning' | 'empty';
@@ -45,10 +48,17 @@ export const ButtonMain: React.FC<ButtonMainProps> = ({
   );
 };
 
+type HoverButton = {
+  icon: IconDefinition;
+  text: string;
+  action: () => void;
+};
+
 interface ButtonCircleProps extends ButtonProps {
   icon: IconDefinition;
   small?: boolean;
-  tooltipText?: string; // Nuova prop per il testo del tooltip
+  tooltipText?: string;
+  hoverButtons?: HoverButton[];
 }
 
 export const ButtonCircle: React.FC<ButtonCircleProps> = ({
@@ -57,18 +67,45 @@ export const ButtonCircle: React.FC<ButtonCircleProps> = ({
   shadow = false,
   small = false,
   disabled = false,
-  tooltipText, // Destructure della prop aggiunta
+  tooltipText,
+  hoverButtons,
   ...rest
 }) => {
+  const [showHoverButtons, setShowHoverButtons] = useState<boolean>(false);
+
+  const handleShowHoverButtons = () => {
+    setShowHoverButtons(true);
+    console.log('ciao');
+  };
+
+  const handleHideHoverButtons = () => {
+    setShowHoverButtons(false);
+  };
+
   return (
-    <button
-      className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''} ${disabled ? 'disabled' : ''}`}
-      {...rest}
-    >
-      <div className="tooltip">
-        <FontAwesomeIcon className="i" icon={icon} />
-        {tooltipText && <span className="tooltip-text">{tooltipText}</span>}
-      </div>
-    </button>
+    <div className="circle-button-container">
+      {hoverButtons && (
+        <div className="hover-buttons">
+          {hoverButtons?.map((value) => (
+            <ButtonCircle
+              icon={value.icon}
+              tint="empty"
+              shadow
+              tooltipText={value.text}
+              onClick={value.action}
+            />
+          ))}
+        </div>
+      )}
+      <button
+        className={`bc ${tint} ${shadow ? 'shadow' : ''} ${small ? 'small' : ''} ${disabled ? 'disabled' : ''}`}
+        {...rest}
+      >
+        <div className="tooltip">
+          <FontAwesomeIcon className="i" icon={icon} />
+          {tooltipText && <span className="tooltip-text">{tooltipText}</span>}
+        </div>
+      </button>
+    </div>
   );
 };

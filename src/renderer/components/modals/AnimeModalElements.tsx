@@ -7,7 +7,9 @@ import {
   faClock,
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBookmark as faBookmarkSolid,
   faBan,
+  faCheck,
   faChevronDown,
   faChevronUp,
   faFilm,
@@ -15,13 +17,17 @@ import {
   faPlay,
   faRotate,
   faStopwatch,
-  faBookmark as faBookmarkFull,
-  faCheck,
+  faXmark,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+import {
+  deleteAnimeFromList,
+  updateAnimeFromList,
+} from '../../../modules/anilist/anilistApi';
 import {
   getAvailableEpisodes,
   getEpisodes,
@@ -32,13 +38,13 @@ import {
   parseDescription,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import { MediaStatus } from '../../../types/anilistGraphQLTypes';
-import { AuthContext } from '../../App';
-import { ButtonCircle, ButtonLoading, ButtonMain } from '../Buttons';
 import {
-  deleteAnimeFromList,
-  updateAnimeFromList,
-} from '../../../modules/anilist/anilistApi';
+  MediaListStatus,
+  MediaStatus,
+} from '../../../types/anilistGraphQLTypes';
+import { AuthContext } from '../../App';
+import { ButtonCircle, ButtonMain } from '../Buttons';
+import { stat } from 'fs';
 
 export const AnimeModalStatus: React.FC<{
   status: MediaStatus | undefined;
@@ -236,6 +242,10 @@ export const AnimeModalWatchButtons: React.FC<{
     getProgress(listAnimeData.media),
   );
 
+  const [listStatus, setListStatus] = useState<MediaListStatus | undefined>(
+    listAnimeData.media.mediaListEntry?.status,
+  );
+
   // const progress = getProgress(listAnimeData.media);
   const episodes = getEpisodes(listAnimeData.media);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
@@ -244,6 +254,10 @@ export const AnimeModalWatchButtons: React.FC<{
   useEffect(() => {
     if (localProgress) setProgress(localProgress);
   }, [localProgress]);
+
+  const handleListStatusChange = (status: MediaListStatus | undefined) => {
+    setListStatus(status);
+  };
 
   return logged ? (
     <div className="watch-buttons">
@@ -293,7 +307,19 @@ export const AnimeModalWatchButtons: React.FC<{
         </>
       )}
 
-      <IsInListButton listAnimeData={listAnimeData} />
+      {listStatus === 'CURRENT' || listStatus === 'REPEATING' ? (
+        <RemoveButton
+          listAnimeData={listAnimeData}
+          listStatus={listStatus}
+          onListStatusChange={handleListStatusChange}
+        />
+      ) : (
+        <IsInListButton
+          listAnimeData={listAnimeData}
+          listStatus={listStatus}
+          onListStatusChange={handleListStatusChange}
+        />
+      )}
     </div>
   ) : (
     <div className="watch-buttons">
@@ -310,7 +336,9 @@ export const AnimeModalWatchButtons: React.FC<{
 
 export const IsInListButton: React.FC<{
   listAnimeData: ListAnimeData;
-}> = ({ listAnimeData }) => {
+  listStatus?: MediaListStatus | undefined;
+  onListStatusChange: (status: MediaListStatus | undefined) => void;
+}> = ({ listAnimeData, listStatus, onListStatusChange }) => {
   const [inList, setInList] = useState<boolean>(false);
   const [listId, setListId] = useState<number | undefined>(
     listAnimeData.media.mediaListEntry?.id,
@@ -318,7 +346,10 @@ export const IsInListButton: React.FC<{
 
   const removeFromList = () => {
     deleteAnimeFromList(listId).then((deleted) => {
-      if (deleted) setInList(false);
+      if (deleted) {
+        setInList(false);
+        onListStatusChange(undefined);
+      }
     });
   };
 
@@ -327,17 +358,56 @@ export const IsInListButton: React.FC<{
       if (data) {
         setListId(data);
         setInList(true);
+        onListStatusChange('PLANNING');
       }
     });
   };
 
   useEffect(() => {
-    setInList(!!listAnimeData.media.mediaListEntry);
+    setInList(listStatus === 'PLANNING');
   }, []);
 
-  return inList ? (
-    <ButtonCircle icon={faCheck} tint="empty" shadow tooltipText='Remove from list' onClick={removeFromList} />
-  ) : (
-    <ButtonCircle icon={faBookmark} tint="empty" shadow tooltipText='Add to list' onClick={addToList} />
+  return (
+    <ButtonCircle
+      icon={inList ? faBookmarkSolid : faBookmark}
+      tint="empty"
+      shadow
+      tooltipText={inList ? 'Remove from list' : 'Add to list'}
+      onClick={inList ? removeFromList : addToList}
+    />
+  );
+};
+
+export const RemoveButton: React.FC<{
+  listAnimeData: ListAnimeData;
+  listStatus?: MediaListStatus | undefined;
+  onListStatusChange: (status: MediaListStatus | undefined) => void;
+}> = ({ listAnimeData, listStatus, onListStatusChange }) => {
+  const markAsCompleted = () => {
+    updateAnimeFromList(listAnimeData.media.id, 'COMPLETED').then((data) => {
+      if (data) {
+        onListStatusChange('COMPLETED');
+      }
+    });
+  };
+
+  const markAsDropped = () => {
+    updateAnimeFromList(listAnimeData.media.id, 'DROPPED').then((data) => {
+      if (data) {
+        onListStatusChange('DROPPED');
+      }
+    });
+  };
+
+  return (
+    <ButtonCircle
+      icon={faXmark}
+      tint="empty"
+      hoverButtons={[
+        { icon: faCheck, text: 'Completed', action: markAsCompleted },
+        { icon: faTrash, text: 'Dropped', action: markAsDropped },
+      ]}
+      shadow
+    />
   );
 };

@@ -118,14 +118,18 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const fetchEpisodesInfo = async () => {
-    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
-      if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
-      data.data.images &&
-        setAlternativeBanner(
-          getUrlByCoverType(data.data.images, 'fanart') ?? undefined,
-        );
-      setEpisodesInfoHasFetched(true);
-    });
+    axios
+      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
+      .then((data) => {
+        if (data.data && data.data.episodes)
+          setEpisodesInfo(data.data.episodes);
+        data.data.images &&
+          setAlternativeBanner(
+            getUrlByCoverType(data.data.images, 'fanart') ?? undefined,
+          );
+        setEpisodesInfoHasFetched(true);
+      })
+      .catch(() => {});
   };
 
   const handleTrailerPlay = () => {

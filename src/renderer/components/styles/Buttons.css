@@ -100,6 +100,35 @@ button.bc.disabled {
   opacity: 0.5;
 }
 
+/* button circle hover buttons */
+
+.circle-button-container {
+  position: relative;
+}
+
+.circle-button-container .hover-buttons {
+  position: absolute;
+  /* can't figure out how to center automatically :( */
+  top: -9px;
+  left: -90%;
+  display: flex;
+  gap: 18px;
+  visibility: hidden;
+  opacity: 0;
+  padding: 10px;
+  background-color: var(--color-1);
+  border-radius: 100px;
+  transform: scale(0.9);
+}
+
+.circle-button-container:hover .hover-buttons button,
+.circle-button-container:hover .hover-buttons {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transition: 0.2s;
+}
+
 /* button circle hover tooltip */
 
 .tooltip {
@@ -109,6 +138,7 @@ button.bc.disabled {
 
 .tooltip .tooltip-text {
   visibility: hidden;
+  position: absolute;
   white-space: nowrap;
   width: auto;
   background-color: var(--font-1);
@@ -118,7 +148,6 @@ button.bc.disabled {
   text-align: center;
   border-radius: 6px;
   padding: 8px 14px;
-  position: absolute;
   z-index: 1;
   bottom: 50px;
   left: 50%;

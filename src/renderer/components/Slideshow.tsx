@@ -65,9 +65,13 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
   }, [isVisible]);
 
   const fetchEpisodesInfo = async () => {
-    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
-      if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
-    });
+    axios
+      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
+      .then((data) => {
+        if (data.data && data.data.episodes)
+          setEpisodesInfo(data.data.episodes);
+      })
+      .catch(() => {});
   };
 
   const handlePressButton = async () => {
@@ -165,7 +169,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
                   if (!hasModalBeenShowed) setHasModalBeenShowed(true);
                 }}
               />
-              <IsInListButton listAnimeData={listAnimeData} />
+              {/* <IsInListButton listAnimeData={listAnimeData} /> */}
             </div>
           </div>
         </div>
