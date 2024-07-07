@@ -42,6 +42,22 @@ button.bc.small {
   font-size: 1rem;
 }
 
+button.bc.empty {
+  color: var(--font-1);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--font-3);
+}
+
+button.bc.empty:hover:not(.disabled) {
+  background-color: rgba(90, 90, 90, 0.5);
+  border: 2px solid var(--font-2);
+}
+
+button.bc.empty:active:not(.disabled) {
+  background-color: rgba(120, 120, 120, 0.5);
+  border: 2px solid var(--font-3);
+}
+
 /* COMMON */
 
 button.bm.shadow,

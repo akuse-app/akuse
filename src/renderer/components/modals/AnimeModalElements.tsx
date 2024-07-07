@@ -16,6 +16,7 @@ import {
   faRotate,
   faStopwatch,
   faBookmark as faBookmarkFull,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
@@ -366,13 +367,8 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
   }, []);
 
   return inList ? (
-    <ButtonCircle
-      icon={faBookmarkFull}
-      tint="light"
-      shadow
-      onClick={removeFromList}
-    />
+    <ButtonCircle icon={faCheck} tint="empty" shadow onClick={removeFromList} />
   ) : (
-    <ButtonCircle icon={faBookmark} tint="light" shadow onClick={addToList} />
+    <ButtonCircle icon={faBookmark} tint="empty" shadow onClick={addToList} />
   );
 };

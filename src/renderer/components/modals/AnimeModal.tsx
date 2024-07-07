@@ -232,7 +232,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 <div className="trailer-volume show-trailer">
                   <ButtonCircle
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
-                    tint="light"
+                    tint="empty"
                     shadow
                     onClick={toggleTrailerVolume}
                   />
