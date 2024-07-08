@@ -49,7 +49,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   };
 
   return (
-    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={`${title.toLowerCase().replace(' ', '-')}-section`}>
       <h1>{title}</h1>
       {enableButtons && (
         <div

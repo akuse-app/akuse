@@ -113,7 +113,6 @@ const createWindow = async () => {
 };
 
 ipcMain.handle('get-is-packaged', async () => {
-  console.log(app.isPackaged);
   return app.isPackaged;
 });
 
