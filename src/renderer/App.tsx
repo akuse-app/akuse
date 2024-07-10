@@ -47,24 +47,15 @@ export default function App() {
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
-  const [currentListAnime, setCurrentListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [trendingAnime, setTrendingAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [mostPopularAnime, setMostPopularAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [nextReleasesAnime, setNextReleasesAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
+  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>();
+  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
+  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
+  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
 
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
-  const [planningListAnime, setPlanningListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
+  const [planningListAnime, setPlanningListAnimeListAnime] =
+    useState<ListAnimeData[]>();
 
   const style = getComputedStyle(document.body);
   setDefaultStoreVariables();
