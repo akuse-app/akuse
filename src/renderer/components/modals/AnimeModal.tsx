@@ -129,7 +129,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           );
         setEpisodesInfoHasFetched(true);
       })
-      .catch(() => {});
+      .catch(() => {setEpisodesInfoHasFetched(true);});
   };
 
   const handleTrailerPlay = () => {
