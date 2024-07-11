@@ -13,7 +13,10 @@ import {
   updateAnimeProgress,
 } from '../../../modules/anilist/anilistApi';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
-import { getAvailableEpisodes, getRandomDiscordPhrase } from '../../../modules/utils';
+import {
+  getAvailableEpisodes,
+  getRandomDiscordPhrase,
+} from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
@@ -66,16 +69,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [progressUpdated, setProgressUpdated] = useState<boolean>(false);
   const [activity, setActivity] = useState<boolean>(false);
 
-  if(!activity && episodeTitle){
+  if (!activity && episodeTitle) {
     setActivity(true);
-    ipcRenderer.send("update-presence", {
+    ipcRenderer.send('update-presence', {
       details: `Watching ${listAnimeData.media.title?.english}`,
       state: episodeTitle,
       startTimestamp: Date.now(),
-      largeImageKey: listAnimeData.media.coverImage?.large || "icon",
-      largeImageText: listAnimeData.media.title?.english || "akuse",
+      largeImageKey: listAnimeData.media.coverImage?.large || 'icon',
+      largeImageText: listAnimeData.media.title?.english || 'akuse',
       smallImageKey: 'icon',
-      buttons: [{label: "Download app", url: "https://github.com/akuse-app/akuse/releases/latest"}]})
+      buttons: [
+        {
+          label: 'Download app',
+          url: 'https://github.com/akuse-app/akuse/releases/latest',
+        },
+      ],
+    });
   }
 
   // controls
@@ -94,10 +103,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
 
-  // const [videoLoading, setLoading] = useState<boolean>(loading);
-
   // keydown handlers
-
   const handleVideoPlayerKeydown = async (
     event: KeyboardEvent | React.KeyboardEvent<HTMLVideoElement>,
   ) => {
@@ -216,7 +222,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     if (video !== null) {
       playHlsVideo(video.url);
-      // loadSource(video.url, video.isM3U8 ?? false);
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
@@ -236,6 +241,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const playHlsVideo = (url: string) => {
     try {
+      console.log(url)
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
@@ -306,7 +312,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleTimeUpdate = () => {
     if (!videoRef.current?.paused) {
       setPlaying(true);
-      onChangeLoading(false)
+      onChangeLoading(false);
     }
 
     const cTime = videoRef.current?.currentTime;
@@ -401,15 +407,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setFullscreen(false);
       document.exitFullscreen();
     }
-    
+
     onClose();
 
-    ipcRenderer.send("update-presence", {
+    ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
       state: getRandomDiscordPhrase(),
       startTimestamp: Date.now(),
-      largeImageKey: "icon",
-      largeImageText: "akuse",
+      largeImageKey: 'icon',
+      largeImageText: 'akuse',
       smallImageKey: undefined,
       instance: true,
       buttons: [
@@ -418,7 +424,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           url: 'https://github.com/akuse-app/akuse/releases/latest',
         },
       ],
-    })
+    });
   };
 
   const toggleFullScreenWithoutPropagation = (event: any) => {

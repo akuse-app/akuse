@@ -42,6 +42,22 @@ button.bc.small {
   font-size: 1rem;
 }
 
+button.bc.empty {
+  color: var(--font-1);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--font-3);
+}
+
+button.bc.empty:hover:not(.disabled) {
+  background-color: rgba(90, 90, 90, 0.5);
+  border: 2px solid var(--font-2);
+}
+
+button.bc.empty:active:not(.disabled) {
+  background-color: rgba(120, 120, 120, 0.5);
+  border: 2px solid var(--font-3);
+}
+
 /* COMMON */
 
 button.bm.shadow,
@@ -82,4 +98,68 @@ button.bc:active:not(.disabled) {
 button.bm.disabled,
 button.bc.disabled {
   opacity: 0.5;
+}
+
+/* button circle hover buttons */
+
+.circle-button-container {
+  position: relative;
+}
+
+.circle-button-container .hover-buttons {
+  position: absolute;
+  /* can't figure out how to center automatically :( */
+  top: -9px;
+  left: -90%;
+  display: flex;
+  gap: 18px;
+  visibility: hidden;
+  opacity: 0;
+  padding: 10px;
+  background-color: var(--color-1);
+  border-radius: 100px;
+  transform: scale(0.9);
+}
+
+.circle-button-container:hover .hover-buttons button,
+.circle-button-container:hover .hover-buttons {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transition: 0.2s;
+}
+
+/* button circle hover tooltip */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: auto;
+  background-color: var(--font-1);
+  color: black;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 14px;
+  z-index: 1;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  will-change: transform;
+  /* transform: translateY(210px); */
+  transition: opacity 0.3s;
+}
+
+button.bc:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  /* transform: translateY(0); */
 }

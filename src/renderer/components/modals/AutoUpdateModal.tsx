@@ -6,7 +6,6 @@ import { useRef, useState } from 'react';
 import { ButtonMain } from '../Buttons';
 import {
   faCloudDownload,
-  faFileDownload,
 } from '@fortawesome/free-solid-svg-icons';
 import DOMPurify from 'dompurify';
 import { ipcRenderer } from 'electron';

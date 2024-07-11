@@ -84,10 +84,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, []);
 
   useEffect(() => {
-    if(!showPlayer) {
-      setPlayerIVideo(null)
+    if (!showPlayer) {
+      setPlayerIVideo(null);
     }
-  }, [showPlayer])
+  }, [showPlayer]);
 
   useEffect(() => {
     try {
@@ -118,14 +118,18 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const fetchEpisodesInfo = async () => {
-    axios.get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`).then((data) => {
-      if (data.data && data.data.episodes) setEpisodesInfo(data.data.episodes);
-      data.data.images &&
-        setAlternativeBanner(
-          getUrlByCoverType(data.data.images, 'fanart') ?? undefined,
-        );
-      setEpisodesInfoHasFetched(true);
-    });
+    axios
+      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
+      .then((data) => {
+        if (data.data && data.data.episodes)
+          setEpisodesInfo(data.data.episodes);
+        data.data.images &&
+          setAlternativeBanner(
+            getUrlByCoverType(data.data.images, 'fanart') ?? undefined,
+          );
+        setEpisodesInfoHasFetched(true);
+      })
+      .catch(() => {setEpisodesInfoHasFetched(true);});
   };
 
   const handleTrailerPlay = () => {
@@ -232,8 +236,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 <div className="trailer-volume show-trailer">
                   <ButtonCircle
                     icon={trailerVolumeOn ? faVolumeHigh : faVolumeXmark}
-                    tint="light"
+                    tint="empty"
                     shadow
+                    tooltipText={trailerVolumeOn ? 'Volume off' : 'Volume on'}
                     onClick={toggleTrailerVolume}
                   />
                 </div>

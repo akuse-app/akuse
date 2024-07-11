@@ -17,6 +17,14 @@
 
 <img title="img" alt="img" src="./assets/screenshot.jpg">
 
+## 💝 Support this app
+
+<p align="center">
+    <a href="https://www.paypal.com/paypalme/alessioganzarolli">
+      <img width="250px" src="https://github.com/aha999/DonateButtons/raw/master/paypal-donate-icon-7.png"/>
+    </a>
+</p>
+
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
 

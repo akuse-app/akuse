@@ -29,6 +29,7 @@ import { ipcRenderer } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
+import DonateModal from './components/modals/DonateModal';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -42,47 +43,43 @@ export default function App() {
   const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
-
-  setDefaultStoreVariables();
-
-  ipcRenderer.on('auto-update', async () => {
-    setShowUpdateModal(true);
-  });
+  const [showDonateModal, setShowDonateModal] = useState<boolean>(false);
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
-  const [currentListAnime, setCurrentListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [trendingAnime, setTrendingAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [mostPopularAnime, setMostPopularAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  const [nextReleasesAnime, setNextReleasesAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
+  const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>();
+  const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
+  const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
+  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
 
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
-  const [planningListAnime, setPlanningListAnimeListAnime] = useState<
-    ListAnimeData[] | undefined
-  >(undefined);
-  // const [completedListAnime, setCompletedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [droppedListAnime, setDroppedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [pausedListAnime, setPausedListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
-  // const [RepeatingListAnime, setRepeatingListAnimeListAnime] = useState<
-  //   ListAnimeData[] | undefined
-  // >(undefined);
+  const [planningListAnime, setPlanningListAnimeListAnime] =
+    useState<ListAnimeData[]>();
 
   const style = getComputedStyle(document.body);
+  setDefaultStoreVariables();
+
+  useEffect(() => {
+    fetchTab1AnimeData();
+  }, []);
+
+  useEffect(() => {
+    if (tab2Click) {
+      fetchTab2AnimeData();
+    }
+  }, [tab2Click, viewerId]);
+
+  useEffect(() => {
+    if (Math.floor(Math.random() * 8) + 1 === 1 && !showUpdateModal) {
+      setShowDonateModal(true);
+    }
+  }, []);
+
+  ipcRenderer.on('auto-update', async () => {
+    setShowDonateModal(false);
+    setShowUpdateModal(true);
+  });
 
   const fetchTab1AnimeData = async () => {
     try {
@@ -113,29 +110,11 @@ export default function App() {
         setPlanningListAnimeListAnime(
           await getViewerList(viewerId, 'PLANNING'),
         );
-        // setCompletedListAnimeListAnime(
-        //   await getViewerList(viewerId, 'COMPLETED'),
-        // );
-        // setDroppedListAnimeListAnime(await getViewerList(viewerId, 'DROPPED'));
-        // setPausedListAnimeListAnime(await getViewerList(viewerId, 'PAUSED'));
-        // setRepeatingListAnimeListAnime(
-        //   await getViewerList(viewerId, 'REPEATING'),
-        // );
       }
     } catch (error) {
       console.log('Tab2 error: ' + error);
     }
   };
-
-  useEffect(() => {
-    fetchTab1AnimeData();
-  }, []);
-
-  useEffect(() => {
-    if (tab2Click) {
-      fetchTab2AnimeData();
-    }
-  }, [tab2Click, viewerId]);
 
   return (
     <AuthContext.Provider value={logged}>
@@ -148,6 +127,12 @@ export default function App() {
             show={showUpdateModal}
             onClose={() => {
               setShowUpdateModal(false);
+            }}
+          />
+          <DonateModal
+            show={showDonateModal}
+            onClose={() => {
+              setShowDonateModal(false);
             }}
           />
           <MemoryRouter>

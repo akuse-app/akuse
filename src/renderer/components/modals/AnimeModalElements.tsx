@@ -7,7 +7,9 @@ import {
   faClock,
 } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBookmark as faBookmarkSolid,
   faBan,
+  faCheck,
   faChevronDown,
   faChevronUp,
   faFilm,
@@ -15,12 +17,17 @@ import {
   faPlay,
   faRotate,
   faStopwatch,
-  faBookmark as faBookmarkFull,
+  faXmark,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DOMPurify from 'dompurify';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
+import {
+  deleteAnimeFromList,
+  updateAnimeFromList,
+} from '../../../modules/anilist/anilistApi';
 import {
   getAvailableEpisodes,
   getEpisodes,
@@ -31,21 +38,17 @@ import {
   parseDescription,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import { MediaStatus } from '../../../types/anilistGraphQLTypes';
-import { AuthContext } from '../../App';
-import { ButtonCircle, ButtonLoading, ButtonMain } from '../Buttons';
 import {
-  deleteAnimeFromList,
-  updateAnimeFromList,
-} from '../../../modules/anilist/anilistApi';
+  MediaListStatus,
+  MediaStatus,
+} from '../../../types/anilistGraphQLTypes';
+import { AuthContext } from '../../App';
+import { ButtonCircle, ButtonMain } from '../Buttons';
+import { stat } from 'fs';
 
-interface AnimeModalStatusProps {
+export const AnimeModalStatus: React.FC<{
   status: MediaStatus | undefined;
-}
-
-export const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({
-  status,
-}) => {
+}> = ({ status }) => {
   const style = getComputedStyle(document.body);
   const parsedStatus = getParsedStatus(status);
 
@@ -95,13 +98,9 @@ export const AnimeModalStatus: React.FC<AnimeModalStatusProps> = ({
   );
 };
 
-interface AnimeModalGenresProps {
+export const AnimeModalGenres: React.FC<{
   genres: string[];
-}
-
-export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
-  genres,
-}) => {
+}> = ({ genres }) => {
   return (
     <p className="additional-info">
       {'Genres: '}
@@ -115,13 +114,9 @@ export const AnimeModalGenres: React.FC<AnimeModalGenresProps> = ({
   );
 };
 
-interface AnimeModalOtherTitlesProps {
+export const AnimeModalOtherTitles: React.FC<{
   synonyms: string[];
-}
-
-export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
-  synonyms,
-}) => {
+}> = ({ synonyms }) => {
   return (
     <p className="additional-info">
       {synonyms.length !== 0 && 'Other titles: '}
@@ -135,13 +130,9 @@ export const AnimeModalOtherTitles: React.FC<AnimeModalOtherTitlesProps> = ({
   );
 };
 
-interface AnimeModalEpisodesProps {
+export const AnimeModalEpisodes: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
-  listAnimeData,
-}) => {
+}> = ({ listAnimeData }) => {
   const format = getParsedFormat(listAnimeData.media.format);
   const duration = listAnimeData.media.duration;
   const status = getParsedStatus(listAnimeData.media.status);
@@ -175,13 +166,9 @@ export const AnimeModalEpisodes: React.FC<AnimeModalEpisodesProps> = ({
   );
 };
 
-interface AnimeModalDescriptionProps {
+export const AnimeModalDescription: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
-  listAnimeData,
-}) => {
+}> = ({ listAnimeData }) => {
   const descriptionRef = useRef<HTMLDivElement>(null);
 
   const [fullText, setFullText] = useState<boolean>(false);
@@ -243,23 +230,20 @@ export const AnimeModalDescription: React.FC<AnimeModalDescriptionProps> = ({
   );
 };
 
-interface AnimeModalWatchButtonsProps {
+export const AnimeModalWatchButtons: React.FC<{
   listAnimeData: ListAnimeData;
   localProgress?: number;
   onPlay: (episode: number) => void;
   loading: boolean;
-}
-
-export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
-  listAnimeData,
-  localProgress,
-  onPlay,
-  loading = false,
-}) => {
+}> = ({ listAnimeData, localProgress, onPlay, loading = false }) => {
   const logged = useContext(AuthContext);
 
   const [progress, setProgress] = useState<number | undefined>(
     getProgress(listAnimeData.media),
+  );
+
+  const [listStatus, setListStatus] = useState<MediaListStatus | undefined>(
+    listAnimeData.media.mediaListEntry?.status,
   );
 
   // const progress = getProgress(listAnimeData.media);
@@ -270,6 +254,10 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   useEffect(() => {
     if (localProgress) setProgress(localProgress);
   }, [localProgress]);
+
+  const handleListStatusChange = (status: MediaListStatus | undefined) => {
+    setListStatus(status);
+  };
 
   return logged ? (
     <div className="watch-buttons">
@@ -319,7 +307,19 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
         </>
       )}
 
-      <IsInListButton listAnimeData={listAnimeData} />
+      {listStatus === 'CURRENT' || listStatus === 'REPEATING' ? (
+        <RemoveButton
+          listAnimeData={listAnimeData}
+          listStatus={listStatus}
+          onListStatusChange={handleListStatusChange}
+        />
+      ) : (
+        <IsInListButton
+          listAnimeData={listAnimeData}
+          listStatus={listStatus}
+          onListStatusChange={handleListStatusChange}
+        />
+      )}
     </div>
   ) : (
     <div className="watch-buttons">
@@ -334,13 +334,11 @@ export const AnimeModalWatchButtons: React.FC<AnimeModalWatchButtonsProps> = ({
   );
 };
 
-interface IsInListButtonProps {
+export const IsInListButton: React.FC<{
   listAnimeData: ListAnimeData;
-}
-
-export const IsInListButton: React.FC<IsInListButtonProps> = ({
-  listAnimeData,
-}) => {
+  listStatus?: MediaListStatus | undefined;
+  onListStatusChange: (status: MediaListStatus | undefined) => void;
+}> = ({ listAnimeData, listStatus, onListStatusChange }) => {
   const [inList, setInList] = useState<boolean>(false);
   const [listId, setListId] = useState<number | undefined>(
     listAnimeData.media.mediaListEntry?.id,
@@ -348,7 +346,10 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
 
   const removeFromList = () => {
     deleteAnimeFromList(listId).then((deleted) => {
-      if (deleted) setInList(false);
+      if (deleted) {
+        setInList(false);
+        onListStatusChange(undefined);
+      }
     });
   };
 
@@ -357,22 +358,56 @@ export const IsInListButton: React.FC<IsInListButtonProps> = ({
       if (data) {
         setListId(data);
         setInList(true);
+        onListStatusChange('PLANNING');
       }
     });
   };
 
   useEffect(() => {
-    setInList(!!listAnimeData.media.mediaListEntry);
+    setInList(listStatus === 'PLANNING');
   }, []);
 
-  return inList ? (
+  return (
     <ButtonCircle
-      icon={faBookmarkFull}
-      tint="light"
+      icon={inList ? faBookmarkSolid : faBookmark}
+      tint="empty"
       shadow
-      onClick={removeFromList}
+      tooltipText={inList ? 'Remove from list' : 'Add to list'}
+      onClick={inList ? removeFromList : addToList}
     />
-  ) : (
-    <ButtonCircle icon={faBookmark} tint="light" shadow onClick={addToList} />
+  );
+};
+
+export const RemoveButton: React.FC<{
+  listAnimeData: ListAnimeData;
+  listStatus?: MediaListStatus | undefined;
+  onListStatusChange: (status: MediaListStatus | undefined) => void;
+}> = ({ listAnimeData, listStatus, onListStatusChange }) => {
+  const markAsCompleted = () => {
+    updateAnimeFromList(listAnimeData.media.id, 'COMPLETED').then((data) => {
+      if (data) {
+        onListStatusChange('COMPLETED');
+      }
+    });
+  };
+
+  const markAsDropped = () => {
+    updateAnimeFromList(listAnimeData.media.id, 'DROPPED').then((data) => {
+      if (data) {
+        onListStatusChange('DROPPED');
+      }
+    });
+  };
+
+  return (
+    <ButtonCircle
+      icon={faXmark}
+      tint="empty"
+      hoverButtons={[
+        { icon: faCheck, text: 'Completed', action: markAsCompleted },
+        { icon: faTrash, text: 'Dropped', action: markAsDropped },
+      ]}
+      shadow
+    />
   );
 };

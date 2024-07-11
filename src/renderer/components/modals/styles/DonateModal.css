@@ -1,0 +1,11 @@
+.modal-page-wrapper .donate-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-page-wrapper .donate-modal-content .donate-wrapper {
+  display: flex;
+  justify-content: end;
+  margin-top: 20px;
+}
