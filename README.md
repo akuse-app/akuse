@@ -15,15 +15,13 @@
     </a>
 </p>
 
-<img title="img" alt="img" src="./assets/screenshot.jpg">
-
-## 💝 Support this app
-
 <p align="center">
-    <a href="https://www.paypal.com/paypalme/alessioganzarolli">
-      <img width="250px" src="https://github.com/aha999/DonateButtons/raw/master/paypal-donate-icon-7.png"/>
+    <a href="https://ko-fi.com/aleganza">
+      <img width="250px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea06_kofi_short_button_white%402x.png"/>
     </a>
 </p>
+
+<img title="img" alt="img" src="./assets/screenshot.jpg">
 
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
