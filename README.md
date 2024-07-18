@@ -17,7 +17,7 @@
 
 <p align="center">
     <a href="https://ko-fi.com/aleganza">
-      <img width="250px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea06_kofi_short_button_white%402x.png"/>
+      <img width="500px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea0b_kofi_long_button_red%402x.png"/>
     </a>
 </p>
 
