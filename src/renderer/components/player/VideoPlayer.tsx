@@ -376,6 +376,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 7500);
   };
 
+  const handleVideoEnd = () => {
+    if ((STORE.get('autoplay_next') as boolean) === true) {
+      canNextEpisode(episodeNumber) &&
+        changeEpisode(episodeNumber + 1);
+    };
+  };
+
   const handleMouseMove = () => {
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
@@ -580,6 +587,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onKeyDown={handleKeydown}
             onTimeUpdate={handleTimeUpdate}
             onPause={handleVideoPause}
+            onEnded={handleVideoEnd}
             crossOrigin="anonymous"
           ></video>
         </div>

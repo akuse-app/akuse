@@ -4,6 +4,7 @@ import {
   faHeadphones,
   faLanguage,
   faRotateRight,
+  faRightLong,
   faSpinner,
   faVideo,
   faVolumeHigh,
@@ -45,6 +46,9 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
+  );
+  const [autoplayNext, setAutoplayNext] = useState<boolean>(
+    STORE.get('autoplay_next') as boolean,
   );
   const [watchDubbed, setWatchDubbed] = useState<boolean>(
     STORE.get('dubbed') as boolean,
@@ -133,6 +137,11 @@ const VideoSettings: React.FC<SettingsProps> = ({
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
     setUpdateProgress(!updateProgress);
+  };
+
+  const handleAutoplayNext = () => {
+    STORE.set('autoplay_next', !autoplayNext);
+    setAutoplayNext(!autoplayNext);
   };
 
   const handleWatchDubbedChange = async () => {
@@ -294,6 +303,20 @@ const VideoSettings: React.FC<SettingsProps> = ({
                 <span className="slider round"></span>
               </label>
             )}
+          </li>
+          <li className="autoplay-next">
+            <span>
+              <FontAwesomeIcon className="i" icon={faRightLong} />
+              Autoplay Next
+            </span>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={autoplayNext}
+                onChange={handleAutoplayNext}
+              />
+              <span className="slider round"></span>
+            </label>
           </li>
           <li className="language">
             <span>
