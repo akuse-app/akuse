@@ -154,7 +154,7 @@ const Tab4: React.FC = () => {
     <div className="body-container  show-tab">
       <div className="main-container">
         <div className="settings-page">
-        <Heading text='Settings' />
+          <Heading text="Settings" />
 
           {logged && (
             <CheckboxElement
@@ -164,14 +164,14 @@ const Tab4: React.FC = () => {
             />
           )}
           <CheckboxElement
-            label="Watch dubbed"
-            checked={watchDubbed}
-            onChange={handleWatchDubbedChange}
-          />
-          <CheckboxElement
             label="Autoplay next episode"
             checked={autoplayNext}
             onChange={handleAutoplayNextChange}
+          />
+          <CheckboxElement
+            label="Watch dubbed"
+            checked={watchDubbed}
+            onChange={handleWatchDubbedChange}
           />
           <SelectElement
             label="Select the language in which you want to watch the episodes"

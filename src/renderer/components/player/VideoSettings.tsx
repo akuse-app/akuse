@@ -1,10 +1,11 @@
-import { faClock } from '@fortawesome/free-regular-svg-icons';
+import 'react-activity/dist/Dots.css';
+
+import { faCirclePlay, faClock } from '@fortawesome/free-regular-svg-icons';
 import {
   faGear,
   faHeadphones,
   faLanguage,
   faRotateRight,
-  faRightLong,
   faSpinner,
   faVideo,
   faVolumeHigh,
@@ -15,9 +16,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
-import 'react-activity/dist/Dots.css';
-import { AuthContext } from '../../App';
 import { Dots } from 'react-activity';
+
+import { AuthContext } from '../../App';
 
 const STORE = new Store();
 
@@ -284,6 +285,20 @@ const VideoSettings: React.FC<SettingsProps> = ({
               </label>
             </li>
           )}
+          <li className="autoplay-next">
+            <span>
+              <FontAwesomeIcon className="i" icon={faCirclePlay} />
+              Autoplay Next
+            </span>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={autoplayNext}
+                onChange={handleAutoplayNext}
+              />
+              <span className="slider round"></span>
+            </label>
+          </li>
           <li className="dub">
             <span>
               <FontAwesomeIcon className="i" icon={faHeadphones} />
@@ -303,20 +318,6 @@ const VideoSettings: React.FC<SettingsProps> = ({
                 <span className="slider round"></span>
               </label>
             )}
-          </li>
-          <li className="autoplay-next">
-            <span>
-              <FontAwesomeIcon className="i" icon={faRightLong} />
-              Autoplay Next
-            </span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                checked={autoplayNext}
-                onChange={handleAutoplayNext}
-              />
-              <span className="slider round"></span>
-            </label>
           </li>
           <li className="language">
             <span>
