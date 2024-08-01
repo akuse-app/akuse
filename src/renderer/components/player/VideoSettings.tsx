@@ -188,7 +188,10 @@ const VideoSettings: React.FC<SettingsProps> = ({
         className={`b-player ${show ? 'active' : ''}`}
         onClick={toggleShow}
       >
-        <FontAwesomeIcon className="i" icon={faGear} />
+        <div className="tooltip">
+          <FontAwesomeIcon className="i" icon={faGear} />
+          <div className="tooltip-text">Settings</div>
+        </div>
       </button>
       {show && (
         <div className="dropdown">

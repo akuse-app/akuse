@@ -17,7 +17,10 @@ const Episode: React.FC<{
   isOpen: boolean;
   isCurrent: boolean;
   onClick: () => void;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => Promise<boolean>;
+  onChangeEpisode: (
+    episode: number,
+    reloadAtPreviousTime?: boolean,
+  ) => Promise<boolean>;
 }> = ({
   episode,
   episodeInfo,
@@ -32,7 +35,7 @@ const Episode: React.FC<{
       <span className="number">{episodeInfo ? `Ep: ${episode} - ` : ''}</span>
       <span className="main">
         {episodeInfo && episodeInfo.title
-          ? episodeInfo.title.en ?? `Episode ${episode}`
+          ? (episodeInfo.title.en ?? `Episode ${episode}`)
           : `Episode ${episode}`}
       </span>
       {isCurrent && <span className="current-tag">Watching now</span>}
@@ -61,7 +64,10 @@ const VideoEpisodesChange: React.FC<{
   episodesInfo?: EpisodeInfo[];
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
-  onChangeEpisode: (episode: number, reloadAtPreviousTime?: boolean) => Promise<boolean>;
+  onChangeEpisode: (
+    episode: number,
+    reloadAtPreviousTime?: boolean,
+  ) => Promise<boolean>;
 }> = ({
   show,
   onShow,
@@ -83,8 +89,14 @@ const VideoEpisodesChange: React.FC<{
   return (
     <>
       <div className="other-episodes-content">
-        <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
-          <FontAwesomeIcon className="i" icon={faLayerGroup} />
+        <button
+          className={`b-player ${show ? 'active' : ''}`}
+          onClick={toggleShow}
+        >
+          <div className="tooltip">
+            <FontAwesomeIcon className="i" icon={faLayerGroup} />
+            <div className="tooltip-text">Show Episodes</div>
+          </div>
         </button>
         {show && (
           <div className="dropdown other-episode">
@@ -114,7 +126,10 @@ const VideoEpisodesChange: React.FC<{
             onChangeEpisode(episodeNumber - 1);
           }}
         >
-          <FontAwesomeIcon className="i" icon={faBackward} />
+          <div className="tooltip">
+            <FontAwesomeIcon className="i" icon={faBackward} />
+            <div className="tooltip-text">Previous Episode</div>
+          </div>
         </button>
       )}
       {showNextEpisodeButton && (
@@ -122,7 +137,10 @@ const VideoEpisodesChange: React.FC<{
           className="b-player next show-next-episode-btn"
           onClick={() => onChangeEpisode(episodeNumber + 1)}
         >
-          <FontAwesomeIcon className="i" icon={faForward} />
+          <div className="tooltip">
+            <FontAwesomeIcon className="i" icon={faForward} />
+            <div className="tooltip-text">Next Episode</div>
+          </div>
         </button>
       )}
     </>

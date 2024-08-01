@@ -102,16 +102,25 @@ const TopControls: React.FC<TopControlsProps> = ({
           onChangeEpisode={onChangeEpisode}
         />
         <button className="b-player" onClick={onPiPToggle}>
-          <FontAwesomeIcon
-            className="i"
-            icon={faUpRightFromSquare}
-          />
+          <div className="tooltip">
+            <FontAwesomeIcon className="i" icon={faUpRightFromSquare} />
+            <span className="tooltip-text">
+              Picture-in-Picture
+            </span>
+          </div>
         </button>
         <button className="b-player fullscreen" onClick={onFullScreentoggle}>
-          <FontAwesomeIcon
-            className="i"
-            icon={fullscreen ? faCompress : faExpand}
-          />
+          <div className="tooltip">
+            <FontAwesomeIcon
+              className="i"
+              icon={fullscreen ? faCompress : faExpand}
+            />
+            {
+              <span className="tooltip-text">
+                {fullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+              </span>
+            }
+          </div>
         </button>
       </div>
     </div>
