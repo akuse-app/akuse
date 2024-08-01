@@ -1,11 +1,10 @@
-
 main .anime-entry {
   position: relative;
   width: 175px;
   height: min-content;
   margin-top: 10px;
   /* must be in anime-entry or hover scaling won't work */
-  transition: 0.2s ease-out;
+  transition: transform 0.25s linear;
   border-radius: var(--border-radius);
   will-change: transform;
 }
@@ -15,11 +14,11 @@ main .anime-entry:not(.skeleton) {
 }
 
 main .anime-entry:not(.skeleton):hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 main .anime-entry:not(.skeleton):hover .anime-cover {
-  outline: 2px solid var(--font-1);
+  outline: 3px solid var(--font-1);
 }
 
 main .anime-entry .content {
@@ -39,6 +38,9 @@ main .anime-entry .anime-cover {
   position: relative;
   object-fit: cover;
   border-radius: var(--border-radius);
+  outline: 3px solid transparent;
+  outline-offset: 2.5px;
+  transition: 0.25s linear;
   /* box-shadow: var(--shadow-cover); */
 }
 
@@ -92,7 +94,7 @@ main .anime-entry .anime-title span {
   font-size: 1rem;
 }
 
-main .anime-entry .anime-title span.up_to_date {
+main .anime-entry .anime-title span.up-to-date {
   color: var(--color-info);
 }
 
@@ -100,7 +102,7 @@ main .anime-entry .anime-title span.releasing {
   color: var(--color-success);
 }
 
-main .anime-entry .anime-title span.not_yet_released {
+main .anime-entry .anime-title span.not-yet-released {
   color: var(--color-alert);
 }
 
