@@ -48,17 +48,30 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
 
   const [shadowAnimationClasses, setShadowAnimationClasses] =
     useState<string>('');
+  const [contentAnimationClasses, setContentAnimationClasses] =
+    useState<string>('show-slideshow-content');
+  const [bannerAnimationClasses, setBannerAnimationClasses] = useState<string>(
+    'dwindle-slideshow-banner',
+  );
   const [isFirstActivation, setIsFirstActivation] = useState(true);
 
   // smoother transitions between slides
   useEffect(() => {
     if (isVisible && !isFirstActivation) {
       setShadowAnimationClasses('show-slide-opacity');
+
+      setTimeout(() => {
+        setContentAnimationClasses('show-slideshow-content');
+        setBannerAnimationClasses('dwindle-slideshow-banner');
+      }, 500);
     } else if (!isVisible) {
       setShadowAnimationClasses('show-slide-opacity hide-opacity-long');
       setTimeout(() => {
         setShadowAnimationClasses('hide-opacity-long');
       }, 400);
+
+      setContentAnimationClasses('hide-slideshow-content');
+      setBannerAnimationClasses('enlarge-slideshow-banner');
     }
 
     setIsFirstActivation(false);
@@ -131,7 +144,8 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           // style={{ display: isVisible ? 'block' : 'none' }}
         >
           <div
-            className={`content ${isVisible ? 'show-slideshow-content' : 'hide-slideshow-content'}`}
+            className={`content ${contentAnimationClasses}`}
+            // className={`content ${isVisible ? 'show-slideshow-content' : 'hide-slideshow-content'}`}
           >
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•
@@ -180,7 +194,8 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           src={listAnimeData.media.bannerImage}
           alt={`Slide ${index}`}
           className={
-            isVisible ? 'dwindle-slideshow-banner' : 'enlarge-slideshow-banner'
+            bannerAnimationClasses
+            // isVisible ? 'dwindle-slideshow-banner' : 'enlarge-slideshow-banner'
           }
         />
       </div>

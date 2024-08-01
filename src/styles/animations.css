@@ -14,7 +14,7 @@
   animation: dwindleSlideshowBanner 0.8s linear;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  animation-delay: 0.5s;
+  /* animation-delay: 0.5s; */
 }
 
 @keyframes dwindleSlideshowBanner {
@@ -31,7 +31,6 @@
   animation: enlargeSlideshowBanner 0.8s linear;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  /* animation-delay: 0.5s; */
 }
 
 @keyframes enlargeSlideshowBanner {
@@ -48,7 +47,7 @@
   animation: showSlideshowContent 0.8s ease-out;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  animation-delay: 0.5s;
+  /* animation-delay: 0.5s; */
 }
 
 @keyframes showSlideshowContent {
