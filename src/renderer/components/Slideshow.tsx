@@ -130,7 +130,9 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           className={`shadow-overlay ${shadowAnimationClasses}`}
           // style={{ display: isVisible ? 'block' : 'none' }}
         >
-          <div className={`content show`}>
+          <div
+            className={`content ${isVisible ? 'show-slideshow-content' : 'hide-slideshow-content'}`}
+          >
             <div className="anime-info">
               <div className="anime-format">{listAnimeData.media.format}</div>•
               <div className="anime-year">
@@ -177,6 +179,9 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           key={index}
           src={listAnimeData.media.bannerImage}
           alt={`Slide ${index}`}
+          className={
+            isVisible ? 'dwindle-slideshow-banner' : 'enlarge-slideshow-banner'
+          }
         />
       </div>
       <Toaster />

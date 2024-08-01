@@ -32,6 +32,7 @@
 }
 
 .slideshow-container .content {
+  opacity: 0;
   position: absolute;
   bottom: 20px;
   display: flex;
@@ -86,12 +87,13 @@
   width: 100%;
   height: 450px;
   object-fit: cover;
-  transition: transform 0.5s ease-out; /* Aggiungi transizione per l'effetto hover */
+  /* transition: transform 0.5s ease-out; */
+  transform: scale(1.04);
 }
 
-.slide:hover img {
-  transform: scale(1.05); /* Effetto di ingrandimento */
-}
+/* .slide:hover img {
+  transform: scale(1.05);
+} */
 
 .slideshow-wrapper .buttons {
   display: flex;
