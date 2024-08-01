@@ -3,6 +3,7 @@ const STORE = new Store();
 
 export const setDefaultStoreVariables = () => {
   if (!STORE.has('update_progress')) STORE.set('update_progress', false);
+  if (!STORE.has('autoplay_next')) STORE.set('autoplay_next', true);
   if (!STORE.has('dubbed')) STORE.set('dubbed', false);
   if (!STORE.has('source_flag')) STORE.set('source_flag', 'US');
   if (!STORE.has('intro_skip_time')) STORE.set('intro_skip_time', 85);

@@ -88,6 +88,9 @@ const Tab4: React.FC = () => {
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
   );
+  const [autoplayNext, setAutoplayNext] = useState<boolean>(
+    STORE.get('autoplay_next') as boolean,
+  );
   const [watchDubbed, setWatchDubbed] = useState<boolean>(
     STORE.get('dubbed') as boolean,
   );
@@ -126,6 +129,11 @@ const Tab4: React.FC = () => {
     setShowDuration(!showDuration);
   };
 
+  const handleAutoplayNextChange = () => {
+    STORE.set('autoplay_next', !autoplayNext);
+    setAutoplayNext(!autoplayNext);
+  };
+
   const languageOptions: Option[] = [
     { value: 'US', label: 'English' },
     { value: 'IT', label: 'Italian' },
@@ -159,6 +167,11 @@ const Tab4: React.FC = () => {
             label="Watch dubbed"
             checked={watchDubbed}
             onChange={handleWatchDubbedChange}
+          />
+          <CheckboxElement
+            label="Autoplay next episode"
+            checked={autoplayNext}
+            onChange={handleAutoplayNextChange}
           />
           <SelectElement
             label="Select the language in which you want to watch the episodes"
