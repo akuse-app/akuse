@@ -226,12 +226,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[animeEpisodeNumber].title?.en ??
-              `Episode ${animeEpisodeNumber}`
+          ? (episodesInfo[animeEpisodeNumber].title?.en ??
+              `Episode ${animeEpisodeNumber}`)
           : `Episode ${animeEpisodeNumber}`,
       );
       setEpisodeDescription(
-        episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
+        episodesInfo ? (episodesInfo[animeEpisodeNumber].summary ?? '') : '',
       );
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
@@ -241,7 +241,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const playHlsVideo = (url: string) => {
     try {
-      console.log(url)
+      console.log(url);
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
@@ -378,9 +378,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleVideoEnd = () => {
     if ((STORE.get('autoplay_next') as boolean) === true) {
-      canNextEpisode(episodeNumber) &&
-        changeEpisode(episodeNumber + 1);
-    };
+      canNextEpisode(episodeNumber) && changeEpisode(episodeNumber + 1);
+    }
   };
 
   const handleMouseMove = () => {
@@ -409,10 +408,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 2000);
   };
 
-  const handleExit = () => {
+  const handleExit = async () => {
     if (document.fullscreenElement) {
       setFullscreen(false);
       document.exitFullscreen();
+    }
+    
+    if(videoRef.current && videoRef.current === document.pictureInPictureElement) {
+      await document.exitPictureInPicture();
     }
 
     onClose();
@@ -457,6 +460,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const togglePiP = async () => {
+    if (videoRef.current) {
+      try {
+        if (videoRef.current !== document.pictureInPictureElement) {
+          await videoRef.current.requestPictureInPicture();
+        } else {
+          await document.exitPictureInPicture();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const changeEpisode = async (
     episode: number | null, // null to play the current episode
     reloadAtPreviousTime?: boolean,
@@ -474,11 +491,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeNumber(episodeToPlay);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`
+          ? (episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`)
           : `Episode ${episode}`,
       );
       setEpisodeDescription(
-        episodesInfo ? episodesInfo[episodeToPlay].summary ?? '' : '',
+        episodesInfo ? (episodesInfo[episodeToPlay].summary ?? '') : '',
       );
       playHlsVideo(value.url);
       // loadSource(value.url, value.isM3U8 ?? false);
@@ -557,6 +574,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               showPreviousEpisodeButton={showPreviousEpisodeButton}
               fullscreen={fullscreen}
               onFullScreentoggle={toggleFullScreen}
+              onPiPToggle={togglePiP}
               onChangeEpisode={changeEpisode}
               onExit={handleExit}
               onClick={togglePlayingWithoutPropagation}
