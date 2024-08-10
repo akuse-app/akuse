@@ -117,7 +117,7 @@
 ## 🐛 Known Issues
 
 - If Log-In in installed apps doesn't work, make sure you have set a default browser.
-- Some anime may don't work because of different names as compared to AniList: feel free to open a new issue if you find some of them so they can be fixed.
+- Some anime may not work due to different names compared to AniList. Feel free to open a new issue if you find any, so they can be fixed.
 
 ## 🌟 Contributors
 
