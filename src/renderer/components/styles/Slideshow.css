@@ -28,7 +28,7 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  z-index: 2; /* Assicurati che sia sopra l'immagine ingrandita */
+  z-index: 2;
 }
 
 .slideshow-container .content {
@@ -41,8 +41,8 @@
   max-width: 500px;
   height: max-content;
   padding-left: 20px;
-  font-weight: var(--font-weight);
-  z-index: 2; /* Assicurati che sia sopra l'immagine ingrandita */
+  z-index: 2;
+  text-shadow: black 1px 0 5px;
 }
 
 .slideshow-container .anime-title {
@@ -57,8 +57,15 @@
 }
 
 .slideshow-container .anime-info {
+  color: var(--font-1);
+  font-weight: 500;
   display: flex;
   gap: 10px;
+  font-size: 0.8rem;
+}
+
+.slideshow-container .anime-info .bullet {
+  color: var(--font-2);
 }
 
 .slideshow-container .anime-info .anime-format {
@@ -68,15 +75,13 @@
 .slideshow-container .anime-info,
 .slideshow-container .anime-info *,
 .slideshow-container .anime-genres {
-  font-size: 0.8rem;
-  color: var(--font-2);
 }
 
 .slideshow-container .anime-description {
   font-size: 0.9rem;
   color: var(--font-2);
   display: -webkit-box;
-  line-height: 20px;
+  line-height: 22px;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;

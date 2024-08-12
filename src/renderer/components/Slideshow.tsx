@@ -24,7 +24,6 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../types/types';
 import { ButtonMain } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
-import { IsInListButton } from './modals/AnimeModalElements';
 import VideoPlayer from './player/VideoPlayer';
 
 interface SlideProps {
@@ -148,12 +147,13 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
             // className={`content ${isVisible ? 'show-slideshow-content' : 'hide-slideshow-content'}`}
           >
             <div className="anime-info">
-              <div className="anime-format">{listAnimeData.media.format}</div>•
+              <div className="anime-format">{listAnimeData.media.format}</div>
+              <div className="bullet">•</div>
               <div className="anime-year">
                 {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
                 {getParsedSeasonYear(listAnimeData.media)}
               </div>
-              •
+              <div className="bullet">•</div>
               <div className="anime-episodes">
                 {getAvailableEpisodes(listAnimeData.media)} Episodes
               </div>
@@ -222,11 +222,11 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
     );
   }, [listAnimeData]);
 
-  useEffect(() => {
-    const intervalId = setInterval(goToNext, 12500);
+  // useEffect(() => {
+  //   const intervalId = setInterval(goToNext, 12500);
 
-    return () => clearInterval(intervalId);
-  }, [animeData, currentIndex]);
+  //   return () => clearInterval(intervalId);
+  // }, [animeData, currentIndex]);
 
   const goToPrevious = () => {
     if (!animeData) return;
