@@ -339,6 +339,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
               >
                 <option value="US">English</option>
                 <option value="IT">Italian</option>
+                <option value="HU">Hungarian</option>
               </select>
             )}
           </li>

@@ -137,6 +137,7 @@ const Tab4: React.FC = () => {
   const languageOptions: Option[] = [
     { value: 'US', label: 'English' },
     { value: 'IT', label: 'Italian' },
+    { value: 'HU', label: 'Hungarian' },
   ];
 
   const skipTimeOptions: Option[] = [

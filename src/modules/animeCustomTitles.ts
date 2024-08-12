@@ -36,4 +36,5 @@ export const animeCustomTitles: AnimeCustomTitles = {
     },
     '113415': { title: `Jujutsu Kaisen`, index: 5 }, // VERY unstable :(
   },
+  HU: {}
 };

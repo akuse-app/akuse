@@ -11,13 +11,16 @@ export const setDefaultStoreVariables = () => {
   if (!STORE.has('trailer_volume_on')) STORE.set('trailer_volume_on', false);
 }
 
-export const getSourceFlag = async (): Promise<'IT' | 'US' | null> => {
+export const getSourceFlag = async (): Promise<'IT' | 'US' | 'HU' | null> => {
   switch (STORE.get('source_flag')) {
     case 'US': {
       return 'US';
     }
     case 'IT': {
       return 'IT';
+    }
+    case 'HU': {
+      return 'HU';
     }
     default: {
       return null;

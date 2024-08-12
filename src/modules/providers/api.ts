@@ -6,6 +6,7 @@ import { animeCustomTitles } from '../animeCustomTitles';
 import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
+import { getEpisodeUrl as animedrive } from './animedrive';
 
 const STORE = new Store();
 
@@ -55,6 +56,15 @@ export const getUniversalEpisodeUrl = async (
         dubbed,
       );
       return data ? getDefaultQualityVideo(data) : null; // change when animeunity api updates
+    }
+    case 'HU': {
+      const data = await animedrive(
+        animeTitles,
+        customTitle && !dubbed ? customTitle.index : 0,
+        episode,
+        dubbed,
+      );
+      return data ? getDefaultQualityVideo(data) : null;
     }
   }
 
