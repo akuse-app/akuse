@@ -323,6 +323,14 @@
   filter: brightness(0.70);
 }
 
+.up-controls .info .title,
+.up-controls .info .back {
+  max-width: calc(100vw - 450px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+
 .up-controls .info .title {
   color: var(--font-2);
   /* color: var(--color-transparency); */
@@ -330,8 +338,7 @@
   font-size: 1.4rem;
 }
 
-.up-controls .info .back,
-.up-controls .info .episode {
+.up-controls .info .back {
   color: var(--font-1);
   font-weight: var(--font-weight);
   font-size: 2.2rem;

@@ -70,8 +70,7 @@ const TopControls: React.FC<TopControlsProps> = ({
           <span className="back">
             <FontAwesomeIcon className="i" icon={faAngleLeft} />
             <span className="episode">
-              <span>{`Ep. ${episodeNumber} - `}</span>
-              {episodeTitle}
+              {`Ep. ${episodeNumber} - ${episodeTitle}`}
             </span>
           </span>
         </div>

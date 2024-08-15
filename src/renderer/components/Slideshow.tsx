@@ -222,11 +222,11 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
     );
   }, [listAnimeData]);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(goToNext, 12500);
+  useEffect(() => {
+    const intervalId = setInterval(goToNext, 12500);
 
-  //   return () => clearInterval(intervalId);
-  // }, [animeData, currentIndex]);
+    return () => clearInterval(intervalId);
+  }, [animeData, currentIndex]);
 
   const goToPrevious = () => {
     if (!animeData) return;
