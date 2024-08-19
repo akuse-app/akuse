@@ -106,5 +106,5 @@ export const getAnimeEpisodeId = async (
   episode: number,
 ): Promise<string | null> => {
   const data = await consumet.fetchAnimeInfo(animeId);
-  return data?.episodes?.[episode - 1]?.id ?? null;
+  return data?.episodes?.find((ep) => ep.number == episode)?.id ?? null;
 };
