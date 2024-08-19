@@ -2,6 +2,7 @@ import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
+import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
@@ -22,7 +23,6 @@ import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
-import { ipcRenderer } from 'electron';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -222,6 +222,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     if (video !== null) {
       playHlsVideo(video.url);
+
+      // resume from tracked progress
+      // const trackedProgress = STORE.get(
+      //   `${listAnimeData.media.id}-${animeEpisodeNumber}`,
+      // ) as number;
+
+      // if (trackedProgress && videoRef.current)
+      //   videoRef.current.currentTime = trackedProgress;
+
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
@@ -325,6 +334,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setDuration(dTime);
         setBuffered(videoRef.current?.buffered);
 
+        // keep track of episode time
+        // const progressKey = `${listAnimeData.media.id}-${episodeNumber}`;
+        
+        // if (Math.trunc(cTime) % 20 === 0 && cTime - Math.trunc(cTime) < 0.3) {
+        //   console.log(`Tracked new time for ${progressKey}: ${cTime}`);
+        //   STORE.set(progressKey, cTime);
+        // }
+
         // automatically update progress
         // console.log((cTime * 100) / dTime);
         if (
@@ -413,8 +430,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setFullscreen(false);
       document.exitFullscreen();
     }
-    
-    if(videoRef.current && videoRef.current === document.pictureInPictureElement) {
+
+    if (
+      videoRef.current &&
+      videoRef.current === document.pictureInPictureElement
+    ) {
       await document.exitPictureInPicture();
     }
 
