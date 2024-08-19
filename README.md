@@ -9,15 +9,20 @@
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/akuse-app/akuse">
     <img alt="total-downloads" src="https://img.shields.io/github/downloads/aleganza/akuse/total">
-    <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/aleganza/akuse?color=red">
     <a href="https://discord.gg/f3wdnqSNX5">
-        <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?label=discord&color=%235567E3">
+        <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?style=flat&label=discord&logo=discord&color=%235567E3">
+    </a>
+</p>
+
+<p align="center" style="text-decoration: none;">
+    <a href="https://github.com/akuse-app/akuse/releases/latest">
+        <img alt="Made For Windows" src="https://img.shields.io/badge/made_for-Windows-0078D6?style=flat&logo=windows&logoColor=white"><img alt="Made For Linux" src="https://img.shields.io/badge/made_for-Linux-FCC624?style=flat&logo=linux&logoColor=white">
     </a>
 </p>
 
 <p align="center">
     <a href="https://ko-fi.com/aleganza">
-      <img width="500px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea0b_kofi_long_button_red%402x.png"/>
+      <img width="400px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea0b_kofi_long_button_red%402x.png"/>
     </a>
 </p>
 
