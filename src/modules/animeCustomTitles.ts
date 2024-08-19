@@ -18,23 +18,10 @@ type AnimeCustomTitles = {
 
 export const animeCustomTitles: AnimeCustomTitles = {
   US: {
-    '113415': { title: `Jujutsu Kaisen Tv`, index: 0 },
-    '150672': { title: `"Oshi No Ko"`, index: 0 },
-    '11061': { title: `Hunter X Hunter 2011`, index: 0 },
-    '43': { title: `Ghost in the Shell`, index: 0 },
-    '235': { title: `Detective Conan Remastered`, index: 0 },
-    '1482': { title: `D.Gray-man (2006)`, index: 0 },
-    '132052': { title: 'Kakkou no Iinazuke', index: 1 },
-    '263': { title: 'Hajime no Ippo', index: 0 },
+    // '235': { title: `Detective Conan Remastered`, index: 0 },
+    '132052': { title: 'Kakkou no Iinazuke', index: 1 }, // same releaseDate with another one
+    '168623': { title: 'Dahlia in Bloom', index: 0 }, // anilist has wrong name (Madougushi Dahlia wa Utsumukanai -> Madougushi Dahliya wa Utsumukanai)
   },
-  IT: {
-    '11061': { title: `Hunter X Hunter (2011)`, index: 1 },
-    '16498': {
-      title: ` Shingeki no Kyojin
-      `,
-      index: 1,
-    },
-    '113415': { title: `Jujutsu Kaisen`, index: 5 }, // VERY unstable :(
-  },
-  HU: {}
+  IT: {},
+  HU: {},
 };

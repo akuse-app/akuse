@@ -15,14 +15,21 @@ export const getEpisodeUrl = async (
   index: number,
   episode: number,
   dubbed: boolean,
+  releaseDate: number,
 ): Promise<IVideo[] | null> => {
   console.log(
-    `%c Episode ${episode}, looking for AnimeUnity source...`,
-    `color: #6b8cff`,
+    `%c Episode ${episode}, looking for ${consumet.name} source...`,
+    `color: #0c7475`,
   );
 
   for (const animeSearch of animeTitles) {
-    const result = await searchEpisodeUrl(animeSearch, index, episode, dubbed);
+    const result = await searchEpisodeUrl(
+      animeSearch,
+      index,
+      episode,
+      dubbed,
+      releaseDate,
+    );
     if (result) {
       return result;
     }
@@ -44,14 +51,18 @@ async function searchEpisodeUrl(
   index: number,
   episode: number,
   dubbed: boolean,
+  releaseDate: number,
 ): Promise<IVideo[] | null> {
   const animeId = await getAnimeId(
-    dubbed ? 0 : index,
+    index,
     dubbed ? `${animeSearch} (ITA)` : animeSearch,
+    dubbed,
+    releaseDate,
   );
 
   if (animeId) {
     const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
+    console.log(animeEpisodeId);
     if (animeEpisodeId) {
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
@@ -73,11 +84,23 @@ async function searchEpisodeUrl(
 export const getAnimeId = async (
   index: number,
   animeSearch: string,
+  dubbed: boolean,
+  releaseDate: number,
 ): Promise<string | null> => {
   const data = await consumet.search(animeSearch);
-  console.log(animeSearch)
-  console.log(index)
-  return data.results[index]?.id ?? null;
+
+  const filteredResults = data.results.filter((result) =>
+    dubbed
+      ? (result.title as string).includes('(ITA)')
+      : !(result.title as string).includes('(ITA)'),
+  );
+
+  return (
+    filteredResults.filter(
+      (result) => result.releaseDate == releaseDate.toString(),
+    )[index]?.id ?? null
+  );
+  // return data.results[index]?.id ?? null;
 };
 
 /**

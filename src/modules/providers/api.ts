@@ -24,17 +24,10 @@ export const getUniversalEpisodeUrl = async (
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
 
-  const customTitle =
-    animeCustomTitles[STORE.get('source_flag') as string][
-      listAnimeData.media?.id!
-    ];
+  const customTitle = animeCustomTitles[lang][listAnimeData.media?.id!];
 
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
   if (customTitle) animeTitles.unshift(customTitle.title);
-
-  // customTitle
-  //   ? (animeTitles = [customTitle.title])
-  //   : (animeTitles = getParsedAnimeTitles(listAnimeData.media));
 
   console.log(lang + ' ' + dubbed + ' ' + customTitle?.title);
 
@@ -42,25 +35,27 @@ export const getUniversalEpisodeUrl = async (
     case 'US': {
       const data = await gogoanime(
         animeTitles,
-        customTitle && !dubbed ? customTitle.index : 0,
+        customTitle ? customTitle.index : 0,
         episode,
         dubbed,
+        listAnimeData.media.startDate?.year ?? 0,
       );
       return data ? getDefaultQualityVideo(data) : null;
     }
     case 'IT': {
       const data = await animeunity(
         animeTitles,
-        customTitle && !dubbed ? customTitle.index : 0,
+        customTitle ? customTitle.index : 0,
         episode,
         dubbed,
+        listAnimeData.media.startDate?.year ?? 0,
       );
-      return data ? getDefaultQualityVideo(data) : null; // change when animeunity api updates
+      return data ? getDefaultQualityVideo(data) : null;
     }
     case 'HU': {
       const data = await animedrive(
         animeTitles,
-        customTitle && !dubbed ? customTitle.index : 0,
+        customTitle ? customTitle.index : 0,
         episode,
         dubbed,
       );

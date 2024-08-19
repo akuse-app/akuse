@@ -15,7 +15,7 @@ export const getEpisodeUrl = async (
   episode: number,
   dubbed: boolean,
 ): Promise<IVideo | null> => {
-  console.log(`%c Episode ${episode}, looking for AnimeSaturn source...`, `color: #6b8cff`);
+  console.log(`%c Episode ${episode}, looking for ${consumet.name} source...`, `color: #6b8cff`);
 
   for (const animeSearch of animeTitles) {
     const result = await searchEpisodeUrl(animeSearch, episode, dubbed);

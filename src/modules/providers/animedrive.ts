@@ -9,7 +9,7 @@ export const getEpisodeUrl = async (
   dubbed: boolean,
 ): Promise<IVideo[] | null> => {
   console.log(
-    `%c Episode ${episode}, looking for Gogoanime source...`,
+    `%c Episode ${episode}, looking for ${consumet.name} source...`,
     `color: #6b8cff`,
   );
 
