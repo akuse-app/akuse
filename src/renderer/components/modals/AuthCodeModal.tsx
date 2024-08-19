@@ -1,6 +1,6 @@
 import './styles/AuthCodeModal.css';
 
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { ipcRenderer } from 'electron';
 import { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -46,7 +46,7 @@ const AuthCodeModal: React.FC<{ show: boolean; onClose: () => void }> = ({
             <ButtonMain
               text={'Log-in'}
               tint="light"
-              icon={faRightFromBracket}
+              icon={faRightToBracket}
               onClick={() => {
                 ipcRenderer.send('handle-login', code);
               }}

@@ -1,6 +1,6 @@
 import './styles/MainNavbar.css';
 
-import { faBookmark, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
@@ -8,7 +8,6 @@ import {
   faLaptopCode,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
-  faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
@@ -119,7 +118,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
         ) : (
           <LiLink
             text="Log-In"
-            icon={faRightToBracket}
+            icon={faCircleUser}
             onClick={() => {
               ipcRenderer.send('open-login-url');
             }}
