@@ -1,16 +1,3 @@
-/* SELECT */
-select.main-select-0 {
-  outline: none;
-  border: none;
-  padding: 6px 0px 6px 8px;
-  font-size: 1rem;
-  font-weight: var(--font-weight);
-  color: var(--font-2);
-  background-color: var(--color-3);
-  border-right: 8px solid transparent;
-  border-radius: var(--border-radius);
-}
-
 /* PROGRESS BAR */
 .bar {
   width: calc(100% - 20px);

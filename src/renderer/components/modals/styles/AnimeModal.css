@@ -119,7 +119,7 @@
   border-radius: var(--border-radius);
 }
 
-.anime-page .title {
+.anime-page .content-wrapper .content .title {
   color: var(--font-1);
   /* font-size: 2.6vw; */
   line-height: 46px;
@@ -375,10 +375,10 @@
   color: var(--font-2);
   font-size: 1rem;
   font-weight: var(--font-weight);
-  line-height: 26px;
+  line-height: 21px;
 
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
