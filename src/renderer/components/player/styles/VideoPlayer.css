@@ -325,10 +325,10 @@
 
 .up-controls .info .title,
 .up-controls .info .back {
-  max-width: calc(100vw - 450px);
+  max-width: calc(100vw - 500px);
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;  
+  text-overflow: ellipsis;
 }
 
 .up-controls .info .title {
@@ -358,7 +358,7 @@
   opacity: 0.95;
   /* backdrop-filter: blur(50px); */
   list-style: none;
-  overflow: hidden;
+  /* overflow: hidden; */
   border-radius: var(--border-radius);
   background-color: #22252ee6;
   /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); */
@@ -463,16 +463,16 @@
 }
 
 .up-controls .settings-content .dropdown li {
-  /* width: calc(100% - 30px); */
-  position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  height: 55px;
+  padding: 0 15px;
   font-size: 1.2rem;
-  padding: 15px;
   color: var(--font-2);
 }
 
-.up-controls .settings-content .dropdown li .i {
+.up-controls .settings-content .dropdown li .i.label {
   margin-right: 8px;
   width: 30px;
 }

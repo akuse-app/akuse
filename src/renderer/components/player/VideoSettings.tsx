@@ -19,6 +19,7 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Dots } from 'react-activity';
 
 import { AuthContext } from '../../App';
+import Select from '../Select';
 
 const STORE = new Store();
 
@@ -63,6 +64,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+  const [speed, setSpeed] = useState('1');
 
   // loading
   const [changeEpisodeLoading, setChangeEpisodeLoading] =
@@ -128,10 +130,11 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleSpeedChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const speed = parseFloat(event.target.value);
+  const handleSpeedChange = (value: any) => {
+    const speedValue = parseFloat(value);
+    setSpeed(value);
     if (videoRef.current) {
-      videoRef.current.playbackRate = speed;
+      videoRef.current.playbackRate = speedValue;
     }
   };
 
@@ -160,16 +163,15 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleLanguageChange = async (
-    event: ChangeEvent<HTMLSelectElement>,
-  ) => {
+  const handleLanguageChange = async (value: any) => {
+    console.log(value)
     const previous = STORE.get('source_flag');
-    STORE.set('source_flag', event.target.value);
+    STORE.set('source_flag', value);
 
     setChangeEpisodeLoading(true);
 
     if (await onChangeEpisode(null, true)) {
-      setSelectedLanguage(event.target.value);
+      setSelectedLanguage(value);
       setChangeEpisodeLoading(false);
     } else {
       STORE.set('source_flag', previous);
@@ -177,9 +179,9 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('intro_skip_time', parseInt(event.target.value));
-    setSkipTime(parseInt(event.target.value));
+  const handleSkipTimeChange = (value: any) => {
+    STORE.set('intro_skip_time', parseInt(value));
+    setSkipTime(parseInt(value));
   };
 
   return (
@@ -197,30 +199,32 @@ const VideoSettings: React.FC<SettingsProps> = ({
         <div className="dropdown">
           <li className="quality">
             <span>
-              <FontAwesomeIcon className="i" icon={faVideo} />
+              <FontAwesomeIcon className="i label" icon={faVideo} />
               Quality
             </span>
-            <select
-              className="main-select-0"
-              onChange={handleQualityChange}
-              value={hlsData?.currentLevel}
-            >
-              {hlsData &&
-                hlsData?.levels?.map((level, index) => (
-                  <option key={index} value={index}>
-                    {`${level.height}p`}
-                  </option>
-                ))}
-            </select>
+            {hlsData && (
+              <Select
+                zIndex={12}
+                options={[
+                  ...hlsData?.levels?.map((level, index) => ({
+                    label: `${level.height}p`,
+                    value: index,
+                  })),
+                ]}
+                selectedValue={hlsData?.currentLevel}
+                onChange={handleQualityChange}
+                width={110}
+              />
+            )}
           </li>
           <li className="volume">
             <span onClick={toggleMute}>
               {isMuted ? (
-                <FontAwesomeIcon className="i" icon={faVolumeXmark} />
+                <FontAwesomeIcon className="i label" icon={faVolumeXmark} />
               ) : volume <= 0.3 ? (
-                <FontAwesomeIcon className="i" icon={faVolumeLow} />
+                <FontAwesomeIcon className="i label" icon={faVolumeLow} />
               ) : (
-                <FontAwesomeIcon className="i" icon={faVolumeHigh} />
+                <FontAwesomeIcon className="i label" icon={faVolumeHigh} />
               )}
               Volume
             </span>
@@ -236,46 +240,52 @@ const VideoSettings: React.FC<SettingsProps> = ({
           </li>
           <li className="playback">
             <span>
-              <FontAwesomeIcon className="i" icon={faClock} />
+              <FontAwesomeIcon className="i label" icon={faClock} />
               Speed
             </span>
-            <select className="main-select-0" onChange={handleSpeedChange}>
-              <option value="0.25">0.25</option>
-              <option value="0.50">0.50</option>
-              <option value="0.75">0.75</option>
-              <option value="1" selected>
-                Normal
-              </option>
-              <option value="1.25">1.25</option>
-              <option value="1.50">1.50</option>
-              <option value="1.75">1.75</option>
-              <option value="2">2</option>
-            </select>
+            <Select
+              zIndex={11}
+              options={[
+                { label: '0.25', value: '0.25' },
+                { label: '0.50', value: '0.50' },
+                { label: '0.75', value: '0.75' },
+                { label: '1', value: '1' },
+                { label: '1.25', value: '1.25' },
+                { label: '1.50', value: '1.50' },
+                { label: '1.75', value: '1.75' },
+                { label: '2', value: '2' },
+              ]}
+              selectedValue={speed}
+              onChange={handleSpeedChange}
+              width={100}
+            />
           </li>
           <li className="intro-skip-time">
             <span>
-              <FontAwesomeIcon className="i" icon={faRotateRight} />
+              <FontAwesomeIcon className="i label" icon={faRotateRight} />
               Intro Skip Time
             </span>
-            <select
-              className="main-select-0"
-              value={skipTime}
+            <Select
+              zIndex={10}
+              options={[
+                { label: '60', value: 60 },
+                { label: '65', value: 65 },
+                { label: '70', value: 70 },
+                { label: '75', value: 75 },
+                { label: '80', value: 80 },
+                { label: '85', value: 85 },
+                { label: '90', value: 90 },
+                { label: '95', value: 95 },
+              ]}
+              selectedValue={skipTime}
               onChange={handleSkipTimeChange}
-            >
-              <option value="60">60</option>
-              <option value="65">65</option>
-              <option value="70">70</option>
-              <option value="75">75</option>
-              <option value="80">80</option>
-              <option value="85">85</option>
-              <option value="90">90</option>
-              <option value="95">95</option>
-            </select>
+              width={100}
+            />
           </li>
           {logged && (
             <li className="update-progress">
               <span>
-                <FontAwesomeIcon className="i" icon={faSpinner} />
+                <FontAwesomeIcon className="i label" icon={faSpinner} />
                 Update progress
               </span>
               <label className="switch">
@@ -290,7 +300,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
           )}
           <li className="autoplay-next">
             <span>
-              <FontAwesomeIcon className="i" icon={faCirclePlay} />
+              <FontAwesomeIcon className="i label" icon={faCirclePlay} />
               Autoplay Next
             </span>
             <label className="switch">
@@ -304,7 +314,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
           </li>
           <li className="dub">
             <span>
-              <FontAwesomeIcon className="i" icon={faHeadphones} />
+              <FontAwesomeIcon className="i label" icon={faHeadphones} />
               Dub
             </span>
             {changeEpisodeLoading ? (
@@ -324,7 +334,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
           </li>
           <li className="language">
             <span>
-              <FontAwesomeIcon className="i" icon={faLanguage} />
+              <FontAwesomeIcon className="i label" icon={faLanguage} />
               Language
             </span>
             {changeEpisodeLoading ? (
@@ -332,15 +342,17 @@ const VideoSettings: React.FC<SettingsProps> = ({
                 <Dots />
               </div>
             ) : (
-              <select
-                className="main-select-0"
-                value={selectedLanguage}
+              <Select
+                zIndex={9}
+                options={[
+                  { label: 'English', value: 'US' },
+                  { label: 'Italian', value: 'IT' },
+                  { label: 'Hungarian', value: 'HU' },
+                ]}
+                selectedValue={selectedLanguage}
                 onChange={handleLanguageChange}
-              >
-                <option value="US">English</option>
-                <option value="IT">Italian</option>
-                <option value="HU">Hungarian</option>
-              </select>
+                width={140}
+              />
             )}
           </li>
         </div>

@@ -270,7 +270,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 episodesInfoHasFetched ? (
                   <img
                     src={alternativeBanner || listAnimeData.media.bannerImage}
-                    className="banner"
+                    className="banner show-opacity"
                     alt="Banner"
                   />
                 ) : null}

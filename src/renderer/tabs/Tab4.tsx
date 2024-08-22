@@ -3,22 +3,20 @@ import { ContentSteeringController } from 'hls.js';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { AuthContext } from '../App';
 import Heading from '../components/Heading';
+import Select from '../components/Select';
 
 const STORE = new Store();
 
-// Interfaccia per definire la struttura delle opzioni del select
 interface Option {
-  value: string;
+  value: any;
   label: string;
 }
 
-// Props per il componente Element
 interface ElementProps {
   label: string;
   children: React.ReactNode;
 }
 
-// Componente generico per gli elementi
 const Element: React.FC<ElementProps> = ({ label, children }) => {
   return (
     <div className="element">
@@ -30,14 +28,12 @@ const Element: React.FC<ElementProps> = ({ label, children }) => {
   );
 };
 
-// Props per il componente CheckboxElement
 interface CheckboxElementProps {
   label: string;
   checked: boolean;
   onChange: () => void;
 }
 
-// Componente per gestire gli elementi con i checkbox
 const CheckboxElement: React.FC<CheckboxElementProps> = ({
   label,
   checked,
@@ -53,35 +49,36 @@ const CheckboxElement: React.FC<CheckboxElementProps> = ({
   );
 };
 
-// Props per il componente SelectElement
 interface SelectElementProps {
   label: string;
   value: number | string;
   options: Option[];
+  zIndex?: number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-// Componente per gestire gli elementi con i select
 const SelectElement: React.FC<SelectElementProps> = ({
   label,
   value,
   options,
+  zIndex = 1,
   onChange,
 }) => {
   return (
     <Element label={label}>
       <label>
-        <select className="main-select-0" value={value} onChange={onChange}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        <Select
+          zIndex={zIndex}
+          options={[...options]}
+          selectedValue={value}
+          onChange={onChange}
+          width={140}
+        />
       </label>
     </Element>
   );
 };
+
 const Tab4: React.FC = () => {
   const logged = useContext(AuthContext);
 
@@ -114,14 +111,14 @@ const Tab4: React.FC = () => {
     setWatchDubbed(!watchDubbed);
   };
 
-  const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('source_flag', event.target.value);
-    setSelectedLanguage(event.target.value);
+  const handleLanguageChange = (value: any) => {
+    STORE.set('source_flag', value);
+    setSelectedLanguage(value);
   };
 
-  const handleSkipTimeChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    STORE.set('intro_skip_time', parseInt(event.target.value));
-    setSkipTime(parseInt(event.target.value));
+  const handleSkipTimeChange = (value: any) => {
+    STORE.set('intro_skip_time', parseInt(value));
+    setSkipTime(parseInt(value));
   };
 
   const handleShowDurationChange = () => {
@@ -141,14 +138,14 @@ const Tab4: React.FC = () => {
   ];
 
   const skipTimeOptions: Option[] = [
-    { value: '60', label: '60' },
-    { value: '65', label: '65' },
-    { value: '70', label: '70' },
-    { value: '75', label: '75' },
-    { value: '80', label: '80' },
-    { value: '85', label: '85' },
-    { value: '90', label: '90' },
-    { value: '95', label: '95' },
+    { value: 60, label: '60' },
+    { value: 65, label: '65' },
+    { value: 70, label: '70' },
+    { value: 75, label: '75' },
+    { value: 80, label: '80' },
+    { value: 85, label: '85' },
+    { value: 90, label: '90' },
+    { value: 95, label: '95' },
   ];
 
   return (
@@ -178,12 +175,14 @@ const Tab4: React.FC = () => {
             label="Select the language in which you want to watch the episodes"
             value={selectedLanguage}
             options={languageOptions}
+            zIndex={4}
             onChange={handleLanguageChange}
           />
           <SelectElement
             label="Select the duration of the intro skip (in seconds)"
             value={skipTime}
             options={skipTimeOptions}
+            zIndex={3}
             onChange={handleSkipTimeChange}
           />
           <CheckboxElement
