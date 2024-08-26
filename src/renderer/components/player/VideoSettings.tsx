@@ -64,11 +64,11 @@ const VideoSettings: React.FC<SettingsProps> = ({
 
   const [isMuted, setIsMuted] = useState(false);
 
-  const [speed, setSpeed] = useState('1');
-
   const [volume, setVolume] = useState<number>(
     STORE.get('volume') as number
   );
+
+  const [speed, setSpeed] = useState('1');
 
 
   // loading
