@@ -9,6 +9,7 @@ export const setDefaultStoreVariables = () => {
   if (!STORE.has('intro_skip_time')) STORE.set('intro_skip_time', 85);
   if (!STORE.has('show_duration')) STORE.set('show_duration', true);
   if (!STORE.has('trailer_volume_on')) STORE.set('trailer_volume_on', false);
+  if (!STORE.has('volume')) STORE.set('volume', 1);
 }
 
 export const getSourceFlag = async (): Promise<'IT' | 'US' | 'HU' | null> => {

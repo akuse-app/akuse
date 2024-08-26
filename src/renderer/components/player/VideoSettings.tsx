@@ -63,14 +63,25 @@ const VideoSettings: React.FC<SettingsProps> = ({
   );
 
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(1);
+
   const [speed, setSpeed] = useState('1');
+
+  const [volume, setVolume] = useState<number>(
+    STORE.get('volume') as number
+  );
+
 
   // loading
   const [changeEpisodeLoading, setChangeEpisodeLoading] =
     useState<boolean>(false);
 
   useEffect(() => {
+
+    // Sets initial volume
+    if (videoRef.current) {
+      videoRef.current.volume = volume;
+    }
+
     const handleVideoVolumeChange = () => {
       if (videoRef.current) {
         setIsMuted(videoRef.current.muted);
@@ -119,14 +130,12 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = Math.min(Math.max(parseFloat(event.target.value), 0), 1);
-    console.log(newVolume);
+  const handleVolumeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(event.target.value);
     if (videoRef.current) {
+      STORE.set('volume', newVolume)
       videoRef.current.volume = newVolume;
-      videoRef.current.muted = newVolume === 0;
       setVolume(newVolume);
-      setIsMuted(newVolume === 0);
     }
   };
 
@@ -233,7 +242,6 @@ const VideoSettings: React.FC<SettingsProps> = ({
               min="0"
               max="1"
               step="0.1"
-              defaultValue={1}
               value={volume}
               onChange={handleVolumeChange}
             />
