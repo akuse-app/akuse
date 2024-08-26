@@ -2,20 +2,18 @@ import 'react-activity/dist/Dots.css';
 
 import {
   faAngleLeft,
-  faBackward,
   faCompress,
   faExpand,
-  faForward,
-  faLayerGroup,
+  faUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Hls from 'hls.js';
+import { useState } from 'react';
 
 import { ListAnimeData } from '../../../types/anilistAPITypes';
-import VideoSettings from './VideoSettings';
-import Hls from 'hls.js';
 import { EpisodeInfo } from '../../../types/types';
 import VideoEpisodesChange from './VideoEpisodesChange';
-import { useState } from 'react';
+import VideoSettings from './VideoSettings';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -28,6 +26,7 @@ interface TopControlsProps {
   showNextEpisodeButton: boolean;
   fullscreen: boolean;
   onFullScreentoggle: () => void;
+  onPiPToggle: () => void;
   onChangeEpisode: (
     episode: number | null,
     reloadAtPreviousTime?: boolean,
@@ -48,6 +47,7 @@ const TopControls: React.FC<TopControlsProps> = ({
   showNextEpisodeButton,
   fullscreen,
   onFullScreentoggle,
+  onPiPToggle,
   onChangeEpisode,
   onExit,
   onClick,
@@ -70,8 +70,7 @@ const TopControls: React.FC<TopControlsProps> = ({
           <span className="back">
             <FontAwesomeIcon className="i" icon={faAngleLeft} />
             <span className="episode">
-              <span>{`Ep. ${episodeNumber} - `}</span>
-              {episodeTitle}
+              {`Ep. ${episodeNumber} - ${episodeTitle}`}
             </span>
           </span>
         </div>
@@ -101,11 +100,26 @@ const TopControls: React.FC<TopControlsProps> = ({
           showNextEpisodeButton={showNextEpisodeButton}
           onChangeEpisode={onChangeEpisode}
         />
+        <button className="b-player" onClick={onPiPToggle}>
+          <div className="tooltip">
+            <FontAwesomeIcon className="i" icon={faUpRightFromSquare} />
+            <span className="tooltip-text">
+              Picture-in-Picture
+            </span>
+          </div>
+        </button>
         <button className="b-player fullscreen" onClick={onFullScreentoggle}>
-          <FontAwesomeIcon
-            className="i"
-            icon={fullscreen ? faCompress : faExpand}
-          />
+          <div className="tooltip">
+            <FontAwesomeIcon
+              className="i"
+              icon={fullscreen ? faCompress : faExpand}
+            />
+            {
+              <span className="tooltip-text">
+                {fullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+              </span>
+            }
+          </div>
         </button>
       </div>
     </div>

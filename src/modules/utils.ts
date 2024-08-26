@@ -334,11 +334,7 @@ export const parseAirdate = (airdate: string) =>
  * @returns parsed anime titles
  */
 export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
-  var animeTitles = getTitlesAndSynonyms(animeEntry);
-
-  // const customTitle =
-  //   animeCustomTitles[STORE.get('source_flag') as string][animeEntry?.id!];
-  // if (customTitle) animeTitles.unshift(customTitle);
+  let animeTitles = getTitlesAndSynonyms(animeEntry);
 
   animeTitles.forEach((title) => {
     if (title.includes('Season '))
@@ -347,6 +343,8 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
       animeTitles.push(title.replace('Season ', '').replace('Part ', ''));
     if (title.includes('Part ')) animeTitles.push(title.replace('Part ', ''));
     if (title.includes(':')) animeTitles.push(title.replace(':', ''));
+    if (title.includes('(') && title.includes(')')) // hunter x hunter
+      animeTitles.push(title.replace('(', '').replace(')', ''));
   });
 
   return animeTitles;

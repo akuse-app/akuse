@@ -19,7 +19,7 @@ const StatusDot: React.FC<{
         listAnimeData?.media.mediaListEntry?.status == 'REPEATING') &&
       listAnimeData.media.mediaListEntry.progress !==
         getAvailableEpisodes(listAnimeData.media) ? (
-        <span className="up_to_date">
+        <span className="up-to-date">
           <FontAwesomeIcon
             className="i"
             icon={faCircleDot}
@@ -38,7 +38,7 @@ const StatusDot: React.FC<{
         )
       )}
       {listAnimeData?.media.status === 'NOT_YET_RELEASED' && (
-        <span className="not_yet_released">
+        <span className="not-yet-released">
           <FontAwesomeIcon
             className="i"
             icon={faCircleDot}

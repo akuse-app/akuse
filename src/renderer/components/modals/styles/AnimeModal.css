@@ -119,18 +119,18 @@
   border-radius: var(--border-radius);
 }
 
-.anime-page .title {
+.anime-page .content-wrapper .content .title {
   color: var(--font-1);
-  /* font-size: 2.6vw; */
+  line-height: 46px;
   font-size: 2.8rem;
   font-weight: 800;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .anime-page ul.info {
   display: flex;
   gap: 20px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   padding-left: 0;
   color: var(--font-3);
   font-size: 1.1rem;
@@ -211,6 +211,7 @@
   position: relative;
   width: calc(100% - 50px);
   margin: 0 25px 10px 25px;
+  z-index: 10;
 }
 
 .anime-page .episodes-section .episodes-options .right {
@@ -373,10 +374,10 @@
   color: var(--font-2);
   font-size: 1rem;
   font-weight: var(--font-weight);
-  line-height: 26px;
+  line-height: 21px;
 
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;

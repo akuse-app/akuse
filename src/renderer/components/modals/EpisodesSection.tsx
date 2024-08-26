@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getAvailableEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
+import Select from '../Select';
 import EpisodeEntry from './EpisodeEntry';
 
 const EPISODES_PER_PAGE = 30;
@@ -50,8 +51,8 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
 
   const pages = getEpisodesArray();
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setActiveSection(parseInt(event.target.value));
+  const handleChange = (value: any) => {
+    setActiveSection(value);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,17 +69,18 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
               <h2>Episodes</h2>
               <div className="right">
                 {episodes > EPISODES_PER_PAGE && (
-                  <select
-                    className="main-select-0"
+                  <Select
+                    zIndex={1}
+                    options={[
+                      ...pages.map((page, index) => ({
+                        label: `${page[0]} - ${page.slice(-1)}`,
+                        value: index,
+                      })),
+                    ]}
+                    selectedValue={activeSection}
                     onChange={handleChange}
-                    value={activeSection}
-                  >
-                    {pages.map((page, index) => (
-                      <option key={index} value={index}>
-                        {`${page[0]} - ${page.slice(-1)}`}
-                      </option>
-                    ))}
-                  </select>
+                    width={140}
+                  />
                 )}
               </div>
             </div>
@@ -93,31 +95,31 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
                   number={episodesInfo ? `Ep: ${episode} - ` : ''}
                   cover={
                     episodesInfo
-                      ? episodesInfo[episode]?.image ??
+                      ? (episodesInfo[episode]?.image ??
                         listAnimeData.media.bannerImage ??
-                        ''
-                      : listAnimeData.media.bannerImage ?? ''
+                        '')
+                      : (listAnimeData.media.bannerImage ?? '')
                   }
                   title={
                     episodesInfo && episodesInfo[episode]?.title
-                      ? episodesInfo[episode]?.title?.en ?? `Episode ${episode}`
+                      ? (episodesInfo[episode]?.title?.en ??
+                        `Episode ${episode}`)
                       : `Episode ${episode}`
                   }
                   description={
                     episodesInfo
-                      ? episodesInfo[episode]?.summary ??
-                        'No description available.'
+                      ? (episodesInfo[episode]?.summary ??
+                        'No description available.')
                       : 'No description available.'
                   }
                   releaseDate={
                     episodesInfo
-                      ? parseAirdate(episodesInfo[episode]?.airdate || '') ?? ''
+                      ? (parseAirdate(episodesInfo[episode]?.airdate || '') ??
+                        '')
                       : ''
                   }
                   duration={
-                    episodesInfo
-                      ? `${episodesInfo[episode]?.length}min` ?? ''
-                      : ''
+                    episodesInfo ? `${episodesInfo[episode]?.length}min` : ''
                   }
                   loading={loading}
                 />

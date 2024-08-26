@@ -2,6 +2,7 @@ import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { IVideo } from '@consumet/extensions';
+import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
@@ -22,7 +23,6 @@ import { EpisodeInfo } from '../../../types/types';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
-import { ipcRenderer } from 'electron';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -222,16 +222,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     if (video !== null) {
       playHlsVideo(video.url);
+
+      // resume from tracked progress
+      // const trackedProgress = STORE.get(
+      //   `${listAnimeData.media.id}-${animeEpisodeNumber}`,
+      // ) as number;
+
+      // if (trackedProgress && videoRef.current)
+      //   videoRef.current.currentTime = trackedProgress;
+
       setVideoData(video);
       setEpisodeNumber(animeEpisodeNumber);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[animeEpisodeNumber].title?.en ??
-              `Episode ${animeEpisodeNumber}`
+          ? (episodesInfo[animeEpisodeNumber].title?.en ??
+              `Episode ${animeEpisodeNumber}`)
           : `Episode ${animeEpisodeNumber}`,
       );
       setEpisodeDescription(
-        episodesInfo ? episodesInfo[animeEpisodeNumber].summary ?? '' : '',
+        episodesInfo ? (episodesInfo[animeEpisodeNumber].summary ?? '') : '',
       );
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
@@ -241,7 +250,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const playHlsVideo = (url: string) => {
     try {
-      console.log(url)
+      console.log(url);
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
@@ -325,6 +334,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setDuration(dTime);
         setBuffered(videoRef.current?.buffered);
 
+        // keep track of episode time
+        // const progressKey = `${listAnimeData.media.id}-${episodeNumber}`;
+        
+        // if (Math.trunc(cTime) % 20 === 0 && cTime - Math.trunc(cTime) < 0.3) {
+        //   console.log(`Tracked new time for ${progressKey}: ${cTime}`);
+        //   STORE.set(progressKey, cTime);
+        // }
+
         // automatically update progress
         // console.log((cTime * 100) / dTime);
         if (
@@ -376,6 +393,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 7500);
   };
 
+  const handleVideoEnd = () => {
+    if ((STORE.get('autoplay_next') as boolean) === true) {
+      canNextEpisode(episodeNumber) && changeEpisode(episodeNumber + 1);
+    }
+  };
+
   const handleMouseMove = () => {
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
@@ -402,10 +425,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 2000);
   };
 
-  const handleExit = () => {
+  const handleExit = async () => {
     if (document.fullscreenElement) {
       setFullscreen(false);
       document.exitFullscreen();
+    }
+
+    if (
+      videoRef.current &&
+      videoRef.current === document.pictureInPictureElement
+    ) {
+      await document.exitPictureInPicture();
     }
 
     onClose();
@@ -450,6 +480,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const togglePiP = async () => {
+    if (videoRef.current) {
+      try {
+        if (videoRef.current !== document.pictureInPictureElement) {
+          await videoRef.current.requestPictureInPicture();
+        } else {
+          await document.exitPictureInPicture();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const changeEpisode = async (
     episode: number | null, // null to play the current episode
     reloadAtPreviousTime?: boolean,
@@ -467,11 +511,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeNumber(episodeToPlay);
       setEpisodeTitle(
         episodesInfo
-          ? episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`
+          ? (episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`)
           : `Episode ${episode}`,
       );
       setEpisodeDescription(
-        episodesInfo ? episodesInfo[episodeToPlay].summary ?? '' : '',
+        episodesInfo ? (episodesInfo[episodeToPlay].summary ?? '') : '',
       );
       playHlsVideo(value.url);
       // loadSource(value.url, value.isM3U8 ?? false);
@@ -550,6 +594,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               showPreviousEpisodeButton={showPreviousEpisodeButton}
               fullscreen={fullscreen}
               onFullScreentoggle={toggleFullScreen}
+              onPiPToggle={togglePiP}
               onChangeEpisode={changeEpisode}
               onExit={handleExit}
               onClick={togglePlayingWithoutPropagation}
@@ -580,6 +625,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             onKeyDown={handleKeydown}
             onTimeUpdate={handleTimeUpdate}
             onPause={handleVideoPause}
+            onEnded={handleVideoEnd}
             crossOrigin="anonymous"
           ></video>
         </div>

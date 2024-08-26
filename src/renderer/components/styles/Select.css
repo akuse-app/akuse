@@ -1,0 +1,83 @@
+.custom-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 43px;
+  background-color: var(--color-2);
+  border-radius: var(--border-radius);
+  color: var(--font-2);
+  z-index: 20;
+  transition: filter 0.1s;
+  font-weight: 500;
+}
+
+.custom-select.open-radius {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.custom-select .label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 16px;
+}
+
+.custom-select .label .chevron {
+  position: absolute;
+  top: 24%;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  transition: 0.1s;
+}
+
+.custom-select .label .chevron.down {
+  transform: rotate(180deg);
+  top: 31%;
+}
+
+.custom-select .options-group {
+  min-width: 100%;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: var(--color-2);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  z-index: 999;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 200px;
+}
+
+.custom-select .option {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 12px;
+  font-size: 16px;
+}
+
+.custom-select .option.active {
+  color: var(--font-1);
+  background-color: var(--color-important);
+}
+
+.custom-select .option.active:hover {
+  filter: brightness(1.1);
+}
+
+.custom-select .option:hover:not(.active) {
+  color: var(--font-2);
+  background-color: var(--color-3);
+}
+
+@media (max-width: 1000px) {
+  .custom-select-container {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

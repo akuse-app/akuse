@@ -32,7 +32,7 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
   return (
     <div className="episode-entry" onClick={onPress}>
       {hasInfoLoaded ? (
-        <div className="image">
+        <div className="image show-opacity">
           <img src={cover ?? ''} alt="episode cover" />
         </div>
       ) : (

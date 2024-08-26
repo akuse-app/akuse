@@ -24,7 +24,6 @@ import { ListAnimeData } from '../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../types/types';
 import { ButtonMain } from './Buttons';
 import AnimeModal from './modals/AnimeModal';
-import { IsInListButton } from './modals/AnimeModalElements';
 import VideoPlayer from './player/VideoPlayer';
 
 interface SlideProps {
@@ -48,17 +47,30 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
 
   const [shadowAnimationClasses, setShadowAnimationClasses] =
     useState<string>('');
+  const [contentAnimationClasses, setContentAnimationClasses] =
+    useState<string>('show-slideshow-content');
+  const [bannerAnimationClasses, setBannerAnimationClasses] = useState<string>(
+    'dwindle-slideshow-banner',
+  );
   const [isFirstActivation, setIsFirstActivation] = useState(true);
 
   // smoother transitions between slides
   useEffect(() => {
     if (isVisible && !isFirstActivation) {
       setShadowAnimationClasses('show-slide-opacity');
+
+      setTimeout(() => {
+        setContentAnimationClasses('show-slideshow-content');
+        setBannerAnimationClasses('dwindle-slideshow-banner');
+      }, 500);
     } else if (!isVisible) {
       setShadowAnimationClasses('show-slide-opacity hide-opacity-long');
       setTimeout(() => {
         setShadowAnimationClasses('hide-opacity-long');
       }, 400);
+
+      setContentAnimationClasses('hide-slideshow-content');
+      setBannerAnimationClasses('enlarge-slideshow-banner');
     }
 
     setIsFirstActivation(false);
@@ -130,14 +142,18 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           className={`shadow-overlay ${shadowAnimationClasses}`}
           // style={{ display: isVisible ? 'block' : 'none' }}
         >
-          <div className={`content show`}>
+          <div
+            className={`content ${contentAnimationClasses}`}
+            // className={`content ${isVisible ? 'show-slideshow-content' : 'hide-slideshow-content'}`}
+          >
             <div className="anime-info">
-              <div className="anime-format">{listAnimeData.media.format}</div>•
+              <div className="anime-format">{listAnimeData.media.format}</div>
+              <div className="bullet">•</div>
               <div className="anime-year">
                 {capitalizeFirstLetter(listAnimeData.media.season ?? '?')}{' '}
                 {getParsedSeasonYear(listAnimeData.media)}
               </div>
-              •
+              <div className="bullet">•</div>
               <div className="anime-episodes">
                 {getAvailableEpisodes(listAnimeData.media)} Episodes
               </div>
@@ -177,6 +193,10 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
           key={index}
           src={listAnimeData.media.bannerImage}
           alt={`Slide ${index}`}
+          className={
+            bannerAnimationClasses
+            // isVisible ? 'dwindle-slideshow-banner' : 'enlarge-slideshow-banner'
+          }
         />
       </div>
       <Toaster />

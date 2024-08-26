@@ -1,35 +1,20 @@
 import { IVideo } from '@consumet/extensions';
-import AnimeUnity from '@consumet/extensions/dist/providers/anime/animeunity';
+import AnimeDrive from '@consumet/extensions/dist/providers/anime/animedrive';
+const consumet = new AnimeDrive();
 
-const consumet = new AnimeUnity();
-
-/**
- *
- * @param animeTitles
- * @param episode
- * @param dubbed
- * @returns
- */
 export const getEpisodeUrl = async (
   animeTitles: string[],
   index: number,
   episode: number,
   dubbed: boolean,
-  releaseDate: number,
 ): Promise<IVideo[] | null> => {
   console.log(
     `%c Episode ${episode}, looking for ${consumet.name} source...`,
-    `color: #0c7475`,
+    `color: #6b8cff`,
   );
 
   for (const animeSearch of animeTitles) {
-    const result = await searchEpisodeUrl(
-      animeSearch,
-      index,
-      episode,
-      dubbed,
-      releaseDate,
-    );
+    const result = await searchEpisodeUrl(animeSearch, index, episode, dubbed);
     if (result) {
       return result;
     }
@@ -44,29 +29,26 @@ export const getEpisodeUrl = async (
  * @param {*} animeSearch
  * @param {*} episode anime episode to look for
  * @param {*} dubbed dubbed version or not
- * @returns consumet IVideo if url is found, otherwise null
+ * @returns IVideo sources if found, null otherwise
  */
 async function searchEpisodeUrl(
   animeSearch: string,
   index: number,
   episode: number,
-  dubbed: boolean,
-  releaseDate: number,
+  dubbed: boolean
 ): Promise<IVideo[] | null> {
   const animeId = await getAnimeId(
-    index,
-    dubbed ? `${animeSearch} (ITA)` : animeSearch,
-    dubbed,
-    releaseDate,
+    dubbed ? 0 : index,
+    dubbed ? `${animeSearch} (Dub)` : animeSearch,
   );
 
   if (animeId) {
     const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
     if (animeEpisodeId) {
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
-      console.log(`%c ${animeSearch}`, `color: #45AD67`);
 
-      return data.sources;
+      console.log(`%c ${animeSearch}`, `color: #45AD67`);
+      return data.sources
     }
   }
 
@@ -83,23 +65,9 @@ async function searchEpisodeUrl(
 export const getAnimeId = async (
   index: number,
   animeSearch: string,
-  dubbed: boolean,
-  releaseDate: number,
 ): Promise<string | null> => {
   const data = await consumet.search(animeSearch);
-
-  const filteredResults = data.results.filter((result) =>
-    dubbed
-      ? (result.title as string).includes('(ITA)')
-      : !(result.title as string).includes('(ITA)'),
-  );
-
-  return (
-    filteredResults.filter(
-      (result) => result.releaseDate == releaseDate.toString(),
-    )[index]?.id ?? null
-  );
-  // return data.results[index]?.id ?? null;
+  return data.results[index]?.id ?? null;
 };
 
 /**
@@ -113,9 +81,6 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
-  const data = await consumet.fetchAnimeInfo(
-    animeId,
-    episode > 120 ? Math.floor(episode / 120) + 1 : 1,
-  );
-  return data?.episodes?.find((ep) => ep.number == episode)?.id ?? null;
+  const data = await consumet.fetchAnimeInfo(animeId);
+  return data?.episodes?.[episode - 1]?.id ?? null;
 };

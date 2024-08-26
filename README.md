@@ -9,21 +9,42 @@
     <img alt="license" src="https://img.shields.io/github/license/aleganza/akuse"> 
     <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/akuse-app/akuse">
     <img alt="total-downloads" src="https://img.shields.io/github/downloads/aleganza/akuse/total">
-    <img alt="GitHub Issues or Pull Requests" src="https://img.shields.io/github/issues/aleganza/akuse?color=red">
     <a href="https://discord.gg/f3wdnqSNX5">
-        <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?label=discord&color=%235567E3">
+        <img alt="Discord" src="https://img.shields.io/discord/1163970236224118796?style=flat&label=discord&logo=discord&color=%235567E3">
+    </a>
+</p>
+
+<p align="center" style="text-decoration: none;">
+    <a href="https://github.com/akuse-app/akuse/releases/latest">
+        <img alt="Made For Windows" src="https://img.shields.io/badge/made_for-Windows-0078D6?style=flat&logo=windows&logoColor=white"><img alt="Made For Linux" src="https://img.shields.io/badge/made_for-Linux-FCC624?style=flat&logo=linux&logoColor=white">
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://ko-fi.com/aleganza">
+      <img width="400px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea0b_kofi_long_button_red%402x.png"/>
     </a>
 </p>
 
 <img title="img" alt="img" src="./assets/screenshot.jpg">
 
-## 💝 Support this app
+<br/>
 
-<p align="center">
-    <a href="https://www.paypal.com/paypalme/alessioganzarolli">
-      <img width="250px" src="https://github.com/aha999/DonateButtons/raw/master/paypal-donate-icon-7.png"/>
-    </a>
-</p>
+# Why choose akuse?
+
+- **🚀 Fast:** Smooth and quick streaming with minimal buffering.
+- **🎨 Sleek UI:** User-friendly and eye-catching.
+- **🔄 Reliable:** Regular updates and fresh content.
+
+<br/>
+
+# Other info
+<details>
+  <summary><h2>🗺 Languages</h2></summary>
+
+  - Italian
+  - English
+</details>
 
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
@@ -119,7 +140,7 @@
 ## 🐛 Known Issues
 
 - If Log-In in installed apps doesn't work, make sure you have set a default browser.
-- Some anime may don't work because of different names as compared to AniList: feel free to open a new issue if you find some of them so they can be fixed.
+- Some anime may not work due to different names compared to AniList. Feel free to open a new issue if you find any, so they can be fixed.
 
 ## 🌟 Contributors
 
@@ -129,6 +150,10 @@
 
 - [Consumet API](https://github.com/consumet/consumet.ts): used to fetch episodes links
 - [This API](https://api.ani.zip/mappings?anilist_id=21): used to fetch episodes info and thumbnails
+
+<br/>
+
+# Legal
 
 ## 📢 Disclaimer
 
