@@ -28,6 +28,24 @@
 
 <img title="img" alt="img" src="./assets/screenshot.jpg">
 
+<br/>
+
+# Why choose akuse?
+
+- **🚀 Fast:** Enjoy smooth and quick streaming with minimal buffering.
+- **🎨 Modern UI:** Experience an intuitive and visually appealing interface.
+- **🔄 Reliable:** Regularly maintained with frequent updates and fresh content.
+
+<br/>
+
+# Other info
+<details>
+  <summary><h2>🗺 Languages</h2></summary>
+
+  - Italian
+  - English
+</details>
+
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
 
@@ -132,6 +150,10 @@
 
 - [Consumet API](https://github.com/consumet/consumet.ts): used to fetch episodes links
 - [This API](https://api.ani.zip/mappings?anilist_id=21): used to fetch episodes info and thumbnails
+
+<br/>
+
+# Legal
 
 ## 📢 Disclaimer
 
