@@ -32,9 +32,9 @@
 
 # Why choose akuse?
 
-- **🚀 Fast:** Enjoy smooth and quick streaming with minimal buffering.
-- **🎨 Modern UI:** Experience an intuitive and visually appealing interface.
-- **🔄 Reliable:** Regularly maintained with frequent updates and fresh content.
+- **🚀 Fast:** Smooth and quick streaming with minimal buffering.
+- **🎨 Sleek UI:** User-friendly and eye-catching.
+- **🔄 Reliable:** Regular updates and fresh content.
 
 <br/>
 
