@@ -9,6 +9,7 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
+  getAiringSchedule,
   getMostPopularAnime,
   getNextReleases,
   getTrendingAnime,
@@ -87,6 +88,9 @@ export default function App() {
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
+
+        console.log('qui');
+        const sus = await getAiringSchedule(id);
 
         setUserInfo(await getViewerInfo(id));
         const current = await getViewerList(id, 'CURRENT');

@@ -1,3 +1,4 @@
+import { app } from 'electron';
 import Store from 'electron-store';
 
 import {
@@ -9,9 +10,8 @@ import {
 import { MediaListStatus } from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
-import { getOptions, makeRequest } from '../requests';
 import isAppImage from '../packaging/isAppImage';
-import { app, ipcRenderer } from 'electron';
+import { getOptions, makeRequest } from '../requests';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -272,6 +272,53 @@ export const getAnimeInfo = async (animeId: any) => {
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Media;
+};
+
+/**
+ * gets airing schedule
+ *
+ * @param viewerId
+ * @returns
+ */
+
+export const getAiringSchedule = async (viewerId: number | null) => {
+  const timeInSeconds = Math.floor(Date.now() / 1000);
+
+  const query = ` 
+  query {
+    Page(page: 1, perPage: ${PAGES}) {
+      pageInfo {
+        hasNextPage
+      },
+      airingSchedules(airingAt_greater: ${timeInSeconds}) {
+        episode,
+        timeUntilAiring,
+        airingAt,
+        media {
+          ${MEDIA_DATA}
+        }
+      }
+    }
+  }`;
+
+  if (viewerId) {
+    var headers: any = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  } else {
+    var headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
+
+  const options = getOptions(query);
+  console.log(query);
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  console.log(respData);
+  // return respData.data.Page;
 };
 
 /**
