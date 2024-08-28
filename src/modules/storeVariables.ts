@@ -10,6 +10,9 @@ export const setDefaultStoreVariables = () => {
   if (!STORE.has('show_duration')) STORE.set('show_duration', true);
   if (!STORE.has('trailer_volume_on')) STORE.set('trailer_volume_on', false);
   if (!STORE.has('volume')) STORE.set('volume', 1);
+  if (!STORE.has('rich_presence')) STORE.set('rich_presence', false);
+  if (!STORE.has('episode_per_page')) STORE.set('episode_per_page', 30);
+  if (!STORE.has('history')) STORE.set('history', {entries: {}});
 }
 
 export const getSourceFlag = async (): Promise<'IT' | 'US' | 'HU' | null> => {

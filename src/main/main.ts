@@ -35,6 +35,8 @@ if (isDebug) {
   require('electron-debug')();
 }
 
+const RPCEnabled = STORE.get('rich_presence');
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -76,6 +78,7 @@ const createWindow = async () => {
       contextIsolation: false,
       webSecurity: false,
       allowRunningInsecureContent: false,
+      enableRemoteModule: true,
     },
   });
 
@@ -296,40 +299,77 @@ ipcMain.on('download-update', async () => {
 });
 
 /* DISCORD RPC */
+(() => {
+  if(!RPCEnabled) return;
+  let clientId = STORE.get('presence_id');
+  let RPC;
 
-const clientId = '1256111110151475241';
+  console.log("Client Id:", clientId);
 
-const RPC = new DiscordRPC.Client({ transport: 'ipc' });
-DiscordRPC.register(clientId);
+  function initializeRPC(clientId) {
+    RPC = new DiscordRPC.Client({ transport: 'ipc' });
 
-async function setActivity(details?: string, state?: string, startTimestamp?: number, largeImageKey?: string, largeImageText?: string, smallImageKey?: string, instance?: boolean, buttons?: any[]) {
-  if (!RPC || !mainWindow) {
-    return;
+    DiscordRPC.register(clientId);
+
+    RPC.on('ready', () => {
+      console.log('Discord RPC is ready');
+      setActivity();
+    });
+
+    RPC.on('error', (error) => {
+      console.error('Discord RPC Error:', error);
+    });
+
+    RPC.login({ clientId }).catch(console.error);
+  }
+
+  async function setActivity(
+    details = '🌸 Watch anime without ads.',
+    state = 'Enjoying coding!',
+    startTimestamp = Date.now(),
+    largeImageKey = 'akuse',
+    largeImageText = 'akuse',
+    smallImageKey = '',
+    instance = false,
+    buttons = [{ label: 'Download akuse', url: 'https://github.com/akuse-app/akuse/releases/latest' }]
+  ) {
+    if (!RPC) {
+      return;
+    }
+
+    const activityPayload = {
+      details,
+      state,
+      startTimestamp,
+      assets: {
+        largeImage: largeImageKey,
+        largeText: largeImageText,
+        smallImage: smallImageKey || '', // Provide an empty string if not used
+      },
+      instance,
+      buttons,
+    };
+
+    console.log('Setting activity with:', activityPayload); // Debugging line
+
+    RPC.setActivity(activityPayload).catch(console.error);
   }
 
 
-  RPC.setActivity({
-    details: details || '🌸 Watch anime without ads.',
-    state: state || getRandomDiscordPhrase(),
-    startTimestamp: startTimestamp || Date.now(),
-    largeImageKey: largeImageKey || 'icon',
-    largeImageText: largeImageText || 'akuse',
-    smallImageKey: smallImageKey,
-    instance: instance || false,
-    buttons: buttons || [
-      {
-        label: 'Download akuse',
-        url: 'https://github.com/akuse-app/akuse/releases/latest',
-      },
-    ],
+
+
+  ipcMain.on('set-client-id', (event, clientId) => {
+    if (RPC) {
+      RPC.destroy();
+    }
+    initializeRPC(clientId);
   });
-}
 
-RPC.on('ready', () => {
-  setActivity();
-});
-RPC.login({ clientId }).catch(console.error);
+  ipcMain.on('update-presence', (event, data) => {
+    setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.smallImageKey, data.instance, data.buttons);
+  });
 
-ipcMain.on('update-presence', (event, data) => {
-  setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.smallImageKey, data.instance, data.buttons);
-})
+  app.on('ready', () => {
+    initializeRPC(clientId);  // Initialize with default client ID
+  });
+})()

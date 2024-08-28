@@ -5,9 +5,9 @@ import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import Select from '../Select';
 import EpisodeEntry from './EpisodeEntry';
+import Store from 'electron-store';
 
-const EPISODES_PER_PAGE = 30;
-
+const store = new Store();
 interface EpisodesSectionProps {
   episodesInfo?: EpisodeInfo[];
   episodesInfoHasFetched: boolean;
@@ -26,10 +26,12 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   const [activeSection, setActiveSection] = useState<number>(0);
   const [searchValue, setSearchValue] = useState<string>('');
   const [widenInput, setWidenInput] = useState<boolean>(false);
-
   const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
+  const history = store.get('history');
+  const history_entry = history.entries[listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id];
 
   const getEpisodesArray = () => {
+    const EPISODES_PER_PAGE = store.get('episodes_per_page') as number;
     const total_pages: number = Math.ceil(episodes / EPISODES_PER_PAGE);
     const episodesArray: number[][] = [];
 
@@ -68,7 +70,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
             <div className="episodes-options">
               <h2>Episodes</h2>
               <div className="right">
-                {episodes > EPISODES_PER_PAGE && (
+                {episodes > (store.get('episodes_per_page') as number) && (
                   <Select
                     zIndex={1}
                     options={[
@@ -85,11 +87,18 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
               </div>
             </div>
             <div className="episodes">
-              {pages[activeSection].map((episode, index) => (
-                <EpisodeEntry
+              {pages[activeSection].map((episode, index) => {
+                const entry = history_entry.history[episode];
+                const duration = entry?.duration ?? 0;
+                const episode_progress = (entry !== undefined ? entry.time / duration : 0) * 100;
+
+                console.log(episode, episode_progress);
+
+                return <EpisodeEntry
                   onPress={() => {
                     onPlay(episode);
                   }}
+                  progress={episode_progress}
                   key={index}
                   hasInfoLoaded={episodesInfoHasFetched}
                   number={episodesInfo ? `Ep: ${episode} - ` : ''}
@@ -123,7 +132,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
                   }
                   loading={loading}
                 />
-              ))}
+              })}
             </div>
           </>
         )}

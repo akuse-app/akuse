@@ -2,8 +2,10 @@ import Store from 'electron-store';
 import { ContentSteeringController } from 'hls.js';
 import React, { ChangeEvent, useContext, useState } from 'react';
 import { AuthContext } from '../App';
+import { ipcRenderer } from 'electron';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
+import toast, { Toaster } from 'react-hot-toast';
 
 const STORE = new Store();
 
@@ -49,6 +51,26 @@ const CheckboxElement: React.FC<CheckboxElementProps> = ({
   );
 };
 
+interface TextInputElementProps {
+  label: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const TextInputElement: React.FC<TextInputElementProps> = ({ label, value, onChange }) => {
+  return (
+    <div className="text-input-element">
+      <label className="text-input-label">{label}</label>
+      <input
+        type="text"
+        className="text-input-field"
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
+
 interface SelectElementProps {
   label: string;
   value: number | string;
@@ -81,6 +103,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
 
 const Tab4: React.FC = () => {
   const logged = useContext(AuthContext);
+  const style = getComputedStyle(document.body);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
@@ -100,6 +123,54 @@ const Tab4: React.FC = () => {
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
+  const [richPresence, setRichPresence] = useState<boolean>(
+    STORE.get('rich_presence') as boolean,
+  );
+  const [presenceId, setPresenceId] = useState<string>(
+    STORE.get('presence_id') as string,
+  );
+  const [episodesPerPage, setEpisodesPerPage] = useState<number>(
+    STORE.get('episodes_per_page') as number,
+  );
+
+  const handlePresenceId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const clientId = event.target.value;
+
+    STORE.set('presence_id', clientId);
+    setPresenceId(clientId);
+
+    if(!richPresence) return;
+
+    ipcRenderer.send('set-client-id', clientId);
+    ipcRenderer.send('update-presence', {
+      details: '🌸 Watch anime without ads.',
+      state: 'Enjoying coding!',
+      startTimestamp: Date.now(),
+      largeImageKey: 'akuse',
+      largeImageText: 'akuse',
+      instance: false,
+      buttons: [
+        {
+          label: 'Download akuse',
+          url: 'https://github.com/akuse-app/akuse/releases/latest',
+        },
+      ],
+    });
+  };
+
+  const handleEpisodesPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /* Should probably swap this for the dropdown instead but I like the flexibility. */
+    let value = event.target.value;
+    if(/[a-zA-Z\.]/.test(value))
+      value = value.replaceAll(/[a-zA-Z\.]/g, '');
+
+    let number = Math.max(Number(value), 1);
+    if(Number.isNaN(number))
+      number = 1;
+
+    STORE.set('episodes_per_page', number);
+    setEpisodesPerPage(number);
+  };
 
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
@@ -129,6 +200,11 @@ const Tab4: React.FC = () => {
   const handleAutoplayNextChange = () => {
     STORE.set('autoplay_next', !autoplayNext);
     setAutoplayNext(!autoplayNext);
+  };
+
+  const handleRichPresence = () => {
+    STORE.set("rich_presence", !richPresence);
+    setRichPresence(!richPresence);
   };
 
   const languageOptions: Option[] = [
@@ -190,8 +266,24 @@ const Tab4: React.FC = () => {
             checked={showDuration}
             onChange={handleShowDurationChange}
           />
+          <CheckboxElement
+            label="Discord RPC"
+            checked={richPresence}
+            onChange={handleRichPresence}
+          />
+          <TextInputElement
+            label="RPC Client ID"
+            value={presenceId}
+            onChange={handlePresenceId}
+          />
+          <TextInputElement
+            label="Episodes Per Page"
+            value={String(episodesPerPage)}
+            onChange={handleEpisodesPerPage}
+          />
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

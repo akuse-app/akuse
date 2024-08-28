@@ -343,6 +343,25 @@
   transition: var(--transition);
 }
 
+.anime-page .episodes-section .episode-entry .progress-bar {
+  position: absolute;
+  background-color: var(--color-important);
+  bottom: 0.3px;
+  margin-left: 0.5px;
+  max-width: 311px;
+  height: 7.5px;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  transition: var(--transition);
+}
+
+.anime-page .episodes-section .episode-entry .progress-bar.full-width {
+  width: 100%;
+}
+
+.anime-page .episodes-section .episode-entry .progress-bar.partial-width {
+  border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius); /* Rounded corners */
+}
+
 .anime-page .episodes-section .episode-entry .episode-content {
   width: 100%;
   display: flex;

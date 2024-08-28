@@ -15,6 +15,41 @@
   border-radius: var(--border-radius);
 }
 
+/* TEXT INPUT */
+
+.text-input-element {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  padding: 16px;
+  background-color: var(--color-3);
+  border-radius: 10px;
+}
+
+.text-input-label {
+  /* font-size: 14px; */
+  padding-left: 5px;
+  color: var(--font-1);
+  margin-bottom: 8px;
+}
+
+.text-input-field {
+  border: 2px solid var(--color-3);
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: var(--color-2);
+  color: var(--font-1);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.text-input-field:focus {
+  border-color: var(--color-important);
+  background-color: var(--color-1);
+  outline: none;
+}
+
+
 /* SWITCH */
 
 /* The switch - the box around the slider */

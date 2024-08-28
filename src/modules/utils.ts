@@ -1,5 +1,8 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
+import Store from 'electron-store';
+
+const store = new Store();
 
 const MONTHS = {
   '1': 'January',
@@ -161,8 +164,23 @@ export const getScore = (animeEntry: Media) =>
  * @param {*} animeEntry
  * @returns anime progress
  */
-export const getProgress = (animeEntry: Media): number | undefined =>
-  animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+export const getProgress = (animeEntry: Media): number | undefined => {
+  const history = store.get("history") as { entries: object };
+
+  if(history !== undefined && animeEntry?.mediaListEntry !== null) {
+    const entry = history.entries[animeEntry.mediaListEntry.id];
+    if (entry !== undefined) {
+        const latestEntry = Object.values(entry.history).reduce((latest, current) => {
+          return current.timestamp > latest.timestamp ? current : latest;
+        });
+
+        if(latestEntry && latestEntry.data !== undefined) {
+          return latestEntry.data.episodeNumber - 1;
+        }
+    }
+  }
+  return animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+}
 
 /**
  * Returns whether an anime is available or not

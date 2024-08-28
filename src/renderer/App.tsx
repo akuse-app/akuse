@@ -91,6 +91,18 @@ export default function App() {
         setUserInfo(await getViewerInfo(id));
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
+
+        const history = store.get("history") as object;
+
+        const currentIds = new Set(current.map(item => item.id));
+
+        for (const entry of Object.values(history.entries)) {
+          if (currentIds.has(entry.data.id))
+            continue;
+          current.push(entry.data);
+          currentIds.add(entry.data.id);
+        }
+
         setCurrentListAnime(current.concat(rewatching));
       }
 
