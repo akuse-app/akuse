@@ -118,6 +118,7 @@ button.bc.disabled {
   padding: 10px;
   background-color: var(--color-1);
   border-radius: 100px;
+  z-index: 10;
   transform: scale(0.9);
 }
 
