@@ -4,7 +4,7 @@ import 'react-activity/dist/Dots.css';
 import { IVideo } from '@consumet/extensions';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
-import Hls, { ContentSteeringController } from 'hls.js';
+import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
@@ -20,6 +20,7 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
+import { History } from '../../../types/historyTypes';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
@@ -104,10 +105,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [buffered, setBuffered] = useState<TimeRanges>();
 
   // history
-  interface History {
-    entries: object
-  }
-  const [history, setHistory] = useState<History>(STORE.get("history"));
+  const [history, setHistory] = useState<History>(STORE.get("history") as History);
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -231,8 +229,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       playHlsVideo(video.url);
 
       // resume from tracked progress
-      const animeId = listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id;
-      const anime = history.entries[animeId] as object;
+      const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number;
+      const anime = history.entries[animeId];
 
       if(anime !== undefined) {
         const currentEpisode = anime.history[animeEpisodeNumber];
@@ -283,7 +281,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const video = videoRef.current;
     const cTime = video?.currentTime;
     if(cTime === undefined) return;
-    const animeId = listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id;
+    const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number;
     if(animeId === null) return;
 
     console.log(animeId);
@@ -298,7 +296,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       time: cTime,
       timestamp: Date.now(),
       duration: video?.duration,
-      data: episodesInfo[episodeNumber]
+      data: (episodesInfo as EpisodeInfo[])[episodeNumber]
     };
 
     STORE.set("history", history);

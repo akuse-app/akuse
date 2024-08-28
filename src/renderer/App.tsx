@@ -19,6 +19,7 @@ import {
 } from '../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
+import { History } from '../types/historyTypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
@@ -96,8 +97,7 @@ export default function App() {
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
 
-        const history = store.get("history") as object;
-
+        const history = store.get("history") as History;
         const currentIds = new Set(current.map(item => item.id));
 
         for (const entry of Object.values(history.entries)) {
