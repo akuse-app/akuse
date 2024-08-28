@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { getAvailableEpisodes, parseAirdate } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
+import { History } from '../../../types/historyTypes';
 import Select from '../Select';
 import EpisodeEntry from './EpisodeEntry';
 import Store from 'electron-store';
+import { getAnimeHistory } from '../../../modules/history';
 
 const store = new Store();
 interface EpisodesSectionProps {
@@ -27,8 +29,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   const [searchValue, setSearchValue] = useState<string>('');
   const [widenInput, setWidenInput] = useState<boolean>(false);
   const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
-  const history = store.get('history');
-  const history_entry = history.entries[listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id];
+  const history_entry = getAnimeHistory((listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number);
 
   const getEpisodesArray = () => {
     const EPISODES_PER_PAGE = store.get('episodes_per_page') as number;
@@ -88,11 +89,9 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
             </div>
             <div className="episodes">
               {pages[activeSection].map((episode, index) => {
-                const entry = history_entry.history[episode];
+                const entry = history_entry?.history[episode];
                 const duration = entry?.duration ?? 0;
                 const episode_progress = (entry !== undefined ? entry.time / duration : 0) * 100;
-
-                console.log(episode, episode_progress);
 
                 return <EpisodeEntry
                   onPress={() => {

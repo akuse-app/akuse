@@ -103,7 +103,6 @@ const SelectElement: React.FC<SelectElementProps> = ({
 
 const Tab4: React.FC = () => {
   const logged = useContext(AuthContext);
-  const style = getComputedStyle(document.body);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
@@ -123,43 +122,12 @@ const Tab4: React.FC = () => {
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
-  const [richPresence, setRichPresence] = useState<boolean>(
-    STORE.get('rich_presence') as boolean,
-  );
-  const [presenceId, setPresenceId] = useState<string>(
-    STORE.get('presence_id') as string,
-  );
   const [episodesPerPage, setEpisodesPerPage] = useState<number>(
     STORE.get('episodes_per_page') as number,
   );
 
-  const handlePresenceId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const clientId = event.target.value;
-
-    STORE.set('presence_id', clientId);
-    setPresenceId(clientId);
-
-    if(!richPresence) return;
-
-    ipcRenderer.send('set-client-id', clientId);
-    ipcRenderer.send('update-presence', {
-      details: '🌸 Watch anime without ads.',
-      state: 'Enjoying coding!',
-      startTimestamp: Date.now(),
-      largeImageKey: 'akuse',
-      largeImageText: 'akuse',
-      instance: false,
-      buttons: [
-        {
-          label: 'Download akuse',
-          url: 'https://github.com/akuse-app/akuse/releases/latest',
-        },
-      ],
-    });
-  };
-
   const handleEpisodesPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    /* Should probably swap this for the dropdown instead but I like the flexibility. */
+    /* Should probably swap this for the dropdown instead, but I like the freedom of choosing anything. */
     let value = event.target.value;
     if(/[a-zA-Z\.]/.test(value))
       value = value.replaceAll(/[a-zA-Z\.]/g, '');
@@ -200,11 +168,6 @@ const Tab4: React.FC = () => {
   const handleAutoplayNextChange = () => {
     STORE.set('autoplay_next', !autoplayNext);
     setAutoplayNext(!autoplayNext);
-  };
-
-  const handleRichPresence = () => {
-    STORE.set("rich_presence", !richPresence);
-    setRichPresence(!richPresence);
   };
 
   const languageOptions: Option[] = [
@@ -265,16 +228,6 @@ const Tab4: React.FC = () => {
             label="Display the video duration instead of the remaining time."
             checked={showDuration}
             onChange={handleShowDurationChange}
-          />
-          <CheckboxElement
-            label="Discord RPC"
-            checked={richPresence}
-            onChange={handleRichPresence}
-          />
-          <TextInputElement
-            label="RPC Client ID"
-            value={presenceId}
-            onChange={handlePresenceId}
           />
           <TextInputElement
             label="Episodes Per Page"

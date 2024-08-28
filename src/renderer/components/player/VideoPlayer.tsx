@@ -24,6 +24,7 @@ import { History } from '../../../types/historyTypes';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
+import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -103,9 +104,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
-
-  // history
-  const [history, setHistory] = useState<History>(STORE.get("history") as History);
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -230,10 +228,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       // resume from tracked progress
       const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number;
-      const anime = history.entries[animeId];
+      const animeHistory = getAnimeHistory(animeId);
 
-      if(anime !== undefined) {
-        const currentEpisode = anime.history[animeEpisodeNumber];
+      if(animeHistory !== undefined) {
+        const currentEpisode = animeHistory.history[animeEpisodeNumber];
         if(currentEpisode !== undefined && videoRef?.current) {
           videoRef.current.currentTime = currentEpisode.time
         }
@@ -284,13 +282,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number;
     if(animeId === null) return;
 
-    console.log(animeId);
+    let entry = getAnimeHistory(animeId);
 
-    if(history.entries[animeId] === undefined) {
-      history.entries[animeId] = { history: {}, data: listAnimeData };
+    if(entry === undefined) {
+      entry = { history: {}, data: listAnimeData };
     }
-
-    const entry = history.entries[animeId];
 
     entry.history[episodeNumber] = {
       time: cTime,
@@ -299,7 +295,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       data: (episodesInfo as EpisodeInfo[])[episodeNumber]
     };
 
-    STORE.set("history", history);
+    setAnimeHistory(entry);
     onLocalProgressChange(episodeNumber - 1);
   };
 

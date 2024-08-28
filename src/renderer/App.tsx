@@ -32,6 +32,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
+import { getHistoryEntries } from '../modules/history';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -90,22 +91,22 @@ export default function App() {
         id = await getViewerId();
         setViewerId(id);
 
-        console.log('qui');
         const sus = await getAiringSchedule(id);
 
         setUserInfo(await getViewerInfo(id));
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
 
-        const history = store.get("history") as History;
+        const entries = getHistoryEntries();
         const currentIds = new Set(current.map(item => item.id));
 
-        for (const entry of Object.values(history.entries)) {
-          if (currentIds.has(entry.data.id))
-            continue;
-          current.push(entry.data);
-          currentIds.add(entry.data.id);
-        }
+        Object.entries(entries)
+          .filter(([id, entry]) => !currentIds.has(Number(id)) && !currentIds.has(entry.data.id))
+          .forEach(([id, entry]) => {
+            const numId = Number(id);
+            current.push(entry.data);
+            currentIds.add(numId);
+          });
 
         setCurrentListAnime(current.concat(rewatching));
       }

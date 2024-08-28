@@ -1,6 +1,8 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
 import Store from 'electron-store';
+import { History } from '../types/historyTypes';
+import { getLastWatchedEpisode } from './history';
 
 const store = new Store();
 
@@ -165,20 +167,12 @@ export const getScore = (animeEntry: Media) =>
  * @returns anime progress
  */
 export const getProgress = (animeEntry: Media): number | undefined => {
-  const history = store.get("history") as { entries: object };
+  const animeId = animeEntry?.mediaListEntry?.id as number;
+  const lastWatched = getLastWatchedEpisode(animeId);
 
-  if(history !== undefined && animeEntry?.mediaListEntry !== null) {
-    const entry = history.entries[animeEntry.mediaListEntry.id];
-    if (entry !== undefined) {
-        const latestEntry = Object.values(entry.history).reduce((latest, current) => {
-          return current.timestamp > latest.timestamp ? current : latest;
-        });
+  if(lastWatched !== undefined && lastWatched.data !== undefined)
+    return (lastWatched.data.episodeNumber as number) - 1;
 
-        if(latestEntry && latestEntry.data !== undefined) {
-          return latestEntry.data.episodeNumber - 1;
-        }
-    }
-  }
   return animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
 }
 
