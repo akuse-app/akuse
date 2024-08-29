@@ -6,7 +6,7 @@ const defaultValues = {
   autoplay_next: true,
   dubbed: false,
   source_flag: 'US',
-  intro_ski_time: 85,
+  intro_skip_time: 85,
   show_duration: true,
   trailer_volume_on: false,
   volume: 1,
