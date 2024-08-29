@@ -18,8 +18,7 @@ import {
   getViewerList,
 } from '../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../modules/utils';
-import { CurrentListAnime, ListAnimeData, UserInfo } from '../types/anilistAPITypes';
-import { History } from '../types/historyTypes';
+import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
@@ -32,8 +31,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
-import { getHistory, getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
-import { log } from 'console';
+import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -90,8 +88,6 @@ export default function App() {
     try {
       var id = null;
       const entries = getHistoryEntries();
-      const hasEntries = Object.values(entries).length > 0;
-      setHasHistory(hasEntries);
 
       if (logged) {
         id = await getViewerId();
@@ -117,7 +113,8 @@ export default function App() {
           });
 
         setCurrentListAnime(current.concat(rewatching));
-      } else if(hasEntries) {
+      } else if(Object.values(entries).length > 0) {
+        setHasHistory(true);
         const currentList = Object.values(entries).map((value) => value.data).sort((a, b) =>
           (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
         )

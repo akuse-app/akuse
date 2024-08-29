@@ -280,13 +280,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const cTime = video?.currentTime;
     if(cTime === undefined) return;
     const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number;
-    if(animeId === null) return;
+    if(animeId === null || animeId === undefined) return;
 
-    let entry = getAnimeHistory(animeId);
-
-    if(entry === undefined) {
-      entry = { history: {}, data: listAnimeData };
-    }
+    let entry = getAnimeHistory(animeId) ?? { history: {}, data: listAnimeData };
 
     entry.history[episodeNumber] = {
       time: cTime,

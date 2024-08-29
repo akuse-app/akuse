@@ -231,10 +231,6 @@
         "nsis"
       ]
     },
-    "flatpak": {
-      "runtimeVersion": "23.08",
-      "baseVersion": "23.08"
-    },
     "nsis": {
       "deleteAppDataOnUninstall": true,
       "oneClick": false,
