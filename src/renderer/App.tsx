@@ -32,7 +32,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
-import { getHistory, getHistoryEntries } from '../modules/history';
+import { getHistory, getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
 import { log } from 'console';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
@@ -93,7 +93,6 @@ export default function App() {
       const hasEntries = Object.values(entries).length > 0;
       setHasHistory(hasEntries);
 
-      // console.log(entries);
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
@@ -108,6 +107,9 @@ export default function App() {
 
         Object.entries(entries)
           .filter(([id, entry]) => !currentIds.has(Number(id)) && !currentIds.has(entry.data.id))
+          .sort((a, b) =>
+            (getLastWatchedEpisode(Number(a))?.timestamp ?? 0) - (getLastWatchedEpisode(Number(b))?.timestamp ?? 0)
+          )
           .forEach(([id, entry]) => {
             const numId = Number(id);
             current.push(entry.data);
@@ -116,7 +118,9 @@ export default function App() {
 
         setCurrentListAnime(current.concat(rewatching));
       } else if(hasEntries) {
-        const currentList = Object.values(entries).map((value) => value.data)
+        const currentList = Object.values(entries).map((value) => value.data).sort((a, b) =>
+          (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+        )
         setCurrentListAnime(currentList);
       }
 
@@ -142,10 +146,8 @@ export default function App() {
     }
   };
 
-  console.log(hasHistory)
-
   return (
-    <AuthContext.Provider value={hasHistory || logged}>
+    <AuthContext.Provider value={logged || hasHistory}>
       <ViewerIdContext.Provider value={viewerId}>
         <SkeletonTheme
           baseColor={style.getPropertyValue('--color-3')}
