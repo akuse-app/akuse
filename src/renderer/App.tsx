@@ -178,7 +178,7 @@ export default function App() {
                   />
                 }
               />
-              {logged && !hasHistory && (
+              {logged && (
                 <Route
                   path="/tab2"
                   element={
