@@ -16,7 +16,10 @@ import {
   getViewerId,
   getViewerInfo,
   getViewerList,
+  getAnimesFromTitles
 } from '../modules/anilist/anilistApi';
+
+import { getRecentEpisodes, fetchAnimeInfo } from '../modules/providers/gogoanime';
 import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
@@ -54,6 +57,7 @@ export default function App() {
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
+  const [newAnime, setNewAnime] = useState<ListAnimeData[]>();
 
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
@@ -85,15 +89,14 @@ export default function App() {
   });
 
   const fetchTab1AnimeData = async () => {
-    try {
+    // try {
       var id = null;
       const entries = getHistoryEntries();
+      // console.log("huh", sus.)
 
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
-
-        const sus = await getAiringSchedule(id);
 
         setUserInfo(await getViewerInfo(id));
         const current = await getViewerList(id, 'CURRENT');
@@ -126,9 +129,12 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-    } catch (error) {
-      console.log('Tab1 error: ' + error);
-    }
+      setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
+        return episode.title as string;
+      })));
+    // } catch (error) {
+      // console.log('Tab1 error: ' + error);
+    // }
   };
 
   const fetchTab2AnimeData = async () => {
@@ -175,6 +181,7 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
+                    newAnime={newAnime}
                   />
                 }
               />

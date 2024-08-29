@@ -15,6 +15,7 @@ interface Tab1Props {
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
   nextReleasesAnime?: ListAnimeData[];
+  newAnime?: ListAnimeData[];
 }
 
 const Tab1: React.FC<Tab1Props> = ({
@@ -23,6 +24,7 @@ const Tab1: React.FC<Tab1Props> = ({
   trendingAnime,
   mostPopularAnime,
   nextReleasesAnime,
+  newAnime
 }) => {
   const logged = useContext(AuthContext);
 
@@ -43,6 +45,7 @@ const Tab1: React.FC<Tab1Props> = ({
                 animeData={currentListAnime}
               />
             )}
+            <AnimeSection title="New Episodes" animeData={newAnime} />
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
             <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />

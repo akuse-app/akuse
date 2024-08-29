@@ -4,6 +4,7 @@ import Store from 'electron-store';
 import {
   AnimeData,
   CurrentListAnime,
+  ListAnimeData,
   MostPopularAnime,
   TrendingAnime,
 } from '../../types/anilistAPITypes';
@@ -12,6 +13,7 @@ import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import isAppImage from '../packaging/isAppImage';
 import { getOptions, makeRequest } from '../requests';
+import { ITitle } from '@consumet/extensions';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -244,6 +246,61 @@ export const getFollowingUsers = async (viewerId: any) => {
 };
 
 /**
+ * Gets a list of anime from a list of titles.
+ *
+ * @param titles
+ * @returns anime list
+ */
+export const getAnimesFromTitles = async (titles: string[]) => {
+  let query_variables: string[] = [];
+  let variables: { [key: string]: string } = {};
+  let search_text: string[] = [];
+
+  const results: ListAnimeData[] = [];
+  const headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+  };
+
+  for (let index = 0; index < titles.length; index++) {
+      const value = titles[index];
+      const id: string = `anime${query_variables.length}`;
+
+      query_variables.push(`$${id}: String`);
+      search_text.push(`    ${id}: Media(search: $${id}, type: ANIME) { ${MEDIA_DATA} }`);
+      variables[id] = value.replaceAll("\"", "");
+
+      if (query_variables.length > 2 || index === titles.length - 1) {
+          const query = `
+              query(${query_variables.join(", ")}) {
+              ${search_text.join("\n")}
+              }
+          `;
+
+          const options = getOptions(query, variables);
+          const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+          for (let i = 0; i < query_variables.length; i++) {
+              const id = `anime${i}`;
+              results.push({
+                  id: null,
+                  mediaId: null,
+                  progress: null,
+                  media: respData.data[id],
+              });
+          }
+
+          query_variables = [];
+          variables = {};
+          search_text = [];
+      }
+  }
+
+  return results;
+};
+
+
+/**
  * Gets the info from an anime
  *
  * @param {*} animeId
@@ -284,7 +341,7 @@ export const getAnimeInfo = async (animeId: any) => {
 export const getAiringSchedule = async (viewerId: number | null) => {
   const timeInSeconds = Math.floor(Date.now() / 1000);
 
-  const query = ` 
+  const query = `
   query {
     Page(page: 1, perPage: ${PAGES}) {
       pageInfo {
@@ -315,10 +372,9 @@ export const getAiringSchedule = async (viewerId: number | null) => {
   }
 
   const options = getOptions(query);
-  console.log(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-  console.log(respData);
-  // return respData.data.Page;
+
+  return respData.data.Page;
 };
 
 /**
@@ -342,7 +398,7 @@ export const getTrendingAnime = async (
               media(sort: TRENDING_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -385,7 +441,7 @@ export const getMostPopularAnime = async (
               media(sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -425,7 +481,7 @@ export const getNextReleases = async (viewerId: number | null) => {
               media(status: NOT_YET_RELEASED, sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -469,7 +525,7 @@ export const searchFilteredAnime = async (
               media(${args}) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -509,7 +565,7 @@ export const releasingAnimes = async () => {
               media(status: RELEASING, sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -539,7 +595,7 @@ export const getAnimesByGenre = async (genre: any, viewerId: number | null) => {
               media(genre: "${genre}", sort: TRENDING_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 

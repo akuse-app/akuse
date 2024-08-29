@@ -8,10 +8,18 @@ export interface EpisodeHistoryEntry {
   data: EpisodeInfo
 }
 
+export interface EpisodeHistoryEntries {
+  [episodeNumber: number]: EpisodeHistoryEntry
+}
+
 export interface AnimeHistoryEntry {
-  history: { [key: number]: EpisodeHistoryEntry}
+  history: EpisodeHistoryEntries
   data: ListAnimeData
 }
+
+export interface HistoryEntries {
+  [animeId: number]: AnimeHistoryEntry
+}
 export interface History {
-  entries: { [key: number]: AnimeHistoryEntry}
+  entries: HistoryEntries
 }

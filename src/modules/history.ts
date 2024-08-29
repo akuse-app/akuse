@@ -1,4 +1,4 @@
-import { History, AnimeHistoryEntry, EpisodeHistoryEntry } from "../types/historyTypes";
+import { History, AnimeHistoryEntry, EpisodeHistoryEntry, HistoryEntries } from "../types/historyTypes";
 import Store from "electron-store";
 
 const store = new Store();
@@ -19,18 +19,14 @@ export const getAnimeHistory = (
  *
  * @returns history entries
  */
-export const getHistoryEntries = (): { [key: number]: AnimeHistoryEntry } => {
-  return history.entries;
-}
+export const getHistoryEntries = (): HistoryEntries => history.entries;
 
 /**
  * Get local history.
  *
  * @returns local history.
  */
-export const getHistory = (): History => {
-  return history;
-}
+export const getHistory = (): History => history;
 
 /**
  * Set local history.
