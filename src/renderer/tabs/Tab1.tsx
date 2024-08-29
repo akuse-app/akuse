@@ -45,7 +45,7 @@ const Tab1: React.FC<Tab1Props> = ({
                 animeData={currentListAnime}
               />
             )}
-            <AnimeSection title="New Episodes" animeData={newAnime} />
+            <AnimeSection title="Recently Updated" animeData={newAnime} />
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
             <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />

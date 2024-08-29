@@ -19,7 +19,7 @@ import {
   getAnimesFromTitles
 } from '../modules/anilist/anilistApi';
 
-import { getRecentEpisodes, fetchAnimeInfo } from '../modules/providers/gogoanime';
+import { getRecentEpisodes } from '../modules/providers/gogoanime';
 import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
