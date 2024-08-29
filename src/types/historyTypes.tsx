@@ -4,7 +4,7 @@ import { EpisodeInfo } from "./types"
 export interface EpisodeHistoryEntry {
   time: number
   timestamp: number
-  duration: number | undefined
+  duration?: number
   data: EpisodeInfo
 }
 

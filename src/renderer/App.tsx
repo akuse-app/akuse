@@ -32,7 +32,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
-import { getHistoryEntries } from '../modules/history';
+import { getHistory, getHistoryEntries } from '../modules/history';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -87,6 +87,7 @@ export default function App() {
   const fetchTab1AnimeData = async () => {
     try {
       var id = null;
+      const entries = getHistoryEntries()
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
@@ -97,7 +98,6 @@ export default function App() {
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
 
-        const entries = getHistoryEntries();
         const currentIds = new Set(current.map(item => item.id));
 
         Object.entries(entries)
@@ -109,6 +109,8 @@ export default function App() {
           });
 
         setCurrentListAnime(current.concat(rewatching));
+      } else if(Object.values(entries).length > 0) {
+        setCurrentListAnime(Object.values(entries).map((value) => value.data))
       }
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
