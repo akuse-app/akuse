@@ -365,7 +365,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         if (
           (cTime * 100) / dTime > 85 &&
           (STORE.get('update_progress') as boolean) &&
-          !progressUpdated
+          !progressUpdated &&
+          (STORE.get('logged') as boolean)
         ) {
           // when updating progress, put the anime in current if it wasn't there
           const status = listAnimeData.media.mediaListEntry?.status;
