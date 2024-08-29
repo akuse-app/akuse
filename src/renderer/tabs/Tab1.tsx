@@ -28,7 +28,7 @@ const Tab1: React.FC<Tab1Props> = ({
 
   return (
     <div className="body-container  show-tab">
-      <div className="main-container">
+      <div className="main-container" style={{ paddingBottom: "110px" }} >
         <main>
           {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
 

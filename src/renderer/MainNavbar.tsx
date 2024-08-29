@@ -11,14 +11,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import isAppImage from '../modules/packaging/isAppImage';
-import { AuthContext } from './App';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
-import { getHistoryEntries } from '../modules/history';
 import Store from "electron-store";
 
 const Li: React.FC<{
@@ -124,6 +122,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
             text="Log-In"
             icon={faCircleUser}
             onClick={() => {
+              setShowAuthCodeModal(true);
               ipcRenderer.send('open-login-url');
             }}
           />
@@ -134,11 +133,11 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
               show={showAuthCodeModal}
               onClose={() => setShowAuthCodeModal(false)}
             />
-            <LiLink
+            {/* <LiLink
               text="Insert auth code"
               icon={faLaptopCode}
               onClick={() => setShowAuthCodeModal(true)}
-            />
+            /> */}
           </>
         )}
       </ul>
