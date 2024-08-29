@@ -18,7 +18,7 @@ import {
   getViewerList,
 } from '../modules/anilist/anilistApi';
 import { animeDataToListAnimeData } from '../modules/utils';
-import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
+import { CurrentListAnime, ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import { History } from '../types/historyTypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
@@ -33,6 +33,7 @@ import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
 import { getHistory, getHistoryEntries } from '../modules/history';
+import { log } from 'console';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -47,6 +48,7 @@ export default function App() {
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showDonateModal, setShowDonateModal] = useState<boolean>(false);
+  const [hasHistory, setHasHistory] = useState<boolean>(false);
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -87,7 +89,11 @@ export default function App() {
   const fetchTab1AnimeData = async () => {
     try {
       var id = null;
-      const entries = getHistoryEntries()
+      const entries = getHistoryEntries();
+      const hasEntries = Object.values(entries).length > 0;
+      setHasHistory(hasEntries);
+
+      // console.log(entries);
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
@@ -109,8 +115,9 @@ export default function App() {
           });
 
         setCurrentListAnime(current.concat(rewatching));
-      } else if(Object.values(entries).length > 0) {
-        setCurrentListAnime(Object.values(entries).map((value) => value.data))
+      } else if(hasEntries) {
+        const currentList = Object.values(entries).map((value) => value.data)
+        setCurrentListAnime(currentList);
       }
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
@@ -135,8 +142,10 @@ export default function App() {
     }
   };
 
+  console.log(hasHistory)
+
   return (
-    <AuthContext.Provider value={logged}>
+    <AuthContext.Provider value={hasHistory || logged}>
       <ViewerIdContext.Provider value={viewerId}>
         <SkeletonTheme
           baseColor={style.getPropertyValue('--color-3')}
@@ -170,7 +179,7 @@ export default function App() {
                   />
                 }
               />
-              {logged && (
+              {logged && !hasHistory && (
                 <Route
                   path="/tab2"
                   element={
@@ -181,6 +190,19 @@ export default function App() {
                       // droppedListAnime={droppedListAnime}
                       // pausedListAnime={pausedListAnime}
                       // repeatingListAnime={RepeatingListAnime}
+                      clicked={() => {
+                        !tab2Click && setTab2Click(true);
+                      }}
+                    />
+                  }
+                />
+              )}
+              {!logged && hasHistory && (
+                <Route
+                  path="/tab2"
+                  element={
+                    <Tab2
+                      currentListAnime={currentListAnime}
                       clicked={() => {
                         !tab2Click && setTab2Click(true);
                       }}
