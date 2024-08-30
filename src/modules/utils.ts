@@ -167,7 +167,7 @@ export const getScore = (animeEntry: Media) =>
  * @returns anime progress
  */
 export const getProgress = (animeEntry: Media): number | undefined => {
-  const animeId = animeEntry?.mediaListEntry?.id as number;
+  const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
   const lastWatched = getLastWatchedEpisode(animeId);
 
   if(lastWatched !== undefined && lastWatched.data !== undefined)

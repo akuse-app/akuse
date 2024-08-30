@@ -348,13 +348,13 @@ ipcMain.on('update-section', (event, ...args) => {
 //       assets: {
 //         largeImage: largeImageKey,
 //         largeText: largeImageText,
-//         smallImage: smallImageKey || '', // Provide an empty string if not used
+//         smallImage: smallImageKey || '',
 //       },
 //       instance,
 //       buttons,
 //     };
 
-//     console.log('Setting activity with:', activityPayload); // Debugging line
+//     console.log('Setting activity with:', activityPayload);
 
 //     RPC.setActivity(activityPayload).catch(console.error);
 //   }
@@ -374,6 +374,6 @@ ipcMain.on('update-section', (event, ...args) => {
 //   });
 
 //   app.on('ready', () => {
-//     initializeRPC(clientId);  // Initialize with default client ID
+//     initializeRPC(clientId);
 //   });
 // })()

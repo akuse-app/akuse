@@ -37,7 +37,7 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
       {hasInfoLoaded ? (
         <div className="image show-opacity">
           <img src={cover ?? ''} alt="episode cover" />
-          <div style={{ "width": ((progress !== 0 && progress < 2.5) ? 2.5 : progress) + "%" }} className={`progress-bar ${(progress ?? 0) >= 90 ? 'full-width' : 'partial-width'}`}/>
+          {/* <div style={{ "width": ((progress !== 0 && progress < 2.5) ? 2.5 : progress) + "%" }} className={`progress-bar ${(progress ?? 0) >= 90 ? 'full-width' : 'partial-width'}`}/> */}
         </div>
       ) : (
         <Skeleton className="image" />
