@@ -6,24 +6,30 @@ import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
 import UserNavbar from '../components/UserNavbar';
+import Store from 'electron-store';
+
+const store = new Store();
 interface Tab1Props {
   userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
   nextReleasesAnime?: ListAnimeData[];
+  bookmarkAnime?: ListAnimeData[];
   newAnime?: ListAnimeData[];
 }
 
 const Tab1: React.FC<Tab1Props> = ({
   userInfo,
   currentListAnime,
+  bookmarkAnime,
   trendingAnime,
   mostPopularAnime,
   nextReleasesAnime,
   newAnime
 }) => {
-  const logged = useContext(AuthContext);
+  const hasHistory = useContext(AuthContext);
+  const logged = store.get('logged') as boolean;
 
   return (
     <div className="body-container  show-tab">
@@ -36,13 +42,19 @@ const Tab1: React.FC<Tab1Props> = ({
           <Slideshow listAnimeData={trendingAnime} />
 
           <div className="section-container">
-            {logged && (
+            {hasHistory && (
               <AnimeSection
                 title="Continue Watching"
                 animeData={currentListAnime}
               />
             )}
             <AnimeSection title="Recently Updated" animeData={newAnime} />
+            {logged && (
+              <AnimeSection
+                title="Bookmarks"
+                animeData={bookmarkAnime}
+              />
+            )}
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
             <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />

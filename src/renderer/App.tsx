@@ -58,6 +58,7 @@ export default function App() {
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
   const [newAnime, setNewAnime] = useState<ListAnimeData[]>();
+  const [bookmarkAnime, setBookmarkAnime] = useState<ListAnimeData[]>();
 
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
@@ -86,7 +87,6 @@ export default function App() {
   useEffect(() => {
       const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
         for(const section of sections) {
-          console.log(section);
           switch(section) {
             case 'history':
               const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
@@ -98,6 +98,16 @@ export default function App() {
               setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
                 return episode.title as string;
               })));
+              break;
+            case 'bookmark':
+              const id = await getViewerId();
+              setViewerId(id);
+
+              setUserInfo(await getViewerInfo(id));
+              const current = await getViewerList(id, 'CURRENT');
+              const rewatching = await getViewerList(id, 'REPEATING');
+
+              setBookmarkAnime(current.concat(rewatching));
               break;
           }
         }
@@ -128,21 +138,10 @@ export default function App() {
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
 
-        const currentIds = new Set(current.map(item => item.id));
+        setBookmarkAnime(current.concat(rewatching));
+      }
 
-        Object.entries(entries)
-          .filter(([id, entry]) => !currentIds.has(Number(id)) && !currentIds.has(entry.data.id))
-          .sort((a, b) =>
-            (getLastWatchedEpisode(Number(a))?.timestamp ?? 0) - (getLastWatchedEpisode(Number(b))?.timestamp ?? 0)
-          )
-          .forEach(([id, entry]) => {
-            const numId = Number(id);
-            current.push(entry.data);
-            currentIds.add(numId);
-          });
-
-        setCurrentListAnime(current.concat(rewatching));
-      } else if(Object.values(entries).length > 0) {
+      if(Object.values(entries).length > 0) {
         setHasHistory(true);
         const currentList = Object.values(entries).map((value) => value.data).sort((a, b) =>
           (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
@@ -208,6 +207,7 @@ export default function App() {
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
                     newAnime={newAnime}
+                    bookmarkAnime={bookmarkAnime}
                   />
                 }
               />
