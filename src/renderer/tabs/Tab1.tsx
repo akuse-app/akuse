@@ -49,7 +49,7 @@ const Tab1: React.FC<Tab1Props> = ({
               />
             )}
             <AnimeSection title="Recently Updated" animeData={newAnime} />
-            {logged && (
+            {logged && bookmarkAnime?.length !== 0 &&  (
               <AnimeSection
                 title="Bookmarks"
                 animeData={bookmarkAnime}
