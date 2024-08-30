@@ -106,8 +106,9 @@ export default function App() {
               setUserInfo(await getViewerInfo(id));
               const current = await getViewerList(id, 'CURRENT');
               const rewatching = await getViewerList(id, 'REPEATING');
+              const planning = await getViewerList(id, 'PLANNING');
 
-              setBookmarkAnime(current.concat(rewatching));
+              setBookmarkAnime(current.concat(rewatching).concat(planning));
               break;
           }
         }
@@ -137,8 +138,9 @@ export default function App() {
         setUserInfo(await getViewerInfo(id));
         const current = await getViewerList(id, 'CURRENT');
         const rewatching = await getViewerList(id, 'REPEATING');
+        const planning = await getViewerList(id, 'PLANNING');
 
-        setBookmarkAnime(current.concat(rewatching));
+        setBookmarkAnime(current.concat(rewatching).concat(planning));
       }
 
       if(Object.values(entries).length > 0) {

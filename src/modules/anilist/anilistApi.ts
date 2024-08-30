@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, ipcRenderer } from 'electron';
 import Store from 'electron-store';
 
 import {
@@ -698,6 +698,8 @@ export const updateAnimeFromList = async (
       `Anime list updated (status: ${status},score: ${scoreRaw},progress: ${progress}) for list ${mediaId}`,
     );
 
+    ipcRenderer.send('update-section', 'bookmark');
+
     return respData.data.SaveMediaListEntry.id;
   } catch (error) {
     console.log(error);
@@ -728,7 +730,11 @@ export const deleteAnimeFromList = async (id: any): Promise<boolean> => {
     };
 
     const options = getOptions(query, variables);
-    return await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+    const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+    ipcRenderer.send('update-section', 'bookmark');
+
+    return respData
   } catch (error) {
     console.log(error);
     return false;
@@ -767,6 +773,7 @@ export const updateAnimeProgress = async (
 
   const options = getOptions(query, variables);
   await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  ipcRenderer.send('update-section', 'bookmark');
 
   console.log(`Progress updated (${progress}) for anime ${mediaId}`);
 };
