@@ -297,10 +297,9 @@ ipcMain.on('download-update', async () => {
   mainWindow.webContents.send('console-log', pth);
 });
 
-// var lastHistoryUpdate = Date.now() / 1000;
-ipcMain.on('update-history', () => {
+ipcMain.on('update-section', (event, ...args) => {
   if(!mainWindow) return;
-  mainWindow.webContents.send('update-history');
+  mainWindow.webContents.send('update-section', ...args);
 });
 
 /* DISCORD RPC */

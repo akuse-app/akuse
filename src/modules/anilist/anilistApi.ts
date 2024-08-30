@@ -276,18 +276,21 @@ export const getAnimesFromTitles = async (titles: string[]) => {
               ${search_text.join("\n")}
               }
           `;
+          try {
+            const options = getOptions(query, variables);
+            const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-          const options = getOptions(query, variables);
-          const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-
-          for (let i = 0; i < query_variables.length; i++) {
-              const id = `anime${i}`;
-              results.push({
-                  id: null,
-                  mediaId: null,
-                  progress: null,
-                  media: respData.data[id],
-              });
+            for (let i = 0; i < query_variables.length; i++) {
+                const id = `anime${i}`;
+                results.push({
+                    id: null,
+                    mediaId: null,
+                    progress: null,
+                    media: respData.data[id],
+                });
+            }
+          } catch (error) {
+            console.log('Batch search error:', error);
           }
 
           query_variables = [];

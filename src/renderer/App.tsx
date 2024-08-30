@@ -29,7 +29,7 @@ import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
 import { setDefaultStoreVariables } from '../modules/storeVariables';
-import { ipcRenderer } from 'electron';
+import { IpcRenderer, ipcRenderer, IpcRendererEvent } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
@@ -84,19 +84,32 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-      const updateHistoryListener = () => {
-          const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
-              (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-          );
-          setCurrentListAnime(currentList);
-      };
+      const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
+        for(const section of sections) {
+          console.log(section);
+          switch(section) {
+            case 'history':
+              const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
+                (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+              );
+              setCurrentListAnime(currentList);
+              break;
+            case 'new':
+              setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
+                return episode.title as string;
+              })));
+              break;
+          }
+        }
+      }
 
-      ipcRenderer.on('update-history', updateHistoryListener);
+      ipcRenderer.on('update-section', updateSectionListener);
 
       return () => {
-          ipcRenderer.removeListener('update-history', updateHistoryListener);
+          ipcRenderer.removeListener('update-section', updateSectionListener);
       };
-  }, []);
+  });
+
   ipcRenderer.on('auto-update', async () => {
     setShowDonateModal(false);
     setShowUpdateModal(true);

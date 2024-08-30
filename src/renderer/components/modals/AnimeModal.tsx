@@ -194,7 +194,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const handlePlayerClose = () => {
     try {
-      if (trailerRef.current) trailerRef.current.play();
+      // if (trailerRef.current) trailerRef.current.play();
       setShowPlayer(false);
     } catch (error) {
       console.log(error);
