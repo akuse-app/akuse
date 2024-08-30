@@ -78,7 +78,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       startTimestamp: Date.now(),
       largeImageKey: listAnimeData.media.coverImage?.large || 'akuse',
       largeImageText: listAnimeData.media.title?.english || 'akuse',
-      smallImageKey: 'akuse',
+      smallImageKey: 'icon',
       buttons: [
         {
           label: 'Download app',
@@ -463,7 +463,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       details: `🌸 Watch anime without ads.`,
       state: getRandomDiscordPhrase(),
       startTimestamp: Date.now(),
-      largeImageKey: 'akuse',
+      largeImageKey: 'icon',
       largeImageText: 'akuse',
       smallImageKey: undefined,
       instance: true,

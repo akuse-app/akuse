@@ -303,77 +303,40 @@ ipcMain.on('update-section', (event, ...args) => {
 });
 
 /* DISCORD RPC */
-// (() => {
-//   if(!RPCEnabled) return;
-//   let clientId = STORE.get('presence_id');
-//   let RPC;
 
-//   console.log("Client Id:", clientId);
+const clientId = '1256111110151475241';
 
-//   function initializeRPC(clientId) {
-//     RPC = new DiscordRPC.Client({ transport: 'ipc' });
+const RPC = new DiscordRPC.Client({ transport: 'ipc' });
+DiscordRPC.register(clientId);
 
-//     DiscordRPC.register(clientId);
-
-//     RPC.on('ready', () => {
-//       console.log('Discord RPC is ready');
-//       setActivity();
-//     });
-
-//     RPC.on('error', (error) => {
-//       console.error('Discord RPC Error:', error);
-//     });
-
-//     RPC.login({ clientId }).catch(console.error);
-//   }
-
-//   async function setActivity(
-//     details = '🌸 Watch anime without ads.',
-//     state = 'Enjoying coding!',
-//     startTimestamp = Date.now(),
-//     largeImageKey = 'akuse',
-//     largeImageText = 'akuse',
-//     smallImageKey = '', // Optional
-//     instance = false,
-//     buttons = [{ label: 'Download akuse', url: 'https://github.com/akuse-app/akuse/releases/latest' }]
-//   ) {
-//     if (!RPC) {
-//       return;
-//     }
-
-//     const activityPayload = {
-//       details,
-//       state,
-//       startTimestamp,
-//       assets: {
-//         largeImage: largeImageKey,
-//         largeText: largeImageText,
-//         smallImage: smallImageKey || '',
-//       },
-//       instance,
-//       buttons,
-//     };
-
-//     console.log('Setting activity with:', activityPayload);
-
-//     RPC.setActivity(activityPayload).catch(console.error);
-//   }
+async function setActivity(details?: string, state?: string, startTimestamp?: number, largeImageKey?: string, largeImageText?: string, smallImageKey?: string, instance?: boolean, buttons?: any[]) {
+  if (!RPC || !mainWindow) {
+    return;
+  }
 
 
+  RPC.setActivity({
+    details: details || '🌸 Watch anime without ads.',
+    state: state || getRandomDiscordPhrase(),
+    startTimestamp: startTimestamp || Date.now(),
+    largeImageKey: largeImageKey || 'icon',
+    largeImageText: largeImageText || 'akuse',
+    smallImageKey: smallImageKey,
+    instance: instance || false,
+    buttons: buttons || [
+      {
+        label: 'Download akuse',
+        url: 'https://github.com/akuse-app/akuse/releases/latest',
+      },
+    ],
+  });
+}
 
+RPC.on('ready', () => {
+  setActivity();
+});
+RPC.login({ clientId }).catch(console.error);
 
-//   ipcMain.on('set-client-id', (event, clientId) => {
-//     if (RPC) {
-//       RPC.destroy();
-//     }
-//     initializeRPC(clientId);
-//   });
-
-//   ipcMain.on('update-presence', (event, data) => {
-//     setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.smallImageKey, data.instance, data.buttons);
-//   });
-
-//   app.on('ready', () => {
-//     initializeRPC(clientId);
-//   });
-// })()
+ipcMain.on('update-presence', (event, data) => {
+  setActivity(data.details, data.state, data.startTimestamp, data.largeImageKey, data.largeImageText, data.smallImageKey, data.instance, data.buttons);
+})
