@@ -15,7 +15,7 @@ import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { IpcRendererEvent } from 'electron';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
@@ -40,6 +40,7 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import { ipcRenderer } from 'electron';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -58,6 +59,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
+  const lastOpenedRef = useRef<number>(0);
 
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);
@@ -78,10 +80,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [localProgress, setLocalProgress] = useState<number>();
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  // const [lastOpened, setLastOpened] = useState<number>(Date.now() / 1000);
 
   useEffect(() => {
-    if (!episodesInfoHasFetched) fetchEpisodesInfo();
-  }, []);
+    if (show) fetchEpisodesInfo();
+  }, [show]);
 
   useEffect(() => {
     if (!showPlayer) {
@@ -108,6 +111,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
 
     onClose();
+    ipcRenderer.send('update-section', 'history');
   };
 
   // close modal by clicking shadow area

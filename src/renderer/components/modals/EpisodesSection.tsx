@@ -88,7 +88,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
               </div>
             </div>
             <div className="episodes">
-              {pages[activeSection].map((episode, index) => {
+              {(pages[activeSection] ?? []).map((episode, index) => {
                 const entry = history_entry?.history[episode];
                 const duration = entry?.duration ?? 0;
                 const episode_progress = (entry !== undefined ? entry.time / duration : 0) * 100;

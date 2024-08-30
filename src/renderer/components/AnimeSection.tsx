@@ -1,7 +1,7 @@
 import './styles/AnimeSection.css';
 
 import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
@@ -17,6 +17,15 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   const animeListRef = useRef<HTMLDivElement>(null);
   const [enableButtons, setEnableButtons] = useState<boolean>(false);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  const [displayData, setDisplayData] = useState<ListAnimeData[]>([]);
+
+  useEffect(() => {
+    if (animeData) {
+      setDisplayData(animeData ?? []);
+    } else {
+      setDisplayData(Array(20).fill(undefined));
+    }
+  }, [animeData]);
 
   const hideButtons = () => {
     if (animeListWrapperRef.current && animeListRef.current) {
@@ -73,7 +82,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       )}
       <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
-          {(animeData ? animeData : Array(20).fill(undefined)).map(
+        {displayData.map(
             (listAnimeData, index) => (
               <AnimeEntry key={index} listAnimeData={listAnimeData} />
             ),

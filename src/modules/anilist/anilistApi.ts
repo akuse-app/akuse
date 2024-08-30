@@ -245,6 +245,8 @@ export const getFollowingUsers = async (viewerId: any) => {
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 };
 
+const sanitizeString = (input: string) => JSON.stringify(input).slice(1, -1).replace(/[{};`\\"'\!]/g, '');
+
 /**
  * Gets a list of anime from a list of titles.
  *
@@ -268,7 +270,7 @@ export const getAnimesFromTitles = async (titles: string[]) => {
 
       query_variables.push(`$${id}: String`);
       search_text.push(`    ${id}: Media(search: $${id}, type: ANIME) { ${MEDIA_DATA} }`);
-      variables[id] = value.replaceAll("\"", "");
+      variables[id] = sanitizeString(value).replaceAll('Part', '');
 
       if (query_variables.length > 2 || index === titles.length - 1) {
           const query = `

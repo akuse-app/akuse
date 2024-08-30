@@ -85,41 +85,42 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-      const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
-        for(const section of sections) {
-          switch(section) {
-            case 'history':
-              const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
-                (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-              );
-              setCurrentListAnime(currentList);
-              break;
-            case 'new':
-              setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
-                return episode.title as string;
-              })));
-              break;
-            case 'bookmark':
-              const id = await getViewerId();
-              setViewerId(id);
+    const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
+      for(const section of sections) {
+        switch(section) {
+          case 'history':
+            const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
+              (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+            );
+            setCurrentListAnime(currentList);
+            break;
+          case 'new':
+            setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
+              return episode.title as string;
+            })));
+            break;
+          case 'bookmark':
+            const id = await getViewerId();
+            setViewerId(id);
 
-              setUserInfo(await getViewerInfo(id));
-              const current = await getViewerList(id, 'CURRENT');
-              const rewatching = await getViewerList(id, 'REPEATING');
-              const planning = await getViewerList(id, 'PLANNING');
+            setUserInfo(await getViewerInfo(id));
+            const current = await getViewerList(id, 'CURRENT');
+            const rewatching = await getViewerList(id, 'REPEATING');
+            const planning = await getViewerList(id, 'PLANNING');
 
-              setBookmarkAnime(current.concat(rewatching).concat(planning));
-              break;
-          }
+            setBookmarkAnime(current.concat(rewatching).concat(planning));
+
+            break;
         }
       }
+    }
 
-      ipcRenderer.on('update-section', updateSectionListener);
+    ipcRenderer.on('update-section', updateSectionListener);
 
-      return () => {
-          ipcRenderer.removeListener('update-section', updateSectionListener);
-      };
-  });
+    return () => {
+        ipcRenderer.removeListener('update-section', updateSectionListener);
+    };
+});
 
   ipcRenderer.on('auto-update', async () => {
     setShowDonateModal(false);
@@ -156,9 +157,9 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
-        return episode.title as string;
-      })));
+      // setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
+      //   return episode.title as string;
+      // })));
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -208,7 +209,7 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
-                    newAnime={newAnime}
+                    // newAnime={newAnime}
                     bookmarkAnime={bookmarkAnime}
                   />
                 }

@@ -1,10 +1,6 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
-import Store from 'electron-store';
-import { History } from '../types/historyTypes';
 import { getLastWatchedEpisode } from './history';
-
-const store = new Store();
 
 const MONTHS = {
   '1': 'January',
