@@ -1,5 +1,5 @@
 {
-  "name": "akuse",
+  "name": "akuse-beta",
   "version": "1.5.0",
   "description": "Anime streaming client for PC",
   "keywords": [
@@ -14,14 +14,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akuse-app/akuse.git"
+    "url": "https://github.com/akuse-app/akuse"
   },
   "publish": {
     "provider": "github",
     "releaseType": "release"
   },
   "license": "GPL-3.0-or-later",
-  "author": "aleganza <ganzarolli.alessio@gmail.com> (https://github.com/aleganza)",
+  "author": {
+    "name": "aleganza",
+    "email": "ganzarolli.alessio@gmail.com",
+    "url": "https://github.com/aleganza"
+  },
   "main": "./src/main/main.ts",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
