@@ -83,16 +83,29 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+      const updateHistoryListener = () => {
+          const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
+              (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+          );
+          setCurrentListAnime(currentList);
+      };
+
+      ipcRenderer.on('update-history', updateHistoryListener);
+
+      return () => {
+          ipcRenderer.removeListener('update-history', updateHistoryListener);
+      };
+  }, []);
   ipcRenderer.on('auto-update', async () => {
     setShowDonateModal(false);
     setShowUpdateModal(true);
   });
 
   const fetchTab1AnimeData = async () => {
-    // try {
+    try {
       var id = null;
       const entries = getHistoryEntries();
-      // console.log("huh", sus.)
 
       if (logged) {
         id = await getViewerId();
@@ -132,9 +145,9 @@ export default function App() {
       setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
         return episode.title as string;
       })));
-    // } catch (error) {
-      // console.log('Tab1 error: ' + error);
-    // }
+    } catch (error) {
+      console.log('Tab1 error: ' + error);
+    }
   };
 
   const fetchTab2AnimeData = async () => {

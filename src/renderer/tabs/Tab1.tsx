@@ -1,5 +1,3 @@
-import { userInfo } from 'os';
-import { useEffect } from 'react';
 import { useContext } from 'react';
 
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
@@ -8,7 +6,6 @@ import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
 import UserNavbar from '../components/UserNavbar';
-
 interface Tab1Props {
   userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];

@@ -77,7 +77,7 @@ const createWindow = async () => {
       nodeIntegration: true,
       contextIsolation: false,
       webSecurity: false,
-      allowRunningInsecureContent: false
+      allowRunningInsecureContent: false,
     },
   });
 
@@ -297,6 +297,12 @@ ipcMain.on('download-update', async () => {
   mainWindow.webContents.send('console-log', pth);
 });
 
+// var lastHistoryUpdate = Date.now() / 1000;
+ipcMain.on('update-history', () => {
+  if(!mainWindow) return;
+  mainWindow.webContents.send('update-history');
+});
+
 /* DISCORD RPC */
 // (() => {
 //   if(!RPCEnabled) return;
@@ -328,7 +334,7 @@ ipcMain.on('download-update', async () => {
 //     startTimestamp = Date.now(),
 //     largeImageKey = 'akuse',
 //     largeImageText = 'akuse',
-//     smallImageKey = '',
+//     smallImageKey = '', // Optional
 //     instance = false,
 //     buttons = [{ label: 'Download akuse', url: 'https://github.com/akuse-app/akuse/releases/latest' }]
 //   ) {

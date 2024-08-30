@@ -20,7 +20,6 @@ import {
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
-import { History } from '../../../types/historyTypes';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
@@ -459,6 +458,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     onClose();
 
+    ipcRenderer.send('update-history');
     ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
       state: getRandomDiscordPhrase(),

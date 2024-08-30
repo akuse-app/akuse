@@ -1,6 +1,6 @@
 import Store from 'electron-store';
 import { ContentSteeringController } from 'hls.js';
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../App';
 import { ipcRenderer } from 'electron';
 import Heading from '../components/Heading';

@@ -9,7 +9,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
@@ -21,7 +21,8 @@ import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-const Tab3 = () => {
+
+const Tab3: React.FC = () => {
   const viewerId = useContext(ViewerIdContext);
 
   const [selectedTitle, setSelectedTitle] = useState('');
