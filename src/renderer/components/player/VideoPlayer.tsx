@@ -95,14 +95,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [playing, setPlaying] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [isSettingsShowed, setIsSettingsShowed] = useState<boolean>(false);
+  const [lastInteract, setLastInteract] = useState<number>(0);
   const [showNextEpisodeButton, setShowNextEpisodeButton] =
     useState<boolean>(true);
   const [showPreviousEpisodeButton, setShowPreviousEpisodeButton] =
     useState<boolean>(true);
+
   // timeline
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
+
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -418,6 +421,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleMouseMove = () => {
+    const current = Date.now() / 1000;
+    if(current - lastInteract < 0.75) return;
+    setLastInteract(current);
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
 
