@@ -161,9 +161,7 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      const aired = await getAiredAnime(id)
-      console.log(aired);
-      setNewAnime(airingDataToListAnimeData(aired));
+      setNewAnime(airingDataToListAnimeData(await getAiredAnime(id)));
       // setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
       //   return episode.title as string;
       // })));

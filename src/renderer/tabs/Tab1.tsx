@@ -56,7 +56,7 @@ const Tab1: React.FC<Tab1Props> = ({
             )}
             {logged && bookmarkAnime?.length !== 0 &&  (
               <AnimeSection
-                title="Bookmarks"
+                title="Watchlist"
                 animeData={bookmarkAnime}
               />
             )}
