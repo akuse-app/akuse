@@ -17,7 +17,7 @@ import {
   getViewerInfo,
   getViewerList,
   getAnimesFromTitles,
-  getAiredSchedule
+  getAiredAnime
 } from '../modules/anilist/anilistApi';
 
 import { getRecentEpisodes } from '../modules/providers/gogoanime';
@@ -161,7 +161,9 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      setNewAnime(airingDataToListAnimeData(await getAiredSchedule(id)));
+      const aired = await getAiredAnime(id)
+      console.log(aired);
+      setNewAnime(airingDataToListAnimeData(aired));
       // setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
       //   return episode.title as string;
       // })));

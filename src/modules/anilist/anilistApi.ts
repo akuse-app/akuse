@@ -340,16 +340,16 @@ export const getAnimeInfo = async (animeId: any) => {
 /**
  * get aired anime
  *
- *
+ * @param viewerId
+ * @param airingAt
+ * @returns a list of aired anime
  */
 
-export const getAiredSchedule = async (
+export const getAiredAnime = async (
   viewerId: number | null,
   airingAt: number = Math.floor(Date.now() / 1000)
 ) => {
   const dayBefore = airingAt - 86400;
-
-  console.log(airingAt - dayBefore);
 
   const query = `
   query {
@@ -384,7 +384,7 @@ export const getAiredSchedule = async (
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  return respData.data.Page.airingSchedules as AiringScheduleData[];
+  return (respData.data.Page.airingSchedules as AiringScheduleData[]).reverse();
 };
 
 /**
