@@ -139,17 +139,16 @@ export default function App() {
   const fetchTab1AnimeData = async () => {
     try {
       var id = null;
-      const entries = getHistoryEntries();
 
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
 
         setUserInfo(await getViewerInfo(id));
-        updateBookmark(id);
+        await updateBookmark(id);
       }
 
-      if(Object.values(entries).length > 0) {
+      if(Object.values(getHistoryEntries()).length > 0) {
         updateHistory();
       }
 
@@ -158,13 +157,7 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      const aired = await getAiredAnime(id);
-      const toBeAired = await getAiringSchedule(id);
-
-      console.log(aired);
-      console.log(toBeAired);
-
-      setNewAnime(airingDataToListAnimeData(aired));
+      await updateNewAnime();
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
