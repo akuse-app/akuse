@@ -50,7 +50,7 @@ const Tab1: React.FC<Tab1Props> = ({
             )}
             {newAnime && (
               <AnimeSection
-                title="Recently Updated"
+                title="Just Aired"
                 animeData={newAnime}
               />
             )}

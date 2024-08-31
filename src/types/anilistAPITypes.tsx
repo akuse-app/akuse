@@ -21,6 +21,13 @@ export type ListAnimeData = {
   media: Media
 }
 
+export type AiringScheduleData = {
+  episode: number
+  airingAt: number,
+  media: Media,
+  timeUntilAiring: number
+}
+
 export type TrendingAnime = AnimeData
 export type MostPopularAnime = AnimeData
 export type CurrentListAnime = ListAnimeData[]

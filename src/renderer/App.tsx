@@ -16,11 +16,12 @@ import {
   getViewerId,
   getViewerInfo,
   getViewerList,
-  getAnimesFromTitles
+  getAnimesFromTitles,
+  getAiredSchedule
 } from '../modules/anilist/anilistApi';
 
 import { getRecentEpisodes } from '../modules/providers/gogoanime';
-import { animeDataToListAnimeData } from '../modules/utils';
+import { airingDataToListAnimeData, animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
@@ -143,6 +144,9 @@ export default function App() {
 
         setBookmarkAnime(current.concat(rewatching).concat(planning));
       }
+      // airingSchedule.airingSchedules.forEach((value) => {
+        // console.log(value.media.title.userPreferred, value.airingAt - Date.now() / 1000);
+      // })
 
       if(Object.values(entries).length > 0) {
         setHasHistory(true);
@@ -157,6 +161,7 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
+      setNewAnime(airingDataToListAnimeData(await getAiredSchedule(id)));
       // setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
       //   return episode.title as string;
       // })));
@@ -209,7 +214,7 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
-                    // newAnime={newAnime}
+                    newAnime={newAnime}
                     bookmarkAnime={bookmarkAnime}
                   />
                 }

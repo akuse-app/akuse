@@ -2,6 +2,7 @@ import { app, ipcRenderer } from 'electron';
 import Store from 'electron-store';
 
 import {
+  AiringScheduleData,
   AnimeData,
   CurrentListAnime,
   ListAnimeData,
@@ -337,14 +338,18 @@ export const getAnimeInfo = async (animeId: any) => {
 };
 
 /**
- * gets airing schedule
+ * get aired anime
  *
- * @param viewerId
- * @returns
+ *
  */
 
-export const getAiringSchedule = async (viewerId: number | null) => {
-  const timeInSeconds = Math.floor(Date.now() / 1000);
+export const getAiredSchedule = async (
+  viewerId: number | null,
+  airingAt: number = Math.floor(Date.now() / 1000)
+) => {
+  const dayBefore = airingAt - 86400;
+
+  console.log(airingAt - dayBefore);
 
   const query = `
   query {
@@ -352,7 +357,56 @@ export const getAiringSchedule = async (viewerId: number | null) => {
       pageInfo {
         hasNextPage
       },
-      airingSchedules(airingAt_greater: ${timeInSeconds}) {
+      airingSchedules(airingAt_greater: ${dayBefore}, airingAt_lesser: ${airingAt}) {
+        episode,
+        timeUntilAiring,
+        airingAt,
+        media {
+          ${MEDIA_DATA}
+        }
+      }
+    }
+  }`;
+
+  if (viewerId) {
+    var headers: any = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  } else {
+    var headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
+
+  const options = getOptions(query);
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+  return respData.data.Page.airingSchedules as AiringScheduleData[];
+};
+
+/**
+ * gets airing schedule
+ *
+ * @param viewerId
+ * @returns
+ */
+
+export const getAiringSchedule = async (
+  viewerId: number | null,
+  airingAt: number = Math.floor(Date.now() / 1000)
+) => {
+  // const timeInSeconds = ;
+
+  const query = `
+  query {
+    Page(page: 1, perPage: ${PAGES}) {
+      pageInfo {
+        hasNextPage
+      },
+      airingSchedules(airingAt_greater: ${airingAt}) {
         episode,
         timeUntilAiring,
         airingAt,

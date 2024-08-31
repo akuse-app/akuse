@@ -17,15 +17,6 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   const animeListRef = useRef<HTMLDivElement>(null);
   const [enableButtons, setEnableButtons] = useState<boolean>(false);
   const [showButtons, setShowButtons] = useState<boolean>(false);
-  const [displayData, setDisplayData] = useState<ListAnimeData[]>([]);
-
-  useEffect(() => {
-    if (animeData) {
-      setDisplayData(animeData ?? []);
-    } else {
-      setDisplayData(Array(20).fill(undefined));
-    }
-  }, [animeData]);
 
   const hideButtons = () => {
     if (animeListWrapperRef.current && animeListRef.current) {
@@ -82,7 +73,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       )}
       <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
-        {displayData.map(
+        {(animeData ?? Array(20).fill(undefined)).map(
             (listAnimeData, index) => (
               <AnimeEntry key={index} listAnimeData={listAnimeData} />
             ),

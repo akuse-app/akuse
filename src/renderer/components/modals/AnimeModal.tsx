@@ -23,6 +23,7 @@ import {
   getParsedFormat,
   getParsedMeanScore,
   getParsedSeasonYear,
+  getProgress,
   getTitle,
   getUrlByCoverType,
 } from '../../../modules/utils';
@@ -41,6 +42,7 @@ import {
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
+import { getLastWatchedEpisode } from '../../../modules/history';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -59,7 +61,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
-  const lastOpenedRef = useRef<number>(0);
 
   // trailer
   const [trailer, setTrailer] = useState<boolean>(true);
@@ -80,7 +81,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [localProgress, setLocalProgress] = useState<number>();
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  // const [lastOpened, setLastOpened] = useState<number>(Date.now() / 1000);
 
   useEffect(() => {
     if (show) fetchEpisodesInfo();
@@ -122,8 +122,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const fetchEpisodesInfo = async () => {
+    const animeId = listAnimeData.media.id as number;
+
     axios
-      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
+      .get(`${EPISODES_INFO_URL}${animeId}`)
       .then((data) => {
         if (data.data && data.data.episodes)
           setEpisodesInfo(data.data.episodes);
@@ -134,6 +136,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         setEpisodesInfoHasFetched(true);
       })
       .catch(() => {setEpisodesInfoHasFetched(true);});
+
+    const lastWatched = getLastWatchedEpisode(animeId);
+    if(lastWatched)
+      setLocalProgress((lastWatched.data.episodeNumber as number) - 1);
   };
 
   const handleTrailerPlay = () => {
