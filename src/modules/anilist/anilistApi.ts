@@ -349,7 +349,7 @@ export const getAiredAnime = async (
   viewerId: number | null,
   airingAt: number = Math.floor(Date.now() / 1000)
 ) => {
-  const dayBefore = airingAt - 86400;
+  const dayBefore = airingAt - 43200;
 
   const query = `
   query {
@@ -433,7 +433,7 @@ export const getAiringSchedule = async (
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  return respData.data.Page;
+  return respData.data.Page.airingSchedules as AiringScheduleData[];
 };
 
 /**

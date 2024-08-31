@@ -85,43 +85,51 @@ export default function App() {
     }
   }, []);
 
+  const updateBookmark = async (id: number) => {
+    const current = await getViewerList(id, 'CURRENT');
+    const rewatching = await getViewerList(id, 'REPEATING');
+    const planning = await getViewerList(id, 'PLANNING');
+
+    setBookmarkAnime(current.concat(rewatching).concat(planning));
+  }
+
+  const updateNewAnime = async () => {
+    setNewAnime(airingDataToListAnimeData(await getAiredAnime(viewerId)));
+  }
+
+  const updateHistory = () => {
+    setHasHistory(true);
+    const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
+      (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+    );
+    setCurrentListAnime(currentList);
+  }
+
   useEffect(() => {
-    const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
-      for(const section of sections) {
-        switch(section) {
-          case 'history':
-            const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
-              (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-            );
-            setCurrentListAnime(currentList);
-            break;
-          case 'new':
-            setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
-              return episode.title as string;
-            })));
-            break;
-          case 'bookmark':
-            const id = await getViewerId();
-            setViewerId(id);
+      const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
+        for(const section of sections) {
+          switch(section) {
+            case 'history':
+              updateHistory();
+              continue;
 
-            setUserInfo(await getViewerInfo(id));
-            const current = await getViewerList(id, 'CURRENT');
-            const rewatching = await getViewerList(id, 'REPEATING');
-            const planning = await getViewerList(id, 'PLANNING');
+            case 'new':
+              await updateNewAnime();
+              continue;
 
-            setBookmarkAnime(current.concat(rewatching).concat(planning));
-
-            break;
+            case 'bookmark':
+              await updateBookmark(viewerId as number);
+              continue;
+          }
         }
       }
-    }
 
-    ipcRenderer.on('update-section', updateSectionListener);
+      ipcRenderer.on('update-section', updateSectionListener);
 
-    return () => {
-        ipcRenderer.removeListener('update-section', updateSectionListener);
-    };
-});
+      return () => {
+          ipcRenderer.removeListener('update-section', updateSectionListener);
+      };
+  });
 
   ipcRenderer.on('auto-update', async () => {
     setShowDonateModal(false);
@@ -138,22 +146,11 @@ export default function App() {
         setViewerId(id);
 
         setUserInfo(await getViewerInfo(id));
-        const current = await getViewerList(id, 'CURRENT');
-        const rewatching = await getViewerList(id, 'REPEATING');
-        const planning = await getViewerList(id, 'PLANNING');
-
-        setBookmarkAnime(current.concat(rewatching).concat(planning));
+        updateBookmark(id);
       }
-      // airingSchedule.airingSchedules.forEach((value) => {
-        // console.log(value.media.title.userPreferred, value.airingAt - Date.now() / 1000);
-      // })
 
       if(Object.values(entries).length > 0) {
-        setHasHistory(true);
-        const currentList = Object.values(entries).map((value) => value.data).sort((a, b) =>
-          (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-        )
-        setCurrentListAnime(currentList);
+        updateHistory();
       }
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
@@ -161,10 +158,13 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      setNewAnime(airingDataToListAnimeData(await getAiredAnime(id)));
-      // setNewAnime(await getAnimesFromTitles((await getRecentEpisodes()).results.map((episode) => {
-      //   return episode.title as string;
-      // })));
+      const aired = await getAiredAnime(id);
+      const toBeAired = await getAiringSchedule(id);
+
+      console.log(aired);
+      console.log(toBeAired);
+
+      setNewAnime(airingDataToListAnimeData(aired));
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
