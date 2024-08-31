@@ -363,6 +363,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setCurrentTime(cTime);
         setDuration(dTime);
         setBuffered(videoRef.current?.buffered);
+        handleHistoryUpdate();
 
         if (
           (cTime * 100) / dTime > 85 &&
@@ -409,8 +410,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleVideoPause = () => {
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
+    setShowControls(true);
     pauseInfoTimer = setTimeout(() => {
       !isSettingsShowed && setShowPauseInfo(true);
+      setShowControls(false);
     }, 7500);
   };
 
