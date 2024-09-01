@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { formatTime } from '../../../modules/utils';
 import { faFastForward, faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
-import { SkipEvent } from '../../../types/aniskipTypes';
+import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
 import AniSkip from '../../../modules/aniskip';
 
 const STORE = new Store();
@@ -143,6 +143,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       const event = AniSkip.getCurrentEvent(videoRef.current.currentTime, skipEvents as SkipEvent[]);
       if(event)
         videoRef.current.currentTime = event?.interval.endTime;
+      else
+        videoRef.current.currentTime += introSkip;
 
     } catch (error) {
       console.log(error)
@@ -155,14 +157,26 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       onClick={onClick}
       onDoubleClick={onDblClick}
     >
-      {showSkipEvent && <div className="skip-button">
+      {showSkipEvent && skipEvents && skipEvents.length > 0 && (
+      <div className="skip-button">
+      <ButtonMain
+        text={skipEvent}
+        icon={faFastForward}
+        tint="light"
+        onClick={handleSkipIntro}
+      />
+    </div>
+      )}
+      {(!skipEvents || skipEvents.length === 0) && (
+        <div className="skip-button">
         <ButtonMain
-          text={skipEvent}
-          icon={faFastForward}
+          text={introSkip}
+          icon={faPlus}
           tint="light"
           onClick={handleSkipIntro}
         />
-      </div>}
+      </div>
+      )}
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"
