@@ -1,6 +1,6 @@
 import './styles/MainNavbar.css';
 
-import { faBookmark, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCalendar, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
@@ -11,13 +11,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import isAppImage from '../modules/packaging/isAppImage';
-import { AuthContext } from './App';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
+import Store from "electron-store";
 
 const Li: React.FC<{
   text: string;
@@ -53,8 +53,10 @@ const LiLink: React.FC<{
   );
 };
 
+const store = new Store();
+
 const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
-  const logged = useContext(AuthContext);
+  const logged = store.get('logged') as boolean;
 
   const [activeTab, setActiveTab] = useState(1);
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
@@ -86,6 +88,13 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
             onClick={() => setActiveTab(2)}
           />
         )}
+        <Li
+          text="Schedule"
+          icon={faCalendar}
+          to="/tab5"
+          active={activeTab === 5}
+          onClick={() => setActiveTab(5)}
+        />
         <Li
           text="Search"
           icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
@@ -120,6 +129,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
             text="Log-In"
             icon={faCircleUser}
             onClick={() => {
+              setShowAuthCodeModal(true);
               ipcRenderer.send('open-login-url');
             }}
           />
@@ -130,11 +140,11 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
               show={showAuthCodeModal}
               onClose={() => setShowAuthCodeModal(false)}
             />
-            <LiLink
+            {/* <LiLink
               text="Insert auth code"
               icon={faLaptopCode}
               onClick={() => setShowAuthCodeModal(true)}
-            />
+            /> */}
           </>
         )}
       </ul>

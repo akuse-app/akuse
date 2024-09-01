@@ -37,7 +37,7 @@ const AuthCodeModal: React.FC<{ show: boolean; onClose: () => void }> = ({
             <input
               type="text"
               id="search-page-filter-title"
-              placeholder="Search..."
+              placeholder="Authorization Code.."
               value={code}
               onChange={handleCodeChange}
             />

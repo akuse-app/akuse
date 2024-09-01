@@ -1,7 +1,7 @@
 import './styles/AnimeSection.css';
 
 import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
@@ -73,7 +73,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       )}
       <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
-          {(animeData ? animeData : Array(20).fill(undefined)).map(
+        {(animeData ?? Array(20).fill(undefined)).map(
             (listAnimeData, index) => (
               <AnimeEntry key={index} listAnimeData={listAnimeData} />
             ),

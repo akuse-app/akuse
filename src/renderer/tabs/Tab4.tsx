@@ -1,9 +1,11 @@
 import Store from 'electron-store';
 import { ContentSteeringController } from 'hls.js';
-import React, { ChangeEvent, useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../App';
+import { ipcRenderer } from 'electron';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
+import toast, { Toaster } from 'react-hot-toast';
 
 const STORE = new Store();
 
@@ -46,6 +48,26 @@ const CheckboxElement: React.FC<CheckboxElementProps> = ({
         <span className="slider round"></span>
       </label>
     </Element>
+  );
+};
+
+interface TextInputElementProps {
+  label: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const TextInputElement: React.FC<TextInputElementProps> = ({ label, value, onChange }) => {
+  return (
+    <div className="text-input-element">
+      <label className="text-input-label">{label}</label>
+      <input
+        type="text"
+        className="text-input-field"
+        value={value}
+        onChange={onChange}
+      />
+    </div>
   );
 };
 
@@ -100,6 +122,30 @@ const Tab4: React.FC = () => {
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
+  const [episodesPerPage, setEpisodesPerPage] = useState<number>(
+    STORE.get('episodes_per_page') as number,
+  );
+
+  const [clearHistory, setClearHistory] = useState<boolean>(false);
+
+  const handleEpisodesPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /* Should probably swap this for the dropdown instead, but I like the freedom of choosing anything. */
+    let value = event.target.value;
+    if(/[a-zA-Z\.]/.test(value))
+      value = value.replaceAll(/[a-zA-Z\.]/g, '');
+
+    let number = Math.max(Number(value), 1);
+    if(Number.isNaN(number))
+      number = 1;
+
+    STORE.set('episodes_per_page', number);
+    setEpisodesPerPage(number);
+  };
+
+  const handleClearHistory = () => {
+    STORE.set('history', { entries: {} });
+    setClearHistory(!clearHistory);
+  }
 
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
@@ -190,8 +236,19 @@ const Tab4: React.FC = () => {
             checked={showDuration}
             onChange={handleShowDurationChange}
           />
+          <TextInputElement
+            label="Episodes Per Page"
+            value={String(episodesPerPage)}
+            onChange={handleEpisodesPerPage}
+          />
+          <CheckboxElement
+            label="Clear local history"
+            checked={clearHistory}
+            onChange={handleClearHistory}
+          />
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

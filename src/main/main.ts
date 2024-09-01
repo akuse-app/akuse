@@ -35,6 +35,8 @@ if (isDebug) {
   require('electron-debug')();
 }
 
+const RPCEnabled = STORE.get('rich_presence');
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -293,6 +295,11 @@ ipcMain.on('download-update', async () => {
   let pth = await autoUpdater.downloadUpdate();
   if (!mainWindow) return;
   mainWindow.webContents.send('console-log', pth);
+});
+
+ipcMain.on('update-section', (event, ...args) => {
+  if(!mainWindow) return;
+  mainWindow.webContents.send('update-section', ...args);
 });
 
 /* DISCORD RPC */

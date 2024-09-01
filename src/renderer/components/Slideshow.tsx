@@ -206,9 +206,10 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
 
 interface SlideshowProps {
   listAnimeData?: ListAnimeData[];
+  maxAmount?: number
 }
 
-const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
+const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData, maxAmount = 5 }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   const [animeData, setAnimeData] = useState<ListAnimeData[] | undefined>();
@@ -218,7 +219,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData }) => {
       listAnimeData
         ?.filter((animeData) => animeData?.media.bannerImage)
         ?.filter((animeData) => !animeData.media.mediaListEntry)
-        .slice(0, 5),
+        .slice(0, maxAmount),
     );
   }, [listAnimeData]);
 

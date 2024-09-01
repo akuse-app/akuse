@@ -9,7 +9,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';
@@ -20,8 +20,10 @@ import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { PageInfo } from '../../types/anilistGraphQLTypes';
 
-const Tab3 = () => {
+
+const Tab3: React.FC = () => {
   const viewerId = useContext(ViewerIdContext);
 
   const [selectedTitle, setSelectedTitle] = useState('');
@@ -30,6 +32,9 @@ const Tab3 = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedSort, setSelectedSort] = useState('');
+  const [lastUpdate, setLastUpdate] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [searchedAnime, setSearchedAnime] = useState<
     ListAnimeData[] | undefined
@@ -68,9 +73,7 @@ const Tab3 = () => {
     setSelectedSort('');
   };
 
-  const handleSearchClick = async () => {
-    setSearchedAnime(undefined);
-
+  const getArgs = () => {
     let title = '';
     let genre = '';
     let season = '';
@@ -97,9 +100,32 @@ const Tab3 = () => {
       selectedSort !== '' ? (sort = `sort: ${selectedSort}`) : (sort = ''),
     ].filter((item) => !(item == ''));
 
-    const parsedArgs = args.concat('type: ANIME').join(', ');
+    return args.concat('type: ANIME').join(', ');
+  }
+
+  const getSearchAnime = async (newSearch: boolean = false) => {
+    if(!hasNextPage && (page > 1 || !newSearch)) return searchedAnime;
+
+    const result = newSearch ? [] : searchedAnime;
+
+    const anime = await searchFilteredAnime(getArgs(), viewerId, page);
+    const pageInfo = anime.pageInfo as PageInfo;
+
+    setHasNextPage(pageInfo.hasNextPage);
+    if(pageInfo.hasNextPage)
+      setPage(page + 1);
+
+    return result?.concat(animeDataToListAnimeData(anime));
+  }
+
+  const handleSearchClick = async () => {
+    setSearchedAnime([]);
+
+    setPage(1);
+    setHasNextPage(false);
+
     setSearchedAnime(
-      animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)),
+      await getSearchAnime(true)
     );
   };
 
@@ -109,8 +135,24 @@ const Tab3 = () => {
     if (event.code === 'Enter') handleSearchClick();
   };
 
+  const handleScroll = async (event: any) => {
+    const target: HTMLDivElement = event.target;
+    const position = target.scrollTop;
+    const height = target.scrollHeight - target.offsetHeight;
+    const current = Date.now() / 1000;
+
+    if(Math.floor(height - position) > 1 || current - lastUpdate < 1)
+      return;
+
+    setLastUpdate(lastUpdate);
+
+    setSearchedAnime(
+      await getSearchAnime(),
+    );
+  };
+
   return (
-    <div className="body-container  show-tab">
+    <div className="body-container  show-tab" onScroll={handleScroll}>
       <div className="main-container">
         <Heading text="Search" />
         <main className="search">
@@ -224,7 +266,7 @@ const Tab3 = () => {
                 <Dots />
               </div>
             ) : (
-              searchedAnime?.map((value, index) => (
+              searchedAnime.map((value, index) => (
                 <AnimeEntry key={index} listAnimeData={value} />
               ))
             )}

@@ -73,7 +73,7 @@ export type MediaTrailer = {
 export type PageInfo = {
   total: number;
   currentPage: number;
-  hasNextPage: number;
+  hasNextPage: boolean;
 };
 
 export type Media = {

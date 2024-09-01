@@ -15,7 +15,7 @@ import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { IpcRendererEvent } from 'electron';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
@@ -23,6 +23,7 @@ import {
   getParsedFormat,
   getParsedMeanScore,
   getParsedSeasonYear,
+  getProgress,
   getTitle,
   getUrlByCoverType,
 } from '../../../modules/utils';
@@ -40,6 +41,8 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
+import { ipcRenderer } from 'electron';
+import { getLastWatchedEpisode } from '../../../modules/history';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -80,8 +83,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!episodesInfoHasFetched) fetchEpisodesInfo();
-  }, []);
+    if (show) fetchEpisodesInfo();
+  }, [show]);
 
   useEffect(() => {
     if (!showPlayer) {
@@ -107,6 +110,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
+    ipcRenderer.send('update-section', 'history');
+
     onClose();
   };
 
@@ -118,8 +123,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const fetchEpisodesInfo = async () => {
+    const animeId = listAnimeData.media.id as number;
+
+    const lastWatched = getLastWatchedEpisode(animeId);
+    if(lastWatched)
+      setLocalProgress((lastWatched.data.episodeNumber as number) - 1);
+
     axios
-      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
+      .get(`${EPISODES_INFO_URL}${animeId}`)
       .then((data) => {
         if (data.data && data.data.episodes)
           setEpisodesInfo(data.data.episodes);
@@ -194,7 +205,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const handlePlayerClose = () => {
     try {
-      if (trailerRef.current) trailerRef.current.play();
+      // if (trailerRef.current) trailerRef.current.play();
       setShowPlayer(false);
     } catch (error) {
       console.log(error);

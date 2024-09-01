@@ -2,6 +2,8 @@ import { IVideo } from '@consumet/extensions';
 import Gogoanime from '@consumet/extensions/dist/providers/anime/gogoanime';
 const consumet = new Gogoanime();
 
+export const getRecentEpisodes = consumet.fetchRecentEpisodes;
+
 export const getEpisodeUrl = async (
   animeTitles: string[],
   index: number,

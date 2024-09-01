@@ -1,5 +1,3 @@
-import { userInfo } from 'os';
-import { useEffect } from 'react';
 import { useContext } from 'react';
 
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
@@ -8,7 +6,9 @@ import AnimeSection from '../components/AnimeSection';
 import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
 import UserNavbar from '../components/UserNavbar';
+import Store from 'electron-store';
 
+const store = new Store();
 interface Tab1Props {
   userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];
@@ -22,13 +22,14 @@ const Tab1: React.FC<Tab1Props> = ({
   currentListAnime,
   trendingAnime,
   mostPopularAnime,
-  nextReleasesAnime,
+  nextReleasesAnime
 }) => {
-  const logged = useContext(AuthContext);
+  const hasHistory = useContext(AuthContext);
+  const logged = store.get('logged') as boolean;
 
   return (
     <div className="body-container  show-tab">
-      <div className="main-container">
+      <div className="main-container" style={{ paddingBottom: "110px" }} >
         <main>
           {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
 
@@ -37,7 +38,7 @@ const Tab1: React.FC<Tab1Props> = ({
           <Slideshow listAnimeData={trendingAnime} />
 
           <div className="section-container">
-            {logged && (
+            {hasHistory && (
               <AnimeSection
                 title="Continue Watching"
                 animeData={currentListAnime}

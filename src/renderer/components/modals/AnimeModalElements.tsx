@@ -45,6 +45,9 @@ import {
 import { AuthContext } from '../../App';
 import { ButtonCircle, ButtonMain } from '../Buttons';
 import { stat } from 'fs';
+import Store from 'electron-store';
+
+const store = new Store()
 
 export const AnimeModalStatus: React.FC<{
   status: MediaStatus | undefined;
@@ -246,12 +249,18 @@ export const AnimeModalWatchButtons: React.FC<{
     listAnimeData.media.mediaListEntry?.status,
   );
 
+
   // const progress = getProgress(listAnimeData.media);
   const episodes = getEpisodes(listAnimeData.media);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
   const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
 
   useEffect(() => {
+    if(localProgress === -1) {
+      setProgress(0);
+      return;
+    }
+
     if (localProgress) setProgress(localProgress);
   }, [localProgress]);
 

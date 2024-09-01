@@ -1,5 +1,6 @@
-import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
+import { AiringScheduleData, AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
+import { getLastWatchedEpisode } from './history';
 
 const MONTHS = {
   '1': 'January',
@@ -43,6 +44,19 @@ const DISCORD_PHRASES: string[] = [
 
 export const getRandomDiscordPhrase = (): string =>
   DISCORD_PHRASES[Math.floor(Math.random() * DISCORD_PHRASES.length)];
+
+export const airingDataToListAnimeData = (
+  airingScheduleData: AiringScheduleData[]
+): ListAnimeData[] => {
+  return airingScheduleData.map((value) => {
+    return {
+      id: null,
+      mediaId: null,
+      progress: null,
+      media: value.media
+    };
+  });
+};
 
 export const animeDataToListAnimeData = (
   animeData: AnimeData,
@@ -161,8 +175,15 @@ export const getScore = (animeEntry: Media) =>
  * @param {*} animeEntry
  * @returns anime progress
  */
-export const getProgress = (animeEntry: Media): number | undefined =>
-  animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+export const getProgress = (animeEntry: Media): number | undefined => {
+  const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
+  const lastWatched = getLastWatchedEpisode(animeId);
+
+  if(lastWatched !== undefined && lastWatched.data !== undefined)
+    return (lastWatched.data.episodeNumber as number) - 1;
+
+  return animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+}
 
 /**
  * Returns whether an anime is available or not

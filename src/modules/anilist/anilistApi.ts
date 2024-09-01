@@ -1,9 +1,12 @@
-import { app } from 'electron';
+import { app, ipcRenderer } from 'electron';
 import Store from 'electron-store';
 
 import {
+  AiringPage,
+  AiringScheduleData,
   AnimeData,
   CurrentListAnime,
+  ListAnimeData,
   MostPopularAnime,
   TrendingAnime,
 } from '../../types/anilistAPITypes';
@@ -12,6 +15,7 @@ import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import isAppImage from '../packaging/isAppImage';
 import { getOptions, makeRequest } from '../requests';
+import { ITitle } from '@consumet/extensions';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -243,6 +247,66 @@ export const getFollowingUsers = async (viewerId: any) => {
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 };
 
+const sanitizeString = (input: string) => JSON.stringify(input).slice(1, -1).replace(/[{};`\\"'\!]/g, '');
+
+/**
+ * Gets a list of anime from a list of titles.
+ *
+ * @param titles
+ * @returns anime list
+ */
+export const getAnimesFromTitles = async (titles: string[]) => {
+  let query_variables: string[] = [];
+  let variables: { [key: string]: string } = {};
+  let search_text: string[] = [];
+
+  const results: ListAnimeData[] = [];
+  const headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+  };
+
+  for (let index = 0; index < titles.length; index++) {
+      const value = titles[index];
+      const id: string = `anime${query_variables.length}`;
+
+      query_variables.push(`$${id}: String`);
+      search_text.push(`    ${id}: Media(search: $${id}, type: ANIME) { ${MEDIA_DATA} }`);
+      variables[id] = sanitizeString(value).replaceAll('Part', '');
+
+      if (query_variables.length > 2 || index === titles.length - 1) {
+          const query = `
+              query(${query_variables.join(", ")}) {
+              ${search_text.join("\n")}
+              }
+          `;
+          try {
+            const options = getOptions(query, variables);
+            const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+            for (let i = 0; i < query_variables.length; i++) {
+                const id = `anime${i}`;
+                results.push({
+                    id: null,
+                    mediaId: null,
+                    progress: null,
+                    media: respData.data[id],
+                });
+            }
+          } catch (error) {
+            console.log('Batch search error:', error);
+          }
+
+          query_variables = [];
+          variables = {};
+          search_text = [];
+      }
+  }
+
+  return results;
+};
+
+
 /**
  * Gets the info from an anime
  *
@@ -275,22 +339,30 @@ export const getAnimeInfo = async (animeId: any) => {
 };
 
 /**
- * gets airing schedule
+ * get aired anime
  *
  * @param viewerId
- * @returns
+ * @param airingAt
+ * @returns a list of aired anime
  */
 
-export const getAiringSchedule = async (viewerId: number | null) => {
-  const timeInSeconds = Math.floor(Date.now() / 1000);
+export const getAiredAnime = async (
+  viewerId: number | null,
+  amount: number = PAGES,
+  timeOffset: number = 43200,
+  airingAt: number = Date.now() / 1000,
+  page: number = 1,
+) => {
+  airingAt = Math.floor(airingAt);
+  const airingAfter = Math.floor(airingAt - timeOffset);
 
-  const query = ` 
+  const query = `
   query {
-    Page(page: 1, perPage: ${PAGES}) {
+    Page(page: ${page}, perPage: ${amount}) {
       pageInfo {
         hasNextPage
       },
-      airingSchedules(airingAt_greater: ${timeInSeconds}) {
+      airingSchedules(airingAt_greater: ${airingAfter}, airingAt_lesser: ${airingAt}) {
         episode,
         timeUntilAiring,
         airingAt,
@@ -315,10 +387,61 @@ export const getAiringSchedule = async (viewerId: number | null) => {
   }
 
   const options = getOptions(query);
-  console.log(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
-  console.log(respData);
-  // return respData.data.Page;
+  const pageData = respData.data.Page as AiringPage;
+
+  pageData.airingSchedules = pageData.airingSchedules.reverse();
+
+  return pageData
+};
+
+/**
+ * gets airing schedule
+ *
+ * @param viewerId
+ * @returns
+ */
+
+export const getAiringSchedule = async (
+  viewerId: number | null,
+  airingAt: number = Math.floor(Date.now() / 1000)
+) => {
+  // const timeInSeconds = ;
+
+  const query = `
+  query {
+    Page(page: 1, perPage: ${PAGES}) {
+      pageInfo {
+        hasNextPage
+      },
+      airingSchedules(airingAt_greater: ${airingAt}) {
+        episode,
+        timeUntilAiring,
+        airingAt,
+        media {
+          ${MEDIA_DATA}
+        }
+      }
+    }
+  }`;
+
+  if (viewerId) {
+    var headers: any = {
+      Authorization: 'Bearer ' + STORE.get('access_token'),
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  } else {
+    var headers: any = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    };
+  }
+
+  const options = getOptions(query);
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+  return respData.data.Page.airingSchedules as AiringScheduleData[];
 };
 
 /**
@@ -342,7 +465,7 @@ export const getTrendingAnime = async (
               media(sort: TRENDING_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -385,7 +508,7 @@ export const getMostPopularAnime = async (
               media(sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -425,7 +548,7 @@ export const getNextReleases = async (viewerId: number | null) => {
               media(status: NOT_YET_RELEASED, sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -457,10 +580,11 @@ export const getNextReleases = async (viewerId: number | null) => {
 export const searchFilteredAnime = async (
   args: string,
   viewerId: number | null,
+  page: number = 1
 ): Promise<AnimeData> => {
   var query = `
       {
-          Page(page: 1, perPage: 50) {
+          Page(page: ${page}, perPage: 50) {
               pageInfo {
                   total
                   currentPage
@@ -469,7 +593,7 @@ export const searchFilteredAnime = async (
               media(${args}) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -509,7 +633,7 @@ export const releasingAnimes = async () => {
               media(status: RELEASING, sort: POPULARITY_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -539,7 +663,7 @@ export const getAnimesByGenre = async (genre: any, viewerId: number | null) => {
               media(genre: "${genre}", sort: TRENDING_DESC, type: ANIME) {
                   ${MEDIA_DATA}
               }
-          } 
+          }
       }
       `;
 
@@ -669,7 +793,9 @@ export const deleteAnimeFromList = async (id: any): Promise<boolean> => {
     };
 
     const options = getOptions(query, variables);
-    return await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+    const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+    return respData
   } catch (error) {
     console.log(error);
     return false;
