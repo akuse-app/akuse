@@ -21,6 +21,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   const [searchTime, setSearchTime] = useState<number>(Date.now() / 1000);
   const [hasPopulated, setHasPopulated] = useState<boolean>(false);
 
+
   // Time constants
   const timeOffset = 86400;
 
@@ -72,7 +73,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     const height = target.scrollHeight - target.offsetHeight;
     const current = Date.now() / 1000;
 
-    if(height - position > 1 || current - lastUpdate < 1)
+    if(Math.floor(height - position) > 1 || current - lastUpdate < 1)
       return;
 
     setLastUpdate(current);

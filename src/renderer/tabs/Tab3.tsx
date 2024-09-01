@@ -115,8 +115,6 @@ const Tab3: React.FC = () => {
     if(pageInfo.hasNextPage)
       setPage(page + 1);
 
-    console.log(anime, searchedAnime);
-
     return result?.concat(animeDataToListAnimeData(anime));
   }
 
@@ -143,7 +141,7 @@ const Tab3: React.FC = () => {
     const height = target.scrollHeight - target.offsetHeight;
     const current = Date.now() / 1000;
 
-    if(height - position > 1 || current - lastUpdate < 1)
+    if(Math.floor(height - position) > 1 || current - lastUpdate < 1)
       return;
 
     setLastUpdate(lastUpdate);
