@@ -89,7 +89,7 @@ export default function App() {
     const historyAvailable = Object.values(entries).length > 0
 
     let result: ListAnimeData[] = [];
-    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id || b.id || b.media.mediaListEntry && b.media.mediaListEntry.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode(( b.media.id || a.id || a.media.mediaListEntry && a.media.mediaListEntry.id) as number)?.timestamp ?? 0)
+    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id ?? (b.media.mediaListEntry && b.media.mediaListEntry.id)) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.media.id ?? (a.media.mediaListEntry && a.media.mediaListEntry.id)) as number)?.timestamp ?? 0);
 
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
@@ -116,6 +116,8 @@ export default function App() {
     if(historyAvailable) {
       result = Object.values(result).sort(sortNewest);
     }
+
+    // console.log(entries, result);
 
     setCurrentListAnime(result);
   }

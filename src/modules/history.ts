@@ -49,7 +49,7 @@ export const setAnimeHistory = (
   animeHistory: AnimeHistoryEntry
 ) => {
   const listAnimeData = animeHistory.data;
-  const animeId = (listAnimeData.id || listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number
+  const animeId = (listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number
 
   history.entries[animeId] = animeHistory;
 
@@ -72,5 +72,5 @@ export const getLastWatchedEpisode = (
 
   return Object.values(animeHistory?.history).reduce((latest, current) => {
     return current.timestamp > latest.timestamp ? current : latest;
-  });
+  }, Object.values(animeHistory.history)[0]);
 }

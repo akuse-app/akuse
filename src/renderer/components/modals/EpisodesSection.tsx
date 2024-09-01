@@ -29,7 +29,7 @@ const EpisodesSection: React.FC<EpisodesSectionProps> = ({
   const [searchValue, setSearchValue] = useState<string>('');
   const [widenInput, setWidenInput] = useState<boolean>(false);
   const episodes = getAvailableEpisodes(listAnimeData.media) ?? 0;
-  const history_entry = getAnimeHistory((listAnimeData.media.id || listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number);
+  const history_entry = getAnimeHistory((listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number);
 
   const getEpisodesArray = () => {
     const EPISODES_PER_PAGE = store.get('episodes_per_page') as number;

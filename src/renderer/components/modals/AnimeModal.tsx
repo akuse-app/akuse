@@ -125,6 +125,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const fetchEpisodesInfo = async () => {
     const animeId = listAnimeData.media.id as number;
 
+    const lastWatched = getLastWatchedEpisode(animeId);
+    if(lastWatched)
+      setLocalProgress((lastWatched.data.episodeNumber as number) - 1);
+
     axios
       .get(`${EPISODES_INFO_URL}${animeId}`)
       .then((data) => {
@@ -137,10 +141,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         setEpisodesInfoHasFetched(true);
       })
       .catch(() => {setEpisodesInfoHasFetched(true);});
-
-    const lastWatched = getLastWatchedEpisode(animeId);
-    if(lastWatched)
-      setLocalProgress((lastWatched.data.episodeNumber as number) - 1);
   };
 
   const handleTrailerPlay = () => {

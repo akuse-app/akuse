@@ -229,7 +229,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       playHlsVideo(video.url);
 
       // resume from tracked progress
-      const animeId = (listAnimeData.media.id || listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
+      const animeId = (listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
       const animeHistory = getAnimeHistory(animeId);
 
       if(animeHistory !== undefined) {
@@ -281,7 +281,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const video = videoRef.current;
     const cTime = video?.currentTime;
     if(cTime === undefined) return;
-    const animeId = (listAnimeData.media.id || listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
+    const animeId = (listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
     if(animeId === null || animeId === undefined) return;
     console.log(animeId);
     let entry = getAnimeHistory(animeId) ?? { history: {}, data: listAnimeData };
