@@ -78,6 +78,7 @@ export type PageInfo = {
 
 export type Media = {
   id?: number;
+  idMal?: number;
   title?: MediaTitle;
   format?: MediaFormat;
   status?: MediaStatus;

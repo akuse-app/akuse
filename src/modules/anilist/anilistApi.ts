@@ -15,7 +15,6 @@ import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import isAppImage from '../packaging/isAppImage';
 import { getOptions, makeRequest } from '../requests';
-import { ITitle } from '@consumet/extensions';
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -28,6 +27,7 @@ const HEADERS: Object = {
 };
 const MEDIA_DATA: string = `
         id
+        idMal
         title {
             romaji
             english
