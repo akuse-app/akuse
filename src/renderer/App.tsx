@@ -89,7 +89,19 @@ export default function App() {
     const historyAvailable = Object.values(entries).length > 0
 
     let result: ListAnimeData[] = [];
-    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.id || b.media.id || b.media.mediaListEntry && b.media.mediaListEntry.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.id || a.media.mediaListEntry && a.media.mediaListEntry.id) as number)?.timestamp ?? 0)
+    const usedIds = new Set();
+    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id || b.id || b.media.mediaListEntry && b.media.mediaListEntry.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode(( b.media.id || a.id || a.media.mediaListEntry && a.media.mediaListEntry.id) as number)?.timestamp ?? 0)
+    const filterUsed = (value: ListAnimeData) => {
+      const id = value.media.id || value.id || value.media.mediaListEntry && value.media.mediaListEntry.id;
+
+      console.log(value, id);
+
+      if(usedIds.has(id)) return;
+
+      usedIds.add(id);
+
+      return value;
+    }
 
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
@@ -100,15 +112,14 @@ export default function App() {
       result = result.concat(current.concat(rewatching));
     } else if(historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
-      console.log(result);
+      result = Object.values(entries).map((value) => value.data).sort(sortNewest).filter(filterUsed);
       setCurrentListAnime(result);
       return;
     }
 
     if(result.length === 0 && historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
+      result = Object.values(entries).map((value) => value.data).sort(sortNewest).filter(filterUsed);
 
       setCurrentListAnime(result);
       return;
@@ -118,7 +129,7 @@ export default function App() {
       result = Object.values(result).sort(sortNewest);
     }
 
-    setCurrentListAnime(result);
+    setCurrentListAnime(result.filter(filterUsed));
   }
 
   useEffect(() => {
