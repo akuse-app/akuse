@@ -91,7 +91,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
             title="Today's Schedule"
             animeData={todayAnime}
           />
-          <Heading text="Aired" />
+          <Heading text="Recently Aired" />
           <div className="entries-container">
             {!airedAnime ? (
               <div className="activity-indicator">
