@@ -83,11 +83,11 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     <div className="body-container show-tab" onScroll={handleScroll}>
       <div className="main-container">
         <main>
-          <Slideshow listAnimeData={todayAnime} maxAmount={todayAnime.length}/>
+          {/* <Slideshow listAnimeData={todayAnime} maxAmount={todayAnime.length}/>
           <AnimeSection
             title="Today's Schedule"
             animeData={todayAnime}
-          />
+          /> */}
           <Heading text="Recently Aired" />
           <div className="entries-container">
             {!airedAnime ? (

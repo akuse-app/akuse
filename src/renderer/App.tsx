@@ -59,8 +59,6 @@ export default function App() {
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
-  const [bookmarkAnime, setBookmarkAnime] = useState<ListAnimeData[]>();
-
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
   const [planningListAnime, setPlanningListAnimeListAnime] =
@@ -85,20 +83,44 @@ export default function App() {
     }
   }, []);
 
-  const updateBookmark = async (id: number) => {
-    const current = await getViewerList(id, 'CURRENT');
-    const rewatching = await getViewerList(id, 'REPEATING');
-    const planning = await getViewerList(id, 'PLANNING');
+  const updateHistory = async () => {
+    const entries = getHistoryEntries();
+    const historyAvailable = Object.values(entries).length > 0
 
-    setBookmarkAnime(current.concat(rewatching).concat(planning));
-  }
+    let result: ListAnimeData[] = [];
+    if(logged) {
+      const id = (viewerId as number) || await getViewerId();
 
-  const updateHistory = () => {
-    setHasHistory(true);
-    const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
-      (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-    );
-    setCurrentListAnime(currentList);
+      const current = await getViewerList(id, 'CURRENT');
+      const rewatching = await getViewerList(id, 'REPEATING');
+
+      result = result.concat(current.concat(rewatching));
+    } else if(historyAvailable) {
+      setHasHistory(true);
+      result = Object.values(entries).map((value) => value.data).sort((a, b) =>
+        (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+      );
+      setCurrentListAnime(result);
+      return;
+    }
+
+    if(result.length === 0 && historyAvailable) {
+      setHasHistory(true);
+      result = Object.values(entries).map((value) => value.data).sort((a, b) =>
+        (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
+      );
+
+      setCurrentListAnime(result);
+      return;
+    }
+
+    if(historyAvailable) {
+      result = Object.values(result).sort((a, b) =>
+        (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode(((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number) as number)?.timestamp ?? 0)
+      );
+    }
+
+    setCurrentListAnime(result);
   }
 
   useEffect(() => {
@@ -106,11 +128,7 @@ export default function App() {
         for(const section of sections) {
           switch(section) {
             case 'history':
-              updateHistory();
-              continue;
-
-            case 'bookmark':
-              await updateBookmark(viewerId as number);
+              await updateHistory();
               continue;
           }
         }
@@ -137,12 +155,9 @@ export default function App() {
         setViewerId(id);
 
         setUserInfo(await getViewerInfo(id));
-        await updateBookmark(id);
       }
 
-      if(Object.values(getHistoryEntries()).length > 0) {
-        updateHistory();
-      }
+      updateHistory();
 
       setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
       setMostPopularAnime(
@@ -198,7 +213,6 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
-                    bookmarkAnime={bookmarkAnime}
                   />
                 }
               />

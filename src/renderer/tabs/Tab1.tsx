@@ -15,13 +15,11 @@ interface Tab1Props {
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
   nextReleasesAnime?: ListAnimeData[];
-  bookmarkAnime?: ListAnimeData[];
 }
 
 const Tab1: React.FC<Tab1Props> = ({
   userInfo,
   currentListAnime,
-  bookmarkAnime,
   trendingAnime,
   mostPopularAnime,
   nextReleasesAnime
@@ -44,12 +42,6 @@ const Tab1: React.FC<Tab1Props> = ({
               <AnimeSection
                 title="Continue Watching"
                 animeData={currentListAnime}
-              />
-            )}
-            {logged && bookmarkAnime?.length !== 0 &&  (
-              <AnimeSection
-                title="Watchlist"
-                animeData={bookmarkAnime}
               />
             )}
             <AnimeSection title="Trending Now" animeData={trendingAnime} />

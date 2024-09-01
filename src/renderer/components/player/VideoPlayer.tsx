@@ -348,6 +348,38 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const updateCurrentProgress = (completed: boolean = true) => {
+    const status = listAnimeData.media.mediaListEntry?.status;
+    if((STORE.get('logged') as boolean)) {
+      switch (status) {
+        case 'CURRENT': {
+          updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+          break;
+        }
+        case 'REPEATING':
+        case 'COMPLETED': {
+          updateAnimeFromList(
+            listAnimeData.media.id,
+            'REWATCHING',
+            undefined,
+            episodeNumber,
+          );
+        }
+        default: {
+          updateAnimeFromList(
+            listAnimeData.media.id,
+            'CURRENT',
+            undefined,
+            episodeNumber,
+          );
+        }
+      }
+    }
+
+    setProgressUpdated(true);
+    onLocalProgressChange(completed ? episodeNumber : episodeNumber - 1);
+  }
+
   const handleTimeUpdate = () => {
     if (!videoRef.current?.paused) {
       setPlaying(true);
@@ -371,35 +403,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           !progressUpdated
         ) {
           // when updating progress, put the anime in current if it wasn't there
-          const status = listAnimeData.media.mediaListEntry?.status;
-          if((STORE.get('logged') as boolean)) {
-            switch (status) {
-              case 'CURRENT': {
-                updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
-                break;
-              }
-              case 'REPEATING':
-              case 'COMPLETED': {
-                updateAnimeFromList(
-                  listAnimeData.media.id,
-                  'REWATCHING',
-                  undefined,
-                  episodeNumber,
-                );
-              }
-              default: {
-                updateAnimeFromList(
-                  listAnimeData.media.id,
-                  'CURRENT',
-                  undefined,
-                  episodeNumber,
-                );
-              }
-            }
-          }
-
-          setProgressUpdated(true);
-          onLocalProgressChange(episodeNumber);
+          updateCurrentProgress();
         }
       }
     } catch (error) {
@@ -466,6 +470,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
 
     onClose();
+    updateCurrentProgress(false);
 
     ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
