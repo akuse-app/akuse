@@ -150,6 +150,7 @@
 
 - [Consumet API](https://github.com/consumet/consumet.ts): used to fetch episodes links
 - [This API](https://api.ani.zip/mappings?anilist_id=21): used to fetch episodes info and thumbnails
+- [AniSkip API](https://api.aniskip.com/api-docs#/skip-times/SkipTimesControllerV2_getSkipTimes): used to fetch episode intros & outros.
 
 <br/>
 
