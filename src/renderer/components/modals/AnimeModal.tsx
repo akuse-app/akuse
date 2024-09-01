@@ -111,7 +111,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
 
     onClose();
-    ipcRenderer.send('update-section', 'history');
   };
 
   // close modal by clicking shadow area
