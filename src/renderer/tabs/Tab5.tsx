@@ -72,13 +72,8 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     const height = target.scrollHeight - target.offsetHeight;
     const current = Date.now() / 1000;
 
-    console.log(height - position, current - lastUpdate);
-
     if(height - position > 1 || current - lastUpdate < 1)
       return;
-
-    // if()
-      // return;
 
     setLastUpdate(current);
     populateAiredAnime();
