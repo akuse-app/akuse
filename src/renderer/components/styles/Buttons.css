@@ -42,17 +42,20 @@ button.bc.small {
   font-size: 1rem;
 }
 
+button.bm.empty,
 button.bc.empty {
   color: var(--font-1);
   background-color: rgba(0, 0, 0, 0.5);
   border: 2px solid var(--font-3);
 }
 
+button.bm.empty:hover:not(.disabled),
 button.bc.empty:hover:not(.disabled) {
   background-color: rgba(90, 90, 90, 0.5);
   border: 2px solid var(--font-2);
 }
 
+button.bm.empty:active:not(.disabled),
 button.bc.empty:active:not(.disabled) {
   background-color: rgba(120, 120, 120, 0.5);
   border: 2px solid var(--font-3);

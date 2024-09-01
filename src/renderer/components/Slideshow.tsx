@@ -178,7 +178,7 @@ const Slide: React.FC<SlideProps> = ({ listAnimeData, index, isVisible }) => {
               <ButtonMain
                 text="More info"
                 icon={faArrowUpRightFromSquare}
-                tint="light"
+                tint="empty"
                 shadow
                 onClick={() => {
                   setShowModal(true);

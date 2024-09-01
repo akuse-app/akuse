@@ -1,23 +1,29 @@
 import './styles/MainNavbar.css';
 
-import { faBookmark, faCalendar, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faBookmark,
+  faCalendar,
+  faCircleUser,
+  faCompass,
+  IconDefinition,
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
+  faCalendar as faCalendarFull,
   faCompass as faCompassFull,
   faGear,
-  faLaptopCode,
   faMagnifyingGlass,
   faMagnifyingGlassPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ipcRenderer } from 'electron';
+import Store from 'electron-store';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import isAppImage from '../modules/packaging/isAppImage';
 import AuthCodeModal from './components/modals/AuthCodeModal';
 import UserModal from './components/modals/UserModal';
-import Store from "electron-store";
 
 const Li: React.FC<{
   text: string;
@@ -90,7 +96,7 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
         )}
         <Li
           text="Schedule"
-          icon={faCalendar}
+          icon={activeTab === 5 ? faCalendarFull : faCalendar}
           to="/tab5"
           active={activeTab === 5}
           onClick={() => setActiveTab(5)}
