@@ -110,6 +110,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
+    ipcRenderer.send('update-section', 'history');
+
     onClose();
   };
 

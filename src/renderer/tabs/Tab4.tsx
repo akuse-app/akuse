@@ -126,6 +126,8 @@ const Tab4: React.FC = () => {
     STORE.get('episodes_per_page') as number,
   );
 
+  const [clearHistory, setClearHistory] = useState<boolean>(false);
+
   const handleEpisodesPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     /* Should probably swap this for the dropdown instead, but I like the freedom of choosing anything. */
     let value = event.target.value;
@@ -139,6 +141,11 @@ const Tab4: React.FC = () => {
     STORE.set('episodes_per_page', number);
     setEpisodesPerPage(number);
   };
+
+  const handleClearHistory = () => {
+    STORE.set('history', { entries: {} });
+    setClearHistory(!clearHistory);
+  }
 
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
@@ -233,6 +240,11 @@ const Tab4: React.FC = () => {
             label="Episodes Per Page"
             value={String(episodesPerPage)}
             onChange={handleEpisodesPerPage}
+          />
+          <CheckboxElement
+            label="Clear local history"
+            checked={clearHistory}
+            onChange={handleClearHistory}
           />
         </div>
       </div>

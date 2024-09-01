@@ -283,7 +283,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if(cTime === undefined) return;
     const animeId = (listAnimeData.media.id || listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
     if(animeId === null || animeId === undefined) return;
-
+    console.log(animeId);
     let entry = getAnimeHistory(animeId) ?? { history: {}, data: listAnimeData };
 
     entry.history[episodeNumber] = {
@@ -471,8 +471,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     onClose();
     updateCurrentProgress(false);
-
-    ipcRenderer.send('update-section', 'history');
 
     ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
