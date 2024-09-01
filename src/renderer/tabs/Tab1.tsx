@@ -46,12 +46,6 @@ const Tab1: React.FC<Tab1Props> = ({
                 animeData={currentListAnime}
               />
             )}
-            {/* {newAnime && (
-              <AnimeSection
-                title="Just Aired"
-                animeData={newAnime}
-              />
-            )} */}
             {logged && bookmarkAnime?.length !== 0 &&  (
               <AnimeSection
                 title="Watchlist"

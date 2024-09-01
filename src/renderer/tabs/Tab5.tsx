@@ -6,6 +6,7 @@ import { airingDataToListAnimeData } from "../../modules/utils";
 import { Dots } from "react-activity";
 import AnimeEntry from "../components/AnimeEntry";
 import AnimeSection from "../components/AnimeSection";
+import Slideshow from "../components/Slideshow";
 
 interface Tab5Props {
   viewerId: number | null;
@@ -87,6 +88,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     <div className="body-container show-tab" onScroll={handleScroll}>
       <div className="main-container">
         <main>
+          <Slideshow listAnimeData={todayAnime} maxAmount={todayAnime.length}/>
           <AnimeSection
             title="Today's Schedule"
             animeData={todayAnime}

@@ -89,18 +89,18 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           />
         )}
         <Li
-          text="Search"
-          icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
-          to="/tab3"
-          active={activeTab === 3}
-          onClick={() => setActiveTab(3)}
-        />
-        <Li
           text="Schedule"
           icon={faCalendar}
           to="/tab5"
           active={activeTab === 5}
           onClick={() => setActiveTab(5)}
+        />
+        <Li
+          text="Search"
+          icon={activeTab === 3 ? faMagnifyingGlassPlus : faMagnifyingGlass}
+          to="/tab3"
+          active={activeTab === 3}
+          onClick={() => setActiveTab(3)}
         />
         <Li
           text="Settings"
