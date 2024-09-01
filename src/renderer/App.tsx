@@ -36,6 +36,7 @@ import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
 import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
+import Tab5 from './tabs/Tab5';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -58,7 +59,6 @@ export default function App() {
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
-  const [newAnime, setNewAnime] = useState<ListAnimeData[]>();
   const [bookmarkAnime, setBookmarkAnime] = useState<ListAnimeData[]>();
 
   // tab2
@@ -93,10 +93,6 @@ export default function App() {
     setBookmarkAnime(current.concat(rewatching).concat(planning));
   }
 
-  const updateNewAnime = async () => {
-    setNewAnime(airingDataToListAnimeData(await getAiredAnime(viewerId)));
-  }
-
   const updateHistory = () => {
     setHasHistory(true);
     const currentList = Object.values(getHistoryEntries()).map((value) => value.data).sort((a, b) =>
@@ -111,10 +107,6 @@ export default function App() {
           switch(section) {
             case 'history':
               updateHistory();
-              continue;
-
-            case 'new':
-              await updateNewAnime();
               continue;
 
             case 'bookmark':
@@ -157,7 +149,6 @@ export default function App() {
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
       setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
-      await updateNewAnime();
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -207,7 +198,6 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
-                    newAnime={newAnime}
                     bookmarkAnime={bookmarkAnime}
                   />
                 }
@@ -245,6 +235,14 @@ export default function App() {
               )}
               <Route path="/tab3" element={<Tab3 />} />
               <Route path="/tab4" element={<Tab4 />} />
+              <Route
+                path="/tab5"
+                element={
+                  <Tab5
+                    viewerId={viewerId}
+                  />
+                }
+              />
             </Routes>
           </MemoryRouter>
         </SkeletonTheme>

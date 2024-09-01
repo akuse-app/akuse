@@ -16,7 +16,6 @@ interface Tab1Props {
   mostPopularAnime?: ListAnimeData[];
   nextReleasesAnime?: ListAnimeData[];
   bookmarkAnime?: ListAnimeData[];
-  newAnime?: ListAnimeData[];
 }
 
 const Tab1: React.FC<Tab1Props> = ({
@@ -25,8 +24,7 @@ const Tab1: React.FC<Tab1Props> = ({
   bookmarkAnime,
   trendingAnime,
   mostPopularAnime,
-  nextReleasesAnime,
-  newAnime
+  nextReleasesAnime
 }) => {
   const hasHistory = useContext(AuthContext);
   const logged = store.get('logged') as boolean;
@@ -48,12 +46,12 @@ const Tab1: React.FC<Tab1Props> = ({
                 animeData={currentListAnime}
               />
             )}
-            {newAnime && (
+            {/* {newAnime && (
               <AnimeSection
                 title="Just Aired"
                 animeData={newAnime}
               />
-            )}
+            )} */}
             {logged && bookmarkAnime?.length !== 0 &&  (
               <AnimeSection
                 title="Watchlist"

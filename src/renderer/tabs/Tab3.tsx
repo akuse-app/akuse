@@ -225,7 +225,7 @@ const Tab3: React.FC = () => {
                 <Dots />
               </div>
             ) : (
-              searchedAnime?.map((value, index) => (
+              searchedAnime.map((value, index) => (
                 <AnimeEntry key={index} listAnimeData={value} />
               ))
             )}

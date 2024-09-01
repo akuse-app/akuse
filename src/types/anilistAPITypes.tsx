@@ -21,6 +21,13 @@ export type ListAnimeData = {
   media: Media
 }
 
+export type AiringPage = {
+  airingSchedules: AiringScheduleData[]
+  pageInfo: {
+    hasNextPage: boolean
+  }
+}
+
 export type AiringScheduleData = {
   episode: number
   airingAt: number,

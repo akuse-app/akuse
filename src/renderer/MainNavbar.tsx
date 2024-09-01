@@ -1,6 +1,6 @@
 import './styles/MainNavbar.css';
 
-import { faBookmark, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCalendar, faCircleUser, faCompass, IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faBookmark as faBookmarkFull,
   faCompass as faCompassFull,
@@ -94,6 +94,13 @@ const MainNavbar: React.FC<{ avatar?: string }> = ({ avatar }) => {
           to="/tab3"
           active={activeTab === 3}
           onClick={() => setActiveTab(3)}
+        />
+        <Li
+          text="Schedule"
+          icon={faCalendar}
+          to="/tab5"
+          active={activeTab === 5}
+          onClick={() => setActiveTab(5)}
         />
         <Li
           text="Settings"

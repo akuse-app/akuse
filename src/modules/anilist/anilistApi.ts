@@ -2,6 +2,7 @@ import { app, ipcRenderer } from 'electron';
 import Store from 'electron-store';
 
 import {
+  AiringPage,
   AiringScheduleData,
   AnimeData,
   CurrentListAnime,
@@ -347,17 +348,25 @@ export const getAnimeInfo = async (animeId: any) => {
 
 export const getAiredAnime = async (
   viewerId: number | null,
-  airingAt: number = Math.floor(Date.now() / 1000)
+  amount: number = PAGES,
+  timeOffset: number = 43200,
+  airingAt: number = Date.now() / 1000,
+  page: number = 1,
 ) => {
-  const dayBefore = airingAt - 43200;
+  airingAt = Math.floor(airingAt);
+  const airingAfter = Math.floor(airingAt - timeOffset);
 
   const query = `
   query {
-    Page(page: 1, perPage: ${PAGES}) {
+    Page(page: ${page}, perPage: ${amount}) {
       pageInfo {
+        total
+        currentPage
+        lastPage
         hasNextPage
+        perPage
       },
-      airingSchedules(airingAt_greater: ${dayBefore}, airingAt_lesser: ${airingAt}) {
+      airingSchedules(airingAt_greater: ${airingAfter}, airingAt_lesser: ${airingAt}) {
         episode,
         timeUntilAiring,
         airingAt,
@@ -383,8 +392,11 @@ export const getAiredAnime = async (
 
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  const pageData = respData.data.Page as AiringPage;
 
-  return (respData.data.Page.airingSchedules as AiringScheduleData[]).reverse();
+  pageData.airingSchedules = pageData.airingSchedules.reverse();
+
+  return pageData
 };
 
 /**
