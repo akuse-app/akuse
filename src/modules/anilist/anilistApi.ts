@@ -360,11 +360,7 @@ export const getAiredAnime = async (
   query {
     Page(page: ${page}, perPage: ${amount}) {
       pageInfo {
-        total
-        currentPage
-        lastPage
         hasNextPage
-        perPage
       },
       airingSchedules(airingAt_greater: ${airingAfter}, airingAt_lesser: ${airingAt}) {
         episode,
@@ -584,10 +580,11 @@ export const getNextReleases = async (viewerId: number | null) => {
 export const searchFilteredAnime = async (
   args: string,
   viewerId: number | null,
+  page: number = 1
 ): Promise<AnimeData> => {
   var query = `
       {
-          Page(page: 1, perPage: 50) {
+          Page(page: ${page}, perPage: 50) {
               pageInfo {
                   total
                   currentPage

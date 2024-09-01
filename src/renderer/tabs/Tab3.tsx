@@ -20,6 +20,7 @@ import { ViewerIdContext } from '../App';
 import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import { PageInfo } from '../../types/anilistGraphQLTypes';
 
 
 const Tab3: React.FC = () => {
@@ -31,6 +32,9 @@ const Tab3: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedSort, setSelectedSort] = useState('');
+  const [lastUpdate, setLastUpdate] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [page, setPage] = useState(1);
 
   const [searchedAnime, setSearchedAnime] = useState<
     ListAnimeData[] | undefined
@@ -69,9 +73,7 @@ const Tab3: React.FC = () => {
     setSelectedSort('');
   };
 
-  const handleSearchClick = async () => {
-    setSearchedAnime(undefined);
-
+  const getArgs = () => {
     let title = '';
     let genre = '';
     let season = '';
@@ -98,9 +100,34 @@ const Tab3: React.FC = () => {
       selectedSort !== '' ? (sort = `sort: ${selectedSort}`) : (sort = ''),
     ].filter((item) => !(item == ''));
 
-    const parsedArgs = args.concat('type: ANIME').join(', ');
+    return args.concat('type: ANIME').join(', ');
+  }
+
+  const getSearchAnime = async (newSearch: boolean = false) => {
+    if(!hasNextPage && (page > 1 || !newSearch)) return searchedAnime;
+
+    const result = newSearch ? [] : searchedAnime;
+
+    const anime = await searchFilteredAnime(getArgs(), viewerId, page);
+    const pageInfo = anime.pageInfo as PageInfo;
+
+    setHasNextPage(pageInfo.hasNextPage);
+    if(pageInfo.hasNextPage)
+      setPage(page + 1);
+
+    console.log(anime, searchedAnime);
+
+    return result?.concat(animeDataToListAnimeData(anime));
+  }
+
+  const handleSearchClick = async () => {
+    setSearchedAnime([]);
+
+    setPage(1);
+    setHasNextPage(false);
+
     setSearchedAnime(
-      animeDataToListAnimeData(await searchFilteredAnime(parsedArgs, viewerId)),
+      await getSearchAnime(true)
     );
   };
 
@@ -110,8 +137,25 @@ const Tab3: React.FC = () => {
     if (event.code === 'Enter') handleSearchClick();
   };
 
+  const handleScroll = async (event: any) => {
+    const target: HTMLDivElement = event.target;
+    const position = target.scrollTop;
+    const height = target.scrollHeight - target.offsetHeight;
+    const current = Date.now() / 1000;
+
+    if(height - position > 1 || current - lastUpdate < 1)
+      return;
+
+    setLastUpdate(lastUpdate);
+
+    setSearchedAnime(
+      await getSearchAnime(),
+    );
+    // populateAiredAnime();
+  };
+
   return (
-    <div className="body-container  show-tab">
+    <div className="body-container  show-tab" onScroll={handleScroll}>
       <div className="main-container">
         <Heading text="Search" />
         <main className="search">
