@@ -37,6 +37,7 @@ import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
 import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
 import Tab5 from './tabs/Tab5';
+import { AnimeHistoryEntry } from '../types/historyTypes';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
@@ -88,6 +89,8 @@ export default function App() {
     const historyAvailable = Object.values(entries).length > 0
 
     let result: ListAnimeData[] = [];
+    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.id || b.media.id || b.media.mediaListEntry && b.media.mediaListEntry.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.id || a.media.mediaListEntry && a.media.mediaListEntry.id) as number)?.timestamp ?? 0)
+
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
 
@@ -97,27 +100,22 @@ export default function App() {
       result = result.concat(current.concat(rewatching));
     } else if(historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort((a, b) =>
-        (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-      );
+      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
+      console.log(result);
       setCurrentListAnime(result);
       return;
     }
 
     if(result.length === 0 && historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort((a, b) =>
-        (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-      );
+      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
 
       setCurrentListAnime(result);
       return;
     }
 
     if(historyAvailable) {
-      result = Object.values(result).sort((a, b) =>
-        (getLastWatchedEpisode((b.id || b.media.mediaListEntry && b.media.mediaListEntry.id || b.media.id) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.id || a.media.mediaListEntry && a.media.mediaListEntry.id || a.media.id) as number)?.timestamp ?? 0)
-      );
+      result = Object.values(result).sort(sortNewest);
     }
 
     setCurrentListAnime(result);

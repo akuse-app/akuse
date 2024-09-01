@@ -49,7 +49,7 @@ export const setAnimeHistory = (
   animeHistory: AnimeHistoryEntry
 ) => {
   const listAnimeData = animeHistory.data;
-  const animeId = (listAnimeData.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id || listAnimeData.media.id) as number
+  const animeId = (listAnimeData.id || listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number
 
   history.entries[animeId] = animeHistory;
 

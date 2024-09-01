@@ -149,7 +149,6 @@ const Tab3: React.FC = () => {
     setSearchedAnime(
       await getSearchAnime(),
     );
-    // populateAiredAnime();
   };
 
   return (
