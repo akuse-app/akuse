@@ -2,8 +2,10 @@ import Store from 'electron-store';
 import { useEffect, useRef, useState } from 'react';
 
 import { formatTime } from '../../../modules/utils';
-import { faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faFastForward, faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
+import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
+import AniSkip from '../../../modules/aniskip';
 
 const STORE = new Store();
 
@@ -13,6 +15,7 @@ interface BottomControlsProps {
   currentTime?: number;
   duration?: number;
   buffered?: TimeRanges;
+  skipEvents?: SkipEvent[];
   onClick?: (event: any) => void;
   onDblClick?: (event: any) => void;
 }
@@ -23,6 +26,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   currentTime,
   duration,
   buffered,
+  skipEvents,
   onClick,
   onDblClick,
 }) => {
@@ -45,6 +49,8 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
+  const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
+  const [skipEvent, setSkipEvent] = useState<string>('Skip Intro');
 
   useEffect(() => {
     setVideoCurrentTime(formatTime(videoRef.current?.currentTime ?? 0));
@@ -62,6 +68,19 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     if (videoRef.current && buffered && buffered.length > 0) {
       setBufferedBarWidth(`${(buffered.end(0) / (duration ?? 0)) * 100}%`);
     }
+
+    if(skipEvents && skipEvents.length > 0) {
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
+
+      if(currentEvent) {
+        const eventName = AniSkip.getEventName(currentEvent);
+        setShowSkipEvent(true);
+        setSkipEvent(`Skip ${eventName}`);
+      } else {
+        setShowSkipEvent(false);
+      }
+    }
+
   }, [currentTime, duration, buffered]);
 
   useEffect(() => {
@@ -121,7 +140,12 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     if (!videoRef.current) return;
 
     try {
-      videoRef.current.currentTime += introSkip;
+      const event = AniSkip.getCurrentEvent(videoRef.current.currentTime, skipEvents as SkipEvent[]);
+      if(event)
+        videoRef.current.currentTime = event?.interval.endTime;
+      else
+        videoRef.current.currentTime += introSkip;
+
     } catch (error) {
       console.log(error)
     }
@@ -133,7 +157,18 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       onClick={onClick}
       onDoubleClick={onDblClick}
     >
+      {showSkipEvent && skipEvents && skipEvents.length > 0 && (
       <div className="skip-button">
+      <ButtonMain
+        text={skipEvent}
+        icon={faFastForward}
+        tint="light"
+        onClick={handleSkipIntro}
+      />
+    </div>
+      )}
+      {!showSkipEvent && (
+        <div className="skip-button">
         <ButtonMain
           text={introSkip}
           icon={faPlus}
@@ -141,6 +176,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
           onClick={handleSkipIntro}
         />
       </div>
+      )}
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"

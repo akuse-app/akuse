@@ -24,12 +24,16 @@ import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
+import AniSkip from '../../../modules/aniskip';
+import { SkipEvent } from '../../../types/aniskipTypes';
+import { skip } from 'node:test';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
 var pauseInfoTimer: any;
+var pauseControlTimer: any;
 
 interface VideoPlayerProps {
   video: IVideo | null;
@@ -105,6 +109,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
+  const [skipEvents, setSkipEvents] = useState<SkipEvent[]>();
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -223,6 +228,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onChangeLoading(loading);
   }, [loading]);
 
+  const getSkipEvents = async (episode: number) => {
+    const skipEvent = await AniSkip.getSkipEvents(listAnimeData.media.idMal as number, episode ?? episodeNumber ?? animeEpisodeNumber);
+
+    setSkipEvents(skipEvent);
+  }
+
   useEffect(() => {
     if (video !== null) {
       playHlsVideo(video.url);
@@ -254,6 +265,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
+      getSkipEvents(animeEpisodeNumber)
     }
   }, [video, listAnimeData]);
 
@@ -417,12 +429,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleVideoPause = () => {
     clearTimeout(pauseInfoTimer);
+    clearTimeout(pauseControlTimer);
+
     setShowPauseInfo(false);
     setShowControls(true);
     pauseInfoTimer = setTimeout(() => {
       !isSettingsShowed && setShowPauseInfo(true);
-      setShowControls(false);
     }, 7500);
+
+    pauseControlTimer = setTimeout(() => {
+      setShowControls(false);
+    }, 2000);
   };
 
   const handleVideoEnd = () => {
@@ -436,6 +453,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (current - lastInteract < 0.75) return;
     setLastInteract(current);
     clearTimeout(pauseInfoTimer);
+    clearTimeout(pauseControlTimer);
+
     setShowPauseInfo(false);
 
     pauseInfoTimer = setTimeout(() => {
@@ -545,6 +564,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const setData = (value: IVideo) => {
       setVideoData(value);
       setEpisodeNumber(episodeToPlay);
+      getSkipEvents(episodeToPlay);
       setEpisodeTitle(
         episodesInfo
           ? (episodesInfo[episodeToPlay].title?.en ?? `Episode ${episode}`)
@@ -650,6 +670,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               containerRef={containerRef}
               currentTime={currentTime}
               duration={duration}
+              skipEvents={skipEvents}
               buffered={buffered}
               onClick={togglePlayingWithoutPropagation}
               onDblClick={toggleFullScreenWithoutPropagation}
