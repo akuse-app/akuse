@@ -48,20 +48,20 @@
   border: none;
   outline: none;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .container .b-player .i {
-  cursor: pointer;
   transition: 0.1s ease-out;
   will-change: transform;
 }
 
-.container .b-player .i:hover {
+.container .b-player:hover .i {
   color: var(--font-1);
   transform: scale(1.05);
 }
 
-.container .b-player .i:active {
+.container .b-player:active .i {
   transform: scale(1);
   color: var(--color-transparency);
 }
@@ -95,7 +95,7 @@
   height: 3px;
   position: relative;
   background: var(--color-transparency);
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
   transition: ease 0.1s;
 }
 
@@ -142,7 +142,7 @@
   margin: 0;
   z-index: 1;
   background: var(--color-transparency-2);
-  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  /* border-radius: var(--border-radius) 0 0 var(--border-radius); */
 }
 
 .progress-area .video-progress-bar {
@@ -151,7 +151,7 @@
   position: relative;
   margin: 0;
   background: var(--color-important);
-  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  /* border-radius: var(--border-radius) 0 0 var(--border-radius); */
   z-index: 100;
 }
 
@@ -534,9 +534,9 @@
   font-size: 1rem;
 }
 
-.mid-controls .b-player i:hover {
+/* .mid-controls .b-player i:hover {
   color: var(--font-1);
-}
+} */
 
 .bottom-controls .current-time,
 .bottom-controls .video-duration {
