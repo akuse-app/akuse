@@ -126,7 +126,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     const animeId = listAnimeData.media.id as number;
 
     const lastWatched = getLastWatchedEpisode(animeId);
-    if(lastWatched)
+    if(lastWatched && lastWatched.data)
       setLocalProgress((lastWatched.data.episodeNumber as number) - 1);
 
     axios

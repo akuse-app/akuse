@@ -127,7 +127,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'ArrowLeft': {
         event.preventDefault();
-        video.currentTime -= 5;
+        video.currentTime -= STORE.get('key_press_skip') as number;
         break;
       }
       case 'ArrowUp': {
@@ -137,7 +137,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
       case 'ArrowRight': {
         event.preventDefault();
-        video.currentTime += 5;
+        video.currentTime += STORE.get('key_press_skip') as number;
         break;
       }
       case 'ArrowDown': {

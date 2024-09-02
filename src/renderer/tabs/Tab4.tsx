@@ -121,7 +121,7 @@ const Tab4: React.FC = () => {
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     STORE.get('source_flag') as string,
   );
-  const [skipTime, setSkipTime] = useState<number>(
+  const [introSkipTime, setIntroSkipTime] = useState<number>(
     STORE.get('intro_skip_time') as number,
   );
   const [showDuration, setShowDuration] = useState<boolean>(
@@ -130,17 +130,16 @@ const Tab4: React.FC = () => {
   const [episodesPerPage, setEpisodesPerPage] = useState<number>(
     STORE.get('episodes_per_page') as number,
   );
+  const [skipTime, setSkipTime] = useState<number>(
+    STORE.get('key_press_skip') as number
+  );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
 
+
   const handleEpisodesPerPage = (value: any) => {
-    if (/[a-zA-Z\.]/.test(value)) value = value.replaceAll(/[a-zA-Z\.]/g, '');
-
-    let number = Math.max(Number(value), 1);
-    if (Number.isNaN(number)) number = 1;
-
-    STORE.set('episodes_per_page', number);
-    setEpisodesPerPage(number);
+    STORE.set('episodes_per_page', parseInt(value));
+    setEpisodesPerPage(parseInt(value));
   };
 
   const handleClearHistory = () => {
@@ -163,9 +162,14 @@ const Tab4: React.FC = () => {
     setSelectedLanguage(value);
   };
 
+  const handleIntroSkipTimeChange = (value: any) => {
+    STORE.set('intro_skip_time', parseInt(value));
+    setIntroSkipTime(parseInt(value));
+  };
+
   const handleSkipTimeChange = (value: any) => {
     STORE.set('intro_skip_time', parseInt(value));
-    setSkipTime(parseInt(value));
+    setIntroSkipTime(parseInt(value));
   };
 
   const handleShowDurationChange = () => {
@@ -193,7 +197,7 @@ const Tab4: React.FC = () => {
     { value: 50, label: '50' },
   ];
 
-  const skipTimeOptions: Option[] = [
+  const introSkipTimeOptions: Option[] = [
     { value: 60, label: '60' },
     { value: 65, label: '65' },
     { value: 70, label: '70' },
@@ -202,6 +206,14 @@ const Tab4: React.FC = () => {
     { value: 85, label: '85' },
     { value: 90, label: '90' },
     { value: 95, label: '95' },
+  ];
+
+  const skipTimeOptions: Option[] = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 },
   ];
 
   return (
@@ -220,6 +232,14 @@ const Tab4: React.FC = () => {
 
           <SelectElement
             label="Select the duration of the default intro skip (in seconds)"
+            value={introSkipTime}
+            options={introSkipTimeOptions}
+            zIndex={3}
+            onChange={handleIntroSkipTimeChange}
+          />
+
+          <SelectElement
+            label="Select the amount you want to skip using the arrows"
             value={skipTime}
             options={skipTimeOptions}
             zIndex={3}

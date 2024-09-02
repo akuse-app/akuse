@@ -58,8 +58,12 @@ const VideoSettings: React.FC<SettingsProps> = ({
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     STORE.get('source_flag') as string,
   );
-  const [skipTime, setSkipTime] = useState<number>(
+  const [introSkipTime, setIntroSkipTime] = useState<number>(
     STORE.get('intro_skip_time') as number,
+  );
+
+  const [skipTime, setSkipTime] = useState<number>(
+    STORE.get('key_press_skip') as number,
   );
 
   const [isMuted, setIsMuted] = useState(false);
@@ -188,8 +192,13 @@ const VideoSettings: React.FC<SettingsProps> = ({
     }
   };
 
-  const handleSkipTimeChange = (value: any) => {
+  const handleIntroSkipTimeChange = (value: any) => {
     STORE.set('intro_skip_time', parseInt(value));
+    setIntroSkipTime(parseInt(value));
+  };
+
+  const handleSkipTimeChange = (value: any) => {
+    STORE.set('key_press_skip', parseInt(value));
     setSkipTime(parseInt(value));
   };
 
@@ -252,7 +261,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
               Speed
             </span>
             <Select
-              zIndex={11}
+              zIndex={12}
               options={[
                 { label: '0.25', value: '0.25' },
                 { label: '0.50', value: '0.50' },
@@ -265,6 +274,25 @@ const VideoSettings: React.FC<SettingsProps> = ({
               ]}
               selectedValue={speed}
               onChange={handleSpeedChange}
+              width={100}
+            />
+          </li>
+          <li className="skip-time">
+            <span>
+              <FontAwesomeIcon className="i label" icon={faRotateRight} />
+              Skip Time
+            </span>
+            <Select
+              zIndex={11}
+              options={[
+                { label: '1', value: 1 },
+                { label: '2', value: 2 },
+                { label: '3', value: 3 },
+                { label: '4', value: 4 },
+                { label: '5', value: 5 },
+              ]}
+              selectedValue={skipTime}
+              onChange={handleSkipTimeChange}
               width={100}
             />
           </li>
@@ -285,8 +313,8 @@ const VideoSettings: React.FC<SettingsProps> = ({
                 { label: '90', value: 90 },
                 { label: '95', value: 95 },
               ]}
-              selectedValue={skipTime}
-              onChange={handleSkipTimeChange}
+              selectedValue={introSkipTime}
+              onChange={handleIntroSkipTimeChange}
               width={100}
             />
           </li>
