@@ -234,7 +234,7 @@ const Tab4: React.FC = () => {
             label="Select the duration of the default intro skip (in seconds)"
             value={introSkipTime}
             options={introSkipTimeOptions}
-            zIndex={2}
+            zIndex={3}
             onChange={handleIntroSkipTimeChange}
           />
 
@@ -242,7 +242,7 @@ const Tab4: React.FC = () => {
             label="Select the amount you want to skip using the arrows"
             value={skipTime}
             options={skipTimeOptions}
-            zIndex={3}
+            zIndex={2}
             onChange={handleSkipTimeChange}
           />
 
