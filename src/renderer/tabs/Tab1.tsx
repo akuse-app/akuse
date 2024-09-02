@@ -25,11 +25,11 @@ const Tab1: React.FC<Tab1Props> = ({
   nextReleasesAnime
 }) => {
   const hasHistory = useContext(AuthContext);
-  const logged = store.get('logged') as boolean;
+  // const logged = store.get('logged') as boolean;
 
   return (
     <div className="body-container  show-tab">
-      <div className="main-container" style={{ paddingBottom: "110px" }} >
+      <div className="main-container lifted">
         <main>
           {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
 

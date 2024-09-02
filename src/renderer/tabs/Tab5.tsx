@@ -82,7 +82,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
 
   return (
     <div className="body-container show-tab" onScroll={handleScroll}>
-      <div className="main-container">
+      <div className="main-container lifted">
         <main>
           {/* <Slideshow listAnimeData={todayAnime} maxAmount={todayAnime.length}/>
           <AnimeSection

@@ -57,17 +57,22 @@ interface TextInputElementProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TextInputElement: React.FC<TextInputElementProps> = ({ label, value, onChange }) => {
+const TextInputElement: React.FC<TextInputElementProps> = ({
+  label,
+  value,
+  onChange,
+}) => {
   return (
-    <div className="text-input-element">
-      <label className="text-input-label">{label}</label>
-      <input
-        type="text"
-        className="text-input-field"
-        value={value}
-        onChange={onChange}
-      />
-    </div>
+    <Element label={label}>
+      <label>
+        <input
+          type="text"
+          className="text-input-field"
+          value={value}
+          onChange={onChange}
+        />
+      </label>
+    </Element>
   );
 };
 
@@ -128,15 +133,11 @@ const Tab4: React.FC = () => {
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
 
-  const handleEpisodesPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    /* Should probably swap this for the dropdown instead, but I like the freedom of choosing anything. */
-    let value = event.target.value;
-    if(/[a-zA-Z\.]/.test(value))
-      value = value.replaceAll(/[a-zA-Z\.]/g, '');
+  const handleEpisodesPerPage = (value: any) => {
+    if (/[a-zA-Z\.]/.test(value)) value = value.replaceAll(/[a-zA-Z\.]/g, '');
 
     let number = Math.max(Number(value), 1);
-    if(Number.isNaN(number))
-      number = 1;
+    if (Number.isNaN(number)) number = 1;
 
     STORE.set('episodes_per_page', number);
     setEpisodesPerPage(number);
@@ -145,7 +146,7 @@ const Tab4: React.FC = () => {
   const handleClearHistory = () => {
     STORE.set('history', { entries: {} });
     setClearHistory(!clearHistory);
-  }
+  };
 
   const handleUpdateProgressChange = () => {
     STORE.set('update_progress', !updateProgress);
@@ -183,6 +184,15 @@ const Tab4: React.FC = () => {
     { value: 'HU', label: 'Hungarian' },
   ];
 
+  const episodesPerPageOptions: Option[] = [
+    { value: 5, label: '5' },
+    { value: 10, label: '10' },
+    { value: 20, label: '20' },
+    { value: 30, label: '30' },
+    { value: 40, label: '40' },
+    { value: 50, label: '50' },
+  ];
+
   const skipTimeOptions: Option[] = [
     { value: 60, label: '60' },
     { value: 65, label: '65' },
@@ -195,10 +205,58 @@ const Tab4: React.FC = () => {
   ];
 
   return (
-    <div className="body-container  show-tab">
-      <div className="main-container">
+    <div className="body-container show-tab">
+      <div className="main-container lifted">
         <div className="settings-page">
           <Heading text="Settings" />
+
+          <h1>Playback</h1>
+
+          <CheckboxElement
+            label="Autoplay next episode"
+            checked={autoplayNext}
+            onChange={handleAutoplayNextChange}
+          />
+
+          <SelectElement
+            label="Select the duration of the default intro skip (in seconds)"
+            value={skipTime}
+            options={skipTimeOptions}
+            zIndex={3}
+            onChange={handleSkipTimeChange}
+          />
+
+          <CheckboxElement
+            label="Watch dubbed"
+            checked={watchDubbed}
+            onChange={handleWatchDubbedChange}
+          />
+
+          <SelectElement
+            label="Select the language in which you want to watch the episodes"
+            value={selectedLanguage}
+            options={languageOptions}
+            zIndex={2}
+            onChange={handleLanguageChange}
+          />
+
+          <h1>Appearance</h1>
+
+          <CheckboxElement
+            label="Display the video duration instead of the remaining time."
+            checked={showDuration}
+            onChange={handleShowDurationChange}
+          />
+
+          <SelectElement
+            label="Episodes Per Page"
+            value={episodesPerPage}
+            options={episodesPerPageOptions}
+            zIndex={1}
+            onChange={handleEpisodesPerPage}
+          />
+
+          <h1>Sync & Storage</h1>
 
           {logged && (
             <CheckboxElement
@@ -207,40 +265,7 @@ const Tab4: React.FC = () => {
               onChange={handleUpdateProgressChange}
             />
           )}
-          <CheckboxElement
-            label="Autoplay next episode"
-            checked={autoplayNext}
-            onChange={handleAutoplayNextChange}
-          />
-          <CheckboxElement
-            label="Watch dubbed"
-            checked={watchDubbed}
-            onChange={handleWatchDubbedChange}
-          />
-          <SelectElement
-            label="Select the language in which you want to watch the episodes"
-            value={selectedLanguage}
-            options={languageOptions}
-            zIndex={4}
-            onChange={handleLanguageChange}
-          />
-          <SelectElement
-            label="Select the duration of the intro skip (in seconds)"
-            value={skipTime}
-            options={skipTimeOptions}
-            zIndex={3}
-            onChange={handleSkipTimeChange}
-          />
-          <CheckboxElement
-            label="Display the video duration instead of the remaining time."
-            checked={showDuration}
-            onChange={handleShowDurationChange}
-          />
-          <TextInputElement
-            label="Episodes Per Page"
-            value={String(episodesPerPage)}
-            onChange={handleEpisodesPerPage}
-          />
+
           <CheckboxElement
             label="Clear local history"
             checked={clearHistory}
@@ -248,7 +273,7 @@ const Tab4: React.FC = () => {
           />
         </div>
       </div>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 };

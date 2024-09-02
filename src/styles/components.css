@@ -19,9 +19,12 @@
 
 .text-input-element {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-between; */
   margin-bottom: 16px;
-  padding: 16px;
+  padding: 0 16px;
+  min-height: 52px;
   background-color: var(--color-3);
   border-radius: 10px;
 }

@@ -2,18 +2,18 @@
 
 :root {
   --color-0: #0f1115;
-  --color-1: #1A1D24;
+  --color-1: #1a1d24;
   --color-1b: #1a1d24ea;
-  --color-2: #22252E;
+  --color-2: #22252e;
   --color-3: #2c2e3a;
   --color-4: #32333f;
   --color-important: #ff456d;
   /* #ffc4c9 */
   --color-dark-opacity: rgba(0, 0, 0, 0.6);
-  --color-warning: #FF5454;
-  --color-alert: #E5A639;
-  --color-success: #45AD67;
-  --color-info: #3FA0D0;
+  --color-warning: #ff5454;
+  --color-alert: #e5a639;
+  --color-success: #45ad67;
+  --color-info: #3fa0d0;
 
   --font-1: #f1f2f6;
   --font-2: #bec0cc;
@@ -87,6 +87,10 @@ body {
 body {
   overflow: hidden;
   border-radius: 5px;
+}
+
+.main-container.lifted {
+  padding-bottom: 120px;
 }
 
 img {
@@ -225,11 +229,11 @@ img {
 }
 
 .auto-update-page .content .buttons button:hover {
-  filter: brightness(0.80);
+  filter: brightness(0.8);
 }
 
 .auto-update-page .content .buttons button:active {
-  filter: brightness(0.70);
+  filter: brightness(0.7);
 }
 
 /* MAIN SECTION */
@@ -314,7 +318,7 @@ main section .scrollers {
 main.search {
   display: flex;
   flex-direction: row;
-  gap: 10px
+  gap: 10px;
 }
 
 main .filters-container {
@@ -457,12 +461,12 @@ main button#search-clear {
 
 main button#search-submit:hover,
 main button#search-clear:hover {
-  filter: brightness(0.90);
+  filter: brightness(0.9);
 }
 
 main button#search-submit:active,
 main button#search-clear:active {
-  filter: brightness(0.80);
+  filter: brightness(0.8);
 }
 
 main .entries-container {
@@ -551,7 +555,9 @@ main .entries-container .anime-entry {
 .settings-page .toggler {
   display: flex;
   align-items: center;
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
+  padding: 0 20px;
+  min-height: 52px;
   color: var(--font-1);
   background-color: var(--color-3);
   margin-bottom: 15px;
@@ -603,5 +609,5 @@ main .entries-container .anime-entry {
 }
 
 .settings-page button#exit:active {
-  filter: brightness(0.90);
+  filter: brightness(0.9);
 }
