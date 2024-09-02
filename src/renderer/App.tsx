@@ -117,8 +117,6 @@ export default function App() {
       result = Object.values(result).sort(sortNewest);
     }
 
-    console.log(result);
-
     setCurrentListAnime(result);
   }
 
