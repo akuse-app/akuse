@@ -152,6 +152,7 @@
   margin: 0;
   background: var(--color-important);
   border-radius: var(--border-radius) 0 0 var(--border-radius);
+  z-index: 100;
 }
 
 .video-progress-bar::before {
