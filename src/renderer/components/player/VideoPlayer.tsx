@@ -302,7 +302,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       data: listAnimeData,
     };
 
-    console.log(episodeNumber, (episodesInfo as EpisodeInfo[])[episodeNumber]);
+    if(episodeNumber === 0) return;
 
     entry.history[episodeNumber] = {
       time: cTime,
