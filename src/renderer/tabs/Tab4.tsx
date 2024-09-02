@@ -202,7 +202,7 @@ const Tab4: React.FC = () => {
 
           {logged && (
             <CheckboxElement
-              label="Update progress automatically"
+              label="Update AniList progress and lists automatically"
               checked={updateProgress}
               onChange={handleUpdateProgressChange}
             />

@@ -106,7 +106,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
 
-
   // keydown handlers
   const handleVideoPlayerKeydown = async (
     event: KeyboardEvent | React.KeyboardEvent<HTMLVideoElement>,
@@ -229,13 +228,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       playHlsVideo(video.url);
 
       // resume from tracked progress
-      const animeId = (listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
+      const animeId = (listAnimeData.media.id ||
+        (listAnimeData.media.mediaListEntry &&
+          listAnimeData.media.mediaListEntry.id)) as number;
       const animeHistory = getAnimeHistory(animeId);
 
-      if(animeHistory !== undefined) {
+      if (animeHistory !== undefined) {
         const currentEpisode = animeHistory.history[animeEpisodeNumber];
-        if(currentEpisode !== undefined && videoRef?.current) {
-          videoRef.current.currentTime = currentEpisode.time
+        if (currentEpisode !== undefined && videoRef?.current) {
+          videoRef.current.currentTime = currentEpisode.time;
         }
       }
 
@@ -276,20 +277,24 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-
   const handleHistoryUpdate = () => {
     const video = videoRef.current;
     const cTime = video?.currentTime;
-    if(cTime === undefined) return;
-    const animeId = (listAnimeData.media.id || listAnimeData.media.mediaListEntry && listAnimeData.media.mediaListEntry.id) as number;
-    if(animeId === null || animeId === undefined) return;
-    let entry = getAnimeHistory(animeId) ?? { history: {}, data: listAnimeData };
+    if (cTime === undefined) return;
+    const animeId = (listAnimeData.media.id ||
+      (listAnimeData.media.mediaListEntry &&
+        listAnimeData.media.mediaListEntry.id)) as number;
+    if (animeId === null || animeId === undefined) return;
+    let entry = getAnimeHistory(animeId) ?? {
+      history: {},
+      data: listAnimeData,
+    };
 
     entry.history[episodeNumber] = {
       time: cTime,
       timestamp: Date.now(),
       duration: video?.duration,
-      data: (episodesInfo as EpisodeInfo[])[episodeNumber]
+      data: (episodesInfo as EpisodeInfo[])[episodeNumber],
     };
 
     setAnimeHistory(entry);
@@ -349,7 +354,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const updateCurrentProgress = (completed: boolean = true) => {
     const status = listAnimeData.media.mediaListEntry?.status;
-    if((STORE.get('logged') as boolean)) {
+    if (STORE.get('logged') as boolean) {
       switch (status) {
         case 'CURRENT': {
           updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
@@ -377,7 +382,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     setProgressUpdated(true);
     onLocalProgressChange(completed ? episodeNumber : episodeNumber - 1);
-  }
+  };
 
   const handleTimeUpdate = () => {
     if (!videoRef.current?.paused) {
@@ -428,7 +433,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleMouseMove = () => {
     const current = Date.now() / 1000;
-    if(current - lastInteract < 0.75) return;
+    if (current - lastInteract < 0.75) return;
     setLastInteract(current);
     clearTimeout(pauseInfoTimer);
     setShowPauseInfo(false);
@@ -469,7 +474,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
 
     onClose();
-    updateCurrentProgress(false);
+    if (STORE.get('update_progress') as boolean) updateCurrentProgress(false);
 
     ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
