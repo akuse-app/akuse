@@ -33,6 +33,7 @@ const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
 var pauseInfoTimer: any;
+var pauseControlTimer: any;
 
 interface VideoPlayerProps {
   video: IVideo | null;
@@ -423,12 +424,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleVideoPause = () => {
     clearTimeout(pauseInfoTimer);
+    clearTimeout(pauseControlTimer);
+
     setShowPauseInfo(false);
     setShowControls(true);
     pauseInfoTimer = setTimeout(() => {
       !isSettingsShowed && setShowPauseInfo(true);
-      setShowControls(false);
     }, 7500);
+
+    pauseControlTimer = setTimeout(() => {
+      setShowControls(false);
+    }, 2000);
   };
 
   const handleVideoEnd = () => {
@@ -442,6 +448,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if(current - lastInteract < 0.75) return;
     setLastInteract(current);
     clearTimeout(pauseInfoTimer);
+    clearTimeout(pauseControlTimer);
+
     setShowPauseInfo(false);
 
     pauseInfoTimer = setTimeout(() => {
