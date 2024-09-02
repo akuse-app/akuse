@@ -167,7 +167,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       />
     </div>
       )}
-      {(!skipEvents || skipEvents.length === 0) && (
+      {!showSkipEvent && (
         <div className="skip-button">
         <ButtonMain
           text={introSkip}
