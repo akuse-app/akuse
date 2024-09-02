@@ -302,6 +302,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       data: listAnimeData,
     };
 
+    console.log(episodeNumber, (episodesInfo as EpisodeInfo[])[episodeNumber]);
+
     entry.history[episodeNumber] = {
       time: cTime,
       timestamp: Date.now(),

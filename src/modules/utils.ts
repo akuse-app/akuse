@@ -180,7 +180,7 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   const lastWatched = getLastWatchedEpisode(animeId);
 
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    const progress = (lastWatched.data.episodeNumber as number) - 1;
+    const progress = (lastWatched.data.episodeNumber as number) - ((lastWatched.duration as number * 0.85) > lastWatched.time ? 1 : 0);
     return Number.isNaN(progress) ? 0 : progress;
   }
 
