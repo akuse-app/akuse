@@ -19,3 +19,11 @@ section .anime-list {
   padding-bottom: 10px;
   z-index: 2;
 }
+
+section#related-section {
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  /* height: 25%; */
+  width: calc(100% - 30px);
+}
