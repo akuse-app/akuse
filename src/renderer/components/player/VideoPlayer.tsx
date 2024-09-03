@@ -26,7 +26,6 @@ import TopControls from './TopControls';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import AniSkip from '../../../modules/aniskip';
 import { SkipEvent } from '../../../types/aniskipTypes';
-import { skip } from 'node:test';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);

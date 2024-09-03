@@ -222,7 +222,7 @@ const VideoSettings: React.FC<SettingsProps> = ({
             </span>
             {hlsData && (
               <Select
-                zIndex={12}
+                zIndex={13}
                 options={[
                   ...hlsData?.levels?.map((level, index) => ({
                     label: `${level.height}p`,
