@@ -2,15 +2,13 @@ import { app, ipcRenderer } from 'electron';
 import Store from 'electron-store';
 
 import {
-  AiringPage,
-  AiringScheduleData,
   AnimeData,
   CurrentListAnime,
   ListAnimeData,
   MostPopularAnime,
   TrendingAnime,
 } from '../../types/anilistAPITypes';
-import { MediaListStatus } from '../../types/anilistGraphQLTypes';
+import { AiringPage, AiringSchedule, MediaListStatus } from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import isAppImage from '../packaging/isAppImage';
@@ -28,6 +26,7 @@ const HEADERS: Object = {
 const MEDIA_DATA: string = `
         id
         idMal
+        type
         title {
             romaji
             english
@@ -81,6 +80,71 @@ const MEDIA_DATA: string = `
             id
             site
             thumbnail
+        }
+        relations {
+          edges {
+            id
+            relationType(version: 2)
+            node {
+              id
+              idMal
+              type
+              title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+              }
+              format
+              status
+              description
+              startDate {
+                  year
+                  month
+                  day
+              }
+              endDate {
+                  year
+                  month
+                  day
+              }
+              season
+              seasonYear
+              episodes
+              duration
+              coverImage {
+                  large
+                  extraLarge
+                  color
+              }
+              bannerImage
+              genres
+              synonyms
+              averageScore
+              meanScore
+              popularity
+              favourites
+              isAdult
+              nextAiringEpisode {
+                  id
+                  timeUntilAiring
+                  episode
+              }
+              mediaListEntry {
+                  id
+                  mediaId
+                  status
+                  score(format:POINT_10)
+                  progress
+              }
+              siteUrl
+              trailer {
+                  id
+                  site
+                  thumbnail
+              }
+            }
+          }
         }
     `;
 
@@ -441,7 +505,7 @@ export const getAiringSchedule = async (
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  return respData.data.Page.airingSchedules as AiringScheduleData[];
+  return respData.data.Page.airingSchedules as AiringSchedule[];
 };
 
 /**

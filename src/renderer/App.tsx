@@ -9,19 +9,15 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
-  getAiringSchedule,
   getMostPopularAnime,
   getNextReleases,
   getTrendingAnime,
   getViewerId,
   getViewerInfo,
   getViewerList,
-  getAnimesFromTitles,
-  getAiredAnime
 } from '../modules/anilist/anilistApi';
 
-import { getRecentEpisodes } from '../modules/providers/gogoanime';
-import { airingDataToListAnimeData, animeDataToListAnimeData } from '../modules/utils';
+import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
@@ -30,14 +26,13 @@ import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
 
 import { setDefaultStoreVariables } from '../modules/storeVariables';
-import { IpcRenderer, ipcRenderer, IpcRendererEvent } from 'electron';
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
 import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
 import Tab5 from './tabs/Tab5';
-import { AnimeHistoryEntry } from '../types/historyTypes';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);

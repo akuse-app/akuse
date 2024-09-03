@@ -26,6 +26,7 @@ import {
   getProgress,
   getTitle,
   getUrlByCoverType,
+  relationsToListAnimeData,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
@@ -43,6 +44,11 @@ import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
 import { getLastWatchedEpisode } from '../../../modules/history';
+import { MediaTypes } from '../../../types/anilistGraphQLTypes';
+import AnimeSection from '../AnimeSection';
+import { Dots } from 'react-activity';
+import AnimeEntry from '../AnimeEntry';
+import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -81,9 +87,34 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [localProgress, setLocalProgress] = useState<number>();
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
+
+  const getRelatedAnime = async () => {
+
+    if(listAnimeData.media?.relations === undefined) {
+      /* If you click on a related anime this'll run. */
+      listAnimeData = {
+        id: null,
+        mediaId: null,
+        progress: null,
+        media: await getAnimeInfo(listAnimeData.media.id)
+      }
+    }
+
+    console.log(listAnimeData, listAnimeData.media)
+
+    const edges = listAnimeData.media.relations?.edges;
+    if(!edges) return;
+
+    const list = edges.filter((value) => value.node.type === MediaTypes.Anime);
+    setRelatedAnime(relationsToListAnimeData(list));
+  };
 
   useEffect(() => {
-    if (show) fetchEpisodesInfo();
+    if (show) {
+      fetchEpisodesInfo();
+      getRelatedAnime();
+    }
   }, [show]);
 
   useEffect(() => {
@@ -342,6 +373,20 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               loading={loading}
               onPlay={playEpisode}
             />
+            {relatedAnime && relatedAnime.length > 0 &&
+              <div
+                style={{
+                  marginLeft: '25px',
+                  display: 'flex'
+                }}
+                className='related-anime'
+              >
+                <AnimeSection
+                  title='Related'
+                  animeData={relatedAnime}
+                />
+              </div>
+            }
           </div>
         </div>
       </ModalPage>

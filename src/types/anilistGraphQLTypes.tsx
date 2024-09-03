@@ -39,6 +39,11 @@ export type MediaCoverImage = {
   color?: string;
 };
 
+export type AiringPage = {
+  airingSchedules: AiringSchedule[]
+  pageInfo: PageInfo
+}
+
 export type AiringSchedule = {
   id: number;
   airingAt: number;
@@ -76,8 +81,37 @@ export type PageInfo = {
   hasNextPage: boolean;
 };
 
+export const RelationTypes = {
+  Source: 'SOURCE',
+  Alternative: 'ALTERNATIVE',
+  Other: 'OTHER',
+  Prequel: 'PREQUEL',
+  Sequel: 'SEQUEL',
+  Character: 'CHARACTER'
+};
+
+export type RelationType = typeof RelationTypes[keyof typeof RelationTypes];
+
+export type Relation = {
+  id: number;
+  relationType: RelationType;
+  node: Media;
+};
+
+export type Relations = {
+  edges: Relation[];
+};
+
+export const MediaTypes = {
+  Anime: 'ANIME',
+  Manga: 'MANGA'
+};
+
+export type MediaType = typeof MediaTypes[keyof typeof MediaTypes];
+
 export type Media = {
   id?: number;
+  type?: MediaType;
   idMal?: number;
   title?: MediaTitle;
   format?: MediaFormat;
@@ -102,4 +136,5 @@ export type Media = {
   mediaListEntry?: MediaList;
   siteUrl?: string;
   trailer?: MediaTrailer;
+  relations?: Relations;
 };

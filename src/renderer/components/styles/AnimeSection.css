@@ -1,4 +1,4 @@
-main section .anime-list-wrapper {
+section .anime-list-wrapper {
   padding: 50px;
   margin: -50px;
   position: relative;
@@ -10,7 +10,7 @@ main section .anime-list-wrapper {
   /* disable if drag n scroll is enabled */
 }
 
-main section .anime-list {
+section .anime-list {
   float: left;
   width: max-content;
   gap: 25px;
