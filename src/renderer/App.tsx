@@ -48,6 +48,7 @@ export default function App() {
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showDonateModal, setShowDonateModal] = useState<boolean>(false);
   const [hasHistory, setHasHistory] = useState<boolean>(false);
+  const [sectionUpdate, setSectionUpdate] = useState<number>(0);
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -117,6 +118,9 @@ export default function App() {
 
   useEffect(() => {
       const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
+        const current = Date.now() / 1000;
+        if(current - sectionUpdate < 2) return;
+        setSectionUpdate(current);
         for(const section of sections) {
           switch(section) {
             case 'history':
@@ -131,7 +135,7 @@ export default function App() {
       return () => {
           ipcRenderer.removeListener('update-section', updateSectionListener);
       };
-  });
+  }, [sectionUpdate]);
 
   ipcRenderer.on('auto-update', async () => {
     setShowDonateModal(false);

@@ -100,7 +100,7 @@
 
 .anime-page .content-wrapper .content {
   display: flex;
-  /* gap: 50px; */
+  gap: 10px;
   width: calc(100% - 50px);
   margin: 0 25px 25px 25px;
   border-radius: var(--border-radius);
