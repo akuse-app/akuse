@@ -92,8 +92,9 @@ export default function App() {
 
       const current = await getViewerList(id, 'CURRENT');
       const rewatching = await getViewerList(id, 'REPEATING');
+      const paused = await getViewerList(id, 'PAUSED');
 
-      result = result.concat(current.concat(rewatching));
+      result = result.concat(current.concat(rewatching).concat(paused));
     } else if(historyAvailable) {
       setHasHistory(true);
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);

@@ -265,7 +265,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
-      getSkipEvents(animeEpisodeNumber)
+      getSkipEvents(animeEpisodeNumber);
+
     }
   }, [video, listAnimeData]);
 
@@ -366,7 +367,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const updateCurrentProgress = (completed: boolean = true) => {
     const status = listAnimeData.media.mediaListEntry?.status;
-    if (STORE.get('logged') as boolean) {
+    if(!completed) {
+      updateAnimeFromList(
+        listAnimeData.media.id,
+        'PAUSED',
+        undefined,
+        episodeNumber,
+      );
+      handleHistoryUpdate();
+    }else if (STORE.get('logged') as boolean) {
       switch (status) {
         case 'CURRENT': {
           updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
@@ -493,7 +502,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
 
     onClose();
-    if (STORE.get('update_progress') as boolean) updateCurrentProgress(false);
+    if (STORE.get('update_progress'))
+      updateCurrentProgress((currentTime ?? 0) > (duration ?? 0) * 0.85);
 
     ipcRenderer.send('update-presence', {
       details: `🌸 Watch anime without ads.`,
