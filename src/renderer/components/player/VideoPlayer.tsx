@@ -411,7 +411,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         setCurrentTime(cTime);
         setDuration(dTime);
         setBuffered(videoRef.current?.buffered);
-        handleHistoryUpdate();
+        // handleHistoryUpdate();
 
         if (
           (cTime * 100) / dTime > 85 &&
