@@ -21,7 +21,7 @@
   outline: 3px solid var(--font-1);
 }
 
-.anime-entry .content {
+.anime-entry .anime-content {
   display: flex;
   flex-direction: column;
   gap: 8px;

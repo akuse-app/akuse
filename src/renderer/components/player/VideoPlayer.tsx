@@ -228,7 +228,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   }, [loading]);
 
   const getSkipEvents = async (episode: number) => {
-    const skipEvent = await AniSkip.getSkipEvents(listAnimeData.media.idMal as number, episode ?? episodeNumber ?? animeEpisodeNumber);
+    const duration = videoRef.current?.duration;
+    const skipEvent = await AniSkip.getSkipEvents(listAnimeData.media.idMal as number, episode ?? episodeNumber ?? animeEpisodeNumber, Number.isNaN(duration) ? 0 : duration);
 
     setSkipEvents(skipEvent);
   }

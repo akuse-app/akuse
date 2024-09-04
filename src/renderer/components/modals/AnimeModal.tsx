@@ -92,12 +92,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const getRelatedAnime = async () => {
     if(listAnimeData.media?.relations === undefined) {
       /* If you click on a related anime this'll run. */
-      const media: Media = await getAnimeInfo(listAnimeData.media.id)
       listAnimeData = {
         id: null,
         mediaId: null,
         progress: null,
-        media: media
+        media: await getAnimeInfo(listAnimeData.media.id),
       }
     }
     const edges = listAnimeData.media.relations?.edges;
