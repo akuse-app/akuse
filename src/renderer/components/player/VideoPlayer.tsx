@@ -266,7 +266,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
       getSkipEvents(animeEpisodeNumber);
-
     }
   }, [video, listAnimeData]);
 
@@ -367,36 +366,38 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const updateCurrentProgress = (completed: boolean = true) => {
     const status = listAnimeData.media.mediaListEntry?.status;
-    if(!completed) {
-      updateAnimeFromList(
-        listAnimeData.media.id,
-        'PAUSED',
-        undefined,
-        episodeNumber,
-      );
-      handleHistoryUpdate();
-    }else if (STORE.get('logged') as boolean) {
-      switch (status) {
-        case 'CURRENT': {
-          updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
-          break;
-        }
-        case 'REPEATING':
-        case 'COMPLETED': {
-          updateAnimeFromList(
-            listAnimeData.media.id,
-            'REWATCHING',
-            undefined,
-            episodeNumber,
-          );
-        }
-        default: {
-          updateAnimeFromList(
-            listAnimeData.media.id,
-            'CURRENT',
-            undefined,
-            episodeNumber,
-          );
+    if (STORE.get('logged') as boolean) {
+      if(!completed) {
+        updateAnimeFromList(
+          listAnimeData.media.id,
+          'PAUSED',
+          undefined,
+          episodeNumber,
+        );
+        handleHistoryUpdate();
+      } else {
+        switch (status) {
+          case 'CURRENT': {
+            updateAnimeProgress(listAnimeData.media.id!, episodeNumber);
+            break;
+          }
+          case 'REPEATING':
+          case 'COMPLETED': {
+            updateAnimeFromList(
+              listAnimeData.media.id,
+              'REWATCHING',
+              undefined,
+              episodeNumber,
+            );
+          }
+          default: {
+            updateAnimeFromList(
+              listAnimeData.media.id,
+              'CURRENT',
+              undefined,
+              episodeNumber,
+            );
+          }
         }
       }
     }
