@@ -308,6 +308,7 @@ export const getParsedFormat = (format: MediaFormat | undefined) => {
     case 'MOVIE':
       return 'Movie';
     case 'SPECIAL':
+    case 'SUMMARY':
       return 'Special';
     case 'OVA':
       return 'OVA';
@@ -315,6 +316,12 @@ export const getParsedFormat = (format: MediaFormat | undefined) => {
       return 'ONA';
     case 'MUSIC':
       return 'Music';
+    case 'SEQUEL':
+      return 'Sequel';
+    case 'PREQUEL':
+      return 'Prequel';
+    case 'ALTERNATIVE':
+      return 'Alternative';
     default:
       return '?';
   }

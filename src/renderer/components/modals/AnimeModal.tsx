@@ -44,7 +44,7 @@ import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
 import { getLastWatchedEpisode } from '../../../modules/history';
-import { MediaTypes } from '../../../types/anilistGraphQLTypes';
+import { Media, MediaFormat, MediaTypes } from '../../../types/anilistGraphQLTypes';
 import AnimeSection from '../AnimeSection';
 import { Dots } from 'react-activity';
 import AnimeEntry from '../AnimeEntry';
@@ -92,17 +92,23 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const getRelatedAnime = async () => {
     if(listAnimeData.media?.relations === undefined) {
       /* If you click on a related anime this'll run. */
+      const media: Media = await getAnimeInfo(listAnimeData.media.id)
       listAnimeData = {
         id: null,
         mediaId: null,
         progress: null,
-        media: await getAnimeInfo(listAnimeData.media.id)
+        media: media
       }
     }
     const edges = listAnimeData.media.relations?.edges;
     if(!edges) return;
 
-    const list = edges.filter((value) => value.node.type === MediaTypes.Anime);
+    const list = edges.filter((value) => value.node.type === MediaTypes.Anime).map((value) => {
+      value.node.format = value.node.format === 'TV' ? value.relationType as MediaFormat : value.node.format;
+
+      return value;
+    });
+
     setRelatedAnime(relationsToListAnimeData(list));
   };
 

@@ -16,6 +16,13 @@ export type MediaFormat =
   | 'MANGA'
   | 'NOVEL'
   | 'ONE_SHOT'
+  // Lazy related stuff
+  | 'SEQUEL'
+  | 'PREQUEL'
+  | 'ALTERNATIVE'
+  | 'SIDE_STORY'
+  | 'CHARACTER'
+  | 'SUMMARY'
 
 export type MediaStatus =
   | 'FINISHED'
