@@ -116,9 +116,9 @@ const VideoSettings: React.FC<SettingsProps> = ({
     setHlsData(hls);
   }, [hls]);
 
-  const handleQualityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleQualityChange = (index: number) => {
     if (hlsData) {
-      hlsData.currentLevel = parseInt(event.target.value);
+      hlsData.currentLevel = index;
     }
   };
 
