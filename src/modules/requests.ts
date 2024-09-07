@@ -4,9 +4,7 @@ var remainingRequests = 90;
 var resetTime = 0;
 var lockUntil = 0;
 
-async function delay(seconds: number) {
-  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-}
+const delay = async (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
 const handleRateLimiting = async (current: number) => {
   if (current < lockUntil) {

@@ -26,4 +26,5 @@ section#related-section {
   overflow-y: hidden;
   /* height: 25%; */
   width: calc(100% - 30px);
+  padding-left: 25px;
 }

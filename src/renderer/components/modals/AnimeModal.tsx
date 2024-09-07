@@ -376,10 +376,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             />
             {relatedAnime && relatedAnime.length > 0 &&
               <div
-                style={{
-                  marginLeft: '25px',
-                  display: 'flex'
-                }}
                 className='related-anime'
               >
                 <AnimeSection
