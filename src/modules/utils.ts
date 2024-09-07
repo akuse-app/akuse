@@ -229,12 +229,14 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
   const lastWatched = getLastWatchedEpisode(animeId);
 
-  if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    const progress = (parseInt(lastWatched.data.episode ?? "0")) - ((lastWatched.duration as number * 0.85) > lastWatched.time ? 1 : 0);
-    return Number.isNaN(progress) ? 0 : progress;
+  const anilistProgress = animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+
+  if(anilistProgress === 0 && lastWatched !== undefined && lastWatched.data !== undefined) {
+    const localProgress = (parseInt(lastWatched.data.episode ?? "0")) - ((lastWatched.duration as number * 0.85) > lastWatched.time ? 1 : 0);
+    return Number.isNaN(localProgress) ? 0 : localProgress;
   }
 
-  return animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+  return anilistProgress;
 }
 
 /**
