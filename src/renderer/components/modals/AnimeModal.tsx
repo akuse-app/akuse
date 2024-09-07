@@ -98,6 +98,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         progress: null,
         media: await getAnimeInfo(listAnimeData.media.id),
       }
+
+      setLocalProgress(getProgress(listAnimeData.media));
     }
     const edges = listAnimeData.media.relations?.edges;
     if(!edges) return;
@@ -375,9 +377,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               onPlay={playEpisode}
             />
             {relatedAnime && relatedAnime.length > 0 &&
-              <div
-                className='related-anime'
-              >
+              <div className='related-anime'>
                 <AnimeSection
                   title='Related'
                   animeData={relatedAnime}

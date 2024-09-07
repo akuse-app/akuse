@@ -7,6 +7,7 @@ export type EpisodeInfo = {
   airdate?: string
   length?: string | number
   episodeNumber?: number
+  episode?: string
 };
 
 export type ClientData = {

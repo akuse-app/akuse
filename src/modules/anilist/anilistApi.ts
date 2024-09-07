@@ -1,4 +1,4 @@
-import { app, ipcRenderer } from 'electron';
+import { app } from 'electron';
 import Store from 'electron-store';
 
 import {
@@ -8,11 +8,12 @@ import {
   MostPopularAnime,
   TrendingAnime,
 } from '../../types/anilistAPITypes';
-import { AiringPage, AiringSchedule, MediaListStatus } from '../../types/anilistGraphQLTypes';
+import { AiringPage, AiringSchedule, Media, MediaListStatus} from '../../types/anilistGraphQLTypes';
 import { ClientData } from '../../types/types';
 import { clientData } from '../clientData';
 import isAppImage from '../packaging/isAppImage';
 import { getOptions, makeRequest } from '../requests';
+
 
 const STORE: any = new Store();
 const CLIENT_DATA: ClientData = clientData;
@@ -377,7 +378,7 @@ export const getAnimesFromTitles = async (titles: string[]) => {
  * @param {*} animeId
  * @returns object with anime info
  */
-export const getAnimeInfo = async (animeId: any) => {
+export const getAnimeInfo = async (animeId: any): Promise<Media> => {
   var query = `
           query($id: Int) {
               Media(id: $id, type: ANIME) {
@@ -399,7 +400,7 @@ export const getAnimeInfo = async (animeId: any) => {
   const options = getOptions(query, variables);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  return respData.data.Media;
+  return respData.data.Media as Media;
 };
 
 /**

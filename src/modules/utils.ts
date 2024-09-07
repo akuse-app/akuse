@@ -1,5 +1,5 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
-import { AiringSchedule, Media, MediaFormat, MediaStatus, Relation, Relations } from '../types/anilistGraphQLTypes';
+import { AiringSchedule, Media, MediaFormat, MediaStatus, MediaTypes, Relation, RelationType, RelationTypes } from '../types/anilistGraphQLTypes';
 import { getLastWatchedEpisode } from './history';
 
 const MONTHS = {
@@ -143,6 +143,43 @@ export const getEpisodes = (animeEntry: Media): number | null =>
     : animeEntry.episodes;
 
 /**
+ * Get the sequel from the media.
+ *
+ * @param {*} animeEntry
+ * @returns sequel
+ */
+export const getSequel = (animeEntry: Media): Media | null => {
+  const relations = animeEntry.relations;
+  if (!relations) return null
+
+  for(const relation of relations.edges) {
+    const sequel = relation.relationType === RelationTypes.Sequel &&
+                    relation.node.type === MediaTypes.Anime &&
+                    relation.node;
+    if (!sequel)
+      continue;
+
+    return sequel;
+  }
+
+  return null;
+  // const sequel: Relation = relations.edges.reduce((previous, value) => {
+  //   const media = value.node;
+
+  //   console.log(value.relationType === RelationTypes.Sequel, media.type)
+
+  //   return value.relationType === RelationTypes.Sequel &&
+  //          media.type === MediaTypes.Anime &&
+  //          value || previous;
+  // });
+
+  // if (sequel.relationType !== "SEQUEL" && sequel.node.type !== MediaTypes.Anime)
+  //   return null
+
+  // return sequel.node;
+}
+
+/**
  * Gets the anime available episodes number from 'episodes' or 'nextAiringEpisode'
  *
  * @param {*} animeEntry
@@ -193,7 +230,7 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   const lastWatched = getLastWatchedEpisode(animeId);
 
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    const progress = (lastWatched.data.episodeNumber as number) - ((lastWatched.duration as number * 0.85) > lastWatched.time ? 1 : 0);
+    const progress = (parseInt(lastWatched.data.episode ?? "0")) - ((lastWatched.duration as number * 0.85) > lastWatched.time ? 1 : 0);
     return Number.isNaN(progress) ? 0 : progress;
   }
 
@@ -299,7 +336,7 @@ export const getParsedStatus = (status: MediaStatus | undefined) => {
  * @param {*} status
  * @returns
  */
-export const getParsedFormat = (format: MediaFormat | undefined) => {
+export const getParsedFormat = (format: MediaFormat | RelationType | undefined) => {
   switch (format) {
     case 'TV':
       return 'TV Show';
@@ -308,7 +345,6 @@ export const getParsedFormat = (format: MediaFormat | undefined) => {
     case 'MOVIE':
       return 'Movie';
     case 'SPECIAL':
-    case 'SUMMARY':
       return 'Special';
     case 'OVA':
       return 'OVA';
