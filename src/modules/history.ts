@@ -29,6 +29,19 @@ export const getHistoryEntries = (): HistoryEntries => history.entries;
 export const getHistory = (): History => history;
 
 /**
+ * Get history entry for a specific episode
+ *
+ * @param animeId
+ * @param episodeNumber
+ * @returns history entry
+ */
+export const getEpisodeHistory = (
+  animeId: number,
+  episodeNumber: number
+): EpisodeHistoryEntry | undefined => getAnimeHistory(animeId)?.history[episodeNumber]
+
+
+/**
  * Set local history.
  *
  * @param newHistory

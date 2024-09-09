@@ -1,6 +1,6 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
 import { AiringSchedule, Media, MediaFormat, MediaStatus, MediaTypes, Relation, RelationType, RelationTypes } from '../types/anilistGraphQLTypes';
-import { getLastWatchedEpisode } from './history';
+import { getAnimeHistory, getEpisodeHistory, getLastWatchedEpisode } from './history';
 
 const MONTHS = {
   '1': 'January',
@@ -229,13 +229,22 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
   const lastWatched = getLastWatchedEpisode(animeId);
 
-  const anilistProgress = animeEntry.mediaListEntry === null ? 0 : animeEntry?.mediaListEntry?.progress;
+  const anilistProgress = (animeEntry.mediaListEntry === null ? 0 : animeEntry?.mediaListEntry?.progress) as number;
 
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    const isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
+    let isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
     const localProgress = (parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0);
-    if(anilistProgress !== 0 && anilistProgress)
-      return anilistProgress - (isFinished ? 1 : 0);
+    console.log(anilistProgress, localProgress)
+    if(anilistProgress !== localProgress) {
+      const episodeEntry = getEpisodeHistory(animeId, anilistProgress);
+
+      if(episodeEntry) {
+        isFinished = (episodeEntry.duration as number * 0.85) > episodeEntry.time;
+        return anilistProgress - (isFinished ? 1 : 0);
+      }
+
+      return anilistProgress - 1;
+    }
 
     return Number.isNaN(localProgress) ? 0 : localProgress;
   }
