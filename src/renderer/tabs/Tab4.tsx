@@ -239,7 +239,7 @@ const Tab4: React.FC = () => {
           />
 
           <SelectElement
-            label="Select the amount you want to skip using the arrows"
+            label="Select the amount you want to skip using the arrows (in seconds)"
             value={skipTime}
             options={skipTimeOptions}
             zIndex={3}
