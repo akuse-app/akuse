@@ -494,6 +494,15 @@
   background-color: var(--color-1);
 }
 
+.up-controls .settings-content .dropdown li:first-child:hover {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.up-controls .settings-content .dropdown li:last-child:hover {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+
 .up-controls .settings-content .dropdown li .activity-indicator {
   position: absolute;
   /* top: 0; */
