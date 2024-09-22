@@ -284,18 +284,18 @@ main {
   color: #fff;
 } */
 
-main section {
+section {
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 2;
 }
 
-main section.hide-section {
+section.hide-section {
   display: none;
 }
 
-main section:not(:last-child) {
+section:not(:last-child) {
   margin-bottom: 15px;
 }
 
@@ -306,7 +306,7 @@ h1 {
   margin-bottom: 15px;
 }
 
-main section .scrollers {
+section .scrollers {
   position: absolute;
   top: 0;
   right: 0;

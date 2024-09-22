@@ -1,6 +1,6 @@
-import { AiringScheduleData, AnimeData, ListAnimeData } from '../types/anilistAPITypes';
-import { Media, MediaFormat, MediaStatus } from '../types/anilistGraphQLTypes';
-import { getLastWatchedEpisode } from './history';
+import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
+import { AiringSchedule, Media, MediaFormat, MediaStatus, MediaTypes, Relation, RelationType, RelationTypes } from '../types/anilistGraphQLTypes';
+import { getAnimeHistory, getEpisodeHistory, getLastWatchedEpisode } from './history';
 
 const MONTHS = {
   '1': 'January',
@@ -46,17 +46,30 @@ export const getRandomDiscordPhrase = (): string =>
   DISCORD_PHRASES[Math.floor(Math.random() * DISCORD_PHRASES.length)];
 
 export const airingDataToListAnimeData = (
-  airingScheduleData: AiringScheduleData[]
+  airingScheduleData: AiringSchedule[]
 ): ListAnimeData[] => {
   return airingScheduleData.map((value) => {
     return {
       id: null,
       mediaId: null,
       progress: null,
-      media: value.media
+      media: value.media as Media
     };
   });
 };
+
+export const relationsToListAnimeData = (
+  relations: Relation[]
+): ListAnimeData[] => {
+  return relations.map((value) => {
+    return {
+      id: null,
+      mediaId: null,
+      progress: null,
+      media: value.node
+    }
+  })
+}
 
 export const animeDataToListAnimeData = (
   animeData: AnimeData,
@@ -130,6 +143,43 @@ export const getEpisodes = (animeEntry: Media): number | null =>
     : animeEntry.episodes;
 
 /**
+ * Get the sequel from the media.
+ *
+ * @param {*} animeEntry
+ * @returns sequel
+ */
+export const getSequel = (animeEntry: Media): Media | null => {
+  const relations = animeEntry.relations;
+  if (!relations) return null
+
+  for(const relation of relations.edges) {
+    const sequel = relation.relationType === RelationTypes.Sequel &&
+                    relation.node.type === MediaTypes.Anime &&
+                    relation.node;
+    if (!sequel)
+      continue;
+
+    return sequel;
+  }
+
+  return null;
+  // const sequel: Relation = relations.edges.reduce((previous, value) => {
+  //   const media = value.node;
+
+  //   console.log(value.relationType === RelationTypes.Sequel, media.type)
+
+  //   return value.relationType === RelationTypes.Sequel &&
+  //          media.type === MediaTypes.Anime &&
+  //          value || previous;
+  // });
+
+  // if (sequel.relationType !== "SEQUEL" && sequel.node.type !== MediaTypes.Anime)
+  //   return null
+
+  // return sequel.node;
+}
+
+/**
  * Gets the anime available episodes number from 'episodes' or 'nextAiringEpisode'
  *
  * @param {*} animeEntry
@@ -179,12 +229,27 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
   const lastWatched = getLastWatchedEpisode(animeId);
 
+  const anilistProgress = (animeEntry.mediaListEntry === null ? 0 : animeEntry?.mediaListEntry?.progress) as number;
+
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    const progress = (lastWatched.data.episodeNumber as number) - 1;
-    return Number.isNaN(progress) ? 0 : progress;
+    let isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
+    const localProgress = (parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0);
+    console.log(anilistProgress, localProgress)
+    if(anilistProgress !== localProgress) {
+      const episodeEntry = getEpisodeHistory(animeId, anilistProgress);
+
+      if(episodeEntry) {
+        isFinished = (episodeEntry.duration as number * 0.85) > episodeEntry.time;
+        return anilistProgress - (isFinished ? 1 : 0);
+      }
+
+      return anilistProgress - 1;
+    }
+
+    return Number.isNaN(localProgress) ? 0 : localProgress;
   }
 
-  return animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
+  return anilistProgress;
 }
 
 /**
@@ -286,7 +351,7 @@ export const getParsedStatus = (status: MediaStatus | undefined) => {
  * @param {*} status
  * @returns
  */
-export const getParsedFormat = (format: MediaFormat | undefined) => {
+export const getParsedFormat = (format: MediaFormat | RelationType | undefined) => {
   switch (format) {
     case 'TV':
       return 'TV Show';
@@ -302,6 +367,12 @@ export const getParsedFormat = (format: MediaFormat | undefined) => {
       return 'ONA';
     case 'MUSIC':
       return 'Music';
+    case 'SEQUEL':
+      return 'Sequel';
+    case 'PREQUEL':
+      return 'Prequel';
+    case 'ALTERNATIVE':
+      return 'Alternative';
     default:
       return '?';
   }

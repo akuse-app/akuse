@@ -7,6 +7,7 @@ const defaultValues = {
   dubbed: false,
   source_flag: 'US',
   intro_skip_time: 85,
+  key_press_skip: 5,
   show_duration: true,
   trailer_volume_on: false,
   volume: 1,

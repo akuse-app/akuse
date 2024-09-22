@@ -97,7 +97,7 @@ const AnimeEntry: React.FC<{
           <Skeleton className="anime-cover" />
         )}
 
-        <div className="content">
+        <div className="anime-content">
           <div className="anime-title">
             {listAnimeData ? (
               <>
