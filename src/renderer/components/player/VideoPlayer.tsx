@@ -111,6 +111,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     useState<boolean>(true);
   const [showPreviousEpisodeButton, setShowPreviousEpisodeButton] =
     useState<boolean>(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false)
 
   // timeline
   const [currentTime, setCurrentTime] = useState<number>();
@@ -452,11 +453,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setShowPauseInfo(false);
     setShowControls(true);
     pauseInfoTimer = setTimeout(() => {
-      !isSettingsShowed && setShowPauseInfo(true);
+      !isSettingsShowed && !isDropdownOpen && setShowPauseInfo(true); // first one maybe useless
     }, 7500);
 
     pauseControlTimer = setTimeout(() => {
-      setShowControls(false);
+      !isDropdownOpen && setShowControls(false);
     }, 2000);
   };
 
@@ -477,7 +478,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     pauseInfoTimer = setTimeout(() => {
       try {
-        if (videoRef.current && videoRef.current.paused) {
+        if (videoRef.current && videoRef.current.paused && !isDropdownOpen) {
           setShowPauseInfo(true);
         }
       } catch (error) {
@@ -492,8 +493,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setShowPauseInfo(false);
 
     timer = setTimeout(() => {
-      setShowControls(false);
-      setShowCursor(false);
+      !isDropdownOpen && setShowControls(false);
+      !isDropdownOpen && setShowCursor(false);
     }, 2000);
   };
 
@@ -535,6 +536,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (event.target !== event.currentTarget) return;
     toggleFullScreen();
   };
+
+  const handleDropdownToggle = (isDropdownOpen: boolean) => {
+    console.log(isDropdownOpen)
+    setIsDropdownOpen(isDropdownOpen)
+  }
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -718,6 +724,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               onExit={handleExit}
               onClick={togglePlayingWithoutPropagation}
               onDblClick={toggleFullScreenWithoutPropagation}
+              onDropdownToggle={handleDropdownToggle}
             />
             <MidControls
               videoRef={videoRef}

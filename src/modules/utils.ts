@@ -234,7 +234,7 @@ export const getProgress = (animeEntry: Media): number | undefined => {
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
     let isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
     const localProgress = (parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0);
-    console.log(anilistProgress, localProgress)
+    // console.log(anilistProgress, localProgress)
     if(anilistProgress !== localProgress) {
       const episodeEntry = getEpisodeHistory(animeId, anilistProgress);
 

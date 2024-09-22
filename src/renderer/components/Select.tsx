@@ -38,15 +38,6 @@ const Select: React.FC<SelectProps> = ({
     setIsOpen(false);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      selectRef.current &&
-      !selectRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
@@ -58,6 +49,15 @@ const Select: React.FC<SelectProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      selectRef.current &&
+      !selectRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
 
   const selectedOption = options.find(
     (option) => option.value === selectedValue,

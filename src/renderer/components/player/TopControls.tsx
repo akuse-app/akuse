@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Hls from 'hls.js';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
@@ -34,6 +34,7 @@ interface TopControlsProps {
   onExit: () => void;
   onClick?: (event: any) => void;
   onDblClick?: (event: any) => void;
+  onDropdownToggle: (isDropdownOpen: boolean) => void;
 }
 
 const TopControls: React.FC<TopControlsProps> = ({
@@ -52,9 +53,16 @@ const TopControls: React.FC<TopControlsProps> = ({
   onExit,
   onClick,
   onDblClick,
+  onDropdownToggle,
 }) => {
+  const settingsRef = useRef<HTMLDivElement>(null);
+
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [showEpisodesChange, setShowEpisodesChange] = useState<boolean>(false);
+
+  useEffect(() => {
+    onDropdownToggle(showSettings || showEpisodesChange);
+  }, [showSettings, showEpisodesChange]);
 
   const closeOthers = () => {
     setShowSettings(false);
@@ -84,6 +92,7 @@ const TopControls: React.FC<TopControlsProps> = ({
             setShowSettings(show);
           }}
           videoRef={videoRef}
+          ref={settingsRef}
           hls={hls}
           onChangeEpisode={onChangeEpisode}
         />
@@ -103,9 +112,7 @@ const TopControls: React.FC<TopControlsProps> = ({
         <button className="b-player" onClick={onPiPToggle}>
           <div className="tooltip">
             <FontAwesomeIcon className="i" icon={faUpRightFromSquare} />
-            <span className="tooltip-text">
-              Picture-in-Picture
-            </span>
+            <span className="tooltip-text">Picture-in-Picture</span>
           </div>
         </button>
         <button className="b-player fullscreen" onClick={onFullScreentoggle}>
