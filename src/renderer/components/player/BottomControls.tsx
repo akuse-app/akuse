@@ -70,7 +70,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     }
 
     if(skipEvents && skipEvents.length > 0) {
-      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, duration);
 
       if(currentEvent) {
         const eventName = AniSkip.getEventName(currentEvent);
@@ -119,11 +119,13 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const getTimePercent = (time: number) => {
     if(!videoRef.current) return 0;
     const video = videoRef.current;
+    // console.log('duration', video.duration);
     return (time / video.duration) * 100;
   }
 
   const getSkipEventBarStyle = (event: SkipEvent) => {
     const interval = event.interval;
+    // console.log('skip duration', event.episodeLength);
     return {
       left: `${getTimePercent(interval.startTime)}%`,
       width: `${getTimePercent(interval.endTime - interval.startTime)}%`
@@ -173,16 +175,16 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     >
       {showSkipEvent && skipEvents && skipEvents.length > 0 && (
       <div className="skip-button">
-      <ButtonMain
-        text={skipEvent}
-        icon={faFastForward}
-        tint="light"
-        onClick={handleSkipIntro}
-      />
-    </div>
+        <ButtonMain
+          text={skipEvent}
+          icon={faFastForward}
+          tint="light"
+          onClick={handleSkipIntro}
+        />
+      </div>
       )}
       {!showSkipEvent && (
-        <div className="skip-button">
+      <div className="skip-button">
         <ButtonMain
           text={introSkip}
           icon={faPlus}
