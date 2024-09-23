@@ -5,6 +5,7 @@ button.bm .primary {
   border: none;
   outline: none;
   width: max-content;
+  cursor: pointer;
   height: 50px;
   padding: 12px 24px;
   font-size: 1.1rem;

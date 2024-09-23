@@ -28,10 +28,13 @@ import MidControls from './MidControls';
 import TopControls from './TopControls';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import AniSkip from '../../../modules/aniskip';
-import { SkipEvent } from '../../../types/aniskipTypes';
+import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
 import { getEnvironmentData } from 'node:worker_threads';
 import axios from 'axios';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
+import { ButtonMain } from '../Buttons';
+import { faFastForward } from '@fortawesome/free-solid-svg-icons';
+import { skip } from 'node:test';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -39,6 +42,7 @@ const videoPlayerRoot = document.getElementById('video-player-root');
 var timer: any;
 var pauseInfoTimer: any;
 var pauseControlTimer: any;
+var skipEventTimer: any;
 
 interface VideoPlayerProps {
   video: IVideo | null;
@@ -117,7 +121,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
+  // skip events
   const [skipEvents, setSkipEvents] = useState<SkipEvent[]>();
+  const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
+  const [skipEvent, setSkipEvent] = useState<string>('Skip');
+  const [previousSkipEvent, setPreviousSkipEvent] = useState<string>('');
+
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -207,11 +216,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     const video = videoRef.current;
-
     const handleSeeked = () => {
       console.log('seeked');
       onChangeLoading(false);
       handleHistoryUpdate();
+      setSkipEvent(skipEvent + ' '); /* little hacky but it'll do for now. */
+      setPreviousSkipEvent('');
+      handleSkipEvents();
       if (!video?.paused) setPlaying(true);
     };
 
@@ -415,6 +426,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onLocalProgressChange(completed ? episodeNumber : episodeNumber - 1);
   };
 
+  const handleSkipEvents = () => {
+    const video = videoRef.current;
+    if(!video || previousSkipEvent === skipEvent) return;
+
+    if(skipEvents && skipEvents.length > 0) {
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+
+      if(currentEvent) {
+        const eventName = AniSkip.getEventName(currentEvent)
+        if(skipEvent !== `Skip ${eventName}`) {
+          clearTimeout(skipEventTimer);
+          skipEventTimer = setTimeout(() => {
+            setShowSkipEvent(false);
+            setPreviousSkipEvent(`Skip ${eventName}`);
+          }, 5000)
+        }
+
+        setShowSkipEvent(true);
+        setSkipEvent(`Skip ${eventName}`);
+      } else {
+        setShowSkipEvent(false);
+      }
+    }
+  }
+
   const handleTimeUpdate = () => {
     if (!videoRef.current?.paused) {
       setPlaying(true);
@@ -423,6 +459,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const cTime = videoRef.current?.currentTime;
     const dTime = videoRef.current?.duration;
+
+    handleSkipEvents();
 
     try {
       if (cTime && dTime) {
@@ -468,9 +506,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleMouseMove = () => {
-    const current = Date.now() / 1000;
-    if (current - lastInteract < 0.75) return;
-    setLastInteract(current);
     clearTimeout(pauseInfoTimer);
     clearTimeout(pauseControlTimer);
 
@@ -496,6 +531,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       !isDropdownOpen && setShowControls(false);
       !isDropdownOpen && setShowCursor(false);
     }, 2000);
+
+    const current = Date.now() / 1000;
+    if (current - lastInteract < 0.25) return;
+
+    const video = videoRef.current
+    if(!video) return;
+
+    if(skipEvents && skipEvents.length > 0) {
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+
+      if(!currentEvent)
+        return;
+
+      const eventName = AniSkip.getEventName(currentEvent)
+      clearTimeout(skipEventTimer);
+      setShowSkipEvent(true);
+      skipEventTimer = setTimeout(() => {
+        setShowSkipEvent(false);
+        setPreviousSkipEvent(`Skip ${eventName}`);
+      }, 5000)
+    }
   };
 
   const handleExit = async () => {
@@ -684,6 +740,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return hasNext;
   };
 
+  const handleSkipEvent = () => {
+    const video = videoRef.current;
+    if(!video || !skipEvents) return;
+    const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+    if(!currentEvent) return;
+    if(currentEvent.skipType === SkipEventTypes.Outro) {
+      const duration = video.duration - currentEvent.interval.endTime;
+      console.log(duration)
+      if(STORE.get('autoplay_next') && duration < 10) {
+        canNextEpisode(episodeNumber) && changeEpisode(episodeNumber + 1);
+      } else
+        video.currentTime = currentEvent.interval.endTime;
+    } else
+      video.currentTime = currentEvent.interval.endTime;
+  }
+
   return ReactDOM.createPortal(
     show && (
       <>
@@ -703,6 +775,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <h1 id="pause-info-episode-description">{episodeDescription}</h1>
             </div>
           </div>
+          {showSkipEvent && (
+            <div
+              className="skip-button"
+              style={{
+                zIndex: '1000',
+                marginRight: '10px',
+                marginBottom: '20px'
+              }}
+            >
+              <ButtonMain
+                text={skipEvent}
+                icon={faFastForward}
+                tint="light"
+                onClick={handleSkipEvent}
+              />
+            </div>
+          )}
           <div
             className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}
             onClick={togglePlayingWithoutPropagation}
