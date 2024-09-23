@@ -89,9 +89,18 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
   const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
+  const [lastFetchedId, setLastFetchedId] = useState<number>();
 
-  const getRecommendedAnime = async () => {
+  const updateListAnimeData = async () => {
     if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
+      console.log(lastFetchedId, listAnimeData.media.id);
+      if(lastFetchedId === listAnimeData.media.id)
+        return;
+
+      console.log('passed')
+
+      setLastFetchedId(listAnimeData.media.id);
+
       listAnimeData = {
         id: null,
         mediaId: null,
@@ -101,7 +110,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
       setLocalProgress(getProgress(listAnimeData.media));
     }
+  }
 
+  const getRecommendedAnime = async () => {
     const nodes = listAnimeData.media.recommendations?.nodes;
     if(!nodes) return;
     setRecommendedAnime(nodes.map((value) => {
@@ -115,17 +126,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const getRelatedAnime = async () => {
-    if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
-      /* If you click on a related anime this'll run. */
-      listAnimeData = {
-        id: null,
-        mediaId: null,
-        progress: null,
-        media: await getAnimeInfo(listAnimeData.media.id),
-      }
-
-      setLocalProgress(getProgress(listAnimeData.media));
-    }
     const edges = listAnimeData.media.relations?.edges;
     if(!edges) return;
 
@@ -141,8 +141,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   useEffect(() => {
     if (show) {
       fetchEpisodesInfo();
-      getRelatedAnime();
-      getRecommendedAnime();
+      (async () => {
+        await updateListAnimeData();
+        getRelatedAnime();
+        getRecommendedAnime();
+      })()
     }
   }, [show]);
 

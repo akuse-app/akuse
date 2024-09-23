@@ -26,7 +26,6 @@ const Tab1: React.FC<Tab1Props> = ({
 }) => {
   const hasHistory = useContext(AuthContext);
   // const logged = store.get('logged') as boolean;
-  console.log(trendingAnime);
 
   return (
     <div className="body-container  show-tab">
