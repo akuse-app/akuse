@@ -20,7 +20,8 @@ section .anime-list {
   z-index: 2;
 }
 
-section#related-section {
+section#related-section,
+section#recommended-section {
   display: flex;
   overflow-x: hidden;
   overflow-y: hidden;

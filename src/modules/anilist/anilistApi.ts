@@ -24,6 +24,73 @@ const HEADERS: Object = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
 };
+const RECOMMEND_DATA: string = `
+        recommendations(sort:RATING_DESC) {
+          nodes {
+            id
+            rating
+            mediaRecommendation {
+              id
+              idMal
+              type
+              title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+              }
+              format
+              status
+              description
+              startDate {
+                  year
+                  month
+                  day
+              }
+              endDate {
+                  year
+                  month
+                  day
+              }
+              season
+              seasonYear
+              episodes
+              duration
+              coverImage {
+                  large
+                  extraLarge
+                  color
+              }
+              bannerImage
+              genres
+              synonyms
+              averageScore
+              meanScore
+              popularity
+              favourites
+              isAdult
+              nextAiringEpisode {
+                  id
+                  timeUntilAiring
+                  episode
+                  airingAt
+              }
+              mediaListEntry {
+                  id
+                  mediaId
+                  status
+                  score(format:POINT_10)
+                  progress
+              }
+              siteUrl
+              trailer {
+                  id
+                  site
+                  thumbnail
+              }
+            }
+          }
+        }`
 const MEDIA_DATA: string = `
         id
         idMal
@@ -148,6 +215,7 @@ const MEDIA_DATA: string = `
             }
           }
         }
+        ${RECOMMEND_DATA}
     `;
 
 /**
