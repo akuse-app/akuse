@@ -49,6 +49,7 @@ import AnimeSection from '../AnimeSection';
 import { Dots } from 'react-activity';
 import AnimeEntry from '../AnimeEntry';
 import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
+import AnimeSections from '../AnimeSections';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -58,6 +59,11 @@ interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
   onClose: () => void;
+}
+
+interface Option {
+  label: string;
+  value: ListAnimeData[];
 }
 
 const AnimeModal: React.FC<AnimeModalProps> = ({
@@ -90,6 +96,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
   const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   const [lastFetchedId, setLastFetchedId] = useState<number>();
+  const [animeOptions, setAnimeOptions] = useState<Option[]>();
 
   const updateListAnimeData = async () => {
     if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
@@ -109,7 +116,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   }
 
-  const getRecommendedAnime = async () => {
+  const getRecommendedAnime = () => {
     const nodes = listAnimeData.media.recommendations?.nodes;
     if(!nodes) return;
     setRecommendedAnime(nodes.map((value) => {
@@ -122,7 +129,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }));
   };
 
-  const getRelatedAnime = async () => {
+  const getRelatedAnime = () => {
     const edges = listAnimeData.media.relations?.edges;
     if(!edges) return;
 
@@ -418,7 +425,15 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               loading={loading}
               onPlay={playEpisode}
             />
-            {relatedAnime && relatedAnime.length > 0 &&
+            {(recommendedAnime || relatedAnime) && <AnimeSections
+              id={'recommended'}
+              selectedLabel={relatedAnime && 'Related' || 'Recommended'}
+              options={[
+                {label: 'Related', value: relatedAnime || []},
+                {label: 'Recommended', value: recommendedAnime || []},
+              ]}
+            />}
+            {/* {relatedAnime && relatedAnime.length > 0 &&
               <div className='related-anime'>
                 <AnimeSection
                   title='Related'
@@ -433,7 +448,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                   animeData={recommendedAnime}
                 />
               </div>
-            }
+            } */}
           </div>
         </div>
       </ModalPage>

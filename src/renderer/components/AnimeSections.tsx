@@ -6,17 +6,36 @@ import { useRef, useState } from 'react';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
 import { ButtonCircle } from './Buttons';
+import Select from './Select';
 
-interface AnimeSectionProps {
-  title: string;
-  animeData?: ListAnimeData[];
+type Value = ListAnimeData[] | any | null;
+
+interface Option {
+  label: string;
+  value: ListAnimeData[];
 }
 
-const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
+interface AnimeSectionsProps {
+  options: Option[];
+  selectedLabel: string;
+  id: string;
+}
+
+const AnimeSections: React.FC<AnimeSectionsProps> = ({
+  options,
+  id,
+  selectedLabel
+}) => {
   const animeListWrapperRef = useRef<HTMLDivElement>(null);
   const animeListRef = useRef<HTMLDivElement>(null);
   const [enableButtons, setEnableButtons] = useState<boolean>(false);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  // const [selectedSection, setSelectedAnime] = useState<ListAnimeData>();
+  options = options.filter((value) => value.value.length > 0)
+  const selected = options.find((value) => value.label === selectedLabel);
+  const [animeData, setAnimeData] = useState<ListAnimeData[]>(
+    selected && selected.value || options[0].value
+  );
 
   const hideButtons = () => {
     if (animeListWrapperRef.current && animeListRef.current) {
@@ -48,9 +67,21 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
     }
   };
 
+  const handleSectionSelect = (value: ListAnimeData[]) => {
+    // console.log(value);
+    setAnimeData(value);
+    // selectedValue = value;
+  }
+
   return (
-    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={`${title.toLowerCase().replace(' ', '-')}-section`}>
-      <h1>{title}</h1>
+    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={`${id.toLowerCase().replace(' ', '-')}-section`}>
+      <Select
+        options={options}
+        selectedValue={animeData}
+        onChange={handleSectionSelect}
+        className={`${id}-select`}
+      />
+      {/* <h1>{title}</h1> */}
       {enableButtons && (
         <div
           className={`scrollers ${
@@ -84,4 +115,4 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
   );
 };
 
-export default AnimeSection;
+export default AnimeSections;
