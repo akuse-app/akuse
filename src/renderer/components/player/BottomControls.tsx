@@ -116,6 +116,20 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     setPercent(newPercent);
   };
 
+  const getTimePercent = (time: number) => {
+    if(!videoRef.current) return 0;
+    const video = videoRef.current;
+    return (time / video.duration) * 100;
+  }
+
+  const getSkipEventBarStyle = (event: SkipEvent) => {
+    const interval = event.interval;
+    return {
+      left: `${getTimePercent(interval.startTime)}%`,
+      width: `${getTimePercent(interval.endTime - interval.startTime)}%`
+    }
+  }
+
   const dragProgressBar = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!videoRef.current) return;
 
@@ -195,6 +209,12 @@ const BottomControls: React.FC<BottomControlsProps> = ({
             className="video-buffered-bar"
             style={{ width: bufferedBarWidth }}
           ></div>
+          {(skipEvents ?? []).map((event) => (
+            <div
+              className="video-event-bar"
+              style={getSkipEventBarStyle(event)}
+            ></div>
+          ))}
           {/* <div className="preview-thumbnail">
             <img src={previewThumbnailSrc} alt="preview" />
             <div className="time">
