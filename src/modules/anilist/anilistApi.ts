@@ -68,6 +68,7 @@ const MEDIA_DATA: string = `
             id
             timeUntilAiring
             episode
+            airingAt
         }
         mediaListEntry {
             id
@@ -387,11 +388,13 @@ export const getAnimeInfo = async (animeId: any): Promise<Media> => {
           }
       `;
 
-  var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
+  var headers: {[key: string]: string} = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
+
+  if (STORE.has('access_token'))
+    headers.Authorization = 'Bearer ' + STORE.get('access_token');
 
   var variables = {
     id: animeId,
@@ -471,8 +474,6 @@ export const getAiringSchedule = async (
   viewerId: number | null,
   airingAt: number = Math.floor(Date.now() / 1000)
 ) => {
-  // const timeInSeconds = ;
-
   const query = `
   query {
     Page(page: 1, perPage: ${PAGES}) {

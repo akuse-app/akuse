@@ -7,27 +7,22 @@ var lockUntil = 0;
 const delay = async (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
 const handleRateLimiting = async (current: number) => {
-  if (current < lockUntil) {
+  if (current < lockUntil)
     await delay(lockUntil - current);
-  }
 
-  if (current >= resetTime) {
+  if (current >= resetTime)
     remainingRequests = 90;
-  }
 
-  if (remainingRequests <= 0) {
+  if (remainingRequests <= 0)
     await delay(60);
-  }
 };
 
 const handleResponseHeaders = (headers: any) => {
-  if (headers['x-ratelimit-remaining']) {
+  if (headers['x-ratelimit-remaining'])
     remainingRequests = parseInt(headers['x-ratelimit-remaining']);
-  }
 
-  if (headers['x-ratelimit-reset']) {
+  if (headers['x-ratelimit-reset'])
     resetTime = parseInt(headers['x-ratelimit-reset']);
-  }
 };
 
 /**
@@ -81,7 +76,7 @@ export const makeRequest = async (
       let response = (error as { response?: { status: number, headers: { [key: string]: any } } }).response;
 
       if (response && response.status === 429) {
-        const retryAfter = parseInt(response.headers['retry-after'] || '60', 10);
+        const retryAfter = parseInt(response.headers['retry-after'] || '60');
         lockUntil = current + retryAfter;
         await delay(retryAfter);
         return makeRequest(method, url, headers, options);

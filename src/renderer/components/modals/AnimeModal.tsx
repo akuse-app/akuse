@@ -43,7 +43,7 @@ import {
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
-import { getLastWatchedEpisode } from '../../../modules/history';
+import { getAnimeHistory, getLastWatchedEpisode, setAnimeHistory } from '../../../modules/history';
 import { Media, MediaFormat, MediaTypes } from '../../../types/anilistGraphQLTypes';
 import AnimeSection from '../AnimeSection';
 import { Dots } from 'react-activity';
@@ -105,7 +105,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     if(!edges) return;
 
     const list = edges.filter((value) => value.node.type === MediaTypes.Anime).map((value) => {
-      value.node.format = value.node.format === 'TV' ? value.relationType as MediaFormat : value.node.format;
+      value.node.format = value.node.format?.substring(0, 2) === 'TV' ? value.relationType as MediaFormat : value.node.format;
 
       return value;
     });
@@ -158,8 +158,24 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const fetchEpisodesInfo = async () => {
     const animeId = listAnimeData.media.id as number;
-
     setLocalProgress(getProgress(listAnimeData.media));
+
+    if(listAnimeData.media.nextAiringEpisode !== null) {
+      const nextAiringEpisode = listAnimeData.media.nextAiringEpisode;
+      if(nextAiringEpisode) {
+        const currentTime = Date.now() / 1000;
+        nextAiringEpisode.timeUntilAiring = nextAiringEpisode.airingAt ? nextAiringEpisode.airingAt - currentTime : nextAiringEpisode.timeUntilAiring;
+        if(nextAiringEpisode.timeUntilAiring > 0 || !nextAiringEpisode.timeUntilAiring) {
+          /* Not updated history entry. */
+          const entry = getAnimeHistory(animeId);
+          if (entry) {
+            listAnimeData.media = await getAnimeInfo(animeId);
+            entry.data = listAnimeData;
+            setAnimeHistory(entry);
+          }
+        }
+      }
+    }
 
     axios
       .get(`${EPISODES_INFO_URL}${animeId}`)

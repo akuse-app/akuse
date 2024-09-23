@@ -233,17 +233,20 @@ export const getProgress = (animeEntry: Media): number | undefined => {
 
   if(lastWatched !== undefined && lastWatched.data !== undefined) {
     let isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
-    const localProgress = (parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0);
-    // console.log(anilistProgress, localProgress)
+    const localProgress = Math.max((parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0), 0);
+
+    if(anilistProgress === 0)
+      return localProgress;
+
     if(anilistProgress !== localProgress) {
       const episodeEntry = getEpisodeHistory(animeId, anilistProgress);
 
       if(episodeEntry) {
         isFinished = (episodeEntry.duration as number * 0.85) > episodeEntry.time;
-        return anilistProgress - (isFinished ? 1 : 0);
+        return Math.max(anilistProgress - (isFinished ? 1 : 0), 0);
       }
 
-      return anilistProgress - 1;
+      return Math.max(anilistProgress - 1, 0);
     }
 
     return Number.isNaN(localProgress) ? 0 : localProgress;
@@ -367,10 +370,13 @@ export const getParsedFormat = (format: MediaFormat | RelationType | undefined) 
       return 'ONA';
     case 'MUSIC':
       return 'Music';
+    /* Lazy related */
     case 'SEQUEL':
       return 'Sequel';
     case 'PREQUEL':
       return 'Prequel';
+    case 'CHARACTER':
+      return 'Character';
     case 'ALTERNATIVE':
       return 'Alternative';
     default:

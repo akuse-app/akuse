@@ -168,7 +168,7 @@ const Tab4: React.FC = () => {
   };
 
   const handleSkipTimeChange = (value: any) => {
-    STORE.set('intro_skip_time', parseInt(value));
+    STORE.set('key_press_skip', parseInt(value));
     setSkipTime(parseInt(value));
   };
 
