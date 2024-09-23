@@ -93,11 +93,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const updateListAnimeData = async () => {
     if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
-      console.log(lastFetchedId, listAnimeData.media.id);
       if(lastFetchedId === listAnimeData.media.id)
         return;
-
-      console.log('passed')
 
       setLastFetchedId(listAnimeData.media.id);
 
