@@ -1,30 +1,27 @@
-import { UIEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Heading from "../components/Heading";
 import { ListAnimeData } from "../../types/anilistAPITypes";
 import { getAiredAnime } from "../../modules/anilist/anilistApi";
 import { airingDataToListAnimeData } from "../../modules/utils";
 import { Dots } from "react-activity";
 import AnimeEntry from "../components/AnimeEntry";
-import AnimeSection from "../components/AnimeSection";
-import Slideshow from "../components/Slideshow";
-import AnimeSections from "../components/AnimeSections";
-import Store from 'electron-store';
+
 interface Tab5Props {
   viewerId: number | null;
 }
 
-interface Option {
-  label: string;
-  value: ListAnimeData[];
-}
+// interface Option {
+//   label: string;
+//   value: ListAnimeData[];
+// }
 
-const store = new Store();
+// const store = new Store();
 
 const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   const pageRef = useRef<number>(1);
 
   // anime constants
-  const [weekAnime, setWeekAnime] = useState<Option[]>();
+  // const [weekAnime, setWeekAnime] = useState<Option[]>();
   const [airedAnime, setAiredAnime] = useState<ListAnimeData[]>([]);
 
   // search constants
@@ -67,8 +64,8 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
       setAiredAnime(listAnimeData.concat(airedAnime));
   };
 
-  const getDayName = (date: Date, locale: string) =>
-    date.toLocaleDateString(locale, { weekday: 'long' });
+  // const getDayName = (date: Date, locale: string) =>
+  //   date.toLocaleDateString(locale, { weekday: 'long' });
 
   const fetchData = async () => {
     // if(weekAnime) return;

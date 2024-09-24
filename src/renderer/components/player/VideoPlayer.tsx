@@ -461,6 +461,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const dTime = videoRef.current?.duration;
 
     handleSkipEvents();
+    handleHistoryUpdate();
 
     try {
       if (cTime && dTime) {
