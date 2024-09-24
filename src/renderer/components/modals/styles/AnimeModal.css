@@ -319,6 +319,22 @@
   border-radius: var(--border-radius);
 }
 
+.anime-page .episodes-section .episode-entry .progress-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 8px;
+  border-radius: 0 0 0 var(--border-radius);
+}
+
+.anime-page .episodes-section .episode-entry .progress-bar.full-width {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 7px;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
 .anime-page .episodes-section .episode-entry .image .i {
   position: absolute;
   opacity: 0;

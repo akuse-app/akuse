@@ -434,22 +434,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 {label: 'Recommended', value: recommendedAnime || []},
               ]}
             />}
-            {/* {relatedAnime && relatedAnime.length > 0 &&
-              <div className='related-anime'>
-                <AnimeSection
-                  title='Related'
-                  animeData={relatedAnime}
-                />
-              </div>
-            }
-            {recommendedAnime && recommendedAnime.length > 0 &&
-              <div className='recommended-anime'>
-                <AnimeSection
-                  title='Recommended'
-                  animeData={recommendedAnime}
-                />
-              </div>
-            } */}
           </div>
         </div>
       </ModalPage>
