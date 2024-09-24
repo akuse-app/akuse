@@ -7,24 +7,33 @@ import { Dots } from "react-activity";
 import AnimeEntry from "../components/AnimeEntry";
 import AnimeSection from "../components/AnimeSection";
 import Slideshow from "../components/Slideshow";
-
+import AnimeSections from "../components/AnimeSections";
+import Store from 'electron-store';
 interface Tab5Props {
   viewerId: number | null;
 }
 
+interface Option {
+  label: string;
+  value: ListAnimeData[];
+}
+
+const store = new Store();
+
 const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   const pageRef = useRef<number>(1);
 
-  const [todayAnime, setTodayAnime] = useState<ListAnimeData[]>([])
+  // anime constants
+  const [weekAnime, setWeekAnime] = useState<Option[]>();
   const [airedAnime, setAiredAnime] = useState<ListAnimeData[]>([]);
+
+  // search constants
   const [lastUpdate, setLastUpdate] = useState<number>(0);
   const [searchTime, setSearchTime] = useState<number>(Date.now() / 1000);
   const [hasPopulated, setHasPopulated] = useState<boolean>(false);
 
-
-  // Time constants
+  // time constants
   const timeOffset = 86400;
-
 
   useEffect(() => {
     const current = Date.now() / 1000;
@@ -58,13 +67,25 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
       setAiredAnime(listAnimeData.concat(airedAnime));
   };
 
+  const getDayName = (date: Date, locale: string) =>
+    date.toLocaleDateString(locale, { weekday: 'long' });
+
   const fetchData = async () => {
-    const endOfDay = new Date();
-    endOfDay.setHours(24, 0, 0, -1);
+    // if(weekAnime) return;
+    // const weekSchedule: Option[] = [];
 
-    const todaySchedule = await getAiredAnime(viewerId, 60, 86400, Math.floor(endOfDay.getTime() / 1000));
-
-    setTodayAnime(airingDataToListAnimeData(todaySchedule.airingSchedules));
+    // for(let i = 1; i < 8; i++) {
+    //   const endOfDay = new Date();
+    //   endOfDay.setHours(24 * i, 0, 0, -1);
+    //   const dayName = getDayName(endOfDay, 'en-US');
+    //   weekSchedule.push({
+    //     label: dayName,
+    //     value: airingDataToListAnimeData(
+    //       (await getAiredAnime(viewerId, 60, 86400, Math.floor(endOfDay.getTime() / 1000))).airingSchedules
+    //     )
+    //   })
+    // }
+    // setWeekAnime(weekSchedule);
   };
 
   const handleScroll = async (event: any) => {
@@ -89,6 +110,12 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
             title="Today's Schedule"
             animeData={todayAnime}
           /> */}
+          {/* <h1>Week Schedule</h1>
+          {weekAnime && weekAnime.length > 0 && <AnimeSections
+            id={'week'}
+            selectedLabel={getDayName(new Date(), 'en-US')}
+            options={weekAnime}
+          />} */}
           <Heading text="Recently Aired" />
           <div className="entries-container">
             {!airedAnime ? (

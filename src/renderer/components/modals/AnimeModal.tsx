@@ -198,9 +198,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       if(nextAiringEpisode) {
         const currentTime = Date.now() / 1000;
         nextAiringEpisode.timeUntilAiring = nextAiringEpisode.airingAt ? nextAiringEpisode.airingAt - currentTime : nextAiringEpisode.timeUntilAiring;
-        if(nextAiringEpisode.timeUntilAiring > 0 || !nextAiringEpisode.timeUntilAiring) {
+        if(nextAiringEpisode.timeUntilAiring < 0 || !nextAiringEpisode.airingAt) {
           /* Not updated history entry. */
           const entry = getAnimeHistory(animeId);
+          console.log(entry);
           if (entry) {
             listAnimeData.media = await getAnimeInfo(animeId);
             entry.data = listAnimeData;
