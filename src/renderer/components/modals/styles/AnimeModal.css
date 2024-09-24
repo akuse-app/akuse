@@ -331,7 +331,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 7px;
+  /* height: 7px; */
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
