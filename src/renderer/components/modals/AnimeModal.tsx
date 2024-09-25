@@ -44,7 +44,7 @@ import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
 import { getAnimeHistory, getLastWatchedEpisode, setAnimeHistory } from '../../../modules/history';
-import { Media, MediaFormat, MediaTypes } from '../../../types/anilistGraphQLTypes';
+import { Media, MediaFormat, MediaTypes, RelationTypes } from '../../../types/anilistGraphQLTypes';
 import AnimeSection from '../AnimeSection';
 import { Dots } from 'react-activity';
 import AnimeEntry from '../AnimeEntry';
@@ -134,7 +134,12 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     if(!edges) return;
 
     const list = edges.filter((value) => value.node.type === MediaTypes.Anime).map((value) => {
-      value.node.format = value.node.format?.substring(0, 2) === 'TV' ? value.relationType as MediaFormat : value.node.format;
+      value.node.format = (
+        value.node.format?.substring(0, 2) === 'TV' ||
+        value.relationType === RelationTypes.Sequel ||
+        value.relationType === RelationTypes.Prequel ||
+        value.relationType === RelationTypes.Alternative
+      ) ? value.relationType as MediaFormat : value.node.format;
 
       return value;
     });
