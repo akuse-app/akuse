@@ -305,10 +305,10 @@ export const getViewerInfo = async (viewerId: number | null) => {
 };
 
 /**
- * Gets a viewer list (current, completed...)
+ * Gets viewer lists (current, completed...)
  *
  * @param {*} viewerId
- * @param {*} status
+ * @param {*} statuses
  * @returns object with anime entries
  */
 export const getViewerLists = async (
@@ -348,13 +348,9 @@ export const getViewerLists = async (
 
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
-  console.log(statuses)
   const lists = respData.data.MediaListCollection.lists.length === 0
   ? []
-  : (respData.data.MediaListCollection.lists as Array<any>).filter((value) => {
-    console.log(value.name)
-    return statuses.includes(value.name.toLowerCase())
-  });
+  : (respData.data.MediaListCollection.lists as Array<any>).filter((value) => statuses.includes(value.name.toLowerCase()));
 
   return lists.map(value => value.entries).flat();
 };
