@@ -121,7 +121,7 @@ export default function App() {
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
 
-      const history = await getViewerLists(id, 'watching', 'paused', 'completed');
+      const history = await getViewerLists(id, 'CURRENT', 'REPEATING', 'PAUSED');
 
       // console.log(history);
 

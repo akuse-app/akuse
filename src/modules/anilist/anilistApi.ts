@@ -313,14 +313,15 @@ export const getViewerInfo = async (viewerId: number | null) => {
  */
 export const getViewerLists = async (
   viewerId: number,
-  ...statuses: string[]
+  ...statuses: MediaListStatus[]
 ): Promise<CurrentListAnime> => {
   var query = `
-          query($userId : Int) {
-              MediaListCollection(userId : $userId, type: ANIME, sort: UPDATED_TIME_DESC) {
+          query($userId : Int, $statuses: [MediaListStatus]) {
+              MediaListCollection(userId : $userId, type: ANIME, status_in: $statuses, sort: UPDATED_TIME_DESC) {
                   lists {
                       isCustomList
                       name
+                      status
                       entries {
                           id
                           mediaId
@@ -342,6 +343,7 @@ export const getViewerLists = async (
 
   var variables = {
     userId: viewerId,
+    statuses: statuses
   };
 
   const options = getOptions(query, variables);
@@ -350,7 +352,7 @@ export const getViewerLists = async (
 
   const lists = respData.data.MediaListCollection.lists.length === 0
   ? []
-  : (respData.data.MediaListCollection.lists as Array<any>).filter((value) => statuses.includes(value.name.toLowerCase()));
+  : (respData.data.MediaListCollection.lists as Array<any>);
 
   return lists.map(value => value.entries).flat();
 };
