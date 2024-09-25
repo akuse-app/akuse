@@ -311,6 +311,61 @@ export const getViewerInfo = async (viewerId: number | null) => {
  * @param {*} status
  * @returns object with anime entries
  */
+export const getViewerLists = async (
+  viewerId: number,
+  ...statuses: string[]
+): Promise<CurrentListAnime> => {
+  var query = `
+          query($userId : Int) {
+              MediaListCollection(userId : $userId, type: ANIME, sort: UPDATED_TIME_DESC) {
+                  lists {
+                      isCustomList
+                      name
+                      entries {
+                          id
+                          mediaId
+                          progress
+                          media {
+                              ${MEDIA_DATA}
+                          }
+                      }
+                  }
+              }
+          }
+      `;
+
+  var headers = {
+    Authorization: 'Bearer ' + STORE.get('access_token'),
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+
+  var variables = {
+    userId: viewerId,
+  };
+
+  const options = getOptions(query, variables);
+
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+  console.log(statuses)
+  const lists = respData.data.MediaListCollection.lists.length === 0
+  ? []
+  : (respData.data.MediaListCollection.lists as Array<any>).filter((value) => {
+    console.log(value.name)
+    return statuses.includes(value.name.toLowerCase())
+  });
+
+  return lists.map(value => value.entries).flat();
+};
+
+/**
+ * Gets a viewer list (current, completed...)
+ *
+ * @param {*} viewerId
+ * @param {*} status
+ * @returns object with anime entries
+ */
 export const getViewerList = async (
   viewerId: number,
   status: MediaListStatus,

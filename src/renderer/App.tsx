@@ -16,6 +16,7 @@ import {
   getViewerId,
   getViewerInfo,
   getViewerList,
+  getViewerLists,
 } from '../modules/anilist/anilistApi';
 
 import { animeDataToListAnimeData } from '../modules/utils';
@@ -120,16 +121,22 @@ export default function App() {
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
 
-      const current = await getViewerList(id, 'CURRENT');
-      const rewatching = await getViewerList(id, 'REPEATING');
-      const paused = await getViewerList(id, 'PAUSED');
+      const history = await getViewerLists(id, 'watching', 'paused', 'completed');
 
-      result = result.concat(current.concat(rewatching).concat(paused));
+      // console.log(history);
+
+      // const current = await getViewerList(id, 'CURRENT');
+      // const rewatching = await getViewerList(id, 'REPEATING');
+      // const paused = await getViewerList(id, 'PAUSED');
+
+      // console.log(current, rewatching, paused)
+
+      result = result.concat(history);
     } else if(historyAvailable) {
       setHasHistory(true);
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
       setCurrentListAnime(result);
-      await updateRecommended(result);
+      updateRecommended(result);
       return;
     }
 
@@ -138,7 +145,7 @@ export default function App() {
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
 
       setCurrentListAnime(result);
-      await updateRecommended(result);
+      updateRecommended(result);
       return;
     }
 
@@ -147,7 +154,7 @@ export default function App() {
     }
 
     setCurrentListAnime(result);
-    await updateRecommended(result);
+    updateRecommended(result);
   }
 
   useEffect(() => {
