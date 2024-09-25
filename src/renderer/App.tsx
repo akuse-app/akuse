@@ -9,6 +9,7 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
+  getAnimeInfo,
   getMostPopularAnime,
   getNextReleases,
   getTrendingAnime,
@@ -31,7 +32,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
-import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
+import { getAnimeHistory, getHistoryEntries, getLastWatchedEpisode, setAnimeHistory } from '../modules/history';
 import Tab5 from './tabs/Tab5';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
@@ -56,6 +57,7 @@ export default function App() {
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
+  const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
   const [planningListAnime, setPlanningListAnimeListAnime] =
@@ -80,9 +82,37 @@ export default function App() {
     }
   }, []);
 
+  const updateRecommended = async (history: ListAnimeData[]) => {
+    const animeData = history[
+      Math.floor(Math.random() * (history.length - 1))
+    ];
+
+    if(animeData.media.recommendations === undefined) {
+      animeData.media = await getAnimeInfo(animeData.media.id);
+      const entry = getAnimeHistory(animeData.media.id as number);
+      if(entry) {
+        entry.data = animeData;
+        setAnimeHistory(entry);
+      }
+    }
+
+    const recommendedList = animeData.media.recommendations?.nodes.map((value) => {
+      return {
+        id: null,
+        mediaId: null,
+        progress: null,
+        media: value.mediaRecommendation
+      } as ListAnimeData
+    });
+
+    recommendedList?.push(animeData);
+
+    setRecommendedAnime(recommendedList);
+  }
+
   const updateHistory = async () => {
     const entries = getHistoryEntries();
-    const historyAvailable = Object.values(entries).length > 0
+    const historyAvailable = Object.values(entries).length > 0;
 
     let result: ListAnimeData[] = [];
     const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id ?? (b.media.mediaListEntry && b.media.mediaListEntry.id)) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.media.id ?? (a.media.mediaListEntry && a.media.mediaListEntry.id)) as number)?.timestamp ?? 0);
@@ -99,6 +129,7 @@ export default function App() {
       setHasHistory(true);
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
       setCurrentListAnime(result);
+      await updateRecommended(result);
       return;
     }
 
@@ -107,6 +138,7 @@ export default function App() {
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
 
       setCurrentListAnime(result);
+      await updateRecommended(result);
       return;
     }
 
@@ -115,6 +147,7 @@ export default function App() {
     }
 
     setCurrentListAnime(result);
+    await updateRecommended(result);
   }
 
   useEffect(() => {
@@ -150,7 +183,6 @@ export default function App() {
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
-
         setUserInfo(await getViewerInfo(id));
       }
 
@@ -210,6 +242,7 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
+                    recommendedAnime={recommendedAnime}
                   />
                 }
               />
