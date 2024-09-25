@@ -8,8 +8,6 @@ import AnimeEntry from './AnimeEntry';
 import { ButtonCircle } from './Buttons';
 import Select from './Select';
 
-type Value = ListAnimeData[] | any | null;
-
 interface Option {
   label: string;
   value: ListAnimeData[];
@@ -19,12 +17,14 @@ interface AnimeSectionsProps {
   options: Option[];
   selectedLabel: string;
   id: string;
+  onClick?: () => any;
 }
 
 const AnimeSections: React.FC<AnimeSectionsProps> = ({
   options,
   id,
-  selectedLabel
+  selectedLabel,
+  onClick
 }) => {
   const animeListWrapperRef = useRef<HTMLDivElement>(null);
   const animeListRef = useRef<HTMLDivElement>(null);
@@ -81,7 +81,6 @@ const AnimeSections: React.FC<AnimeSectionsProps> = ({
         onChange={handleSectionSelect}
         className={`${id}-select`}
       />
-      {/* <h1>{title}</h1> */}
       {enableButtons && (
         <div
           className={`scrollers ${
@@ -106,7 +105,7 @@ const AnimeSections: React.FC<AnimeSectionsProps> = ({
         <div className="anime-list" ref={animeListRef}>
         {(animeData ?? Array(20).fill(undefined)).map(
             (listAnimeData, index) => (
-              <AnimeEntry key={index} listAnimeData={listAnimeData} />
+              <AnimeEntry onClick={onClick} key={index} listAnimeData={listAnimeData} />
             ),
           )}
         </div>

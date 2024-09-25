@@ -509,6 +509,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleMouseMove = () => {
+    const current = Date.now() / 1000;
+    if (current - lastInteract < 0.75) return;
+    setLastInteract(current);
+
     clearTimeout(pauseInfoTimer);
     clearTimeout(pauseControlTimer);
 
@@ -534,10 +538,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       !isDropdownOpen && setShowControls(false);
       !isDropdownOpen && setShowCursor(false);
     }, 2000);
-
-    const current = Date.now() / 1000;
-    if (current - lastInteract < 0.25) return;
-    setLastInteract(current);
 
     const video = videoRef.current
     if(!video) return;

@@ -96,7 +96,6 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
   const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   const [lastFetchedId, setLastFetchedId] = useState<number>();
-  const [animeOptions, setAnimeOptions] = useState<Option[]>();
 
   const updateListAnimeData = async () => {
     if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
@@ -174,7 +173,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   }, [show]);
 
-  const closeModal = () => {
+  const closeModal = (updateSection: boolean = true) => {
     if (trailerRef.current) {
       trailerRef.current.pause();
       setTimeout(() => {
@@ -182,7 +181,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
-    ipcRenderer.send('update-section', 'history');
+    if(updateSection)
+      ipcRenderer.send('update-section', 'history');
 
     onClose();
   };
@@ -318,7 +318,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       <ModalPage show={show} closeModal={closeModal}>
         <div className="anime-page" onClick={handleClickOutside}>
           <div className="content-wrapper" ref={modalRef}>
-            <button className="exit" onClick={closeModal}>
+            <button className="exit" onClick={() => closeModal()}>
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
 
@@ -434,6 +434,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             {(recommendedAnime || relatedAnime) && <AnimeSections
               id={'recommended'}
               selectedLabel={relatedAnime && 'Related' || 'Recommended'}
+              onClick={() => closeModal(false)}
               options={[
                 {label: 'Related', value: relatedAnime || []},
                 {label: 'Recommended', value: recommendedAnime || []},

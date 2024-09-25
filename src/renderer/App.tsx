@@ -120,18 +120,7 @@ export default function App() {
 
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
-
-      const history = await getViewerLists(id, 'CURRENT', 'REPEATING', 'PAUSED');
-
-      // console.log(history);
-
-      // const current = await getViewerList(id, 'CURRENT');
-      // const rewatching = await getViewerList(id, 'REPEATING');
-      // const paused = await getViewerList(id, 'PAUSED');
-
-      // console.log(current, rewatching, paused)
-
-      result = result.concat(history);
+      result = await getViewerLists(id, 'CURRENT', 'REPEATING', 'PAUSED');
     } else if(historyAvailable) {
       setHasHistory(true);
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
