@@ -64,7 +64,7 @@ const Tab1: React.FC<Tab1Props> = ({
                   recommendedTitle.substring(0, 58) + '...' :
                   recommendedTitle
                 }"`}
-                animeData={recommendedAnime}
+                animeData={recommendedAnime?.slice(0, -1)}
               />
             )}
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />

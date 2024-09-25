@@ -160,7 +160,7 @@ export default function App() {
   useEffect(() => {
       const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
         const current = Date.now() / 1000;
-        if(current - sectionUpdate < 2) return;
+        if(current - sectionUpdate < 3) return;
         setSectionUpdate(current);
         for(const section of sections) {
           switch(section) {
