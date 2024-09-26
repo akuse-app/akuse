@@ -379,6 +379,14 @@ export const getParsedFormat = (format: MediaFormat | RelationType | undefined) 
       return 'Character';
     case 'ALTERNATIVE':
       return 'Alternative';
+    case 'SIDE_STORY':
+      return 'Side Story';
+    case 'PARENT':
+      return 'Parent';
+    case 'SPIN_OFF':
+      return 'Spin Off';
+    case 'ADAPTATION':
+      return 'Adaptation';
     default:
       return '?';
   }

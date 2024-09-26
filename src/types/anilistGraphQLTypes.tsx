@@ -96,7 +96,13 @@ export const RelationTypes = {
   Other: 'OTHER',
   Prequel: 'PREQUEL',
   Sequel: 'SEQUEL',
-  Character: 'CHARACTER'
+  Character: 'CHARACTER',
+  SideStory: 'SIDE_STORY',
+  Parent: 'PARENT',
+  Adaptation: 'ADAPTATION',
+  SpinOff: 'SPIN_OFF',
+  Compilation: 'COMPILATION',
+  Contains: 'CONTAINS'
 };
 
 export type RelationType = typeof RelationTypes[keyof typeof RelationTypes];

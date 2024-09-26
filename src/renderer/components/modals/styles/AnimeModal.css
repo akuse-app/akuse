@@ -335,6 +335,10 @@
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
+.anime-page .episodes-section .episode-entry .progress-bar.small-width {
+  width: 2.5%;
+}
+
 .anime-page .episodes-section .episode-entry .image .i {
   position: absolute;
   opacity: 0;

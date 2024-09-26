@@ -59,17 +59,14 @@ interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
   onClose: () => void;
-}
-
-interface Option {
-  label: string;
-  value: ListAnimeData[];
+  ref?: React.RefObject<HTMLDivElement>
 }
 
 const AnimeModal: React.FC<AnimeModalProps> = ({
   listAnimeData,
   show,
   onClose,
+  ref
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
@@ -96,6 +93,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
   const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   const [lastFetchedId, setLastFetchedId] = useState<number>();
+  const [onScreen, setOnScreen] = useState<boolean>(true);
 
   const updateListAnimeData = async () => {
     if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
@@ -137,7 +135,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         value.node.format?.substring(0, 2) === 'TV' ||
         value.relationType === RelationTypes.Sequel ||
         value.relationType === RelationTypes.Prequel ||
-        value.relationType === RelationTypes.Alternative
+        value.relationType === RelationTypes.Alternative ||
+        // value.relationType === RelationTypes.SideStory ||
+        value.relationType === RelationTypes.Parent ||
+        value.relationType === RelationTypes.SpinOff
       ) ? value.relationType as MediaFormat : value.node.format;
 
       return value;
@@ -164,6 +165,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, [showPlayer]);
 
   useEffect(() => {
+    if(!onScreen) return;
     try {
       if (show && trailerRef.current && canRePlayTrailer)
         trailerRef.current.play();
@@ -189,6 +191,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
+    if(!onScreen) return;
     if (!modalRef.current?.contains(event.target as Node)) {
       closeModal();
     }
@@ -315,7 +318,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         />
       )}
       <ModalPageShadow show={show} />
-      <ModalPage show={show} closeModal={closeModal}>
+      <ModalPage modalRef={ref} show={show} closeModal={closeModal}>
         <div className="anime-page" onClick={handleClickOutside}>
           <div className="content-wrapper" ref={modalRef}>
             <button className="exit" onClick={() => closeModal()}>
@@ -434,7 +437,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
             {(recommendedAnime || relatedAnime) && <AnimeSections
               id={'recommended'}
               selectedLabel={relatedAnime && 'Related' || 'Recommended'}
-              onClick={() => closeModal(false)}
+              onClick={() => {
+                setOnScreen(false);
+                closeModal(false);
+              }}
               options={[
                 {label: 'Related', value: relatedAnime || []},
                 {label: 'Recommended', value: recommendedAnime || []},

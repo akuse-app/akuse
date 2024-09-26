@@ -138,9 +138,8 @@ export default function App() {
       return;
     }
 
-    if(historyAvailable) {
+    if(historyAvailable)
       result = Object.values(result).sort(sortNewest);
-    }
 
     setCurrentListAnime(result);
     updateRecommended(result);
