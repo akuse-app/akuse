@@ -389,37 +389,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const updateCurrentProgress = (completed: boolean = true) => {
     const status = listAnime.media.mediaListEntry?.status;
     if (STORE.get('logged') as boolean) {
-      if(!completed) {
-        updateAnimeFromList(
-          listAnime.media.id,
-          'PAUSED',
-          undefined,
-          episodeNumber,
-        );
-        handleHistoryUpdate();
-      } else {
-        switch (status) {
-          case 'CURRENT': {
-            updateAnimeProgress(listAnime.media.id!, episodeNumber);
-            break;
-          }
-          case 'REPEATING':
-          case 'COMPLETED': {
-            updateAnimeFromList(
-              listAnime.media.id,
-              'REWATCHING',
-              undefined,
-              episodeNumber,
-            );
-          }
-          default: {
-            updateAnimeFromList(
-              listAnime.media.id,
-              'CURRENT',
-              undefined,
-              episodeNumber,
-            );
-          }
+      switch (status) {
+        case 'CURRENT': {
+          updateAnimeProgress(listAnime.media.id!, episodeNumber);
+          break;
+        }
+        case 'REPEATING':
+        case 'COMPLETED': {
+          updateAnimeFromList(
+            listAnime.media.id,
+            'REWATCHING',
+            undefined,
+            episodeNumber,
+          );
+        }
+        default: {
+          updateAnimeFromList(
+            listAnime.media.id,
+            'CURRENT',
+            undefined,
+            episodeNumber,
+          );
         }
       }
     }
