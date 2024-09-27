@@ -133,6 +133,9 @@ const Tab4: React.FC = () => {
   const [skipTime, setSkipTime] = useState<number>(
     STORE.get('key_press_skip') as number
   );
+  const [adultContent, setAdultContent] = useState<boolean>(
+    STORE.get('adult_content') as boolean
+  );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
 
@@ -145,6 +148,11 @@ const Tab4: React.FC = () => {
   const handleClearHistory = () => {
     STORE.set('history', { entries: {} });
     setClearHistory(!clearHistory);
+  };
+
+  const handleAdultContent = () => {
+    STORE.set('adult_content', !adultContent);
+    setAdultContent(!adultContent);
   };
 
   const handleUpdateProgressChange = () => {
@@ -222,6 +230,16 @@ const Tab4: React.FC = () => {
         <div className="settings-page">
           <Heading text="Settings" />
 
+          <h1>General</h1>
+
+          <CheckboxElement
+            label="Show 18+ content (only applies to 'Recently Aired')"
+            checked={adultContent}
+            onChange={handleAdultContent}
+          />
+
+          <br/>
+
           <h1>Playback</h1>
 
           <CheckboxElement
@@ -260,6 +278,8 @@ const Tab4: React.FC = () => {
             onChange={handleLanguageChange}
           />
 
+          <br/>
+
           <h1>Appearance</h1>
 
           <CheckboxElement
@@ -275,6 +295,8 @@ const Tab4: React.FC = () => {
             zIndex={1}
             onChange={handleEpisodesPerPage}
           />
+
+          <br/>
 
           <h1>Sync & Storage</h1>
 

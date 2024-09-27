@@ -1,12 +1,13 @@
 import './styles/Heading.css'
 
 interface HeadingProps {
-  text: string
+  text: string;
+  children?: React.ReactNode;
 }
 
-const Heading:React.FC<HeadingProps> = ({ text }) => {
+const Heading:React.FC<HeadingProps> = ({ text, children }) => {
   return (
-    <h1 className='heading'>{text}</h1>
+    <h1 className='heading'>{text}{children}</h1>
   )
 }
 

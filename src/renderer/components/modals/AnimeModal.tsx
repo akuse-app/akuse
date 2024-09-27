@@ -434,7 +434,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               loading={loading}
               onPlay={playEpisode}
             />
-            {(recommendedAnime || relatedAnime) && <AnimeSections
+            {(relatedAnime && relatedAnime.length > 0 ||
+              recommendedAnime && recommendedAnime.length > 0) && <AnimeSections
               id={'recommended'}
               selectedLabel={relatedAnime && 'Related' || 'Recommended'}
               onClick={() => {
@@ -442,8 +443,8 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
                 closeModal(false);
               }}
               options={[
-                {label: 'Related', value: relatedAnime || []},
-                {label: 'Recommended', value: recommendedAnime || []},
+                {label: 'Related', value: relatedAnime === undefined ? [] : relatedAnime},
+                {label: 'Recommended', value: recommendedAnime === undefined ? [] : recommendedAnime},
               ]}
             />}
           </div>

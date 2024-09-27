@@ -31,10 +31,10 @@ const AnimeSections: React.FC<AnimeSectionsProps> = ({
   const [enableButtons, setEnableButtons] = useState<boolean>(false);
   const [showButtons, setShowButtons] = useState<boolean>(false);
   // const [selectedSection, setSelectedAnime] = useState<ListAnimeData>();
-  options = options.filter((value) => value.value.length > 0)
-  const selected = options.find((value) => value.label === selectedLabel);
+  options = options.filter((value) => value.value.length > 0);
+  const selected = options.find((value) => value.label === selectedLabel) || options[0];
   const [animeData, setAnimeData] = useState<ListAnimeData[]>(
-    selected && selected.value || options[0].value
+    selected.value
   );
 
   const hideButtons = () => {

@@ -12,7 +12,8 @@ const defaultValues = {
   trailer_volume_on: false,
   volume: 1,
   episodes_per_page: 30,
-  history: { entries: {} }
+  history: { entries: {} },
+  adult_content: true
 }
 
 export const setDefaultStoreVariables = () => {

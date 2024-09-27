@@ -218,6 +218,9 @@ const MEDIA_DATA: string = `
         ${RECOMMEND_DATA}
     `;
 
+const filterAdultMedia = (media?: Media) =>
+  media && !media.isAdult;
+
 /**
  * Retrieves the access token for the api
  *
@@ -581,6 +584,10 @@ export const getAiredAnime = async (
 
   pageData.airingSchedules = pageData.airingSchedules.reverse();
 
+  const adultContent = STORE.get('adult_content') as boolean;
+  if (!adultContent)
+    pageData.airingSchedules = pageData.airingSchedules.filter((value) => filterAdultMedia(value.media));
+
   return pageData
 };
 
@@ -627,8 +634,13 @@ export const getAiringSchedule = async (
 
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  const pageData = respData.data.Page as AiringPage;
 
-  return respData.data.Page.airingSchedules as AiringSchedule[];
+  const adultContent = STORE.get('adult_content') as boolean;
+  if (!adultContent)
+    pageData.airingSchedules = pageData.airingSchedules.filter((value) => filterAdultMedia(value.media));
+
+  return pageData.airingSchedules as AiringSchedule[];
 };
 
 /**

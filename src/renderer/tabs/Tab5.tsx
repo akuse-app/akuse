@@ -5,17 +5,13 @@ import { getAiredAnime } from "../../modules/anilist/anilistApi";
 import { airingDataToListAnimeData } from "../../modules/utils";
 import { Dots } from "react-activity";
 import AnimeEntry from "../components/AnimeEntry";
+import Store from "electron-store";
 
 interface Tab5Props {
   viewerId: number | null;
 }
 
-// interface Option {
-//   label: string;
-//   value: ListAnimeData[];
-// }
-
-// const store = new Store();
+const store = new Store();
 
 const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   const pageRef = useRef<number>(1);
@@ -31,6 +27,11 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
 
   // time constants
   const timeOffset = 86400;
+
+  //other
+  const [adultContent, setAdultContent] = useState<boolean>(
+    store.get('adult_content') as boolean
+  );
 
   useEffect(() => {
     const current = Date.now() / 1000;
@@ -98,9 +99,15 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     populateAiredAnime();
   };
 
+  const handleAdultContent = () => {
+    store.set('adult_content', !adultContent);
+    setAdultContent(!adultContent);
+  };
+
+
   return (
     <div className="body-container show-tab" onScroll={handleScroll}>
-      <div className="main-container lifted">
+      <div className="main-container lifted schedule-page">
         <main>
           {/* <Slideshow listAnimeData={todayAnime} maxAmount={todayAnime.length}/>
           <AnimeSection
@@ -113,7 +120,7 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
             selectedLabel={getDayName(new Date(), 'en-US')}
             options={weekAnime}
           />} */}
-          <Heading text="Recently Aired" />
+          <Heading text="Recently Aired"/>
           <div className="entries-container">
             {!airedAnime ? (
               <div className="activity-indicator">
