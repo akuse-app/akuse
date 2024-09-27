@@ -28,11 +28,6 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   // time constants
   const timeOffset = 86400;
 
-  //other
-  const [adultContent, setAdultContent] = useState<boolean>(
-    store.get('adult_content') as boolean
-  );
-
   useEffect(() => {
     const current = Date.now() / 1000;
 
@@ -98,12 +93,6 @@ const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
     setLastUpdate(current);
     populateAiredAnime();
   };
-
-  const handleAdultContent = () => {
-    store.set('adult_content', !adultContent);
-    setAdultContent(!adultContent);
-  };
-
 
   return (
     <div className="body-container show-tab" onScroll={handleScroll}>
