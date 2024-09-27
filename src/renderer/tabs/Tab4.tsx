@@ -140,6 +140,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
+  const [userFetched, setUserFetched] = useState<boolean>(false);
 
 
   const handleEpisodesPerPage = (value: any) => {
@@ -248,11 +249,12 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   ];
 
   useEffect(() => {
-    if(viewerId)
+    if(viewerId && !userFetched)
       (async() => {
         const viewerInfo = await getViewerInfo(viewerId);
         const displayAdultContent = viewerInfo.options.displayAdultContent as boolean;
         STORE.set('adult_content', displayAdultContent);
+        setUserFetched(true);
         setAdultContent(displayAdultContent);
       })()
   })
