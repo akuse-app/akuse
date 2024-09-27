@@ -287,6 +287,9 @@ export const getViewerInfo = async (viewerId: number | null) => {
                   avatar {
                       medium
                   }
+                  options {
+                    displayAdultContent
+                  }
               }
           }
       `;
@@ -512,20 +515,20 @@ export const getAnimeInfo = async (animeId: any): Promise<Media> => {
           }
       `;
 
-  var headers: {[key: string]: string} = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  };
+      var headers: {[key: string]: string} = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
 
-  if (STORE.has('access_token'))
-    headers.Authorization = 'Bearer ' + STORE.get('access_token');
+      if (STORE.has('access_token'))
+        headers.Authorization = 'Bearer ' + STORE.get('access_token');
 
-  var variables = {
-    id: animeId,
-  };
+      var variables = {
+        id: animeId,
+      };
 
-  const options = getOptions(query, variables);
-  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+      const options = getOptions(query, variables);
+      const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Media as Media;
 };

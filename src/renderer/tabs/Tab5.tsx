@@ -5,13 +5,10 @@ import { getAiredAnime } from "../../modules/anilist/anilistApi";
 import { airingDataToListAnimeData } from "../../modules/utils";
 import { Dots } from "react-activity";
 import AnimeEntry from "../components/AnimeEntry";
-import Store from "electron-store";
 
 interface Tab5Props {
   viewerId: number | null;
 }
-
-const store = new Store();
 
 const Tab5: React.FC<Tab5Props> = ({ viewerId }) => {
   const pageRef = useRef<number>(1);

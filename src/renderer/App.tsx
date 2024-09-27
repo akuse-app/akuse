@@ -275,7 +275,11 @@ export default function App() {
                 />
               )}
               <Route path="/tab3" element={<Tab3 />} />
-              <Route path="/tab4" element={<Tab4 />} />
+              <Route path="/tab4" element={
+                <Tab4
+                  viewerId={viewerId}
+                />
+              } />
               <Route
                 path="/tab5"
                 element={
