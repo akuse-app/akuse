@@ -1,6 +1,10 @@
 import { IVideo } from '@consumet/extensions';
 import Gogoanime from '@consumet/extensions/dist/providers/anime/gogoanime';
+import ProviderCache from './cache';
+
+const cache = new ProviderCache();
 const consumet = new Gogoanime();
+
 
 export const getRecentEpisodes = consumet.fetchRecentEpisodes;
 
@@ -47,6 +51,11 @@ async function searchEpisodeUrl(
   dubbed: boolean,
   releaseDate: number,
 ): Promise<IVideo[] | null> {
+  const cacheId = `${animeSearch}-${episode}`;
+
+  if(cache.search[cacheId] !== undefined)
+    return cache.search[cacheId];
+
   const animeId = await getAnimeId(
     index,
     dubbed ? `${animeSearch} (Dub)` : animeSearch,
@@ -59,11 +68,14 @@ async function searchEpisodeUrl(
     if (animeEpisodeId) {
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
-
-      return data.sources;
+      const result = (
+        cache.search[cacheId] = data.sources
+      );
+      return result;
     }
   }
 
+  cache.search[cacheId] = null;
   console.log(`%c ${animeSearch}`, `color: #E5A639`);
   return null;
 }
@@ -80,6 +92,9 @@ export const getAnimeId = async (
   dubbed: boolean,
   releaseDate: number,
 ): Promise<string | null> => {
+  if(cache.animeIds[animeSearch] !== undefined)
+    return cache.animeIds[animeSearch];
+
   const data = await consumet.search(animeSearch);
 
   const filteredResults = data.results.filter((result) =>
@@ -87,13 +102,13 @@ export const getAnimeId = async (
       ? (result.title as string).includes('(Dub)')
       : !(result.title as string).includes('(Dub)'),
   );
-
-  return (
-    filteredResults.filter(
+  const result = (
+    cache.animeIds[animeSearch] = filteredResults.filter(
       (result) => result.releaseDate == releaseDate.toString(),
     )[index]?.id ?? null
   );
-  // return data.results[index]?.id ?? null;
+
+  return result;
 };
 
 /**
@@ -107,6 +122,11 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
+  if(cache.episodes[animeId] !== undefined)
+    return cache.episodes[animeId]?.find((ep) => ep.number == episode)?.id ?? null;
+
   const data = await consumet.fetchAnimeInfo(animeId);
-  return data?.episodes?.find((ep) => ep.number == episode)?.id ?? null;
+  return (
+    cache.episodes[animeId] = data?.episodes
+  )?.find((ep) => ep.number == episode)?.id ?? null;
 };

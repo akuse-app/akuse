@@ -1,7 +1,9 @@
 import { IVideo } from '@consumet/extensions';
 import AnimeUnity from '@consumet/extensions/dist/providers/anime/animeunity';
+import ProviderCache from './cache';
 
 const consumet = new AnimeUnity();
+const cache = new ProviderCache();
 
 /**
  *
@@ -53,6 +55,10 @@ async function searchEpisodeUrl(
   dubbed: boolean,
   releaseDate: number,
 ): Promise<IVideo[] | null> {
+  const cacheId = `${animeSearch}-${episode}`;
+  if(cache.search[cacheId] !== undefined)
+    return cache.search[cacheId];
+
   const animeId = await getAnimeId(
     index,
     dubbed ? `${animeSearch} (ITA)` : animeSearch,
@@ -66,12 +72,16 @@ async function searchEpisodeUrl(
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
 
-      return data.sources;
+      return (
+        cache.search[cacheId] = data.sources
+      );
     }
   }
 
   console.log(`%c ${animeSearch}`, `color: #E5A639`);
-  return null;
+  return (
+    cache.search[cacheId] = null
+  );
 }
 
 /**
@@ -86,6 +96,9 @@ export const getAnimeId = async (
   dubbed: boolean,
   releaseDate: number,
 ): Promise<string | null> => {
+  if(cache.animeIds[animeSearch] !== undefined)
+    return cache.animeIds[animeSearch];
+
   const data = await consumet.search(animeSearch);
 
   const filteredResults = data.results.filter((result) =>
@@ -95,7 +108,7 @@ export const getAnimeId = async (
   );
 
   return (
-    filteredResults.filter(
+    cache.animeIds[animeSearch] = filteredResults.filter(
       (result) => result.releaseDate == releaseDate.toString(),
     )[index]?.id ?? null
   );
@@ -113,9 +126,15 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
+  if(cache.episodes[animeId] !== undefined)
+    return cache.episodes[animeId]?.find((ep) => ep.number == episode)?.id ?? null;;
+
   const data = await consumet.fetchAnimeInfo(
     animeId,
     episode > 120 ? Math.floor(episode / 120) + 1 : 1,
   );
-  return data?.episodes?.find((ep) => ep.number == episode)?.id ?? null;
+
+  return (
+    cache.episodes[animeId] = data?.episodes
+  )?.find((ep) => ep.number == episode)?.id ?? null;
 };
