@@ -21,6 +21,9 @@ import AnimeEntry from '../components/AnimeEntry';
 import Heading from '../components/Heading';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { PageInfo } from '../../types/anilistGraphQLTypes';
+import Store from 'electron-store';
+
+const store = new Store();
 
 const Tab3: React.FC = () => {
   const viewerId = useContext(ViewerIdContext);
@@ -97,6 +100,8 @@ const Tab3: React.FC = () => {
         ? (format = `format: ${selectedFormat}`)
         : (format = ''),
       selectedSort !== '' ? (sort = `sort: ${selectedSort}`) : (sort = ''),
+      store.get('adult_content') ? '' :
+      'isAdult: false'
     ].filter((item) => !(item == ''));
 
     return args.concat('type: ANIME').join(', ');
