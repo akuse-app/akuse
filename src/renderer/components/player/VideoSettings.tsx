@@ -1,13 +1,10 @@
 import React, { forwardRef, useContext, useEffect, useRef, useState, ChangeEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCirclePlay,
   faClock,
   faGear,
-  faHeadphones,
   faLanguage,
   faRotateRight,
-  faSpinner,
   faVideo,
   faVolumeHigh,
   faVolumeLow,
@@ -296,7 +293,7 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
             </li>
             {subtitleTrack && subtitleTracks && <li className="subtitle-tracks">
               <span>
-                <FontAwesomeIcon className="i label" icon={faRotateRight} />
+                <FontAwesomeIcon className="i label" icon={faLanguage} />
                 Subtitles
               </span>
               <Select
