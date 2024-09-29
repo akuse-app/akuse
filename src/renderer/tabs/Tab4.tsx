@@ -217,10 +217,10 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   };
 
   const languageOptions: Option[] = [
-    { value: 'gogo', label: 'GogoAnime 🇺🇸' },
-    { value: 'hianime', label: 'HiAnime 🇺🇸' },
-    { value: 'unity', label: 'AnimeUnity 🇮🇹' },
-    { value: 'drive', label: 'AnimeDrive 🇭🇺' },
+    { value: 'gogo', label: 'English 🇺🇸' },
+    { value: 'hianime', label: 'English Alt 🇺🇸' },
+    { value: 'unity', label: 'Italian 🇮🇹' },
+    { value: 'drive', label: 'Hungarian 🇭🇺' },
   ];
 
   const episodesPerPageOptions: Option[] = [
@@ -281,12 +281,12 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
           <h1>Playback</h1>
 
           <SelectElement
-            label="Select source"
+            label="Select the language in which you want to watch the episodes"
             value={selectedLanguage}
             options={languageOptions}
             zIndex={5}
-            width={155}
             onChange={handleLanguageChange}
+            width={145}
           />
 
           <CheckboxElement
