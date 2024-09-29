@@ -281,7 +281,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
           <h1>Playback</h1>
 
           <SelectElement
-            label="Select the language in which you want to watch the episodes"
+            label="Select source"
             value={selectedLanguage}
             options={languageOptions}
             zIndex={5}

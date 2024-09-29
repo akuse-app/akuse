@@ -5,7 +5,7 @@ const defaultValues = {
   update_progress: true,
   autoplay_next: true,
   dubbed: false,
-  source_flag: 'US',
+  source_flag: 'gogo',
   intro_skip_time: 85,
   key_press_skip: 5,
   show_duration: true,
