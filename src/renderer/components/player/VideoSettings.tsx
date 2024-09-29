@@ -65,7 +65,8 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
       false,
     );
     const [subtitleTrack, setSubtitleTrack] = useState<SubtitleTrack | undefined>(
-      (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value => value.default) || subtitleTracks[0]) : undefined
+      (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value =>
+        value.label === STORE.get('subtitle_language') as string) || subtitleTracks.find(value => value.default ) || subtitleTracks[0]) : undefined
     )
 
     useEffect(() => {
@@ -98,8 +99,8 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     useEffect(() => {
       if(!subtitleTrack)
         setSubtitleTrack(
-          (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value => value.default) || subtitleTracks[0]) :
-          undefined
+          (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value =>
+            value.label === STORE.get('subtitle_language') as string) || subtitleTracks.find(value => value.default ) || subtitleTracks[0]) : undefined
         )
 
       setHlsData(hls);
@@ -196,6 +197,7 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     };
 
     const handleChangeSubtitleTrack = (value: SubtitleTrack) => {
+      STORE.set('subtitle_language', value.label);
       onSubtitleTrack(value);
       setSubtitleTrack(value);
     };

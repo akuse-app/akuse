@@ -6,6 +6,7 @@ const defaultValues = {
   autoplay_next: true,
   dubbed: false,
   source_flag: 'gogo',
+  subtitle_language: 'English',
   intro_skip_time: 85,
   key_press_skip: 5,
   show_duration: true,
