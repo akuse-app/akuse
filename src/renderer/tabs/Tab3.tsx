@@ -8,7 +8,7 @@ import {
   faMasksTheater,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Dots from 'react-activity/dist/Dots';
 
 import { FORMATS, GENRES, SEASONS, SORTS } from '../../constants/anilist';

@@ -18,6 +18,8 @@ import Select from '../Select';
 import Store from 'electron-store';
 import { AuthContext } from '../../App';
 import Hls from 'hls.js';
+import { SubtitleTrack } from '../../../modules/providers/hianime';
+import { unstable_batchedUpdates } from 'react-dom';
 
 const STORE = new Store();
 
@@ -25,6 +27,10 @@ interface SettingsProps {
   show: boolean;
   onShow: (show: boolean) => void;
   videoRef: React.RefObject<HTMLVideoElement>;
+  subtitleTracks?: SubtitleTrack[];
+  onSubtitleTrack: (
+    track: SubtitleTrack
+  ) => void;
   hls?: Hls;
   onChangeEpisode: (
     episode: number | null,
@@ -33,7 +39,7 @@ interface SettingsProps {
 }
 
 const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
-  ({ show, onShow, videoRef, hls, onChangeEpisode }, ref) => {
+  ({ show, onShow, videoRef, hls, onChangeEpisode, onSubtitleTrack, subtitleTracks }, ref) => {
     const logged = useContext(AuthContext);
 
     const [hlsData, setHlsData] = useState<Hls>();
@@ -61,6 +67,9 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     const [changeEpisodeLoading, setChangeEpisodeLoading] = useState<boolean>(
       false,
     );
+    const [subtitleTrack, setSubtitleTrack] = useState<SubtitleTrack | undefined>(
+      (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value => value.default) || subtitleTracks[0]) : undefined
+    )
 
     useEffect(() => {
       if (videoRef.current) {
@@ -90,6 +99,12 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     }, []);
 
     useEffect(() => {
+      if(!subtitleTrack)
+        setSubtitleTrack(
+          (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value => value.default) || subtitleTracks[0]) :
+          undefined
+        )
+
       setHlsData(hls);
     }, [hls]);
 
@@ -183,6 +198,11 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
       setSkipTime(parseInt(value));
     };
 
+    const handleChangeSubtitleTrack = (value: SubtitleTrack) => {
+      onSubtitleTrack(value);
+      setSubtitleTrack(value);
+    };
+
     return (
       <div className="settings-content">
         <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
@@ -274,13 +294,29 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
                 width={100}
               />
             </li>
+            {subtitleTrack && subtitleTracks && <li className="subtitle-tracks">
+              <span>
+                <FontAwesomeIcon className="i label" icon={faRotateRight} />
+                Subtitles
+              </span>
+              <Select
+                zIndex={10}
+                options={subtitleTracks.map(value => ({
+                  label: value.label,
+                  value: value
+                }))}
+                selectedValue={subtitleTrack}
+                onChange={handleChangeSubtitleTrack}
+                width={100}
+              />
+            </li>}
             <li className="intro-skip-time">
               <span>
                 <FontAwesomeIcon className="i label" icon={faRotateRight} />
                 Intro Skip Time
               </span>
               <Select
-                zIndex={10}
+                zIndex={9}
                 options={[
                   { label: '5', value: 5 },
                   { label: '10', value: 10 },

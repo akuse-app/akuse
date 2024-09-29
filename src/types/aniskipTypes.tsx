@@ -11,7 +11,6 @@ export interface SkipEvent {
   interval: {
     startTime: number,
     endTime: number,
-    offsetApplied?: boolean
   },
   skipId: string,
   skipType: SkipEventType

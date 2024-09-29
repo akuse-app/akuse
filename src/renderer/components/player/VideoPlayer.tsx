@@ -35,6 +35,7 @@ import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { ButtonMain } from '../Buttons';
 import { faFastForward } from '@fortawesome/free-solid-svg-icons';
 import { skip } from 'node:test';
+import { SubtitleTrack } from '../../../modules/providers/hianime';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -126,7 +127,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
   const [skipEvent, setSkipEvent] = useState<string>('Skip');
   const [previousSkipEvent, setPreviousSkipEvent] = useState<string>('');
-
+  const [subtitleTracks, setSubtitleTracks] = useState<SubtitleTrack[] | undefined>();
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -247,11 +248,56 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onChangeLoading(loading);
   }, [loading]);
 
-  const getSkipEvents = async (episode: number) => {
+  const getSkipEvents = async (episode: number, video: IVideo) => {
     const duration = videoRef.current?.duration;
-    const skipEvent = await AniSkip.getSkipEvents(listAnime.media.idMal as number, episode ?? episodeNumber ?? animeEpisodeNumber, Number.isNaN(duration) ? 0 : duration);
 
-    setSkipEvents(skipEvent);
+    if(video && video.skipEvents) {
+      const skipEvent = video.skipEvents as {
+        intro?: {
+          start: number,
+          end: number
+        },
+        outro?: {
+          start: number,
+          end: number
+        }
+      };
+      const result: SkipEvent[] = [];
+
+      if(skipEvent.intro)
+        result.push({
+          episodeLength: duration ?? 0,
+          interval: {
+            startTime: skipEvent.intro.start,
+            endTime: skipEvent.intro.end
+          },
+          skipId: 'NON-API',
+          skipType: 'op'
+        })
+
+        if(skipEvent.outro)
+          result.push({
+            episodeLength: duration ?? 0,
+            interval: {
+              startTime: skipEvent.outro.start,
+              endTime: skipEvent.outro.end
+            },
+            skipId: 'NON-API',
+            skipType: 'ed'
+          })
+
+
+      setSkipEvents(result);
+      return
+    }
+
+    setSkipEvents(
+      await AniSkip.getSkipEvents(
+        listAnime.media.idMal as number,
+        episode ?? episodeNumber ?? animeEpisodeNumber,
+        Number.isNaN(duration) ? 0 : duration
+      )
+    );
   }
 
   useEffect(() => {
@@ -285,15 +331,45 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
-      getSkipEvents(animeEpisodeNumber);
+      getSkipEvents(animeEpisodeNumber, video);
     }
   }, [video, listAnime]);
+  const setSubtitleTrack = (subtitleTrack: SubtitleTrack) => {
+    if(!videoRef.current)
+      return;
+
+    let track;
+    if((track = videoRef.current.querySelector('track')))
+      track.remove();
+
+    track = document.createElement("track");
+    track.setAttribute("kind", subtitleTrack?.kind);
+    track.setAttribute("src", subtitleTrack.file);
+    videoRef.current.appendChild(track);
+
+    track.track.mode = "showing";
+  }
   const playHlsVideo = (video: IVideo) => {
     const url = video.url;
     try {
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
+        if(video.tracks) {
+          const tracks = video.tracks as SubtitleTrack[];
+          setSubtitleTracks(tracks);
+
+          videoRef.current.addEventListener("loadeddata", () => {
+            if(!videoRef.current)
+              return;
+
+            let currentTrack = tracks.find((value) => value.default);
+            if(!currentTrack)
+              currentTrack = tracks[0];
+
+            setSubtitleTrack(currentTrack);
+          });
+        };
         hls.attachMedia(videoRef.current);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           if (videoRef.current) {
@@ -673,7 +749,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const setData = (value: IVideo) => {
       setVideoData(value);
       setEpisodeNumber(episodeToPlay);
-      getSkipEvents(episodeToPlay);
+      getSkipEvents(episodeToPlay, value);
       setEpisodeTitle(
         episodes
           ? (episodes[episodeToPlay].title?.en ?? `Episode ${episodeToPlay}`)
@@ -797,9 +873,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               episodesInfo={episodeList}
               episodeNumber={episodeNumber}
               episodeTitle={episodeTitle}
+              subtitleTracks={subtitleTracks}
               showNextEpisodeButton={showNextEpisodeButton}
               showPreviousEpisodeButton={showPreviousEpisodeButton}
               fullscreen={fullscreen}
+              onSubtitleTrack={setSubtitleTrack}
               onFullScreentoggle={toggleFullScreen}
               onPiPToggle={togglePiP}
               onChangeEpisode={changeEpisode}

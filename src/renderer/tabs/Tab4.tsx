@@ -82,6 +82,7 @@ interface SelectElementProps {
   label: string;
   value: number | string;
   options: Option[];
+  width?: number;
   zIndex?: number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -90,6 +91,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
   label,
   value,
   options,
+  width = 140,
   zIndex = 1,
   onChange,
 }) => {
@@ -101,7 +103,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
           options={[...options]}
           selectedValue={value}
           onChange={onChange}
-          width={140}
+          width={width}
         />
       </label>
     </Element>
@@ -215,9 +217,10 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   };
 
   const languageOptions: Option[] = [
-    { value: 'US', label: 'English' },
-    { value: 'IT', label: 'Italian' },
-    { value: 'HU', label: 'Hungarian' },
+    { value: 'gogo', label: 'GogoAnime 🇺🇸' },
+    { value: 'hianime', label: 'HiAnime 🇺🇸' },
+    { value: 'unity', label: 'AnimeUnity 🇮🇹' },
+    { value: 'drive', label: 'AnimeDrive 🇭🇺' },
   ];
 
   const episodesPerPageOptions: Option[] = [
@@ -277,6 +280,15 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
 
           <h1>Playback</h1>
 
+          <SelectElement
+            label="Select source"
+            value={selectedLanguage}
+            options={languageOptions}
+            zIndex={5}
+            width={155}
+            onChange={handleLanguageChange}
+          />
+
           <CheckboxElement
             label="Autoplay next episode"
             checked={autoplayNext}
@@ -303,14 +315,6 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             label="Watch dubbed"
             checked={watchDubbed}
             onChange={handleWatchDubbedChange}
-          />
-
-          <SelectElement
-            label="Select the language in which you want to watch the episodes"
-            value={selectedLanguage}
-            options={languageOptions}
-            zIndex={2}
-            onChange={handleLanguageChange}
           />
 
           <br/>
