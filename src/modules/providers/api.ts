@@ -24,7 +24,7 @@ export const getUniversalEpisodeUrl = async (
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
 
-  const customTitle = animeCustomTitles[lang][listAnimeData.media?.id!];
+  const customTitle = animeCustomTitles[lang] && animeCustomTitles[lang][listAnimeData.media?.id!];
 
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
   if (customTitle) animeTitles.unshift(customTitle.title);

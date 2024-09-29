@@ -4,7 +4,7 @@ import 'react-activity/dist/Dots.css';
 import { IVideo } from '@consumet/extensions';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
-import Hls from 'hls.js';
+import Hls, { MediaPlaylist } from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
@@ -256,7 +256,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     if (video !== null) {
-      playHlsVideo(video.url);
+      playHlsVideo(video);
 
       // resume from tracked progress
       const animeId = (listAnime.media.id ||
@@ -288,10 +288,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       getSkipEvents(animeEpisodeNumber);
     }
   }, [video, listAnime]);
-
-  const playHlsVideo = (url: string) => {
+  const playHlsVideo = (video: IVideo) => {
+    const url = video.url;
     try {
-      console.log(url);
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
@@ -423,7 +422,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if(!video || previousSkipEvent === skipEvent) return;
 
     if(skipEvents && skipEvents.length > 0) {
-      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
 
       if(currentEvent) {
         const eventName = AniSkip.getEventName(currentEvent)
@@ -533,7 +532,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if(!video) return;
 
     if(skipEvents && skipEvents.length > 0) {
-      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
 
       if(!currentEvent)
         return;
@@ -683,7 +682,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodes ? (episodes[episodeToPlay].summary ?? '') : '',
       );
-      playHlsVideo(value.url);
+      playHlsVideo(value);
       // loadSource(value.url, value.isM3U8 ?? false);
       setShowNextEpisodeButton(canNextEpisode(episodeToPlay));
       setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
@@ -737,7 +736,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleSkipEvent = () => {
     const video = videoRef.current;
     if(!video || !skipEvents) return;
-    const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents, video.duration);
+    const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
     if(!currentEvent) return;
     if(currentEvent.skipType === SkipEventTypes.Outro) {
       const duration = video.duration - currentEvent.interval.endTime;

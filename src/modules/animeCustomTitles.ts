@@ -1,5 +1,5 @@
-/* 
-    Some anime are difficult to pull automatically, so the 
+/*
+    Some anime are difficult to pull automatically, so the
     correct titles for those (I hope rare) exceptions are written here.
 
     "AnimeId": { title: '`AnimeCustomTitle`', index: 0 } // problem faced
