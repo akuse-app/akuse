@@ -116,22 +116,29 @@ export default class HiAnime {
       }
 
       const episodeData = episodes.find(value => value.number === episode);
-      console.log('episode data',episodeData);
-      const episodeInfo = await axios.get(
-        `${this.vercelUrl}/anime/episode-srcs?id=${animeId}?ep=${episodeData?.id}&server=hd-1&category=${dubbed ? 'dub' : 'sub'}`
-      );
+      try {
+        const servers = (await axios.get(
+          `${this.vercelUrl}/anime/servers?episodeId=${animeId}?ep=${episodeData?.id}`
+        )).data;
+        const episodeInfo = await axios.get(
+          `${this.vercelUrl}/anime/episode-srcs?id=${animeId}?ep=${episodeData?.id}&server=hd-1&category=${dubbed ?
+            'dub' :
+            servers.sub.length > 0 ? 'sub' : 'raw'
+          }`
+        );
 
-      return (
-        this.cache.search[cacheId] = (episodeInfo.data.sources as IVideo[]).map((value) => {
-            value.tracks = episodeInfo.data.tracks;
-            value.skipEvents = {
-              intro: episodeInfo.data.intro,
-              outro: episodeInfo.data.outro
-            };
+        return (
+          this.cache.search[cacheId] = (episodeInfo.data.sources as IVideo[]).map((value) => {
+              value.tracks = episodeInfo.data.tracks;
+              value.skipEvents = {
+                intro: episodeInfo.data.intro,
+                outro: episodeInfo.data.outro
+              };
 
-            return value;
-        }) ?? null
-      )
+              return value;
+          }) ?? null
+        )
+      } catch { return null }
     }
   }
 };
