@@ -19,7 +19,11 @@ export interface SubtitleTrack {
 export default class HiAnime {
   baseUrl = 'https://hianime.to';
   ajaxUrl = `${this.baseUrl}/ajax`;
-  vercelUrl = 'https://aniwatch-api-dusky.vercel.app';
+  aniwatchApiUrls = [
+    'https://aniwatch-api-ch0nker.vercel.app',
+    'https://aniwatch-api-dusky.vercel.app',
+    'https://aniwatch-api-cranci.vercel.app'
+  ];
   cache = new ProviderCache();
   search: any;
   query: (
@@ -117,11 +121,12 @@ export default class HiAnime {
 
       const episodeData = episodes.find(value => value.number === episode);
       try {
+        const url = this.aniwatchApiUrls[~~(Math.random() * this.aniwatchApiUrls.length)];
         const servers = (await axios.get(
-          `${this.vercelUrl}/anime/servers?episodeId=${animeId}?ep=${episodeData?.id}`
+          `${url}/anime/servers?episodeId=${animeId}?ep=${episodeData?.id}`
         )).data;
         const episodeInfo = await axios.get(
-          `${this.vercelUrl}/anime/episode-srcs?id=${animeId}?ep=${episodeData?.id}&server=hd-1&category=${dubbed ?
+          `${url}/anime/episode-srcs?id=${animeId}?ep=${episodeData?.id}&server=hd-1&category=${dubbed ?
             'dub' :
             servers.sub.length > 0 ? 'sub' : 'raw'
           }`
