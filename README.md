@@ -30,7 +30,7 @@
 
 <br/>
 
-# Why choose akuse?
+# Why should you choose akuse?
 
 - **🚀 Fast:** Smooth and quick streaming with minimal buffering.
 - **🎨 Sleek UI:** User-friendly and eye-catching.
