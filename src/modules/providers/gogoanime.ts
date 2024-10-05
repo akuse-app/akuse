@@ -90,7 +90,9 @@ export const getAnimeId = async (
 
   return (
     filteredResults.filter(
-      (result) => result.releaseDate == releaseDate.toString(),
+      (result) =>
+        result.releaseDate == releaseDate.toString() ||
+        result.title == animeSearch,
     )[index]?.id ?? null
   );
   // return data.results[index]?.id ?? null;
