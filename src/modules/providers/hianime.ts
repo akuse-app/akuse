@@ -1,4 +1,4 @@
-import { ISubtitle, IVideo } from '@consumet/extensions';
+import { IVideo } from '@consumet/extensions';
 import ProviderCache from './cache';
 import Zoro from '@consumet/extensions/dist/providers/anime/zoro';
 import axios from 'axios';

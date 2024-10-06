@@ -297,7 +297,7 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
               </span>
               <Select
                 zIndex={10}
-                options={subtitleTracks.map(value => ({
+                options={subtitleTracks.filter(value => value.lang && value.lang !== 'Thumbnails').map(value => ({
                   label: value.lang,
                   value: value
                 }))}

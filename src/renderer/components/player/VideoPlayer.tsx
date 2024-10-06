@@ -335,8 +335,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       return;
 
     let track;
-    if((track = videoRef.current.querySelector('track')))
+    if((track = videoRef.current.querySelector('track'))) {
+      track.track.mode = 'disabled';
       track.remove();
+    }
 
     track = document.createElement("track");
     track.setAttribute("kind", "captions");
@@ -525,7 +527,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const dTime = videoRef.current?.duration;
 
     handleSkipEvents();
-    handleHistoryUpdate();
 
     try {
       if (cTime && dTime) {
