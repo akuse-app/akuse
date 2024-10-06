@@ -1,10 +1,10 @@
 import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
-import { IVideo } from '@consumet/extensions';
+import { ISubtitle, IVideo } from '@consumet/extensions';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
-import Hls, { MediaPlaylist } from 'hls.js';
+import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,7 +17,6 @@ import {
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   getAvailableEpisodes,
-  getMediaListId,
   getRandomDiscordPhrase,
   getSequel,
 } from '../../../modules/utils';
@@ -29,13 +28,10 @@ import TopControls from './TopControls';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import AniSkip from '../../../modules/aniskip';
 import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
-import { getEnvironmentData } from 'node:worker_threads';
 import axios from 'axios';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { ButtonMain } from '../Buttons';
 import { faFastForward } from '@fortawesome/free-solid-svg-icons';
-import { skip } from 'node:test';
-import { SubtitleTrack } from '../../../modules/providers/hianime';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -125,9 +121,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // skip events
   const [skipEvents, setSkipEvents] = useState<SkipEvent[]>();
   const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
-  const [skipEvent, setSkipEvent] = useState<string>('Skip');
+  const [skipEvent, setSkipEvent] = useState<string>('Skip Intro ');
   const [previousSkipEvent, setPreviousSkipEvent] = useState<string>('');
-  const [subtitleTracks, setSubtitleTracks] = useState<SubtitleTrack[] | undefined>();
+  const [subtitleTracks, setSubtitleTracks] = useState<ISubtitle[] | undefined>();
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -334,7 +330,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       getSkipEvents(animeEpisodeNumber, video);
     }
   }, [video, listAnime]);
-  const setSubtitleTrack = (subtitleTrack: SubtitleTrack) => {
+  const setSubtitleTrack = (subtitleTrack: ISubtitle) => {
     if(!videoRef.current)
       return;
 
@@ -343,8 +339,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       track.remove();
 
     track = document.createElement("track");
-    track.setAttribute("kind", subtitleTrack?.kind);
-    track.setAttribute("src", subtitleTrack.file);
+    track.setAttribute("kind", "captions");
+    track.setAttribute("src", subtitleTrack.url);
     videoRef.current.appendChild(track);
 
     track.track.mode = "showing";
@@ -356,16 +352,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         var hls = new Hls();
         hls.loadSource(url);
         if(video.tracks) {
-          const tracks = video.tracks as SubtitleTrack[];
+          const tracks = video.tracks as ISubtitle[];
           setSubtitleTracks(tracks);
 
           videoRef.current.addEventListener("loadeddata", () => {
             if(!videoRef.current)
               return;
 
-            let currentTrack = tracks.find((value) => value.default);
-            if(!currentTrack)
-              currentTrack = tracks[0];
+            const lastUsed = STORE.get('subtitle_language') as string;
+
+            let currentTrack = tracks.find(value =>
+              value.lang.substring(0, lastUsed.length) === lastUsed as string) ?? tracks[0];
 
             setSubtitleTrack(currentTrack);
           });

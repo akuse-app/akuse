@@ -10,13 +10,11 @@ import {
   faVolumeLow,
   faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { Dots } from 'react-activity';
 import Select from '../Select';
 import Store from 'electron-store';
 import { AuthContext } from '../../App';
 import Hls from 'hls.js';
-import { SubtitleTrack } from '../../../modules/providers/hianime';
-import { unstable_batchedUpdates } from 'react-dom';
+import { ISubtitle } from '@consumet/extensions';
 
 const STORE = new Store();
 
@@ -24,9 +22,9 @@ interface SettingsProps {
   show: boolean;
   onShow: (show: boolean) => void;
   videoRef: React.RefObject<HTMLVideoElement>;
-  subtitleTracks?: SubtitleTrack[];
+  subtitleTracks?: ISubtitle[];
   onSubtitleTrack: (
-    track: SubtitleTrack
+    track: ISubtitle
   ) => void;
   hls?: Hls;
   onChangeEpisode: (
@@ -64,10 +62,7 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     const [changeEpisodeLoading, setChangeEpisodeLoading] = useState<boolean>(
       false,
     );
-    const [subtitleTrack, setSubtitleTrack] = useState<SubtitleTrack | undefined>(
-      (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value =>
-        value.label === STORE.get('subtitle_language') as string) || subtitleTracks.find(value => value.default ) || subtitleTracks[0]) : undefined
-    )
+    const [subtitleTrack, setSubtitleTrack] = useState<ISubtitle | undefined>();
 
     useEffect(() => {
       if (videoRef.current) {
@@ -97,11 +92,13 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     }, []);
 
     useEffect(() => {
-      if(!subtitleTrack)
+      if(!subtitleTrack) {
+        const lastUsed = STORE.get('subtitle_language') as string;
         setSubtitleTrack(
           (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value =>
-            value.label === STORE.get('subtitle_language') as string) || subtitleTracks.find(value => value.default ) || subtitleTracks[0]) : undefined
+            value.lang.substring(0, lastUsed.length) === lastUsed as string) || subtitleTracks[0]) : undefined
         )
+      }
 
       setHlsData(hls);
     }, [hls]);
@@ -196,8 +193,8 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
       setSkipTime(parseInt(value));
     };
 
-    const handleChangeSubtitleTrack = (value: SubtitleTrack) => {
-      STORE.set('subtitle_language', value.label);
+    const handleChangeSubtitleTrack = (value: ISubtitle) => {
+      STORE.set('subtitle_language', value.lang);
       onSubtitleTrack(value);
       setSubtitleTrack(value);
     };
@@ -301,7 +298,7 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
               <Select
                 zIndex={10}
                 options={subtitleTracks.map(value => ({
-                  label: value.label,
+                  label: value.lang,
                   value: value
                 }))}
                 selectedValue={subtitleTrack}

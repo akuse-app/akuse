@@ -1,149 +1,172 @@
-import { load } from 'cheerio';
-import { IVideo, IAnimeResult } from '@consumet/extensions';
-import axios from 'axios';
+import { ISubtitle, IVideo } from '@consumet/extensions';
 import ProviderCache from './cache';
+import Zoro from '@consumet/extensions/dist/providers/anime/zoro';
+import axios from 'axios';
 
-interface QueryResult {
-  currentPage: number,
-  hasNextPage: boolean,
-  results: IAnimeResult[]
-}
+const cache = new ProviderCache();
+const consumet = new Zoro();
+const apiUrl = 'https://aniwatch-api-ch0nker.vercel.app'
 
-export interface SubtitleTrack {
-  default?: boolean,
-  file: string,
-  kind: string,
-  label: string
+export const getEpisodeUrl = async (
+  animeTitles: string[],
+  index: number,
+  episode: number,
+  dubbed: boolean,
+): Promise<IVideo[] | null> => {
+  console.log(
+    `%c Episode ${episode}, looking for ${consumet.name} source...`,
+    `color: #ffc119`,
+  );
+
+  for (const animeSearch of animeTitles) {
+    const result = await searchEpisodeUrl(
+      animeSearch,
+      index,
+      episode,
+      dubbed
+    );
+    if (result) {
+      return result;
+    }
+  }
+
+  return null;
 };
 
-export default class HiAnime {
-  baseUrl = 'https://hianime.to';
-  ajaxUrl = `${this.baseUrl}/ajax`;
-  aniwatchApiUrls = [
-    'https://aniwatch-api-ch0nker.vercel.app',
-    'https://aniwatch-api-dusky.vercel.app',
-    'https://aniwatch-api-cranci.vercel.app'
-  ];
-  cache = new ProviderCache();
-  search: any;
-  query: (
-    query: string,
-    page: number,
-  ) => Promise<QueryResult | undefined>;
-  getEpisodeUrl: (
-    animeTitles: string[],
-    index: number,
-    episode: number,
-    dubbed: boolean,
-  ) => Promise<IVideo[] | null>;
+/**
+ * Gets the episode url and isM3U8 flag
+ *
+ * @param {*} animeSearch
+ * @param {*} episode anime episode to look for
+ * @param {*} dubbed dubbed version or not
+ * @returns IVideo sources if found, null otherwise
+ */
+async function searchEpisodeUrl(
+  animeSearch: string,
+  index: number,
+  episode: number,
+  dubbed: boolean,
+): Promise<IVideo[] | null> {
+  const cacheId = `${animeSearch}-${episode}`;
 
-  constructor() {
-    this.query = async function(query: string, page: number = 1) {
-      const searchResult = {
-        currentPage: page,
-        hasNextPage: false,
-        results: [] as IAnimeResult[],
-      };
+  if(cache.search[cacheId] !== undefined)
+    return cache.search[cacheId];
 
-      const response = await axios.get(
-        `${this.baseUrl}/search?keyword=${encodeURIComponent(query)}&page=${page}`
-      );
-      const $ = load(response.data);
+  const animeId = await getAnimeId(
+    index,
+    dubbed ? `${animeSearch} (Dub)` : animeSearch,
+    dubbed,
+  );
 
-      searchResult.hasNextPage = $('.page-item').next().length > 1;
-      $('.flw-item').each((i, elm) => {
-        const posterHref = $(elm).find('.film-poster-ahref');
-        const posterImg = $(elm).find('.film-poster-img');
-
-        searchResult.results.push({
-          id: posterHref.attr('data-id') as string,
-          title: posterImg.attr('alt') as string,
-          url: `${this.baseUrl}${posterHref.attr('href')}`,
-          image: posterImg.attr('data-src'),
-        })
-      })
-
-      if(searchResult.results.length === 0)
-        return;
-
-      return searchResult;
-    }
-
-    this.getEpisodeUrl = async function(
-      animeTitles: string[],
-      index: number,
-      episode: number,
-      dubbed: boolean,
-    ) {
-      let animeId: string | undefined;
-
-      for (const animeSearch of animeTitles) {
-        if(this.cache.animeIds[animeSearch]) {
-          animeId = this.cache.animeIds[animeSearch]
-          break;
-        }
-        const animeInfo = await this.query(animeSearch, 1);
-
-        if(animeInfo && animeInfo.results.length > 0) {
-          animeId = (
-            this.cache.animeIds[animeSearch] = animeInfo.results[index].id
-          )
-          break;
-        }
-      }
-
-      if(!animeId)
-        return null;
-
-      const cacheId = `${animeId}-${episode}`;
-      if(this.cache.search[cacheId] !== undefined)
-        return this.cache.search[cacheId];
-
-      let episodes = this.cache.episodes[animeId] ?? [];
-
-      if(episodes.length === 0) {
-        const episodeResponse = await axios.get(
-          `${this.ajaxUrl}/v2/episode/list/${animeId}`
-        );
-
-        const $ = load(episodeResponse.data.html);
-
-        $('.ep-item').each((i, elm) => {
-          const element = $(elm);
-          episodes.push({
-            id: element.attr('data-id') as string,
-            number: parseInt(element.attr('data-number') as string)
-          })
-        });
-
-        this.cache.episodes[animeId] = episodes;
-      }
-
-      const episodeData = episodes.find(value => value.number === episode);
+  if (animeId) {
+    const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
+    console.log('episodeId',animeEpisodeId)
+    if (animeEpisodeId) {
       try {
-        const url = this.aniwatchApiUrls[~~(Math.random() * this.aniwatchApiUrls.length)];
+        const data = await consumet.fetchEpisodeSources(animeEpisodeId);
+        console.log(`%c ${animeSearch}`, `color: #45AD67`);
+        return (
+          cache.search[cacheId] = data.sources.map((value) => {
+              value.tracks = data.subtitles;
+              value.skipEvents = {
+                intro: data.intro,
+                outro: data.outro
+              };
+
+              return value;
+          }) ?? null
+        );
+      } catch {
+        /* consumet fails to get raw servers so this needed. */
+        const episodeId = animeEpisodeId.replace('$episode$', '?ep=').split('$')[0];
+
         const servers = (await axios.get(
-          `${url}/anime/servers?episodeId=${animeId}?ep=${episodeData?.id}`
+          `${apiUrl}/anime/servers?episodeId=${episodeId}`
         )).data;
         const episodeInfo = await axios.get(
-          `${url}/anime/episode-srcs?id=${animeId}?ep=${episodeData?.id}&server=hd-1&category=${dubbed ?
+          `${apiUrl}/anime/episode-srcs?id=${episodeId}&server=hd-1&category=${dubbed ?
             'dub' :
             servers.sub.length > 0 ? 'sub' : 'raw'
           }`
         );
 
         return (
-          this.cache.search[cacheId] = (episodeInfo.data.sources as IVideo[]).map((value) => {
-              value.tracks = episodeInfo.data.tracks;
+          cache.search[cacheId] = (episodeInfo.data.sources as IVideo[]).map((value) => {
+              value.tracks = (episodeInfo.data.tracks as any[]).map(value => ({
+                url: value.file,
+                lang: value.label
+              }));
+
               value.skipEvents = {
                 intro: episodeInfo.data.intro,
                 outro: episodeInfo.data.outro
               };
 
+              console.log(value.tracks)
+
               return value;
           }) ?? null
         )
-      } catch { return null }
+      }
     }
   }
+
+  cache.search[cacheId] = null;
+  console.log(`%c ${animeSearch}`, `color: #E5A639`);
+  return null;
+}
+
+/**
+ * Gets the anime id
+ *
+ * @param {*} animeSearch
+ * @returns anime id if found, otherwise null
+ */
+export const getAnimeId = async (
+  index: number,
+  animeSearch: string,
+  dubbed: boolean,
+): Promise<string | null> => {
+  if(cache.animeIds[animeSearch] !== undefined)
+    return cache.animeIds[animeSearch];
+
+  const data = await consumet.search(animeSearch);
+
+  const filteredResults = data.results.filter((result) =>
+    dubbed
+      ? (result.title as string).includes('(Dub)')
+      : !(result.title as string).includes('(Dub)'),
+  );
+
+  const result = (
+    cache.animeIds[animeSearch] = filteredResults.filter(
+      result =>
+        (result.title.toString()).toLowerCase() === animeSearch.toLowerCase() ||
+        (result.japaneseTitle.toString()).toLowerCase() === animeSearch.toLowerCase()
+    )[index]?.id ?? null
+  );
+
+  console.log(result);
+
+  return result;
+};
+
+/**
+ * Gets the anime episode id
+ *
+ * @param {*} animeId
+ * @param {*} episode
+ * @returns anime episode id if found, otherwise null
+ */
+export const getAnimeEpisodeId = async (
+  animeId: string,
+  episode: number,
+): Promise<string | null> => {
+  if(cache.episodes[animeId] !== undefined)
+    return cache.episodes[animeId]?.find((ep) => ep.number == episode)?.id ?? null;
+
+  const data = await consumet.fetchAnimeInfo(animeId);
+  return (
+    cache.episodes[animeId] = data?.episodes
+  )?.find((ep) => ep.number == episode)?.id ?? null;
 };

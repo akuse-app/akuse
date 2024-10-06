@@ -14,7 +14,7 @@ import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import VideoEpisodesChange from './VideoEpisodesChange';
 import VideoSettings from './VideoSettings';
-import { SubtitleTrack } from '../../../modules/providers/hianime';
+import { ISubtitle } from '@consumet/extensions';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -26,9 +26,9 @@ interface TopControlsProps {
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
   fullscreen: boolean;
-  subtitleTracks?: SubtitleTrack[];
+  subtitleTracks?: ISubtitle[];
   onSubtitleTrack: (
-    track: SubtitleTrack
+    track: ISubtitle
   ) => void;
   onFullScreentoggle: () => void;
   onPiPToggle: () => void;

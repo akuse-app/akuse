@@ -7,10 +7,9 @@ import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
 import { getEpisodeUrl as animedrive } from './animedrive';
-import HiAnime from './hianime';
+import { getEpisodeUrl as hianime } from './hianime';
 
 const STORE = new Store();
-const hianime = new HiAnime();
 
 /**
  * Gets the episode url and isM3U8 flag, with stored language and dubbed
@@ -34,17 +33,16 @@ export const getUniversalEpisodeUrl = async (
   console.log(lang + ' ' + dubbed + ' ' + customTitle?.title);
 
   switch (lang) {
-    case 'hianime': {
-      const data = await hianime.getEpisodeUrl(
+    case 'US_ALT': {
+      const data = await hianime(
         animeTitles,
         customTitle ? customTitle.index : 0,
         episode,
-        dubbed,
+        dubbed
       );
 
-      return data ? data[0] : null;
+      return data ? getDefaultQualityVideo(data) : null;
     }
-    case 'gogo':
     case 'US': {
       const data = await gogoanime(
         animeTitles,
@@ -55,7 +53,6 @@ export const getUniversalEpisodeUrl = async (
       );
       return data ? getDefaultQualityVideo(data) : null;
     }
-    case 'unity':
     case 'IT': {
       const data = await animeunity(
         animeTitles,
@@ -66,7 +63,6 @@ export const getUniversalEpisodeUrl = async (
       );
       return data ? getDefaultQualityVideo(data) : null;
     }
-    case 'drive':
     case 'HU': {
       const data = await animedrive(
         animeTitles,
