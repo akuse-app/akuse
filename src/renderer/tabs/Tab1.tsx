@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
@@ -25,7 +25,7 @@ const Tab1: React.FC<Tab1Props> = ({
   trendingAnime,
   mostPopularAnime,
   nextReleasesAnime,
-  recommendedAnime
+  recommendedAnime,
 }) => {
   // const [fetchedRecommended, setFetchedRecommended] = useState<boolean>(false);
   const hasHistory = useContext(AuthContext);
@@ -35,7 +35,6 @@ const Tab1: React.FC<Tab1Props> = ({
                           recommendedAnime[recommendedAnime.length - 1] || undefined;
   let recommendedTitle = recommendedFrom &&
                            getTitle(recommendedFrom.media);
-
   // const logged = store.get('logged') as boolean;
 
   return (

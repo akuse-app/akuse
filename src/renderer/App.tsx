@@ -72,12 +72,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (tab2Click) {
-      fetchTab2AnimeData();
-    }
-  }, [tab2Click, viewerId]);
-
-  useEffect(() => {
     if (Math.floor(Math.random() * 8) + 1 === 1 && !showUpdateModal) {
       setShowDonateModal(true);
     }
@@ -161,16 +155,18 @@ export default function App() {
         }
       }
 
+      const autoUpdateListener = async () => {
+        setShowDonateModal(false);
+        setShowUpdateModal(true);
+      }
+
       ipcRenderer.on('update-section', updateSectionListener);
+      ipcRenderer.on('auto-update', autoUpdateListener);
 
       return () => {
           ipcRenderer.removeListener('update-section', updateSectionListener);
+          ipcRenderer.removeListener('auto-update', autoUpdateListener);
       };
-  });
-
-  ipcRenderer.on('auto-update', async () => {
-    setShowDonateModal(false);
-    setShowUpdateModal(true);
   });
 
   const fetchTab1AnimeData = async () => {
@@ -255,7 +251,9 @@ export default function App() {
                       // pausedListAnime={pausedListAnime}
                       // repeatingListAnime={RepeatingListAnime}
                       clicked={() => {
-                        !tab2Click && setTab2Click(true);
+                        if(tab2Click) return
+                        setTab2Click(true);
+                        fetchTab2AnimeData();
                       }}
                     />
                   }
@@ -268,7 +266,9 @@ export default function App() {
                     <Tab2
                       currentListAnime={currentListAnime}
                       clicked={() => {
-                        !tab2Click && setTab2Click(true);
+                        if(tab2Click) return
+                        setTab2Click(true);
+                        fetchTab2AnimeData();
                       }}
                     />
                   }
