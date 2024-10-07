@@ -573,10 +573,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleMouseMove = () => {
-    const current = Date.now() / 1000;
-    if (current - lastInteract < 0.75) return;
-    setLastInteract(current);
-    setShowPauseInfo(false);
+    if(!showControls) {
+      setShowPauseInfo(false);
+      setShowControls(true);
+      setShowCursor(true);
+    }
 
     debounce('pauseInfo', () => {
       try {
@@ -587,11 +588,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         console.log(error);
       }
     }, 7500);
-
-    setShowControls(true);
-    setShowCursor(true);
-
-    setShowPauseInfo(false);
 
     debounce('pauseControl', () => {
       !isDropdownOpen && setShowControls(false);
