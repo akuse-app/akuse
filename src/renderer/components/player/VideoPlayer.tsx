@@ -36,10 +36,16 @@ import { faFastForward } from '@fortawesome/free-solid-svg-icons';
 const STORE = new Store();
 const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
-var timer: any;
-var pauseInfoTimer: any;
-var pauseControlTimer: any;
-var skipEventTimer: any;
+const debounces: { [key: string]: NodeJS.Timeout } = {};
+
+const debounce = (id: string, func: () => void, delay: number) => {
+  const timeoutId = debounces[id];
+  if (timeoutId) clearTimeout(timeoutId);
+  debounces[id] = setTimeout(() => {
+    func();
+    delete debounces[id];
+  }, delay);
+};
 
 interface VideoPlayerProps {
   video: IVideo | null;
@@ -502,8 +508,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       if(currentEvent) {
         const eventName = AniSkip.getEventName(currentEvent)
         if(skipEvent !== `Skip ${eventName}`) {
-          clearTimeout(skipEventTimer);
-          skipEventTimer = setTimeout(() => {
+          debounce('skip', () => {
             setShowSkipEvent(false);
             setPreviousSkipEvent(`Skip ${eventName}`);
           }, 5000)
@@ -551,16 +556,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleVideoPause = () => {
-    clearTimeout(pauseInfoTimer);
-    clearTimeout(pauseControlTimer);
-
     setShowPauseInfo(false);
     setShowControls(true);
-    pauseInfoTimer = setTimeout(() => {
+    debounce('pauseInfo', () => {
       !isSettingsShowed && !isDropdownOpen && setShowPauseInfo(true); // first one maybe useless
     }, 7500);
-
-    pauseControlTimer = setTimeout(() => {
+    debounce('pauseControl', () => {
       !isDropdownOpen && setShowControls(false);
     }, 2000);
   };
@@ -575,13 +576,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const current = Date.now() / 1000;
     if (current - lastInteract < 0.75) return;
     setLastInteract(current);
-
-    clearTimeout(pauseInfoTimer);
-    clearTimeout(pauseControlTimer);
-
     setShowPauseInfo(false);
 
-    pauseInfoTimer = setTimeout(() => {
+    debounce('pauseInfo', () => {
       try {
         if (videoRef.current && videoRef.current.paused && !isDropdownOpen) {
           setShowPauseInfo(true);
@@ -591,13 +588,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     }, 7500);
 
-    clearTimeout(timer);
     setShowControls(true);
     setShowCursor(true);
 
     setShowPauseInfo(false);
 
-    timer = setTimeout(() => {
+    debounce('pauseControl', () => {
       !isDropdownOpen && setShowControls(false);
       !isDropdownOpen && setShowCursor(false);
     }, 2000);
@@ -612,9 +608,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         return;
 
       const eventName = AniSkip.getEventName(currentEvent)
-      clearTimeout(skipEventTimer);
       setShowSkipEvent(true);
-      skipEventTimer = setTimeout(() => {
+      debounce('skip', () => {
         setShowSkipEvent(false);
         setPreviousSkipEvent(`Skip ${eventName}`);
       }, 5000)
