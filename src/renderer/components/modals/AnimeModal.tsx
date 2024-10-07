@@ -15,7 +15,6 @@ import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { IpcRendererEvent } from 'electron';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
@@ -43,11 +42,8 @@ import {
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
-import { getAnimeHistory, getLastWatchedEpisode, setAnimeHistory } from '../../../modules/history';
-import { Media, MediaFormat, MediaTypes, RelationTypes } from '../../../types/anilistGraphQLTypes';
-import AnimeSection from '../AnimeSection';
-import { Dots } from 'react-activity';
-import AnimeEntry from '../AnimeEntry';
+import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
+import { MediaFormat, MediaTypes, RelationTypes } from '../../../types/anilistGraphQLTypes';
 import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
 import AnimeSections from '../AnimeSections';
 
