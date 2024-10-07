@@ -120,8 +120,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     const rect = timeline.getBoundingClientRect();
     const offsetX = event.clientX - rect.left;
 
-    console.log(event.clientX);
-
     const percentage = offsetX / timeline.clientWidth;
 
     let newTime = percentage * videoRef.current.duration;
@@ -208,6 +206,10 @@ const BottomControls: React.FC<BottomControlsProps> = ({
               style={getSkipEventBarStyle(event)}
             ></div>
           ))}
+          <div
+            className="video-progress-bar"
+            style={{ width: progressBarWidth }}
+          ></div>
           {/* <div className="preview-thumbnail">
             <img src={previewThumbnailSrc} alt="preview" />
             <div className="time">
