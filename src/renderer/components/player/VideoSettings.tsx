@@ -37,6 +37,8 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
   ({ show, onShow, videoRef, hls, onChangeEpisode, onSubtitleTrack, subtitleTracks }, ref) => {
     const logged = useContext(AuthContext);
 
+    subtitleTracks = subtitleTracks?.filter(value => value.lang);
+
     const [hlsData, setHlsData] = useState<Hls>();
     const [updateProgress, setUpdateProgress] = useState<boolean>(
       STORE.get('update_progress') as boolean,
