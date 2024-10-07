@@ -138,15 +138,13 @@ export const getAnimeId = async (
       : !(result.title as string).includes('(Dub)'),
   );
 
-  const normalizeTitle = (text: string) => text.replaceAll(/[^\w]/g, '').toLowerCase();
-
-  const normalizedSearch = normalizeTitle(animeSearch);
+  const normalizedSearch = animeSearch.toLowerCase();
 
   const result = (
     cache.animeIds[animeSearch] = filteredResults.filter(
       result =>
-        normalizeTitle(result.title.toString()) === normalizedSearch ||
-        normalizeTitle(result.japaneseTitle.toString()) === normalizedSearch
+        (result.title.toString()).toLowerCase() === normalizedSearch ||
+        (result.japaneseTitle.toString()).toLowerCase() === normalizedSearch
     )[index]?.id ?? null
   );
 
