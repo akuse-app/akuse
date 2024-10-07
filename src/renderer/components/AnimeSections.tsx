@@ -1,7 +1,7 @@
 import './styles/AnimeSection.css';
 
 import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeEntry from './AnimeEntry';
@@ -20,6 +20,14 @@ interface AnimeSectionsProps {
   onClick?: () => any;
 }
 
+const filterOptions = (options: Option[]) => {
+  return options.filter(option => option.value.length > 0);
+};
+
+const getSelectedOption = (options: Option[], selectedLabel: string) => {
+  return options.find(option => option.label === selectedLabel) || options[0];
+};
+
 const AnimeSections: React.FC<AnimeSectionsProps> = ({
   options,
   id,
@@ -30,12 +38,19 @@ const AnimeSections: React.FC<AnimeSectionsProps> = ({
   const animeListRef = useRef<HTMLDivElement>(null);
   const [enableButtons, setEnableButtons] = useState<boolean>(false);
   const [showButtons, setShowButtons] = useState<boolean>(false);
-  // const [selectedSection, setSelectedAnime] = useState<ListAnimeData>();
-  options = options.filter((value) => value.value.length > 0);
-  const selected = options.find((value) => value.label === selectedLabel) || options[0];
-  const [animeData, setAnimeData] = useState<ListAnimeData[]>(
-    selected.value
+
+  const filteredOptions = filterOptions(options);
+  const selected = useMemo(
+    () => getSelectedOption(filteredOptions, selectedLabel),
+    [filteredOptions, selectedLabel]
   );
+  const [animeData, setAnimeData] = useState<ListAnimeData[]>(selected?.value || []);
+
+  useEffect(() => {
+    if (selected?.value) {
+      setAnimeData(selected.value);
+    }
+  }, [selected]);
 
   const hideButtons = () => {
     if (animeListWrapperRef.current && animeListRef.current) {
@@ -76,7 +91,7 @@ const AnimeSections: React.FC<AnimeSectionsProps> = ({
   return (
     <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={`${id.toLowerCase().replace(' ', '-')}-section`}>
       <Select
-        options={options}
+        options={filteredOptions}
         selectedValue={animeData}
         onChange={handleSectionSelect}
         className={`${id}-select`}
