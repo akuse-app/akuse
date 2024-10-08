@@ -38,13 +38,18 @@
 
 <br/>
 
-# Other info
-<details>
-  <summary><h2>🗺 Languages</h2></summary>
+# Languages
 
-  - Italian
-  - English
-</details>
+| Source     | Languages                                                        | Sub  | Dub | In-App name |
+| ---------- | ---------------------------------------------------------------- | ---  | ----| ---------   |
+| Gogoanime  | English                                                          | ✅   | ✅   | 🇺🇸 English     |
+| HiAnime    | English, Arabic, French, German, Portuguese, Russian, Spanish... | ✅   | ❌   | 🌍 Universal   |
+| AnimeUnity | Italian                                                          | ✅   | ✅   | 🇮🇹 Italian     |
+| AnimeDrive | Hungarian                                                        | ❌   | ❌   | 🇭🇺 Hungarian   |
+
+> Note: HiAnime doesn't always provide all the languages!
+
+# Other info
 
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
