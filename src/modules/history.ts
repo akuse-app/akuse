@@ -3,7 +3,6 @@ import Store from "electron-store";
 
 const store = new Store();
 var history = (store.get('history') || { entries: {} }) as History;
-
 /**
  * Get the history entry for the anime's id.
  *
@@ -12,7 +11,7 @@ var history = (store.get('history') || { entries: {} }) as History;
  */
 export const getAnimeHistory = (
   animeId: number
-): AnimeHistoryEntry | undefined => history.entries[animeId]
+): AnimeHistoryEntry | undefined => history.entries[animeId];
 
 /**
  * Get all entries from local history.

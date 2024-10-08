@@ -94,6 +94,7 @@ body {
 }
 
 img {
+  display: block;
   font-style: italic;
   user-select: none;
   -moz-user-select: none;

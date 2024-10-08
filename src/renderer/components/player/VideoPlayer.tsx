@@ -1,7 +1,7 @@
 import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
-import { IVideo } from '@consumet/extensions';
+import { ISubtitle, IVideo } from '@consumet/extensions';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
 import Hls from 'hls.js';
@@ -17,7 +17,6 @@ import {
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   getAvailableEpisodes,
-  getMediaListId,
   getRandomDiscordPhrase,
   getSequel,
 } from '../../../modules/utils';
@@ -28,17 +27,25 @@ import MidControls from './MidControls';
 import TopControls from './TopControls';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import AniSkip from '../../../modules/aniskip';
-import { SkipEvent } from '../../../types/aniskipTypes';
-import { getEnvironmentData } from 'node:worker_threads';
+import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
 import axios from 'axios';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
+import { ButtonMain } from '../Buttons';
+import { faFastForward } from '@fortawesome/free-solid-svg-icons';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
 const videoPlayerRoot = document.getElementById('video-player-root');
-var timer: any;
-var pauseInfoTimer: any;
-var pauseControlTimer: any;
+const debounces: { [key: string]: NodeJS.Timeout } = {};
+
+const debounce = (id: string, func: () => void, delay: number) => {
+  const timeoutId = debounces[id];
+  if (timeoutId) clearTimeout(timeoutId);
+  debounces[id] = setTimeout(() => {
+    func();
+    delete debounces[id];
+  }, delay);
+};
 
 interface VideoPlayerProps {
   video: IVideo | null;
@@ -117,7 +124,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [currentTime, setCurrentTime] = useState<number>();
   const [duration, setDuration] = useState<number>();
   const [buffered, setBuffered] = useState<TimeRanges>();
+  // skip events
   const [skipEvents, setSkipEvents] = useState<SkipEvent[]>();
+  const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
+  const [skipEvent, setSkipEvent] = useState<string>('Skip Intro ');
+  const [previousSkipEvent, setPreviousSkipEvent] = useState<string>('');
+  const [subtitleTracks, setSubtitleTracks] = useState<ISubtitle[] | undefined>();
 
   // keydown handlers
   const handleVideoPlayerKeydown = async (
@@ -207,11 +219,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     const video = videoRef.current;
-
     const handleSeeked = () => {
       console.log('seeked');
       onChangeLoading(false);
       handleHistoryUpdate();
+      setSkipEvent(skipEvent + ' '); /* little hacky but it'll do for now. */
+      setPreviousSkipEvent('');
+      handleSkipEvents();
       if (!video?.paused) setPlaying(true);
     };
 
@@ -236,16 +250,61 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onChangeLoading(loading);
   }, [loading]);
 
-  const getSkipEvents = async (episode: number) => {
+  const getSkipEvents = async (episode: number, video: IVideo) => {
     const duration = videoRef.current?.duration;
-    const skipEvent = await AniSkip.getSkipEvents(listAnime.media.idMal as number, episode ?? episodeNumber ?? animeEpisodeNumber, Number.isNaN(duration) ? 0 : duration);
 
-    setSkipEvents(skipEvent);
+    if(video && video.skipEvents) {
+      const skipEvent = video.skipEvents as {
+        intro?: {
+          start: number,
+          end: number
+        },
+        outro?: {
+          start: number,
+          end: number
+        }
+      };
+      const result: SkipEvent[] = [];
+
+      if(skipEvent.intro)
+        result.push({
+          episodeLength: duration ?? 0,
+          interval: {
+            startTime: skipEvent.intro.start,
+            endTime: skipEvent.intro.end
+          },
+          skipId: 'NON-API',
+          skipType: 'op'
+        })
+
+        if(skipEvent.outro)
+          result.push({
+            episodeLength: duration ?? 0,
+            interval: {
+              startTime: skipEvent.outro.start,
+              endTime: skipEvent.outro.end
+            },
+            skipId: 'NON-API',
+            skipType: 'ed'
+          })
+
+
+      setSkipEvents(result);
+      return
+    }
+
+    setSkipEvents(
+      await AniSkip.getSkipEvents(
+        listAnime.media.idMal as number,
+        episode ?? episodeNumber ?? animeEpisodeNumber,
+        Number.isNaN(duration) ? 0 : duration
+      )
+    );
   }
 
   useEffect(() => {
     if (video !== null) {
-      playHlsVideo(video.url);
+      playHlsVideo(video);
 
       // resume from tracked progress
       const animeId = (listAnime.media.id ||
@@ -274,16 +333,48 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       setShowNextEpisodeButton(canNextEpisode(animeEpisodeNumber));
       setShowPreviousEpisodeButton(canPreviousEpisode(animeEpisodeNumber));
-      getSkipEvents(animeEpisodeNumber);
+      getSkipEvents(animeEpisodeNumber, video);
     }
   }, [video, listAnime]);
+  const setSubtitleTrack = (subtitleTrack: ISubtitle) => {
+    if(!videoRef.current)
+      return;
 
-  const playHlsVideo = (url: string) => {
+    let track;
+    if((track = videoRef.current.querySelector('track'))) {
+      track.track.mode = 'disabled';
+      track.remove();
+    }
+
+    track = document.createElement("track");
+    track.setAttribute("kind", "captions");
+    track.setAttribute("src", subtitleTrack.url);
+    videoRef.current.appendChild(track);
+
+    track.track.mode = "showing";
+  }
+  const playHlsVideo = (video: IVideo) => {
+    const url = video.url;
     try {
-      console.log(url);
       if (Hls.isSupported() && videoRef.current) {
         var hls = new Hls();
         hls.loadSource(url);
+        if(video.tracks) {
+          const tracks = video.tracks as ISubtitle[];
+          setSubtitleTracks(tracks);
+
+          videoRef.current.addEventListener("loadeddata", () => {
+            if(!videoRef.current)
+              return;
+
+            const lastUsed = STORE.get('subtitle_language') as string;
+
+            let currentTrack = tracks.find(value =>
+              value.lang.substring(0, lastUsed.length) === lastUsed as string) ?? tracks[0];
+
+            setSubtitleTrack(currentTrack);
+          });
+        };
         hls.attachMedia(videoRef.current);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           if (videoRef.current) {
@@ -302,11 +393,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const video = videoRef.current;
     const cTime = video?.currentTime;
     if (cTime === undefined) return;
+
     const animeId = (listAnime.media.id ||
       (listAnime.media.mediaListEntry &&
         listAnime.media.mediaListEntry.id)) as number;
     if (animeId === null || animeId === undefined || episodeNumber === 0) return;
-    let entry = getAnimeHistory(animeId) ?? {
+
+    const entry = getAnimeHistory(animeId) ?? {
       history: {},
       data: listAnime,
     };
@@ -376,37 +469,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const updateCurrentProgress = (completed: boolean = true) => {
     const status = listAnime.media.mediaListEntry?.status;
     if (STORE.get('logged') as boolean) {
-      if(!completed) {
-        updateAnimeFromList(
-          listAnime.media.id,
-          'PAUSED',
-          undefined,
-          episodeNumber,
-        );
-        handleHistoryUpdate();
-      } else {
-        switch (status) {
-          case 'CURRENT': {
-            updateAnimeProgress(listAnime.media.id!, episodeNumber);
-            break;
-          }
-          case 'REPEATING':
-          case 'COMPLETED': {
-            updateAnimeFromList(
-              listAnime.media.id,
-              'REWATCHING',
-              undefined,
-              episodeNumber,
-            );
-          }
-          default: {
-            updateAnimeFromList(
-              listAnime.media.id,
-              'CURRENT',
-              undefined,
-              episodeNumber,
-            );
-          }
+      switch (status) {
+        case 'CURRENT': {
+          updateAnimeProgress(listAnime.media.id!, episodeNumber);
+          break;
+        }
+        case 'REPEATING':
+        case 'COMPLETED': {
+          updateAnimeFromList(
+            listAnime.media.id,
+            'REWATCHING',
+            undefined,
+            episodeNumber,
+          );
+        }
+        default: {
+          updateAnimeFromList(
+            listAnime.media.id,
+            'CURRENT',
+            undefined,
+            episodeNumber,
+          );
         }
       }
     }
@@ -414,6 +497,30 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     setProgressUpdated(true);
     onLocalProgressChange(completed ? episodeNumber : episodeNumber - 1);
   };
+
+  const handleSkipEvents = () => {
+    const video = videoRef.current;
+    if(!video || previousSkipEvent === skipEvent) return;
+
+    if(skipEvents && skipEvents.length > 0) {
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
+
+      if(currentEvent) {
+        const eventName = AniSkip.getEventName(currentEvent)
+        if(skipEvent !== `Skip ${eventName}`) {
+          debounce('skip', () => {
+            setShowSkipEvent(false);
+            setPreviousSkipEvent(`Skip ${eventName}`);
+          }, 5000)
+        }
+
+        setShowSkipEvent(true);
+        setSkipEvent(`Skip ${eventName}`);
+      } else {
+        setShowSkipEvent(false);
+      }
+    }
+  }
 
   const handleTimeUpdate = () => {
     if (!videoRef.current?.paused) {
@@ -423,6 +530,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const cTime = videoRef.current?.currentTime;
     const dTime = videoRef.current?.duration;
+
+    handleSkipEvents();
 
     try {
       if (cTime && dTime) {
@@ -447,16 +556,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleVideoPause = () => {
-    clearTimeout(pauseInfoTimer);
-    clearTimeout(pauseControlTimer);
-
     setShowPauseInfo(false);
     setShowControls(true);
-    pauseInfoTimer = setTimeout(() => {
+    debounce('pauseInfo', () => {
       !isSettingsShowed && !isDropdownOpen && setShowPauseInfo(true); // first one maybe useless
     }, 7500);
-
-    pauseControlTimer = setTimeout(() => {
+    debounce('pauseControl', () => {
       !isDropdownOpen && setShowControls(false);
     }, 2000);
   };
@@ -468,15 +573,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleMouseMove = () => {
-    const current = Date.now() / 1000;
-    if (current - lastInteract < 0.75) return;
-    setLastInteract(current);
-    clearTimeout(pauseInfoTimer);
-    clearTimeout(pauseControlTimer);
+    if(!showControls) {
+      setShowPauseInfo(false);
+      setShowControls(true);
+      setShowCursor(true);
+    }
 
-    setShowPauseInfo(false);
-
-    pauseInfoTimer = setTimeout(() => {
+    debounce('pauseInfo', () => {
       try {
         if (videoRef.current && videoRef.current.paused && !isDropdownOpen) {
           setShowPauseInfo(true);
@@ -486,16 +589,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     }, 7500);
 
-    clearTimeout(timer);
-    setShowControls(true);
-    setShowCursor(true);
-
-    setShowPauseInfo(false);
-
-    timer = setTimeout(() => {
+    debounce('pauseControl', () => {
       !isDropdownOpen && setShowControls(false);
       !isDropdownOpen && setShowCursor(false);
     }, 2000);
+
+    const video = videoRef.current
+    if(!video) return;
+
+    if(skipEvents && skipEvents.length > 0) {
+      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
+
+      if(!currentEvent)
+        return;
+
+      const eventName = AniSkip.getEventName(currentEvent)
+      setShowSkipEvent(true);
+      debounce('skip', () => {
+        setShowSkipEvent(false);
+        setPreviousSkipEvent(`Skip ${eventName}`);
+      }, 5000)
+    }
   };
 
   const handleExit = async () => {
@@ -624,7 +738,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const setData = (value: IVideo) => {
       setVideoData(value);
       setEpisodeNumber(episodeToPlay);
-      getSkipEvents(episodeToPlay);
+      getSkipEvents(episodeToPlay, value);
       setEpisodeTitle(
         episodes
           ? (episodes[episodeToPlay].title?.en ?? `Episode ${episodeToPlay}`)
@@ -633,7 +747,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       setEpisodeDescription(
         episodes ? (episodes[episodeToPlay].summary ?? '') : '',
       );
-      playHlsVideo(value.url);
+      playHlsVideo(value);
       // loadSource(value.url, value.isM3U8 ?? false);
       setShowNextEpisodeButton(canNextEpisode(episodeToPlay));
       setShowPreviousEpisodeButton(canPreviousEpisode(episodeToPlay));
@@ -684,6 +798,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return hasNext;
   };
 
+  const handleSkipEvent = () => {
+    const video = videoRef.current;
+    if(!video || !skipEvents) return;
+    const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
+    if(!currentEvent) return;
+    if(currentEvent.skipType === SkipEventTypes.Outro) {
+      const duration = video.duration - currentEvent.interval.endTime;
+      console.log(duration)
+      if(STORE.get('autoplay_next') && duration < 10) {
+        canNextEpisode(episodeNumber) && changeEpisode(episodeNumber + 1);
+      } else
+        video.currentTime = currentEvent.interval.endTime;
+    } else
+      video.currentTime = currentEvent.interval.endTime;
+  }
+
   return ReactDOM.createPortal(
     show && (
       <>
@@ -703,6 +833,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <h1 id="pause-info-episode-description">{episodeDescription}</h1>
             </div>
           </div>
+          {showSkipEvent && !(/ $/).test(skipEvent) && (
+            <div
+              className="skip-button"
+              style={{
+                zIndex: '1000',
+                marginRight: '10px',
+                marginBottom: '20px'
+              }}
+            >
+              <ButtonMain
+                text={skipEvent}
+                icon={faFastForward}
+                tint="light"
+                onClick={handleSkipEvent}
+              />
+            </div>
+          )}
           <div
             className={`shadow-controls ${showCursor ? 'show-cursor' : ''}`}
             onClick={togglePlayingWithoutPropagation}
@@ -715,9 +862,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               episodesInfo={episodeList}
               episodeNumber={episodeNumber}
               episodeTitle={episodeTitle}
+              subtitleTracks={subtitleTracks}
               showNextEpisodeButton={showNextEpisodeButton}
               showPreviousEpisodeButton={showPreviousEpisodeButton}
               fullscreen={fullscreen}
+              onSubtitleTrack={setSubtitleTrack}
               onFullScreentoggle={toggleFullScreen}
               onPiPToggle={togglePiP}
               onChangeEpisode={changeEpisode}

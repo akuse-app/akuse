@@ -38,13 +38,18 @@
 
 <br/>
 
-# Other info
-<details>
-  <summary><h2>🗺 Languages</h2></summary>
+# Languages
 
-  - Italian
-  - English
-</details>
+| Source     | Languages                                                        | Sub  | Dub | In-App name |
+| ---------- | ---------------------------------------------------------------- | ---  | ----| ---------   |
+| Gogoanime  | English                                                          | ✅   | ✅   | 🇺🇸 English     |
+| HiAnime    | English, Arabic, French, German, Portuguese, Russian, Spanish... | ✅   | ❌   | 🌍 Universal   |
+| AnimeUnity | Italian                                                          | ✅   | ✅   | 🇮🇹 Italian     |
+| AnimeDrive | Hungarian                                                        | ❌   | ❌   | 🇭🇺 Hungarian   |
+
+> Note: HiAnime doesn't always provide all the languages!
+
+# Other info
 
 <details>
   <summary><h2>⚙️ Running locally for development</h2></summary>
@@ -151,7 +156,7 @@
 - [Consumet API](https://github.com/consumet/consumet.ts): used to fetch episodes links
 - [This API](https://api.ani.zip/mappings?anilist_id=21): used to fetch episodes info and thumbnails
 - [AniSkip API](https://api.aniskip.com/api-docs#/skip-times/SkipTimesControllerV2_getSkipTimes): used to fetch episode intros & outros.
-
+- [Aniwatch API](https://github.com/ghoshRitesh12/aniwatch-api): used to get hianime episode sources if consumet fails to.
 <br/>
 
 # Legal

@@ -1,3 +1,5 @@
+import internal from "node:stream";
+
 export type MediaTitle = {
   romaji?: string;
   english?: string;
@@ -94,7 +96,13 @@ export const RelationTypes = {
   Other: 'OTHER',
   Prequel: 'PREQUEL',
   Sequel: 'SEQUEL',
-  Character: 'CHARACTER'
+  Character: 'CHARACTER',
+  SideStory: 'SIDE_STORY',
+  Parent: 'PARENT',
+  Adaptation: 'ADAPTATION',
+  SpinOff: 'SPIN_OFF',
+  Compilation: 'COMPILATION',
+  Contains: 'CONTAINS'
 };
 
 export type RelationType = typeof RelationTypes[keyof typeof RelationTypes];
@@ -105,9 +113,18 @@ export type Relation = {
   node: Media;
 };
 
-export type Relations = {
+export type RelationConnection = {
   edges: Relation[];
 };
+
+export type Recommend = {
+  id: number;
+  mediaRecommendation: Media;
+};
+
+export type RecommendConnection = {
+  nodes: Recommend[];
+}
 
 export const MediaTypes = {
   Anime: 'ANIME',
@@ -143,5 +160,6 @@ export type Media = {
   mediaListEntry?: MediaList;
   siteUrl?: string;
   trailer?: MediaTrailer;
-  relations?: Relations;
+  relations?: RelationConnection;
+  recommendations?: RecommendConnection;
 };

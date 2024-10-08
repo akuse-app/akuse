@@ -145,6 +145,16 @@
   /* border-radius: var(--border-radius) 0 0 var(--border-radius); */
 }
 
+.progress-area .video-event-bar {
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  margin: 0;
+  z-index: 101;
+  background: rgba(214, 255, 64, 0.75);
+  /* border-radius: var(--border-radius) 0 0 var(--border-radius); */
+}
+
 .progress-area .video-progress-bar {
   width: 0%;
   height: 100%;

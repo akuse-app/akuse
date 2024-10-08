@@ -20,7 +20,16 @@ section .anime-list {
   z-index: 2;
 }
 
-section#related-section {
+section div.recommended-select {
+  width: 160px
+}
+
+section div.week-select {
+  width: 160px
+}
+
+/* section#related-section, */
+section#recommended-section {
   display: flex;
   overflow-x: hidden;
   overflow-y: hidden;

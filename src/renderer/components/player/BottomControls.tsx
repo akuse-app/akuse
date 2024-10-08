@@ -2,11 +2,9 @@ import Store from 'electron-store';
 import { useEffect, useRef, useState } from 'react';
 
 import { formatTime } from '../../../modules/utils';
-import { faFastForward, faPlus, faRotateRight } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { ButtonMain } from '../Buttons';
-import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
-import AniSkip from '../../../modules/aniskip';
-
+import { SkipEvent } from '../../../types/aniskipTypes';
 const STORE = new Store();
 
 interface BottomControlsProps {
@@ -49,9 +47,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   const [showDuration, setShowDuration] = useState<boolean>(
     STORE.get('show_duration') as boolean,
   );
-  const [showSkipEvent, setShowSkipEvent] = useState<boolean>(false);
-  const [skipEvent, setSkipEvent] = useState<string>('Skip Intro');
-
   useEffect(() => {
     setVideoCurrentTime(formatTime(videoRef.current?.currentTime ?? 0));
     setVideoDuration(formatTime(videoRef.current?.duration ?? 0));
@@ -68,19 +63,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     if (videoRef.current && buffered && buffered.length > 0) {
       setBufferedBarWidth(`${(buffered.end(0) / (duration ?? 0)) * 100}%`);
     }
-
-    if(skipEvents && skipEvents.length > 0) {
-      const currentEvent = AniSkip.getCurrentEvent(currentTime ?? 0, skipEvents);
-
-      if(currentEvent) {
-        const eventName = AniSkip.getEventName(currentEvent);
-        setShowSkipEvent(true);
-        setSkipEvent(`Skip ${eventName}`);
-      } else {
-        setShowSkipEvent(false);
-      }
-    }
-
   }, [currentTime, duration, buffered]);
 
   useEffect(() => {
@@ -97,11 +79,11 @@ const BottomControls: React.FC<BottomControlsProps> = ({
   };
 
   // Funzione per calcolare il tempo in base alla posizione sull'asse X
-  const calculateProgressTime = (event: any) => {
+  const calculateProgressTime = (event: React.MouseEvent) => {
     if (!videoTimelineRef.current || !duration) return;
-
     let timelineWidth = videoTimelineRef.current.clientWidth;
-    const newOffsetX = event.nativeEvent.offsetX;
+    const newOffsetX = event.movementX > event.nativeEvent.offsetX ? event.movementX : event.nativeEvent.offsetX;
+
     let newPercent = Math.floor((newOffsetX / timelineWidth) * duration);
     if (newPercent < 0) newPercent = 0;
     if (newPercent > duration) newPercent = duration;
@@ -116,12 +98,28 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     setPercent(newPercent);
   };
 
+  const getTimePercent = (time: number) => {
+    if(!videoRef.current) return 0;
+    const video = videoRef.current;
+    return (time / video.duration) * 100;
+  }
+
+  const getSkipEventBarStyle = (event: SkipEvent) => {
+    const interval = event.interval;
+
+    return {
+      left: `${getTimePercent(interval.startTime)}%`,
+      width: `${getTimePercent(interval.endTime - interval.startTime)}%`
+    }
+  }
+
   const dragProgressBar = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!videoRef.current) return;
 
     const timeline = event.currentTarget;
     const rect = timeline.getBoundingClientRect();
     const offsetX = event.clientX - rect.left;
+
     const percentage = offsetX / timeline.clientWidth;
 
     let newTime = percentage * videoRef.current.duration;
@@ -140,12 +138,7 @@ const BottomControls: React.FC<BottomControlsProps> = ({
     if (!videoRef.current) return;
 
     try {
-      const event = AniSkip.getCurrentEvent(videoRef.current.currentTime, skipEvents as SkipEvent[]);
-      if(event)
-        videoRef.current.currentTime = event?.interval.endTime;
-      else
-        videoRef.current.currentTime += introSkip;
-
+      videoRef.current.currentTime += introSkip;
     } catch (error) {
       console.log(error)
     }
@@ -157,18 +150,20 @@ const BottomControls: React.FC<BottomControlsProps> = ({
       onClick={onClick}
       onDoubleClick={onDblClick}
     >
-      {showSkipEvent && skipEvents && skipEvents.length > 0 && (
+      {/* {showSkipEvent && skipEvents && skipEvents.length > 0 && (
+      <div
+        className="skip-button"
+        style={{opacity: '1', zIndex: '900'}}
+      >
+        <ButtonMain
+          text={skipEvent}
+          icon={faFastForward}
+          tint="light"
+          onClick={handleSkipIntro}
+        />
+      </div>
+      )} */}
       <div className="skip-button">
-      <ButtonMain
-        text={skipEvent}
-        icon={faFastForward}
-        tint="light"
-        onClick={handleSkipIntro}
-      />
-    </div>
-      )}
-      {!showSkipEvent && (
-        <div className="skip-button">
         <ButtonMain
           text={introSkip}
           icon={faPlus}
@@ -176,12 +171,22 @@ const BottomControls: React.FC<BottomControlsProps> = ({
           onClick={handleSkipIntro}
         />
       </div>
-      )}
       <p className="current-time">{videoCurrentTime}</p>
       <div
         className="video-timeline"
         onClick={dragProgressBar}
         onMouseMove={(event) => {
+          const target = event.target as HTMLDivElement;
+          if(target.className === 'video-event-bar') {
+            const parentElement = target.parentElement as HTMLDivElement;
+            const parentDimensions = parentElement.getBoundingClientRect();
+            const eventDimensions = target.getBoundingClientRect();
+
+            /* lol this is a bit hacky replacing movementX but it works */
+            event.movementX = Math.floor(eventDimensions.x - parentDimensions.x) + event.nativeEvent.offsetX;
+            event.clientX = Math.floor(eventDimensions.x + event.nativeEvent.offsetX)
+            event.currentTarget = parentElement as HTMLDivElement;
+          }
           calculateProgressTime(event);
           if (!isMouseDown) return;
           dragProgressBar(event);
@@ -195,6 +200,16 @@ const BottomControls: React.FC<BottomControlsProps> = ({
             className="video-buffered-bar"
             style={{ width: bufferedBarWidth }}
           ></div>
+          {(skipEvents ?? []).map((event) => (
+            <div
+              className="video-event-bar"
+              style={getSkipEventBarStyle(event)}
+            ></div>
+          ))}
+          <div
+            className="video-progress-bar"
+            style={{ width: progressBarWidth }}
+          ></div>
           {/* <div className="preview-thumbnail">
             <img src={previewThumbnailSrc} alt="preview" />
             <div className="time">
@@ -202,10 +217,6 @@ const BottomControls: React.FC<BottomControlsProps> = ({
               </div>
             </div> */}
           <span style={{ left: `${offsetX}px` }}>{formatTime(percent)}</span>
-          <div
-            className="video-progress-bar"
-            style={{ width: progressBarWidth }}
-          ></div>
         </div>
       </div>
       <p

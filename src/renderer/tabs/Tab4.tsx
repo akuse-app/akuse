@@ -6,6 +6,8 @@ import { ipcRenderer } from 'electron';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
 import toast, { Toaster } from 'react-hot-toast';
+import { getOptions, makeRequest } from '../../modules/requests';
+import { getViewerInfo } from '../../modules/anilist/anilistApi';
 
 const STORE = new Store();
 
@@ -80,6 +82,7 @@ interface SelectElementProps {
   label: string;
   value: number | string;
   options: Option[];
+  width?: number;
   zIndex?: number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -88,6 +91,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
   label,
   value,
   options,
+  width = 140,
   zIndex = 1,
   onChange,
 }) => {
@@ -99,14 +103,14 @@ const SelectElement: React.FC<SelectElementProps> = ({
           options={[...options]}
           selectedValue={value}
           onChange={onChange}
-          width={140}
+          width={width}
         />
       </label>
     </Element>
   );
 };
 
-const Tab4: React.FC = () => {
+const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   const logged = useContext(AuthContext);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
@@ -133,8 +137,12 @@ const Tab4: React.FC = () => {
   const [skipTime, setSkipTime] = useState<number>(
     STORE.get('key_press_skip') as number
   );
+  const [adultContent, setAdultContent] = useState<boolean>(
+    STORE.get('adult_content') as boolean
+  );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
+  const [userFetched, setUserFetched] = useState<boolean>(false);
 
 
   const handleEpisodesPerPage = (value: any) => {
@@ -145,6 +153,32 @@ const Tab4: React.FC = () => {
   const handleClearHistory = () => {
     STORE.set('history', { entries: {} });
     setClearHistory(!clearHistory);
+  };
+
+  const handleAdultContent = async () => {
+    STORE.set('adult_content', !adultContent);
+    if(STORE.get('access_token')) {
+      const mutation = `mutation($adultContent:Boolean){
+        UpdateUser(displayAdultContent:$adultContent) {
+          id
+          name
+        }
+      }`;
+
+      var headers: {[key: string]: string} = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + STORE.get('access_token')
+      };
+
+      var variables = {
+        adultContent: !adultContent,
+      };
+
+      const options = getOptions(mutation, variables);
+      await makeRequest('POST', 'https://graphql.anilist.co', headers, options);
+    }
+    setAdultContent(!adultContent);
   };
 
   const handleUpdateProgressChange = () => {
@@ -168,7 +202,7 @@ const Tab4: React.FC = () => {
   };
 
   const handleSkipTimeChange = (value: any) => {
-    STORE.set('intro_skip_time', parseInt(value));
+    STORE.set('key_press_skip', parseInt(value));
     setSkipTime(parseInt(value));
   };
 
@@ -183,9 +217,10 @@ const Tab4: React.FC = () => {
   };
 
   const languageOptions: Option[] = [
-    { value: 'US', label: 'English' },
-    { value: 'IT', label: 'Italian' },
-    { value: 'HU', label: 'Hungarian' },
+    { value: 'US', label: '🇺🇸 English' },
+    { value: 'INT', label: '🌍 Universal ' },
+    { value: 'IT', label: '🇮🇹 Italian' },
+    { value: 'HU', label: '🇭🇺 Hungarian' },
   ];
 
   const episodesPerPageOptions: Option[] = [
@@ -216,13 +251,43 @@ const Tab4: React.FC = () => {
     { label: '5', value: 5 },
   ];
 
+  useEffect(() => {
+    if(viewerId && !userFetched)
+      (async() => {
+        const viewerInfo = await getViewerInfo(viewerId);
+        const displayAdultContent = viewerInfo.options.displayAdultContent as boolean;
+        STORE.set('adult_content', displayAdultContent);
+        setUserFetched(true);
+        setAdultContent(displayAdultContent);
+      })()
+  })
+
   return (
     <div className="body-container show-tab">
       <div className="main-container lifted">
         <div className="settings-page">
           <Heading text="Settings" />
 
+          <h1>General</h1>
+
+          <CheckboxElement
+            label="Show 18+ content"
+            checked={adultContent}
+            onChange={handleAdultContent}
+          />
+
+          <br/>
+
           <h1>Playback</h1>
+
+          <SelectElement
+            label="Select the language in which you want to watch the episodes"
+            value={selectedLanguage}
+            options={languageOptions}
+            zIndex={5}
+            onChange={handleLanguageChange}
+            width={145}
+          />
 
           <CheckboxElement
             label="Autoplay next episode"
@@ -252,13 +317,7 @@ const Tab4: React.FC = () => {
             onChange={handleWatchDubbedChange}
           />
 
-          <SelectElement
-            label="Select the language in which you want to watch the episodes"
-            value={selectedLanguage}
-            options={languageOptions}
-            zIndex={2}
-            onChange={handleLanguageChange}
-          />
+          <br/>
 
           <h1>Appearance</h1>
 
@@ -275,6 +334,8 @@ const Tab4: React.FC = () => {
             zIndex={1}
             onChange={handleEpisodesPerPage}
           />
+
+          <br/>
 
           <h1>Sync & Storage</h1>
 

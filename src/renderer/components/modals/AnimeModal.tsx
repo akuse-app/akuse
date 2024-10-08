@@ -15,7 +15,6 @@ import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
-import { IpcRendererEvent } from 'electron';
 import { EPISODES_INFO_URL } from '../../../constants/utils';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
@@ -43,12 +42,14 @@ import {
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
-import { getLastWatchedEpisode } from '../../../modules/history';
-import { Media, MediaFormat, MediaTypes } from '../../../types/anilistGraphQLTypes';
-import AnimeSection from '../AnimeSection';
-import { Dots } from 'react-activity';
-import AnimeEntry from '../AnimeEntry';
+import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
+import {
+  MediaFormat,
+  MediaTypes,
+  RelationTypes,
+} from '../../../types/anilistGraphQLTypes';
 import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
+import AnimeSections from '../AnimeSections';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();
@@ -58,12 +59,14 @@ interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
   onClose: () => void;
+  ref?: React.RefObject<HTMLDivElement>;
 }
 
 const AnimeModal: React.FC<AnimeModalProps> = ({
   listAnimeData,
   show,
   onClose,
+  ref,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
@@ -88,27 +91,65 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [alternativeBanner, setAlternativeBanner] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [relatedAnime, setRelatedAnime] = useState<ListAnimeData[]>();
+  const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
+  const [lastFetchedId, setLastFetchedId] = useState<number>();
+  const [onScreen, setOnScreen] = useState<boolean>(true);
 
-  const getRelatedAnime = async () => {
-    if(listAnimeData.media?.relations === undefined) {
-      /* If you click on a related anime this'll run. */
+  const updateListAnimeData = async () => {
+    if (
+      !listAnimeData.media?.relations ||
+      !listAnimeData.media?.recommendations
+    ) {
+      if (lastFetchedId === listAnimeData.media.id) return;
+
+      setLastFetchedId(listAnimeData.media.id);
+
       listAnimeData = {
         id: null,
         mediaId: null,
         progress: null,
         media: await getAnimeInfo(listAnimeData.media.id),
-      }
+      };
 
       setLocalProgress(getProgress(listAnimeData.media));
     }
+  };
+
+  const getRecommendedAnime = () => {
+    const nodes = listAnimeData.media.recommendations?.nodes;
+    if (!nodes) return;
+    setRecommendedAnime(
+      nodes.map((value) => {
+        return {
+          id: null,
+          mediaId: null,
+          progress: null,
+          media: value.mediaRecommendation,
+        };
+      }),
+    );
+  };
+
+  const getRelatedAnime = () => {
     const edges = listAnimeData.media.relations?.edges;
-    if(!edges) return;
+    if (!edges) return;
 
-    const list = edges.filter((value) => value.node.type === MediaTypes.Anime).map((value) => {
-      value.node.format = value.node.format === 'TV' ? value.relationType as MediaFormat : value.node.format;
+    const list = edges
+      .filter((value) => value.node.type === MediaTypes.Anime)
+      .map((value) => {
+        value.node.format =
+          value.node.format?.substring(0, 2) === 'TV' ||
+          value.relationType === RelationTypes.Sequel ||
+          value.relationType === RelationTypes.Prequel ||
+          value.relationType === RelationTypes.Alternative ||
+          // value.relationType === RelationTypes.SideStory ||
+          value.relationType === RelationTypes.Parent ||
+          value.relationType === RelationTypes.SpinOff
+            ? (value.relationType as MediaFormat)
+            : value.node.format;
 
-      return value;
-    });
+        return value;
+      });
 
     setRelatedAnime(relationsToListAnimeData(list));
   };
@@ -116,7 +157,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   useEffect(() => {
     if (show) {
       fetchEpisodesInfo();
-      getRelatedAnime();
+      (async () => {
+        await updateListAnimeData();
+        getRelatedAnime();
+        getRecommendedAnime();
+      })();
     }
   }, [show]);
 
@@ -127,6 +172,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, [showPlayer]);
 
   useEffect(() => {
+    if (!onScreen) return;
     try {
       if (show && trailerRef.current && canRePlayTrailer)
         trailerRef.current.play();
@@ -136,7 +182,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   }, [show]);
 
-  const closeModal = () => {
+  const closeModal = (updateSection: boolean = true) => {
     if (trailerRef.current) {
       trailerRef.current.pause();
       setTimeout(() => {
@@ -144,13 +190,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
-    ipcRenderer.send('update-section', 'history');
+    if (updateSection) ipcRenderer.send('update-section', 'history');
 
     onClose();
   };
 
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
+    if (!onScreen) return;
     if (!modalRef.current?.contains(event.target as Node)) {
       closeModal();
     }
@@ -158,8 +205,30 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
 
   const fetchEpisodesInfo = async () => {
     const animeId = listAnimeData.media.id as number;
-
     setLocalProgress(getProgress(listAnimeData.media));
+
+    if (listAnimeData.media.nextAiringEpisode !== null) {
+      const nextAiringEpisode = listAnimeData.media.nextAiringEpisode;
+      if (nextAiringEpisode) {
+        const currentTime = Date.now() / 1000;
+        nextAiringEpisode.timeUntilAiring = nextAiringEpisode.airingAt
+          ? nextAiringEpisode.airingAt - currentTime
+          : nextAiringEpisode.timeUntilAiring;
+        if (
+          nextAiringEpisode.timeUntilAiring < 0 ||
+          !nextAiringEpisode.airingAt
+        ) {
+          /* Not updated history entry. */
+          const entry = getAnimeHistory(animeId);
+          console.log(entry);
+          if (entry) {
+            listAnimeData.media = await getAnimeInfo(animeId);
+            entry.data = listAnimeData;
+            setAnimeHistory(entry);
+          }
+        }
+      }
+    }
 
     axios
       .get(`${EPISODES_INFO_URL}${animeId}`)
@@ -172,7 +241,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           );
         setEpisodesInfoHasFetched(true);
       })
-      .catch(() => {setEpisodesInfoHasFetched(true);});
+      .catch(() => {
+        setEpisodesInfoHasFetched(true);
+      });
   };
 
   const handleTrailerPlay = () => {
@@ -260,10 +331,10 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         />
       )}
       <ModalPageShadow show={show} />
-      <ModalPage show={show} closeModal={closeModal}>
+      <ModalPage modalRef={ref} show={show} closeModal={closeModal}>
         <div className="anime-page" onClick={handleClickOutside}>
           <div className="content-wrapper" ref={modalRef}>
-            <button className="exit" onClick={closeModal}>
+            <button className="exit" onClick={() => closeModal()}>
               <FontAwesomeIcon className="i" icon={faXmark} />
             </button>
 
@@ -376,14 +447,28 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               loading={loading}
               onPlay={playEpisode}
             />
-            {relatedAnime && relatedAnime.length > 0 &&
-              <div className='related-anime'>
-                <AnimeSection
-                  title='Related'
-                  animeData={relatedAnime}
-                />
-              </div>
-            }
+            {((relatedAnime && relatedAnime.length > 0) ||
+              (recommendedAnime && recommendedAnime.length > 0)) && (
+              <AnimeSections
+                id={'recommended'}
+                selectedLabel={(relatedAnime && 'Related') || 'Recommended'}
+                onClick={() => {
+                  setOnScreen(false);
+                  closeModal(false);
+                }}
+                options={[
+                  {
+                    label: 'Related',
+                    value: relatedAnime === undefined ? [] : relatedAnime,
+                  },
+                  {
+                    label: 'Recommended',
+                    value:
+                      recommendedAnime === undefined ? [] : recommendedAnime,
+                  },
+                ]}
+              />
+            )}
           </div>
         </div>
       </ModalPage>

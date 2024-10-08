@@ -1,20 +1,18 @@
 import { useContext } from 'react';
 
+import { getTitle } from '../../modules/utils';
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
-import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
-import UserNavbar from '../components/UserNavbar';
-import Store from 'electron-store';
 
-const store = new Store();
 interface Tab1Props {
   userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];
   trendingAnime?: ListAnimeData[];
   mostPopularAnime?: ListAnimeData[];
   nextReleasesAnime?: ListAnimeData[];
+  recommendedAnime?: ListAnimeData[];
 }
 
 const Tab1: React.FC<Tab1Props> = ({
@@ -22,9 +20,17 @@ const Tab1: React.FC<Tab1Props> = ({
   currentListAnime,
   trendingAnime,
   mostPopularAnime,
-  nextReleasesAnime
+  nextReleasesAnime,
+  recommendedAnime,
 }) => {
+  // const [fetchedRecommended, setFetchedRecommended] = useState<boolean>(false);
   const hasHistory = useContext(AuthContext);
+  const recommendedFrom = hasHistory &&
+                          recommendedAnime &&
+                          recommendedAnime.length > 0 &&
+                          recommendedAnime[recommendedAnime.length - 1] || undefined;
+  let recommendedTitle = recommendedFrom &&
+                           getTitle(recommendedFrom.media);
   // const logged = store.get('logged') as boolean;
 
   return (
@@ -45,8 +51,19 @@ const Tab1: React.FC<Tab1Props> = ({
               />
             )}
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
+            {hasHistory && recommendedFrom && (
+              <AnimeSection
+                title={`Recommendations From "${
+                  (recommendedTitle &&
+                  recommendedTitle.length > 58) ?
+                  recommendedTitle.substring(0, 58) + '...' :
+                  recommendedTitle
+                }"`}
+                animeData={recommendedAnime?.slice(0, -1)}
+              />
+            )}
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
-            <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
+            {/* <AnimeSection title="Next Releases" animeData={nextReleasesAnime} /> */}
           </div>
         </main>
       </div>

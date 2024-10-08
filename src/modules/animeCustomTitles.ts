@@ -1,5 +1,5 @@
-/* 
-    Some anime are difficult to pull automatically, so the 
+/*
+    Some anime are difficult to pull automatically, so the
     correct titles for those (I hope rare) exceptions are written here.
 
     "AnimeId": { title: '`AnimeCustomTitle`', index: 0 } // problem faced
@@ -22,6 +22,7 @@ export const animeCustomTitles: AnimeCustomTitles = {
     '132052': { title: 'Kakkou no Iinazuke', index: 1 }, // same releaseDate with another one
     '168623': { title: 'Dahlia in Bloom', index: 0 }, // anilist has wrong name (Madougushi Dahlia wa Utsumukanai -> Madougushi Dahliya wa Utsumukanai)
   },
+  INT: {},
   IT: {},
   HU: {},
 };

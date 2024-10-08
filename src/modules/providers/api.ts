@@ -7,6 +7,7 @@ import { getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animeunity } from './animeunity';
 import { getEpisodeUrl as gogoanime } from './gogoanime';
 import { getEpisodeUrl as animedrive } from './animedrive';
+import { getEpisodeUrl as hianime } from './hianime';
 
 const STORE = new Store();
 
@@ -24,7 +25,7 @@ export const getUniversalEpisodeUrl = async (
   const lang = (await STORE.get('source_flag')) as string;
   const dubbed = (await STORE.get('dubbed')) as boolean;
 
-  const customTitle = animeCustomTitles[lang][listAnimeData.media?.id!];
+  const customTitle = animeCustomTitles[lang] && animeCustomTitles[lang][listAnimeData.media?.id!];
 
   const animeTitles = getParsedAnimeTitles(listAnimeData.media);
   if (customTitle) animeTitles.unshift(customTitle.title);
@@ -32,6 +33,16 @@ export const getUniversalEpisodeUrl = async (
   console.log(lang + ' ' + dubbed + ' ' + customTitle?.title);
 
   switch (lang) {
+    case 'INT': {
+      const data = await hianime(
+        animeTitles,
+        customTitle ? customTitle.index : 0,
+        episode,
+        dubbed
+      );
+
+      return data ? getDefaultQualityVideo(data) : null;
+    }
     case 'US': {
       const data = await gogoanime(
         animeTitles,

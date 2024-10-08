@@ -3,7 +3,7 @@ import './styles/AnimeEntry.css';
 import { faCalendar, faCircleDot } from '@fortawesome/free-regular-svg-icons';
 import { faTv } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
 import { getAvailableEpisodes, getParsedFormat, getParsedSeasonYear, getTitle } from '../../modules/utils';
@@ -52,31 +52,34 @@ const StatusDot: React.FC<{
 
 const AnimeEntry: React.FC<{
   listAnimeData?: ListAnimeData;
-}> = ({ listAnimeData }) => {
+  onClick?: () => any;
+}> = ({ listAnimeData, onClick}) => {
   // wether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
   // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
   const [hasModalBeenShowed, setHasModalBeenShowed] = useState<boolean>(false);
-
   const [imageLoaded, setImageLoaded] = useState(false);
+  const modalRef = useRef(null);
 
   return (
     <>
       {listAnimeData && hasModalBeenShowed && (
         <AnimeModal
-          listAnimeData={listAnimeData}
-          show={showModal}
-          onClose={() => setShowModal(false)}
-        />
+        ref={modalRef}
+        listAnimeData={listAnimeData}
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
       )}
       <div
         className={`anime-entry show ${listAnimeData ? '' : 'skeleton'}`}
         onClick={() => {
           setShowModal(true);
+          onClick && onClick();
           if (!hasModalBeenShowed) setHasModalBeenShowed(true);
         }}
       >
-        {listAnimeData ? (
+        {listAnimeData && listAnimeData.media ? (
           <div
             className="anime-cover"
             style={{
@@ -99,7 +102,7 @@ const AnimeEntry: React.FC<{
 
         <div className="anime-content">
           <div className="anime-title">
-            {listAnimeData ? (
+            {listAnimeData && listAnimeData.media ? (
               <>
                 <StatusDot listAnimeData={listAnimeData} />
                 {getTitle(listAnimeData.media)}
@@ -111,26 +114,26 @@ const AnimeEntry: React.FC<{
 
           <div className="anime-info">
             <div className="season-year">
-              {listAnimeData && (
+              {listAnimeData && listAnimeData.media && (
                 <FontAwesomeIcon
                   className="i"
                   icon={faCalendar}
                   style={{ marginRight: 5 }}
                 />
               )}
-              {listAnimeData ? (
+              {listAnimeData && listAnimeData.media ? (
                 getParsedSeasonYear(listAnimeData?.media)
               ) : (
                 <Skeleton />
               )}
             </div>
             <div className="episodes">
-              {listAnimeData ? (
+              {listAnimeData && listAnimeData.media ? (
                 getParsedFormat(listAnimeData?.media.format)
               ) : (
                 <Skeleton />
               )}
-              {listAnimeData && (
+              {listAnimeData && listAnimeData.media && (
                 <FontAwesomeIcon
                   className="i"
                   icon={faTv}

@@ -1,3 +1,4 @@
+import { skip } from "node:test";
 import { SkipEvent, SkipEventTypes } from "../types/aniskipTypes";
 import { makeRequest } from "./requests";
 
@@ -21,7 +22,7 @@ const AniSkip = {
   },
   getCurrentEvent: function(
     time: number,
-    skipEvents: SkipEvent[]
+    skipEvents: SkipEvent[],
   ) {
     if(!skipEvents || skipEvents.length === 0)
       return;
