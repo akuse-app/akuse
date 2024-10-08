@@ -1,15 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 
+import { getTitle } from '../../modules/utils';
 import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
-import Heading from '../components/Heading';
 import Slideshow from '../components/Slideshow';
-import UserNavbar from '../components/UserNavbar';
-import Store from 'electron-store';
-import { getTitle } from '../../modules/utils';
 
-const store = new Store();
 interface Tab1Props {
   userInfo?: UserInfo
   currentListAnime?: ListAnimeData[];

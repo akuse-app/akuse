@@ -3,6 +3,7 @@ import '../styles/animations.css';
 import '../styles/style.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 
+import { ipcRenderer, IpcRendererEvent } from 'electron';
 import Store from 'electron-store';
 import { createContext, useEffect, useState } from 'react';
 import { SkeletonTheme } from 'react-loading-skeleton';
@@ -11,30 +12,26 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
   getAnimeInfo,
   getMostPopularAnime,
-  getNextReleases,
   getTrendingAnime,
   getViewerId,
   getViewerInfo,
   getViewerList,
   getViewerLists,
 } from '../modules/anilist/anilistApi';
-
+import { getAnimeHistory, getHistoryEntries, getLastWatchedEpisode, setAnimeHistory } from '../modules/history';
+import { OS } from '../modules/os';
+import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { animeDataToListAnimeData } from '../modules/utils';
 import { ListAnimeData, UserInfo } from '../types/anilistAPITypes';
+import AutoUpdateModal from './components/modals/AutoUpdateModal';
+import DonateModal from './components/modals/DonateModal';
 import MainNavbar from './MainNavbar';
 import Tab1 from './tabs/Tab1';
 import Tab2 from './tabs/Tab2';
 import Tab3 from './tabs/Tab3';
 import Tab4 from './tabs/Tab4';
-
-import { setDefaultStoreVariables } from '../modules/storeVariables';
-import { ipcRenderer, IpcRendererEvent } from 'electron';
-import AutoUpdateModal from './components/modals/AutoUpdateModal';
-import WindowControls from './WindowControls';
-import { OS } from '../modules/os';
-import DonateModal from './components/modals/DonateModal';
-import { getAnimeHistory, getHistoryEntries, getLastWatchedEpisode, setAnimeHistory } from '../modules/history';
 import Tab5 from './tabs/Tab5';
+import WindowControls from './WindowControls';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);

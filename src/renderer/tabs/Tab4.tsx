@@ -217,10 +217,10 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   };
 
   const languageOptions: Option[] = [
-    { value: 'US', label: 'English 🇺🇸' },
-    { value: 'INT', label: 'Universal 🌍' },
-    { value: 'IT', label: 'Italian 🇮🇹' },
-    { value: 'HU', label: 'Hungarian 🇭🇺' },
+    { value: 'US', label: '🇺🇸 English' },
+    { value: 'INT', label: '🌍 Universal ' },
+    { value: 'IT', label: '🇮🇹 Italian' },
+    { value: 'HU', label: '🇭🇺 Hungarian' },
   ];
 
   const episodesPerPageOptions: Option[] = [

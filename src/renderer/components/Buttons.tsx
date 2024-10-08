@@ -3,10 +3,8 @@ import 'react-activity/dist/Dots.css';
 
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Dots from 'react-activity/dist/Dots';
-import { useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import Dots from 'react-activity/dist/Dots';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   tint?: 'primary' | 'light' | 'dark' | 'warning' | 'empty';
