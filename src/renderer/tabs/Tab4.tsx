@@ -218,7 +218,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
 
   const languageOptions: Option[] = [
     { value: 'US', label: 'English 🇺🇸' },
-    { value: 'US_ALT', label: 'English Alt 🇺🇸' },
+    { value: 'INT', label: 'Universal 🌍' },
     { value: 'IT', label: 'Italian 🇮🇹' },
     { value: 'HU', label: 'Hungarian 🇭🇺' },
   ];

@@ -33,7 +33,7 @@ export const getUniversalEpisodeUrl = async (
   console.log(lang + ' ' + dubbed + ' ' + customTitle?.title);
 
   switch (lang) {
-    case 'US_ALT': {
+    case 'INT': {
       const data = await hianime(
         animeTitles,
         customTitle ? customTitle.index : 0,
