@@ -833,7 +833,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               <h1 id="pause-info-episode-description">{episodeDescription}</h1>
             </div>
           </div>
-          {showSkipEvent && (
+          {showSkipEvent && !(/ $/).test(skipEvent) && (
             <div
               className="skip-button"
               style={{
