@@ -148,8 +148,6 @@ export const getAnimeId = async (
     )[index]?.id ?? null
   );
 
-  console.log(result);
-
   return result;
 };
 
@@ -164,8 +162,12 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
-  if(cache.episodes[animeId] !== undefined)
-    return cache.episodes[animeId]?.find((ep) => ep.number == episode)?.id ?? null;
+  if(cache.episodes[animeId] !== undefined) {
+    const found = cache.episodes[animeId]?.find((ep) => ep.number == episode)
+
+    if(found)
+      return found.id;
+  }
 
   const data = await consumet.fetchAnimeInfo(animeId);
   return (
