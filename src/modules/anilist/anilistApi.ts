@@ -24,6 +24,73 @@ const HEADERS: Object = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
 };
+const RECOMMEND_DATA: string = `
+        recommendations(sort:RATING_DESC) {
+          nodes {
+            id
+            rating
+            mediaRecommendation {
+              id
+              idMal
+              type
+              title {
+                  romaji
+                  english
+                  native
+                  userPreferred
+              }
+              format
+              status
+              description
+              startDate {
+                  year
+                  month
+                  day
+              }
+              endDate {
+                  year
+                  month
+                  day
+              }
+              season
+              seasonYear
+              episodes
+              duration
+              coverImage {
+                  large
+                  extraLarge
+                  color
+              }
+              bannerImage
+              genres
+              synonyms
+              averageScore
+              meanScore
+              popularity
+              favourites
+              isAdult
+              nextAiringEpisode {
+                  id
+                  timeUntilAiring
+                  episode
+                  airingAt
+              }
+              mediaListEntry {
+                  id
+                  mediaId
+                  status
+                  score(format:POINT_10)
+                  progress
+              }
+              siteUrl
+              trailer {
+                  id
+                  site
+                  thumbnail
+              }
+            }
+          }
+        }`
 const MEDIA_DATA: string = `
         id
         idMal
@@ -68,6 +135,7 @@ const MEDIA_DATA: string = `
             id
             timeUntilAiring
             episode
+            airingAt
         }
         mediaListEntry {
             id
@@ -147,7 +215,11 @@ const MEDIA_DATA: string = `
             }
           }
         }
+        ${RECOMMEND_DATA}
     `;
+
+const filterAdultMedia = (media?: Media) =>
+  media && !media.isAdult;
 
 /**
  * Retrieves the access token for the api
@@ -215,6 +287,9 @@ export const getViewerInfo = async (viewerId: number | null) => {
                   avatar {
                       medium
                   }
+                  options {
+                    displayAdultContent
+                  }
               }
           }
       `;
@@ -233,6 +308,59 @@ export const getViewerInfo = async (viewerId: number | null) => {
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.User;
+};
+
+/**
+ * Gets viewer lists (current, completed...)
+ *
+ * @param {*} viewerId
+ * @param {*} statuses
+ * @returns object with anime entries
+ */
+export const getViewerLists = async (
+  viewerId: number,
+  ...statuses: MediaListStatus[]
+): Promise<CurrentListAnime> => {
+  var query = `
+          query($userId : Int, $statuses: [MediaListStatus]) {
+              MediaListCollection(userId : $userId, type: ANIME, status_in: $statuses, sort: UPDATED_TIME_DESC) {
+                  lists {
+                      isCustomList
+                      name
+                      status
+                      entries {
+                          id
+                          mediaId
+                          progress
+                          media {
+                              ${MEDIA_DATA}
+                          }
+                      }
+                  }
+              }
+          }
+      `;
+
+  var headers = {
+    Authorization: 'Bearer ' + STORE.get('access_token'),
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+
+  var variables = {
+    userId: viewerId,
+    statuses: statuses
+  };
+
+  const options = getOptions(query, variables);
+
+  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+
+  const lists = respData.data.MediaListCollection.lists.length === 0
+  ? []
+  : (respData.data.MediaListCollection.lists as Array<any>);
+
+  return lists.map(value => value.entries).flat();
 };
 
 /**
@@ -387,18 +515,20 @@ export const getAnimeInfo = async (animeId: any): Promise<Media> => {
           }
       `;
 
-  var headers = {
-    Authorization: 'Bearer ' + STORE.get('access_token'),
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  };
+      var headers: {[key: string]: string} = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
 
-  var variables = {
-    id: animeId,
-  };
+      if (STORE.has('access_token'))
+        headers.Authorization = 'Bearer ' + STORE.get('access_token');
 
-  const options = getOptions(query, variables);
-  const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+      var variables = {
+        id: animeId,
+      };
+
+      const options = getOptions(query, variables);
+      const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
 
   return respData.data.Media as Media;
 };
@@ -457,6 +587,10 @@ export const getAiredAnime = async (
 
   pageData.airingSchedules = pageData.airingSchedules.reverse();
 
+  const adultContent = STORE.get('adult_content') as boolean;
+  if (!adultContent)
+    pageData.airingSchedules = pageData.airingSchedules.filter((value) => filterAdultMedia(value.media));
+
   return pageData
 };
 
@@ -471,8 +605,6 @@ export const getAiringSchedule = async (
   viewerId: number | null,
   airingAt: number = Math.floor(Date.now() / 1000)
 ) => {
-  // const timeInSeconds = ;
-
   const query = `
   query {
     Page(page: 1, perPage: ${PAGES}) {
@@ -505,8 +637,13 @@ export const getAiringSchedule = async (
 
   const options = getOptions(query);
   const respData = await makeRequest(METHOD, GRAPH_QL_URL, headers, options);
+  const pageData = respData.data.Page as AiringPage;
 
-  return respData.data.Page.airingSchedules as AiringSchedule[];
+  const adultContent = STORE.get('adult_content') as boolean;
+  if (!adultContent)
+    pageData.airingSchedules = pageData.airingSchedules.filter((value) => filterAdultMedia(value.media));
+
+  return pageData.airingSchedules as AiringSchedule[];
 };
 
 /**

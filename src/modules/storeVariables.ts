@@ -6,13 +6,15 @@ const defaultValues = {
   autoplay_next: true,
   dubbed: false,
   source_flag: 'US',
+  subtitle_language: 'English',
   intro_skip_time: 85,
   key_press_skip: 5,
   show_duration: true,
   trailer_volume_on: false,
   volume: 1,
   episodes_per_page: 30,
-  history: { entries: {} }
+  history: { entries: {} },
+  adult_content: true
 }
 
 export const setDefaultStoreVariables = () => {

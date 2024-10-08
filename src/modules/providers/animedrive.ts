@@ -1,5 +1,8 @@
 import { IVideo } from '@consumet/extensions';
 import AnimeDrive from '@consumet/extensions/dist/providers/anime/animedrive';
+import ProviderCache from './cache';
+
+const cache = new ProviderCache();
 const consumet = new AnimeDrive();
 
 export const getEpisodeUrl = async (
@@ -37,6 +40,10 @@ async function searchEpisodeUrl(
   episode: number,
   dubbed: boolean
 ): Promise<IVideo[] | null> {
+  const cacheId = `${animeSearch}-${episode}`;
+  if(cache.search[cacheId] !== undefined)
+    return cache.search[cacheId];
+
   const animeId = await getAnimeId(
     dubbed ? 0 : index,
     dubbed ? `${animeSearch} (Dub)` : animeSearch,
@@ -48,12 +55,16 @@ async function searchEpisodeUrl(
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
 
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
-      return data.sources
+      return (
+        cache.search[cacheId] = data.sources
+      );
     }
   }
 
   console.log(`%c ${animeSearch}`, `color: #E5A639`);
-  return null;
+  return (
+    cache.search[cacheId] = null
+  );
 }
 
 /**
@@ -66,8 +77,13 @@ export const getAnimeId = async (
   index: number,
   animeSearch: string,
 ): Promise<string | null> => {
+  if(cache.animeIds[animeSearch] !== undefined)
+    return cache.animeIds[animeSearch];
+
   const data = await consumet.search(animeSearch);
-  return data.results[index]?.id ?? null;
+  return (
+    cache.animeIds[animeSearch] = data.results[index]?.id ?? null
+  );
 };
 
 /**
@@ -81,6 +97,15 @@ export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
 ): Promise<string | null> => {
+  if(cache.episodes[animeId] !== undefined) {
+    const found = cache.episodes[animeId]?.find((ep) => ep.number == episode)
+
+    if(found)
+      return found.id;
+  }
+
   const data = await consumet.fetchAnimeInfo(animeId);
-  return data?.episodes?.[episode - 1]?.id ?? null;
+  return (
+    cache.episodes[animeId] = data?.episodes
+  )?.[episode - 1]?.id ?? null;
 };

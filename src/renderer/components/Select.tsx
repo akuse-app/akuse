@@ -13,11 +13,12 @@ interface Option {
 
 interface SelectProps {
   options: Option[];
-  selectedValue: Value;
+  selectedValue?: Value;
   onChange?: (value: Value) => void;
   className?: string;
   width?: number | string;
   zIndex?: number;
+  selectedIndex?: number;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -27,12 +28,17 @@ const Select: React.FC<SelectProps> = ({
   className = '',
   width,
   zIndex = 1,
+  selectedIndex = -1
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [selectedOption, setSelectedOption] = useState<Option>();
+
   const selectRef = useRef<HTMLDivElement>(null);
+  let label: string = '';
 
   const handleSelect = (option: Option) => {
     if (onChange) {
+      label = option.label;
       onChange(option.value);
     }
     setIsOpen(false);
@@ -59,9 +65,15 @@ const Select: React.FC<SelectProps> = ({
     }
   };
 
-  const selectedOption = options.find(
+  // let selectedOption;
+  const selectedOption = selectedIndex === -1 ? options.find(
     (option) => option.value === selectedValue,
-  );
+  ) : options[selectedIndex];
+  label = selectedOption?.label ?? '';
+  // if(selectedIndex === -1)
+  //   setSelectedOption();
+  // else
+  //   setSelectedOption();
 
   return (
     <div
@@ -73,7 +85,7 @@ const Select: React.FC<SelectProps> = ({
       onClick={() => setIsOpen(!isOpen)}
     >
       <div className="label">
-        {selectedOption?.label}
+        {label}
         <div className={`chevron ${isOpen ? 'down' : ''}`}>
           <FontAwesomeIcon className="i" icon={faChevronDown} />
         </div>

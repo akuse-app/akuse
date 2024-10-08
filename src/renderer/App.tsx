@@ -9,12 +9,14 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import {
+  getAnimeInfo,
   getMostPopularAnime,
   getNextReleases,
   getTrendingAnime,
   getViewerId,
   getViewerInfo,
   getViewerList,
+  getViewerLists,
 } from '../modules/anilist/anilistApi';
 
 import { animeDataToListAnimeData } from '../modules/utils';
@@ -31,7 +33,7 @@ import AutoUpdateModal from './components/modals/AutoUpdateModal';
 import WindowControls from './WindowControls';
 import { OS } from '../modules/os';
 import DonateModal from './components/modals/DonateModal';
-import { getHistoryEntries, getLastWatchedEpisode } from '../modules/history';
+import { getAnimeHistory, getHistoryEntries, getLastWatchedEpisode, setAnimeHistory } from '../modules/history';
 import Tab5 from './tabs/Tab5';
 
 ipcRenderer.on('console-log', (event, toPrint) => {
@@ -48,7 +50,7 @@ export default function App() {
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showDonateModal, setShowDonateModal] = useState<boolean>(false);
   const [hasHistory, setHasHistory] = useState<boolean>(false);
-  const [sectionUpdate, setSectionUpdate] = useState<number>(0);
+  const [sectionUpdate, setSectionUpdate] = useState<boolean>(true);
 
   // tab1
   const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -56,6 +58,7 @@ export default function App() {
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
   const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
+  const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
   const [planningListAnime, setPlanningListAnimeListAnime] =
@@ -69,36 +72,54 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (tab2Click) {
-      fetchTab2AnimeData();
-    }
-  }, [tab2Click, viewerId]);
-
-  useEffect(() => {
     if (Math.floor(Math.random() * 8) + 1 === 1 && !showUpdateModal) {
       setShowDonateModal(true);
     }
   }, []);
 
+  const updateRecommended = async (history: ListAnimeData[]) => {
+    const animeData = history[
+      Math.floor(Math.random() * (history.length - 1))
+    ];
+
+    if(animeData.media.recommendations === undefined) {
+      animeData.media = await getAnimeInfo(animeData.media.id);
+      const entry = getAnimeHistory(animeData.media.id as number);
+      if(entry) {
+        entry.data = animeData;
+        setAnimeHistory(entry);
+      }
+    }
+
+    const recommendedList = animeData.media.recommendations?.nodes.map((value) => {
+      return {
+        id: null,
+        mediaId: null,
+        progress: null,
+        media: value.mediaRecommendation
+      } as ListAnimeData
+    });
+
+    recommendedList?.push(animeData);
+
+    setRecommendedAnime(recommendedList);
+  }
+
   const updateHistory = async () => {
     const entries = getHistoryEntries();
-    const historyAvailable = Object.values(entries).length > 0
+    const historyAvailable = Object.values(entries).length > 0;
 
     let result: ListAnimeData[] = [];
     const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id ?? (b.media.mediaListEntry && b.media.mediaListEntry.id)) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.media.id ?? (a.media.mediaListEntry && a.media.mediaListEntry.id)) as number)?.timestamp ?? 0);
 
     if(logged) {
       const id = (viewerId as number) || await getViewerId();
-
-      const current = await getViewerList(id, 'CURRENT');
-      const rewatching = await getViewerList(id, 'REPEATING');
-      const paused = await getViewerList(id, 'PAUSED');
-
-      result = result.concat(current.concat(rewatching).concat(paused));
+      result = await getViewerLists(id, 'CURRENT', 'REPEATING', 'PAUSED');
     } else if(historyAvailable) {
       setHasHistory(true);
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
       setCurrentListAnime(result);
+      updateRecommended(result);
       return;
     }
 
@@ -107,21 +128,24 @@ export default function App() {
       result = Object.values(entries).map((value) => value.data).sort(sortNewest);
 
       setCurrentListAnime(result);
+      updateRecommended(result);
       return;
     }
 
-    if(historyAvailable) {
+    if(historyAvailable)
       result = Object.values(result).sort(sortNewest);
-    }
 
     setCurrentListAnime(result);
+    updateRecommended(result);
   }
 
   useEffect(() => {
       const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
-        const current = Date.now() / 1000;
-        if(current - sectionUpdate < 2) return;
-        setSectionUpdate(current);
+        if(sectionUpdate){
+          setSectionUpdate(false);
+          setTimeout(() => setSectionUpdate(true), 3000);
+        } else return;
+
         for(const section of sections) {
           switch(section) {
             case 'history':
@@ -131,16 +155,18 @@ export default function App() {
         }
       }
 
+      const autoUpdateListener = async () => {
+        setShowDonateModal(false);
+        setShowUpdateModal(true);
+      }
+
       ipcRenderer.on('update-section', updateSectionListener);
+      ipcRenderer.on('auto-update', autoUpdateListener);
 
       return () => {
           ipcRenderer.removeListener('update-section', updateSectionListener);
+          ipcRenderer.removeListener('auto-update', autoUpdateListener);
       };
-  }, [sectionUpdate]);
-
-  ipcRenderer.on('auto-update', async () => {
-    setShowDonateModal(false);
-    setShowUpdateModal(true);
   });
 
   const fetchTab1AnimeData = async () => {
@@ -150,7 +176,6 @@ export default function App() {
       if (logged) {
         id = await getViewerId();
         setViewerId(id);
-
         setUserInfo(await getViewerInfo(id));
       }
 
@@ -210,6 +235,7 @@ export default function App() {
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
                     nextReleasesAnime={nextReleasesAnime}
+                    recommendedAnime={recommendedAnime}
                   />
                 }
               />
@@ -225,7 +251,9 @@ export default function App() {
                       // pausedListAnime={pausedListAnime}
                       // repeatingListAnime={RepeatingListAnime}
                       clicked={() => {
-                        !tab2Click && setTab2Click(true);
+                        if(tab2Click) return
+                        setTab2Click(true);
+                        fetchTab2AnimeData();
                       }}
                     />
                   }
@@ -238,14 +266,20 @@ export default function App() {
                     <Tab2
                       currentListAnime={currentListAnime}
                       clicked={() => {
-                        !tab2Click && setTab2Click(true);
+                        if(tab2Click) return
+                        setTab2Click(true);
+                        fetchTab2AnimeData();
                       }}
                     />
                   }
                 />
               )}
               <Route path="/tab3" element={<Tab3 />} />
-              <Route path="/tab4" element={<Tab4 />} />
+              <Route path="/tab4" element={
+                <Tab4
+                  viewerId={viewerId}
+                />
+              } />
               <Route
                 path="/tab5"
                 element={

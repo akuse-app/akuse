@@ -89,7 +89,7 @@ export const ModalPageShadow: React.FC<{
   );
 };
 
-/* 
+/*
   use this when you want a small non-scrollable modal
   best practices:
     - title should be on 1 row

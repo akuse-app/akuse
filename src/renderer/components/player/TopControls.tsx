@@ -14,6 +14,7 @@ import { ListAnimeData } from '../../../types/anilistAPITypes';
 import { EpisodeInfo } from '../../../types/types';
 import VideoEpisodesChange from './VideoEpisodesChange';
 import VideoSettings from './VideoSettings';
+import { ISubtitle } from '@consumet/extensions';
 
 interface TopControlsProps {
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -25,6 +26,10 @@ interface TopControlsProps {
   showPreviousEpisodeButton: boolean;
   showNextEpisodeButton: boolean;
   fullscreen: boolean;
+  subtitleTracks?: ISubtitle[];
+  onSubtitleTrack: (
+    track: ISubtitle
+  ) => void;
   onFullScreentoggle: () => void;
   onPiPToggle: () => void;
   onChangeEpisode: (
@@ -54,6 +59,8 @@ const TopControls: React.FC<TopControlsProps> = ({
   onClick,
   onDblClick,
   onDropdownToggle,
+  subtitleTracks,
+  onSubtitleTrack
 }) => {
   const settingsRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +94,8 @@ const TopControls: React.FC<TopControlsProps> = ({
       <div className="right">
         <VideoSettings
           show={showSettings}
+          subtitleTracks={subtitleTracks}
+          onSubtitleTrack={onSubtitleTrack}
           onShow={(show) => {
             closeOthers();
             setShowSettings(show);

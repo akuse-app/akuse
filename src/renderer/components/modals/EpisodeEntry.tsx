@@ -31,13 +31,22 @@ const EpisodeEntry: React.FC<EpisodeEntryProps> = ({
   progress,
   loading,
 }) => {
-  progress = (progress ?? 0)
+  progress = Math.ceil(progress ?? 0);
   return (
     <div className="episode-entry" onClick={onPress}>
       {hasInfoLoaded ? (
         <div className="image show-opacity">
           <img src={cover ?? ''} alt="episode cover" />
-          {/* <div style={{ "width": ((progress !== 0 && progress < 2.5) ? 2.5 : progress) + "%" }} className={`progress-bar ${(progress ?? 0) >= 90 ? 'full-width' : 'partial-width'}`}/> */}
+          <div
+            style={{
+              width: progress + "%"
+            }}
+            className={`progress-bar ${
+              (progress ?? 0) >= 99 ?
+              'full-width' :
+              'partial-width'
+              }`}/>
+          {progress > 0 && <div className='progress-bar-full'/>}
         </div>
       ) : (
         <Skeleton className="image" />
