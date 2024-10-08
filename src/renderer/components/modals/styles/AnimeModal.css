@@ -29,6 +29,7 @@
   margin: 25px 0;
   background: var(--color-1);
   border-radius: var(--border-radius);
+  padding-bottom: 15px;
 }
 
 .anime-page .up {
