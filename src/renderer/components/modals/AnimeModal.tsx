@@ -43,7 +43,11 @@ import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
 import { ipcRenderer } from 'electron';
 import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
-import { MediaFormat, MediaTypes, RelationTypes } from '../../../types/anilistGraphQLTypes';
+import {
+  MediaFormat,
+  MediaTypes,
+  RelationTypes,
+} from '../../../types/anilistGraphQLTypes';
 import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
 import AnimeSections from '../AnimeSections';
 
@@ -55,14 +59,14 @@ interface AnimeModalProps {
   listAnimeData: ListAnimeData;
   show: boolean;
   onClose: () => void;
-  ref?: React.RefObject<HTMLDivElement>
+  ref?: React.RefObject<HTMLDivElement>;
 }
 
 const AnimeModal: React.FC<AnimeModalProps> = ({
   listAnimeData,
   show,
   onClose,
-  ref
+  ref,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const trailerRef = useRef<HTMLVideoElement>(null);
@@ -92,9 +96,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   const [onScreen, setOnScreen] = useState<boolean>(true);
 
   const updateListAnimeData = async () => {
-    if(!listAnimeData.media?.relations || !listAnimeData.media?.recommendations) {
-      if(lastFetchedId === listAnimeData.media.id)
-        return;
+    if (
+      !listAnimeData.media?.relations ||
+      !listAnimeData.media?.recommendations
+    ) {
+      if (lastFetchedId === listAnimeData.media.id) return;
 
       setLastFetchedId(listAnimeData.media.id);
 
@@ -103,42 +109,47 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         mediaId: null,
         progress: null,
         media: await getAnimeInfo(listAnimeData.media.id),
-      }
+      };
 
       setLocalProgress(getProgress(listAnimeData.media));
     }
-  }
+  };
 
   const getRecommendedAnime = () => {
     const nodes = listAnimeData.media.recommendations?.nodes;
-    if(!nodes) return;
-    setRecommendedAnime(nodes.map((value) => {
-      return {
-        id: null,
-        mediaId: null,
-        progress: null,
-        media: value.mediaRecommendation,
-      }
-    }));
+    if (!nodes) return;
+    setRecommendedAnime(
+      nodes.map((value) => {
+        return {
+          id: null,
+          mediaId: null,
+          progress: null,
+          media: value.mediaRecommendation,
+        };
+      }),
+    );
   };
 
   const getRelatedAnime = () => {
     const edges = listAnimeData.media.relations?.edges;
-    if(!edges) return;
+    if (!edges) return;
 
-    const list = edges.filter((value) => value.node.type === MediaTypes.Anime).map((value) => {
-      value.node.format = (
-        value.node.format?.substring(0, 2) === 'TV' ||
-        value.relationType === RelationTypes.Sequel ||
-        value.relationType === RelationTypes.Prequel ||
-        value.relationType === RelationTypes.Alternative ||
-        // value.relationType === RelationTypes.SideStory ||
-        value.relationType === RelationTypes.Parent ||
-        value.relationType === RelationTypes.SpinOff
-      ) ? value.relationType as MediaFormat : value.node.format;
+    const list = edges
+      .filter((value) => value.node.type === MediaTypes.Anime)
+      .map((value) => {
+        value.node.format =
+          value.node.format?.substring(0, 2) === 'TV' ||
+          value.relationType === RelationTypes.Sequel ||
+          value.relationType === RelationTypes.Prequel ||
+          value.relationType === RelationTypes.Alternative ||
+          // value.relationType === RelationTypes.SideStory ||
+          value.relationType === RelationTypes.Parent ||
+          value.relationType === RelationTypes.SpinOff
+            ? (value.relationType as MediaFormat)
+            : value.node.format;
 
-      return value;
-    });
+        return value;
+      });
 
     setRelatedAnime(relationsToListAnimeData(list));
   };
@@ -150,7 +161,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         await updateListAnimeData();
         getRelatedAnime();
         getRecommendedAnime();
-      })()
+      })();
     }
   }, [show]);
 
@@ -161,7 +172,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   }, [showPlayer]);
 
   useEffect(() => {
-    if(!onScreen) return;
+    if (!onScreen) return;
     try {
       if (show && trailerRef.current && canRePlayTrailer)
         trailerRef.current.play();
@@ -179,15 +190,14 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
-    if(updateSection)
-      ipcRenderer.send('update-section', 'history');
+    if (updateSection) ipcRenderer.send('update-section', 'history');
 
     onClose();
   };
 
   // close modal by clicking shadow area
   const handleClickOutside = (event: any) => {
-    if(!onScreen) return;
+    if (!onScreen) return;
     if (!modalRef.current?.contains(event.target as Node)) {
       closeModal();
     }
@@ -197,12 +207,17 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     const animeId = listAnimeData.media.id as number;
     setLocalProgress(getProgress(listAnimeData.media));
 
-    if(listAnimeData.media.nextAiringEpisode !== null) {
+    if (listAnimeData.media.nextAiringEpisode !== null) {
       const nextAiringEpisode = listAnimeData.media.nextAiringEpisode;
-      if(nextAiringEpisode) {
+      if (nextAiringEpisode) {
         const currentTime = Date.now() / 1000;
-        nextAiringEpisode.timeUntilAiring = nextAiringEpisode.airingAt ? nextAiringEpisode.airingAt - currentTime : nextAiringEpisode.timeUntilAiring;
-        if(nextAiringEpisode.timeUntilAiring < 0 || !nextAiringEpisode.airingAt) {
+        nextAiringEpisode.timeUntilAiring = nextAiringEpisode.airingAt
+          ? nextAiringEpisode.airingAt - currentTime
+          : nextAiringEpisode.timeUntilAiring;
+        if (
+          nextAiringEpisode.timeUntilAiring < 0 ||
+          !nextAiringEpisode.airingAt
+        ) {
           /* Not updated history entry. */
           const entry = getAnimeHistory(animeId);
           console.log(entry);
@@ -226,7 +241,9 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
           );
         setEpisodesInfoHasFetched(true);
       })
-      .catch(() => {setEpisodesInfoHasFetched(true);});
+      .catch(() => {
+        setEpisodesInfoHasFetched(true);
+      });
   };
 
   const handleTrailerPlay = () => {
@@ -430,19 +447,28 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
               loading={loading}
               onPlay={playEpisode}
             />
-            {(relatedAnime && relatedAnime.length > 0 ||
-              recommendedAnime && recommendedAnime.length > 0) && <AnimeSections
-              id={'recommended'}
-              selectedLabel={relatedAnime && 'Related' || 'Recommended'}
-              onClick={() => {
-                setOnScreen(false);
-                closeModal(false);
-              }}
-              options={[
-                {label: 'Related', value: relatedAnime === undefined ? [] : relatedAnime},
-                {label: 'Recommended', value: recommendedAnime === undefined ? [] : recommendedAnime},
-              ]}
-            />}
+            {((relatedAnime && relatedAnime.length > 0) ||
+              (recommendedAnime && recommendedAnime.length > 0)) && (
+              <AnimeSections
+                id={'recommended'}
+                selectedLabel={(relatedAnime && 'Related') || 'Recommended'}
+                onClick={() => {
+                  setOnScreen(false);
+                  closeModal(false);
+                }}
+                options={[
+                  {
+                    label: 'Related',
+                    value: relatedAnime === undefined ? [] : relatedAnime,
+                  },
+                  {
+                    label: 'Recommended',
+                    value:
+                      recommendedAnime === undefined ? [] : recommendedAnime,
+                  },
+                ]}
+              />
+            )}
           </div>
         </div>
       </ModalPage>
