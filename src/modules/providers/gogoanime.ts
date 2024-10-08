@@ -102,9 +102,11 @@ export const getAnimeId = async (
       ? (result.title as string).includes('(Dub)')
       : !(result.title as string).includes('(Dub)'),
   );
+
   const result = (
     cache.animeIds[animeSearch] = filteredResults.filter(
-      (result) => result.releaseDate == releaseDate.toString(),
+      (result) => result.releaseDate == releaseDate.toString() ||
+        result.title == animeSearch,
     )[index]?.id ?? null
   );
 
