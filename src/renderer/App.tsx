@@ -57,7 +57,7 @@ export default function App() {
   const [currentListAnime, setCurrentListAnime] = useState<ListAnimeData[]>();
   const [trendingAnime, setTrendingAnime] = useState<ListAnimeData[]>();
   const [mostPopularAnime, setMostPopularAnime] = useState<ListAnimeData[]>();
-  const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
+  // const [nextReleasesAnime, setNextReleasesAnime] = useState<ListAnimeData[]>();
   const [recommendedAnime, setRecommendedAnime] = useState<ListAnimeData[]>();
   // tab2
   const [tab2Click, setTab2Click] = useState<boolean>(false);
@@ -185,7 +185,7 @@ export default function App() {
       setMostPopularAnime(
         animeDataToListAnimeData(await getMostPopularAnime(id)),
       );
-      setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
+      // setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
     } catch (error) {
       console.log('Tab1 error: ' + error);
     }
@@ -234,7 +234,7 @@ export default function App() {
                     currentListAnime={currentListAnime}
                     trendingAnime={trendingAnime}
                     mostPopularAnime={mostPopularAnime}
-                    nextReleasesAnime={nextReleasesAnime}
+                    // nextReleasesAnime={nextReleasesAnime}
                     recommendedAnime={recommendedAnime}
                   />
                 }

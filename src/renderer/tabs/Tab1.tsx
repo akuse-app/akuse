@@ -67,7 +67,7 @@ const Tab1: React.FC<Tab1Props> = ({
               />
             )}
             <AnimeSection title="Most Popular" animeData={mostPopularAnime} />
-            <AnimeSection title="Next Releases" animeData={nextReleasesAnime} />
+            {/* <AnimeSection title="Next Releases" animeData={nextReleasesAnime} /> */}
           </div>
         </main>
       </div>
