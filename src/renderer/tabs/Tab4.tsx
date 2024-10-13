@@ -110,7 +110,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
   );
 };
 
-const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
+const Tab4: React.FC<{ viewerId: number | null }> = ({ viewerId }) => {
   const logged = useContext(AuthContext);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
@@ -135,13 +135,13 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
     STORE.get('episodes_per_page') as number,
   );
   const [skipTime, setSkipTime] = useState<number>(
-    STORE.get('key_press_skip') as number
+    STORE.get('key_press_skip') as number,
   );
   const [adultContent, setAdultContent] = useState<boolean>(
-    STORE.get('adult_content') as boolean
+    STORE.get('adult_content') as boolean,
   );
   const [lightMode, setLightMode] = useState<boolean>(
-    STORE.get('light_mode') as boolean
+    STORE.get('light_mode') as boolean,
   );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
@@ -158,15 +158,15 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   };
 
   const handleLightMode = () => {
-    const val = !lightMode
+    const val = !lightMode;
 
     STORE.set('light_mode', val);
-    setLightMode(val)
-  }
+    setLightMode(val);
+  };
 
   const handleAdultContent = async () => {
     STORE.set('adult_content', !adultContent);
-    if(STORE.get('access_token')) {
+    if (STORE.get('access_token')) {
       const mutation = `mutation($adultContent:Boolean){
         UpdateUser(displayAdultContent:$adultContent) {
           id
@@ -174,10 +174,10 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
         }
       }`;
 
-      var headers: {[key: string]: string} = {
+      var headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + STORE.get('access_token')
+        Authorization: 'Bearer ' + STORE.get('access_token'),
       };
 
       var variables = {
@@ -262,15 +262,16 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   ];
 
   useEffect(() => {
-    if(viewerId && !userFetched)
-      (async() => {
+    if (viewerId && !userFetched)
+      (async () => {
         const viewerInfo = await getViewerInfo(viewerId);
-        const displayAdultContent = viewerInfo.options.displayAdultContent as boolean;
+        const displayAdultContent = viewerInfo.options
+          .displayAdultContent as boolean;
         STORE.set('adult_content', displayAdultContent);
         setUserFetched(true);
         setAdultContent(displayAdultContent);
-      })()
-  })
+      })();
+  });
 
   return (
     <div className="body-container show-tab">
@@ -292,7 +293,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleAdultContent}
           />
 
-          <br/>
+          <br />
 
           <h1>Playback</h1>
 
@@ -303,6 +304,12 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             zIndex={5}
             onChange={handleLanguageChange}
             width={145}
+          />
+
+          <CheckboxElement
+            label="Watch dubbed"
+            checked={watchDubbed}
+            onChange={handleWatchDubbedChange}
           />
 
           <CheckboxElement
@@ -327,13 +334,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleSkipTimeChange}
           />
 
-          <CheckboxElement
-            label="Watch dubbed"
-            checked={watchDubbed}
-            onChange={handleWatchDubbedChange}
-          />
-
-          <br/>
+          <br />
 
           <h1>Appearance</h1>
 
@@ -351,7 +352,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleEpisodesPerPage}
           />
 
-          <br/>
+          <br />
 
           <h1>Sync & Storage</h1>
 
