@@ -1,6 +1,9 @@
 import './styles/AnimeSection.css';
 
-import { faArrowLeftLong, faArrowRightLong } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeftLong,
+  faArrowRightLong,
+} from '@fortawesome/free-solid-svg-icons';
 import { useRef, useState } from 'react';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
@@ -48,8 +51,14 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
     }
   };
 
+  if (animeData?.length === 0) return null;
+
   return (
-    <section onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} id={`${title.toLowerCase().replace(' ', '-')}-section`}>
+    <section
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      id={`${title.toLowerCase().replace(' ', '-')}-section`}
+    >
       <h1>{title}</h1>
       {enableButtons && (
         <div
@@ -73,7 +82,7 @@ const AnimeSection: React.FC<AnimeSectionProps> = ({ title, animeData }) => {
       )}
       <div className="anime-list-wrapper" ref={animeListWrapperRef}>
         <div className="anime-list" ref={animeListRef}>
-        {(animeData ?? Array(20).fill(undefined)).map(
+          {(animeData ?? Array(20).fill(undefined)).map(
             (listAnimeData, index) => (
               <AnimeEntry key={index} listAnimeData={listAnimeData} />
             ),

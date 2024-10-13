@@ -236,6 +236,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   const fetchEpisodesInfo = async () => {
+    if (STORE.get('light_mode') as boolean) {
+      setEpisodesInfoHasFetched(true);
+      return;
+    }
+
     axios
       .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
       .then((data) => {

@@ -247,6 +247,8 @@ const Slideshow: React.FC<SlideshowProps> = ({ listAnimeData, maxAmount = 5 }) =
     setCurrentIndex(index);
   };
 
+  if (listAnimeData?.length === 0) return null;
+
   return (
     <>
       {/* <h1>Discover</h1> */}

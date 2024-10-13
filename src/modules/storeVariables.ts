@@ -14,7 +14,8 @@ const defaultValues = {
   volume: 1,
   episodes_per_page: 30,
   history: { entries: {} },
-  adult_content: true
+  adult_content: true,
+  light_mode: false
 }
 
 export const setDefaultStoreVariables = () => {

@@ -18,7 +18,12 @@ import {
   getViewerList,
   getViewerLists,
 } from '../modules/anilist/anilistApi';
-import { getAnimeHistory, getHistoryEntries, getLastWatchedEpisode, setAnimeHistory } from '../modules/history';
+import {
+  getAnimeHistory,
+  getHistoryEntries,
+  getLastWatchedEpisode,
+  setAnimeHistory,
+} from '../modules/history';
 import { OS } from '../modules/os';
 import { setDefaultStoreVariables } from '../modules/storeVariables';
 import { animeDataToListAnimeData } from '../modules/utils';
@@ -37,12 +42,12 @@ ipcRenderer.on('console-log', (event, toPrint) => {
   console.log(toPrint);
 });
 
-const store = new Store();
+const STORE = new Store();
 export const AuthContext = createContext<boolean>(false);
 export const ViewerIdContext = createContext<number | null>(null);
 
 export default function App() {
-  const [logged, setLogged] = useState<boolean>(store.get('logged') as boolean);
+  const [logged] = useState<boolean>(STORE.get('logged') as boolean);
   const [viewerId, setViewerId] = useState<number | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
   const [showDonateModal, setShowDonateModal] = useState<boolean>(false);
@@ -75,95 +80,109 @@ export default function App() {
   }, []);
 
   const updateRecommended = async (history: ListAnimeData[]) => {
-    const animeData = history[
-      Math.floor(Math.random() * (history.length - 1))
-    ];
+    const animeData = history[Math.floor(Math.random() * (history.length - 1))];
 
-    if(animeData.media.recommendations === undefined) {
+    if (animeData.media.recommendations === undefined) {
       animeData.media = await getAnimeInfo(animeData.media.id);
       const entry = getAnimeHistory(animeData.media.id as number);
-      if(entry) {
+      if (entry) {
         entry.data = animeData;
         setAnimeHistory(entry);
       }
     }
 
-    const recommendedList = animeData.media.recommendations?.nodes.map((value) => {
-      return {
-        id: null,
-        mediaId: null,
-        progress: null,
-        media: value.mediaRecommendation
-      } as ListAnimeData
-    });
+    const recommendedList = animeData.media.recommendations?.nodes.map(
+      (value) => {
+        return {
+          id: null,
+          mediaId: null,
+          progress: null,
+          media: value.mediaRecommendation,
+        } as ListAnimeData;
+      },
+    );
 
     recommendedList?.push(animeData);
 
     setRecommendedAnime(recommendedList);
-  }
+  };
 
   const updateHistory = async () => {
     const entries = getHistoryEntries();
     const historyAvailable = Object.values(entries).length > 0;
 
     let result: ListAnimeData[] = [];
-    const sortNewest = (a: ListAnimeData, b: ListAnimeData) => (getLastWatchedEpisode((b.media.id ?? (b.media.mediaListEntry && b.media.mediaListEntry.id)) as number)?.timestamp ?? 0) - (getLastWatchedEpisode((a.media.id ?? (a.media.mediaListEntry && a.media.mediaListEntry.id)) as number)?.timestamp ?? 0);
+    const sortNewest = (a: ListAnimeData, b: ListAnimeData) =>
+      (getLastWatchedEpisode(
+        (b.media.id ??
+          (b.media.mediaListEntry && b.media.mediaListEntry.id)) as number,
+      )?.timestamp ?? 0) -
+      (getLastWatchedEpisode(
+        (a.media.id ??
+          (a.media.mediaListEntry && a.media.mediaListEntry.id)) as number,
+      )?.timestamp ?? 0);
 
-    if(logged) {
-      const id = (viewerId as number) || await getViewerId();
+    if (logged) {
+      const id = (viewerId as number) || (await getViewerId());
       result = await getViewerLists(id, 'CURRENT', 'REPEATING', 'PAUSED');
-    } else if(historyAvailable) {
+    } else if (historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
+      result = Object.values(entries)
+        .map((value) => value.data)
+        .sort(sortNewest);
       setCurrentListAnime(result);
       updateRecommended(result);
       return;
     }
 
-    if(result.length === 0 && historyAvailable) {
+    if (result.length === 0 && historyAvailable) {
       setHasHistory(true);
-      result = Object.values(entries).map((value) => value.data).sort(sortNewest);
+      result = Object.values(entries)
+        .map((value) => value.data)
+        .sort(sortNewest);
 
       setCurrentListAnime(result);
       updateRecommended(result);
       return;
     }
 
-    if(historyAvailable)
-      result = Object.values(result).sort(sortNewest);
+    if (historyAvailable) result = Object.values(result).sort(sortNewest);
 
     setCurrentListAnime(result);
     updateRecommended(result);
-  }
+  };
 
   useEffect(() => {
-      const updateSectionListener = async (event: IpcRendererEvent, ...sections: string[]) => {
-        if(sectionUpdate){
-          setSectionUpdate(false);
-          setTimeout(() => setSectionUpdate(true), 3000);
-        } else return;
+    const updateSectionListener = async (
+      event: IpcRendererEvent,
+      ...sections: string[]
+    ) => {
+      if (sectionUpdate) {
+        setSectionUpdate(false);
+        setTimeout(() => setSectionUpdate(true), 3000);
+      } else return;
 
-        for(const section of sections) {
-          switch(section) {
-            case 'history':
-              await updateHistory();
-              continue;
-          }
+      for (const section of sections) {
+        switch (section) {
+          case 'history':
+            await updateHistory();
+            continue;
         }
       }
+    };
 
-      const autoUpdateListener = async () => {
-        setShowDonateModal(false);
-        setShowUpdateModal(true);
-      }
+    const autoUpdateListener = async () => {
+      setShowDonateModal(false);
+      setShowUpdateModal(true);
+    };
 
-      ipcRenderer.on('update-section', updateSectionListener);
-      ipcRenderer.on('auto-update', autoUpdateListener);
+    ipcRenderer.on('update-section', updateSectionListener);
+    ipcRenderer.on('auto-update', autoUpdateListener);
 
-      return () => {
-          ipcRenderer.removeListener('update-section', updateSectionListener);
-          ipcRenderer.removeListener('auto-update', autoUpdateListener);
-      };
+    return () => {
+      ipcRenderer.removeListener('update-section', updateSectionListener);
+      ipcRenderer.removeListener('auto-update', autoUpdateListener);
+    };
   });
 
   const fetchTab1AnimeData = async () => {
@@ -178,10 +197,15 @@ export default function App() {
 
       updateHistory();
 
-      setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
-      setMostPopularAnime(
-        animeDataToListAnimeData(await getMostPopularAnime(id)),
-      );
+      if (STORE.get('light_mode') as boolean) {
+        setTrendingAnime([]);
+        setMostPopularAnime([]);
+      } else {
+        setTrendingAnime(animeDataToListAnimeData(await getTrendingAnime(id)));
+        setMostPopularAnime(
+          animeDataToListAnimeData(await getMostPopularAnime(id)),
+        );
+      }
       // setNextReleasesAnime(animeDataToListAnimeData(await getNextReleases(id)));
     } catch (error) {
       console.log('Tab1 error: ' + error);
@@ -248,7 +272,7 @@ export default function App() {
                       // pausedListAnime={pausedListAnime}
                       // repeatingListAnime={RepeatingListAnime}
                       clicked={() => {
-                        if(tab2Click) return
+                        if (tab2Click) return;
                         setTab2Click(true);
                         fetchTab2AnimeData();
                       }}
@@ -263,7 +287,7 @@ export default function App() {
                     <Tab2
                       currentListAnime={currentListAnime}
                       clicked={() => {
-                        if(tab2Click) return
+                        if (tab2Click) return;
                         setTab2Click(true);
                         fetchTab2AnimeData();
                       }}
@@ -272,19 +296,8 @@ export default function App() {
                 />
               )}
               <Route path="/tab3" element={<Tab3 />} />
-              <Route path="/tab4" element={
-                <Tab4
-                  viewerId={viewerId}
-                />
-              } />
-              <Route
-                path="/tab5"
-                element={
-                  <Tab5
-                    viewerId={viewerId}
-                  />
-                }
-              />
+              <Route path="/tab4" element={<Tab4 viewerId={viewerId} />} />
+              <Route path="/tab5" element={<Tab5 viewerId={viewerId} />} />
             </Routes>
           </MemoryRouter>
         </SkeletonTheme>

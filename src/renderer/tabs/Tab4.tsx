@@ -140,10 +140,12 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   const [adultContent, setAdultContent] = useState<boolean>(
     STORE.get('adult_content') as boolean
   );
+  const [lightMode, setLightMode] = useState<boolean>(
+    STORE.get('light_mode') as boolean
+  );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
   const [userFetched, setUserFetched] = useState<boolean>(false);
-
 
   const handleEpisodesPerPage = (value: any) => {
     STORE.set('episodes_per_page', parseInt(value));
@@ -154,6 +156,13 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
     STORE.set('history', { entries: {} });
     setClearHistory(!clearHistory);
   };
+
+  const handleLightMode = () => {
+    const val = !lightMode
+
+    STORE.set('light_mode', val);
+    setLightMode(val)
+  }
 
   const handleAdultContent = async () => {
     STORE.set('adult_content', !adultContent);
@@ -178,6 +187,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
       const options = getOptions(mutation, variables);
       await makeRequest('POST', 'https://graphql.anilist.co', headers, options);
     }
+
     setAdultContent(!adultContent);
   };
 
@@ -269,6 +279,12 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
           <Heading text="Settings" />
 
           <h1>General</h1>
+
+          <CheckboxElement
+            label="Light mode (disables data loading which can avoided for slow connections)"
+            checked={lightMode}
+            onChange={handleLightMode}
+          />
 
           <CheckboxElement
             label="Show 18+ content"

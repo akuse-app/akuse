@@ -255,11 +255,6 @@ export const AnimeModalWatchButtons: React.FC<{
   const timeUntilAiring = getTimeUntilAiring(listAnimeData.media);
 
   useEffect(() => {
-    // if(localProgress === -1) {
-    //   setProgress(0);
-    //   return;
-    // }
-
     if (localProgress) setProgress(localProgress);
   }, [localProgress]);
 
