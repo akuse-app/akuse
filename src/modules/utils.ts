@@ -225,35 +225,8 @@ export const getScore = (animeEntry: Media) =>
  * @param {*} animeEntry
  * @returns anime progress
  */
-export const getProgress = (animeEntry: Media): number | undefined => {
-  const animeId = (animeEntry.id || animeEntry?.mediaListEntry?.id) as number;
-  const lastWatched = getLastWatchedEpisode(animeId);
-
-  const anilistProgress = (animeEntry.mediaListEntry === null ? 0 : animeEntry?.mediaListEntry?.progress) as number;
-
-  if(lastWatched !== undefined && lastWatched.data !== undefined) {
-    let isFinished = (lastWatched.duration as number * 0.85) > lastWatched.time;
-    const localProgress = Math.max((parseInt(lastWatched.data.episode ?? "0")) - (isFinished ? 1 : 0), 0);
-
-    if(anilistProgress === 0)
-      return localProgress;
-
-    if(anilistProgress !== localProgress) {
-      const episodeEntry = getEpisodeHistory(animeId, anilistProgress);
-
-      if(episodeEntry) {
-        isFinished = (episodeEntry.duration as number * 0.85) > episodeEntry.time;
-        return Math.max(anilistProgress - (isFinished ? 1 : 0), 0);
-      }
-
-      return Math.max(anilistProgress - 1, 0);
-    }
-
-    return Number.isNaN(localProgress) ? 0 : localProgress;
-  }
-
-  return anilistProgress;
-}
+export const getProgress = (animeEntry: Media): number | undefined =>
+  animeEntry.mediaListEntry == null ? 0 : animeEntry.mediaListEntry.progress;
 
 /**
  * Returns whether an anime is available or not

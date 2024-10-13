@@ -155,8 +155,12 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
   };
 
   useEffect(() => {
+    if (!episodesInfoHasFetched) fetchEpisodesInfo();
+  }, []);
+
+  useEffect(() => {
     if (show) {
-      fetchEpisodesInfo();
+      setData();
       (async () => {
         await updateListAnimeData();
         getRelatedAnime();
@@ -190,7 +194,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
       }, 400);
     }
 
-    if (updateSection) ipcRenderer.send('update-section', 'history');
+    // if (updateSection) ipcRenderer.send('update-section', 'history');
 
     onClose();
   };
@@ -203,7 +207,7 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
     }
   };
 
-  const fetchEpisodesInfo = async () => {
+  const setData = async () => {
     const animeId = listAnimeData.media.id as number;
     setLocalProgress(getProgress(listAnimeData.media));
 
@@ -229,9 +233,11 @@ const AnimeModal: React.FC<AnimeModalProps> = ({
         }
       }
     }
+  };
 
+  const fetchEpisodesInfo = async () => {
     axios
-      .get(`${EPISODES_INFO_URL}${animeId}`)
+      .get(`${EPISODES_INFO_URL}${listAnimeData.media.id}`)
       .then((data) => {
         if (data.data && data.data.episodes)
           setEpisodesInfo(data.data.episodes);

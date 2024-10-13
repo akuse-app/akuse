@@ -6,7 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 
-import { getAvailableEpisodes, getParsedFormat, getParsedSeasonYear, getTitle } from '../../modules/utils';
+import {
+  getAvailableEpisodes,
+  getParsedFormat,
+  getParsedSeasonYear,
+  getTitle,
+} from '../../modules/utils';
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import AnimeModal from './modals/AnimeModal';
 
@@ -53,7 +58,7 @@ const StatusDot: React.FC<{
 const AnimeEntry: React.FC<{
   listAnimeData?: ListAnimeData;
   onClick?: () => any;
-}> = ({ listAnimeData, onClick}) => {
+}> = ({ listAnimeData, onClick }) => {
   // wether the modal is shown or not
   const [showModal, setShowModal] = useState<boolean>(false);
   // wether the modal has been opened at least once (used to fetch episodes info only once when opening it)
@@ -65,11 +70,11 @@ const AnimeEntry: React.FC<{
     <>
       {listAnimeData && hasModalBeenShowed && (
         <AnimeModal
-        ref={modalRef}
-        listAnimeData={listAnimeData}
-        show={showModal}
-        onClose={() => setShowModal(false)}
-      />
+          ref={modalRef}
+          listAnimeData={listAnimeData}
+          show={showModal}
+          onClose={() => setShowModal(false)}
+        />
       )}
       <div
         className={`anime-entry show ${listAnimeData ? '' : 'skeleton'}`}
