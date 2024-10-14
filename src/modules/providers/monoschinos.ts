@@ -1,9 +1,11 @@
 import { IVideo } from '@consumet/extensions';
-import Gogoanime from '@consumet/extensions/dist/providers/anime/gogoanime';
+import MonosChinos from '@consumet/extensions/dist/providers/anime/monoschinos';
+
 import ProviderCache from './cache';
 
+const consumet = new MonosChinos()
+
 const cache = new ProviderCache();
-const consumet = new Gogoanime();
 
 export const getEpisodeUrl = async (
   animeTitles: string[],
@@ -11,11 +13,15 @@ export const getEpisodeUrl = async (
   episode: number,
   dubbed: boolean,
   releaseDate: number,
+  totalEpisodes?: number
 ): Promise<IVideo[] | null> => {
   console.log(
     `%c Episode ${episode}, looking for ${consumet.name} source...`,
-    `color: #ffc119`,
+    `color: #e70071`,
   );
+
+  // dubbed is not implemented :(
+  if (dubbed) return null
 
   for (const animeSearch of animeTitles) {
     const result = await searchEpisodeUrl(
@@ -24,6 +30,7 @@ export const getEpisodeUrl = async (
       episode,
       dubbed,
       releaseDate,
+      totalEpisodes
     );
     if (result) {
       return result;
@@ -47,6 +54,7 @@ async function searchEpisodeUrl(
   episode: number,
   dubbed: boolean,
   releaseDate: number,
+  totalEpisodes?: number
 ): Promise<IVideo[] | null> {
   const cacheId = `${animeSearch}-${episode}`;
 
@@ -55,13 +63,13 @@ async function searchEpisodeUrl(
 
   const animeId = await getAnimeId(
     index,
-    dubbed ? `${animeSearch} (Dub)` : animeSearch,
+    dubbed ? `${animeSearch} (???????)` : animeSearch,
     dubbed,
     releaseDate,
   );
 
   if (animeId) {
-    const animeEpisodeId = await getAnimeEpisodeId(animeId, episode);
+    const animeEpisodeId = await getAnimeEpisodeId(animeId, episode, totalEpisodes);
     if (animeEpisodeId) {
       const data = await consumet.fetchEpisodeSources(animeEpisodeId);
       console.log(`%c ${animeSearch}`, `color: #45AD67`);
@@ -120,6 +128,7 @@ export const getAnimeId = async (
 export const getAnimeEpisodeId = async (
   animeId: string,
   episode: number,
+  totalEpisodes?: number
 ): Promise<string | null> => {
   if(cache.episodes[animeId] !== undefined) {
     const found = cache.episodes[animeId]?.find((ep) => ep.number == episode)
@@ -128,7 +137,7 @@ export const getAnimeEpisodeId = async (
       return found.id;
   }
 
-  const data = await consumet.fetchAnimeInfo(animeId);
+  const data = await consumet.fetchAnimeInfo(animeId, totalEpisodes);
   return (
     cache.episodes[animeId] = data?.episodes
   )?.find((ep) => ep.number == episode)?.id ?? null;

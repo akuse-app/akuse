@@ -3,10 +3,11 @@ import Store from 'electron-store';
 
 import { ListAnimeData } from '../../types/anilistAPITypes';
 import { animeCustomTitles } from '../animeCustomTitles';
-import { getParsedAnimeTitles } from '../utils';
-import { getEpisodeUrl as animeunity } from './animeunity';
-import { getEpisodeUrl as gogoanime } from './gogoanime';
+import { getAvailableEpisodes, getEpisodes, getParsedAnimeTitles } from '../utils';
 import { getEpisodeUrl as animedrive } from './animedrive';
+import { getEpisodeUrl as animeunity } from './animeunity';
+import { getEpisodeUrl as monoschinos } from './monoschinos';
+import { getEpisodeUrl as gogoanime } from './gogoanime';
 import { getEpisodeUrl as hianime } from './hianime';
 
 const STORE = new Store();
@@ -60,6 +61,17 @@ export const getUniversalEpisodeUrl = async (
         episode,
         dubbed,
         listAnimeData.media.startDate?.year ?? 0,
+      );
+      return data ? getDefaultQualityVideo(data) : null;
+    }
+    case 'ES': {
+      const data = await monoschinos(
+        animeTitles,
+        customTitle ? customTitle.index : 0,
+        episode,
+        dubbed,
+        listAnimeData.media.startDate?.year ?? 0,
+        getAvailableEpisodes(listAnimeData.media) ?? undefined
       );
       return data ? getDefaultQualityVideo(data) : null;
     }

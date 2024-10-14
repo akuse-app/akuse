@@ -24,5 +24,6 @@ export const animeCustomTitles: AnimeCustomTitles = {
   },
   INT: {},
   IT: {},
+  ES: {},
   HU: {},
 };
