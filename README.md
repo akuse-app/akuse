@@ -45,6 +45,7 @@
 | Gogoanime  | English                                                          | ✅   | ✅   | 🇺🇸 English     |
 | HiAnime    | English, Arabic, French, German, Portuguese, Russian, Spanish... | ✅   | ❌   | 🌍 Universal   |
 | AnimeUnity | Italian                                                          | ✅   | ✅   | 🇮🇹 Italian     |
+| MonosChinos | Spanish                                                          | ❌   | ❌   | 🇪🇸 Spanish     |
 | AnimeDrive | Hungarian                                                        | ❌   | ❌   | 🇭🇺 Hungarian   |
 
 > Note: HiAnime doesn't always provide all the languages!

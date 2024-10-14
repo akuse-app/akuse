@@ -20,6 +20,9 @@ export const getEpisodeUrl = async (
     `color: #e70071`,
   );
 
+  // all broken
+  return null 
+
   // dubbed is not implemented :(
   if (dubbed) return null
 
