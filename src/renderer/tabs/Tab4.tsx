@@ -7,6 +7,7 @@ import { getOptions, makeRequest } from '../../modules/requests';
 import { AuthContext } from '../App';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
+import { spawn } from 'node:child_process';
 
 const STORE = new Store();
 
@@ -17,6 +18,7 @@ interface Option {
 
 interface ElementProps {
   label: string;
+  newItem?: boolean;
   children: React.ReactNode;
 }
 
@@ -28,10 +30,15 @@ export const LANGUAGE_OPTIONS: Option[] = [
   // { value: 'HU', label: '🇭🇺 Hungarian' },
 ];
 
-const Element: React.FC<ElementProps> = ({ label, children }) => {
+const Element: React.FC<ElementProps> = ({
+  label,
+  newItem = false,
+  children,
+}) => {
   return (
     <div className="element">
       <div className="toggler">
+        {newItem && <span className="new-item">New!</span>}
         <p>{label}</p>
         {children}
       </div>
@@ -39,19 +46,14 @@ const Element: React.FC<ElementProps> = ({ label, children }) => {
   );
 };
 
-interface CheckboxElementProps {
+const CheckboxElement: React.FC<{
   label: string;
   checked: boolean;
+  newItem?: boolean;
   onChange: () => void;
-}
-
-const CheckboxElement: React.FC<CheckboxElementProps> = ({
-  label,
-  checked,
-  onChange,
-}) => {
+}> = ({ label, checked, newItem = false, onChange }) => {
   return (
-    <Element label={label}>
+    <Element label={label} newItem={newItem}>
       <label className="switch">
         <input type="checkbox" checked={checked} onChange={onChange} />
         <span className="slider round"></span>
@@ -60,17 +62,11 @@ const CheckboxElement: React.FC<CheckboxElementProps> = ({
   );
 };
 
-interface TextInputElementProps {
+const TextInputElement: React.FC<{
   label: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const TextInputElement: React.FC<TextInputElementProps> = ({
-  label,
-  value,
-  onChange,
-}) => {
+}> = ({ label, value, onChange }) => {
   return (
     <Element label={label}>
       <label>
@@ -85,23 +81,14 @@ const TextInputElement: React.FC<TextInputElementProps> = ({
   );
 };
 
-interface SelectElementProps {
+const SelectElement: React.FC<{
   label: string;
   value: number | string;
   options: Option[];
   width?: number;
   zIndex?: number;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-}
-
-const SelectElement: React.FC<SelectElementProps> = ({
-  label,
-  value,
-  options,
-  width = 140,
-  zIndex = 1,
-  onChange,
-}) => {
+}> = ({ label, value, options, width = 140, zIndex = 1, onChange }) => {
   return (
     <Element label={label}>
       <label>
@@ -117,7 +104,7 @@ const SelectElement: React.FC<SelectElementProps> = ({
   );
 };
 
-const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
+const Tab4: React.FC<{ viewerId: number | null }> = ({ viewerId }) => {
   const logged = useContext(AuthContext);
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
@@ -142,13 +129,13 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
     STORE.get('episodes_per_page') as number,
   );
   const [skipTime, setSkipTime] = useState<number>(
-    STORE.get('key_press_skip') as number
+    STORE.get('key_press_skip') as number,
   );
   const [adultContent, setAdultContent] = useState<boolean>(
-    STORE.get('adult_content') as boolean
+    STORE.get('adult_content') as boolean,
   );
   const [lightMode, setLightMode] = useState<boolean>(
-    STORE.get('light_mode') as boolean
+    STORE.get('light_mode') as boolean,
   );
 
   const [clearHistory, setClearHistory] = useState<boolean>(false);
@@ -165,15 +152,15 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   };
 
   const handleLightMode = () => {
-    const val = !lightMode
+    const val = !lightMode;
 
     STORE.set('light_mode', val);
-    setLightMode(val)
-  }
+    setLightMode(val);
+  };
 
   const handleAdultContent = async () => {
     STORE.set('adult_content', !adultContent);
-    if(STORE.get('access_token')) {
+    if (STORE.get('access_token')) {
       const mutation = `mutation($adultContent:Boolean){
         UpdateUser(displayAdultContent:$adultContent) {
           id
@@ -181,10 +168,10 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
         }
       }`;
 
-      var headers: {[key: string]: string} = {
+      var headers: { [key: string]: string } = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        Authorization: 'Bearer ' + STORE.get('access_token')
+        Authorization: 'Bearer ' + STORE.get('access_token'),
       };
 
       var variables = {
@@ -262,15 +249,16 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
   ];
 
   useEffect(() => {
-    if(viewerId && !userFetched)
-      (async() => {
+    if (viewerId && !userFetched)
+      (async () => {
         const viewerInfo = await getViewerInfo(viewerId);
-        const displayAdultContent = viewerInfo.options.displayAdultContent as boolean;
+        const displayAdultContent = viewerInfo.options
+          .displayAdultContent as boolean;
         STORE.set('adult_content', displayAdultContent);
         setUserFetched(true);
         setAdultContent(displayAdultContent);
-      })()
-  })
+      })();
+  });
 
   return (
     <div className="body-container show-tab">
@@ -281,8 +269,9 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
           <h1>General</h1>
 
           <CheckboxElement
-            label="Light mode (disables data loading which can avoided for slow connections)"
+            label="Light mode (disables some data fetching, which can help avoid issues for slow connections)."
             checked={lightMode}
+            newItem
             onChange={handleLightMode}
           />
 
@@ -292,7 +281,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleAdultContent}
           />
 
-          <br/>
+          <br />
 
           <h1>Playback</h1>
 
@@ -333,7 +322,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleWatchDubbedChange}
           />
 
-          <br/>
+          <br />
 
           <h1>Appearance</h1>
 
@@ -351,7 +340,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
             onChange={handleEpisodesPerPage}
           />
 
-          <br/>
+          <br />
 
           <h1>Sync & Storage</h1>
 
