@@ -1,6 +1,7 @@
 import { IVideo } from '@consumet/extensions';
 import Gogoanime from '@consumet/extensions/dist/providers/anime/gogoanime';
 import ProviderCache from './cache';
+import { getCacheId } from '../utils';
 
 const cache = new ProviderCache();
 const consumet = new Gogoanime();
@@ -48,7 +49,7 @@ async function searchEpisodeUrl(
   dubbed: boolean,
   releaseDate: number,
 ): Promise<IVideo[] | null> {
-  const cacheId = `${animeSearch}-${episode}`;
+  const cacheId = getCacheId(animeSearch, episode, dubbed);
 
   if(cache.search[cacheId] !== undefined)
     return cache.search[cacheId];

@@ -2,6 +2,8 @@ import './styles/VideoPlayer.css';
 import 'react-activity/dist/Dots.css';
 
 import { ISubtitle, IVideo } from '@consumet/extensions';
+import { faFastForward } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import { ipcRenderer } from 'electron';
 import Store from 'electron-store';
 import Hls from 'hls.js';
@@ -9,11 +11,14 @@ import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
+import { EPISODES_INFO_URL } from '../../../constants/utils';
 import {
   getAnimeInfo,
   updateAnimeFromList,
   updateAnimeProgress,
 } from '../../../modules/anilist/anilistApi';
+import AniSkip from '../../../modules/aniskip';
+import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   getAvailableEpisodes,
@@ -21,17 +26,12 @@ import {
   getSequel,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
 import { EpisodeInfo } from '../../../types/types';
+import { ButtonMain } from '../Buttons';
 import BottomControls from './BottomControls';
 import MidControls from './MidControls';
 import TopControls from './TopControls';
-import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
-import AniSkip from '../../../modules/aniskip';
-import { SkipEvent, SkipEventTypes } from '../../../types/aniskipTypes';
-import axios from 'axios';
-import { EPISODES_INFO_URL } from '../../../constants/utils';
-import { ButtonMain } from '../Buttons';
-import { faFastForward } from '@fortawesome/free-solid-svg-icons';
 
 const STORE = new Store();
 const style = getComputedStyle(document.body);
@@ -220,7 +220,7 @@ const VideoPlayer: React.FC<{
   useEffect(() => {
     const video = videoRef.current;
     const handleSeeked = () => {
-      console.log('seeked');
+      // console.log('seeked');
       onChangeLoading(false);
       handleHistoryUpdate();
       setSkipEvent(skipEvent + ' '); /* little hacky but it'll do for now. */
@@ -230,7 +230,7 @@ const VideoPlayer: React.FC<{
     };
 
     const handleWaiting = () => {
-      console.log('waiting');
+      // console.log('waiting');
       onChangeLoading(true);
       setPlaying(false);
     };
@@ -751,6 +751,8 @@ const VideoPlayer: React.FC<{
     let episodes = episodeList;
     let anime = listAnime;
 
+    console.log({ episodeCount, episodeToPlay });
+
     if (episodeCount < episodeToPlay && sequel) {
       const animeId = sequel.id;
       const media = await getAnimeInfo(sequel.id);
@@ -805,6 +807,8 @@ const VideoPlayer: React.FC<{
 
       onChangeLoading(false);
     };
+
+    console.log({ anime, episodeToPlay });
 
     const data = await getUniversalEpisodeUrl(anime, episodeToPlay);
     if (!data) {

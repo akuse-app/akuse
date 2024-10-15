@@ -1,13 +1,12 @@
 import Store from 'electron-store';
-import { ContentSteeringController } from 'hls.js';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
+import { getViewerInfo } from '../../modules/anilist/anilistApi';
+import { getOptions, makeRequest } from '../../modules/requests';
 import { AuthContext } from '../App';
-import { ipcRenderer } from 'electron';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
-import toast, { Toaster } from 'react-hot-toast';
-import { getOptions, makeRequest } from '../../modules/requests';
-import { getViewerInfo } from '../../modules/anilist/anilistApi';
 
 const STORE = new Store();
 
@@ -20,6 +19,14 @@ interface ElementProps {
   label: string;
   children: React.ReactNode;
 }
+
+export const LANGUAGE_OPTIONS: Option[] = [
+  { value: 'INT', label: '🌍 Universal ' },
+  { value: 'US', label: '🇺🇸 English' },
+  { value: 'IT', label: '🇮🇹 Italian' },
+  { value: 'ES', label: '🇪🇸 Spanish' },
+  { value: 'HU', label: '🇭🇺 Hungarian' },
+];
 
 const Element: React.FC<ElementProps> = ({ label, children }) => {
   return (
@@ -226,14 +233,6 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
     setAutoplayNext(!autoplayNext);
   };
 
-  const languageOptions: Option[] = [
-    { value: 'INT', label: '🌍 Universal ' },
-    { value: 'US', label: '🇺🇸 English' },
-    { value: 'IT', label: '🇮🇹 Italian' },
-    { value: 'ES', label: '🇪🇸 Spanish' },
-    { value: 'HU', label: '🇭🇺 Hungarian' },
-  ];
-
   const episodesPerPageOptions: Option[] = [
     { value: 5, label: '5' },
     { value: 10, label: '10' },
@@ -300,7 +299,7 @@ const Tab4: React.FC<{viewerId: number | null}> = ({ viewerId }) => {
           <SelectElement
             label="Select the language in which you want to watch the episodes"
             value={selectedLanguage}
-            options={languageOptions}
+            options={LANGUAGE_OPTIONS}
             zIndex={5}
             onChange={handleLanguageChange}
             width={145}

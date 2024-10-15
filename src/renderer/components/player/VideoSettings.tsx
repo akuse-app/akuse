@@ -1,20 +1,33 @@
-import React, { forwardRef, useContext, useEffect, useRef, useState, ChangeEvent } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ISubtitle } from '@consumet/extensions';
 import {
+  faCirclePlay,
   faClock,
   faGear,
+  faHeadphones,
   faLanguage,
   faRotateRight,
+  faSpinner,
   faVideo,
   faVolumeHigh,
   faVolumeLow,
   faVolumeXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import Select from '../Select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Store from 'electron-store';
-import { AuthContext } from '../../App';
 import Hls from 'hls.js';
-import { ISubtitle } from '@consumet/extensions';
+import React, {
+  ChangeEvent,
+  forwardRef,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import Dots from 'react-activity/dist/Dots';
+
+import { AuthContext } from '../../App';
+import Select from '../Select';
+import { LANGUAGE_OPTIONS } from '../../tabs/Tab4';
 
 const STORE = new Store();
 
@@ -23,9 +36,7 @@ interface SettingsProps {
   onShow: (show: boolean) => void;
   videoRef: React.RefObject<HTMLVideoElement>;
   subtitleTracks?: ISubtitle[];
-  onSubtitleTrack: (
-    track: ISubtitle
-  ) => void;
+  onSubtitleTrack: (track: ISubtitle) => void;
   hls?: Hls;
   onChangeEpisode: (
     episode: number | null,
@@ -34,10 +45,21 @@ interface SettingsProps {
 }
 
 const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
-  ({ show, onShow, videoRef, hls, onChangeEpisode, onSubtitleTrack, subtitleTracks }, ref) => {
+  (
+    {
+      show,
+      onShow,
+      videoRef,
+      hls,
+      onChangeEpisode,
+      onSubtitleTrack,
+      subtitleTracks,
+    },
+    ref,
+  ) => {
     const logged = useContext(AuthContext);
 
-    subtitleTracks = subtitleTracks?.filter(value => value.lang);
+    subtitleTracks = subtitleTracks?.filter((value) => value.lang);
 
     const [hlsData, setHlsData] = useState<Hls>();
     const [updateProgress, setUpdateProgress] = useState<boolean>(
@@ -61,9 +83,8 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     const [isMuted, setIsMuted] = useState(false);
     const [volume, setVolume] = useState<number>(STORE.get('volume') as number);
     const [speed, setSpeed] = useState('1');
-    const [changeEpisodeLoading, setChangeEpisodeLoading] = useState<boolean>(
-      false,
-    );
+    const [changeEpisodeLoading, setChangeEpisodeLoading] =
+      useState<boolean>(false);
     const [subtitleTrack, setSubtitleTrack] = useState<ISubtitle | undefined>();
 
     useEffect(() => {
@@ -94,12 +115,17 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     }, []);
 
     useEffect(() => {
-      if(!subtitleTrack) {
+      if (!subtitleTrack) {
         const lastUsed = STORE.get('subtitle_language') as string;
         setSubtitleTrack(
-          (subtitleTracks && subtitleTracks.length > 0) ? (subtitleTracks.find(value =>
-            value.lang.substring(0, lastUsed.length) === lastUsed as string) || subtitleTracks[0]) : undefined
-        )
+          subtitleTracks && subtitleTracks.length > 0
+            ? subtitleTracks.find(
+                (value) =>
+                  value.lang.substring(0, lastUsed.length) ===
+                  (lastUsed as string),
+              ) || subtitleTracks[0]
+            : undefined,
+        );
       }
 
       setHlsData(hls);
@@ -170,12 +196,12 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
     };
 
     const handleLanguageChange = async (value: any) => {
-      console.log(value);
+      console.log(value)
       const previous = STORE.get('source_flag');
       STORE.set('source_flag', value);
-
+  
       setChangeEpisodeLoading(true);
-
+  
       if (await onChangeEpisode(null, true)) {
         setSelectedLanguage(value);
         setChangeEpisodeLoading(false);
@@ -203,7 +229,10 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
 
     return (
       <div className="settings-content">
-        <button className={`b-player ${show ? 'active' : ''}`} onClick={toggleShow}>
+        <button
+          className={`b-player ${show ? 'active' : ''}`}
+          onClick={toggleShow}
+        >
           <div className="tooltip">
             <FontAwesomeIcon className="i" icon={faGear} />
             <div className="tooltip-text">Settings</div>
@@ -292,22 +321,28 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
                 width={100}
               />
             </li>
-            {subtitleTrack && subtitleTracks && <li className="subtitle-tracks">
-              <span>
-                <FontAwesomeIcon className="i label" icon={faLanguage} />
-                Subtitles
-              </span>
-              <Select
-                zIndex={10}
-                options={subtitleTracks.filter(value => value.lang && value.lang !== 'Thumbnails').map(value => ({
-                  label: value.lang,
-                  value: value
-                }))}
-                selectedValue={subtitleTrack}
-                onChange={handleChangeSubtitleTrack}
-                width={100}
-              />
-            </li>}
+            {subtitleTrack && subtitleTracks && (
+              <li className="subtitle-tracks">
+                <span>
+                  <FontAwesomeIcon className="i label" icon={faLanguage} />
+                  Subtitles
+                </span>
+                <Select
+                  zIndex={10}
+                  options={subtitleTracks
+                    .filter(
+                      (value) => value.lang && value.lang !== 'Thumbnails',
+                    )
+                    .map((value) => ({
+                      label: value.lang,
+                      value: value,
+                    }))}
+                  selectedValue={subtitleTrack}
+                  onChange={handleChangeSubtitleTrack}
+                  width={100}
+                />
+              </li>
+            )}
             <li className="intro-skip-time">
               <span>
                 <FontAwesomeIcon className="i label" icon={faRotateRight} />
@@ -326,6 +361,75 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
                 width={100}
               />
             </li>
+            {logged && (
+              <li className="update-progress">
+                <span>
+                  <FontAwesomeIcon className="i label" icon={faSpinner} />
+                  Update progress
+                </span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={updateProgress}
+                    onChange={handleUpdateProgressChange}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              </li>
+            )}
+            <li className="autoplay-next">
+              <span>
+                <FontAwesomeIcon className="i label" icon={faCirclePlay} />
+                Autoplay Next
+              </span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={autoplayNext}
+                  onChange={handleAutoplayNext}
+                />
+                <span className="slider round"></span>
+              </label>
+            </li>
+            <li className="dub">
+              <span>
+                <FontAwesomeIcon className="i label" icon={faHeadphones} />
+                Dub
+              </span>
+              {changeEpisodeLoading ? (
+                <div className="activity-indicator">
+                  <Dots />
+                </div>
+              ) : (
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={watchDubbed}
+                    onChange={handleWatchDubbedChange}
+                  />
+                  <span className="slider round"></span>
+                </label>
+              )}
+            </li>
+            {/* <li className="language">
+              <span>
+                <FontAwesomeIcon className="i label" icon={faLanguage} />
+                Language
+              </span>
+              {changeEpisodeLoading ? (
+                <div className="activity-indicator">
+                  <Dots />
+                </div>
+              ) : (
+                <Select
+                  zIndex={9}
+                  options={LANGUAGE_OPTIONS}
+                  selectedValue={selectedLanguage}
+                  onChange={handleLanguageChange}
+                  width={140}
+                />
+              )}
+            </li> */}
           </div>
         )}
       </div>
