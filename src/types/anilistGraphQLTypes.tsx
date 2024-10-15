@@ -1,5 +1,3 @@
-import internal from "node:stream";
-
 export type MediaTitle = {
   romaji?: string;
   english?: string;
@@ -24,14 +22,14 @@ export type MediaFormat =
   | 'ALTERNATIVE'
   | 'SIDE_STORY'
   | 'CHARACTER'
-  | 'SUMMARY'
+  | 'SUMMARY';
 
 export type MediaStatus =
   | 'FINISHED'
   | 'RELEASING'
   | 'NOT_YET_RELEASED'
   | 'CANCELLED'
-  | 'HIATUS'
+  | 'HIATUS';
 
 export type FuzzyDate = {
   year?: number;
@@ -39,7 +37,7 @@ export type FuzzyDate = {
   day?: number;
 };
 
-export type MediaSeason = 'WINTER' | 'SPRING' | 'SUMMER' | 'FALL'
+export type MediaSeason = 'WINTER' | 'SPRING' | 'SUMMER' | 'FALL';
 
 export type MediaCoverImage = {
   extraLarge?: string;
@@ -49,9 +47,9 @@ export type MediaCoverImage = {
 };
 
 export type AiringPage = {
-  airingSchedules: AiringSchedule[]
-  pageInfo: PageInfo
-}
+  airingSchedules: AiringSchedule[];
+  pageInfo: PageInfo;
+};
 
 export type AiringSchedule = {
   id: number;
@@ -68,7 +66,7 @@ export type MediaListStatus =
   | 'COMPLETED'
   | 'DROPPED'
   | 'PAUSED'
-  | 'REPEATING'
+  | 'REPEATING';
 
 export type MediaList = {
   id: number;
@@ -102,10 +100,10 @@ export const RelationTypes = {
   Adaptation: 'ADAPTATION',
   SpinOff: 'SPIN_OFF',
   Compilation: 'COMPILATION',
-  Contains: 'CONTAINS'
+  Contains: 'CONTAINS',
 };
 
-export type RelationType = typeof RelationTypes[keyof typeof RelationTypes];
+export type RelationType = (typeof RelationTypes)[keyof typeof RelationTypes];
 
 export type Relation = {
   id: number;
@@ -124,14 +122,14 @@ export type Recommend = {
 
 export type RecommendConnection = {
   nodes: Recommend[];
-}
+};
 
 export const MediaTypes = {
   Anime: 'ANIME',
-  Manga: 'MANGA'
+  Manga: 'MANGA',
 };
 
-export type MediaType = typeof MediaTypes[keyof typeof MediaTypes];
+export type MediaType = (typeof MediaTypes)[keyof typeof MediaTypes];
 
 export type Media = {
   id?: number;
@@ -157,6 +155,13 @@ export type Media = {
   favourites?: number;
   isAdult?: boolean;
   nextAiringEpisode?: AiringSchedule;
+  airingSchedule?: {
+    edges?: Array<{
+      node?: {
+        episode: number;
+      };
+    }>;
+  };
   mediaListEntry?: MediaList;
   siteUrl?: string;
   trailer?: MediaTrailer;

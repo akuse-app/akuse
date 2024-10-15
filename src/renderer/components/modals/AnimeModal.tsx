@@ -1,21 +1,17 @@
 import './styles/AnimeModal.css';
 
 import { IVideo } from '@consumet/extensions';
-import {
-  faCircleExclamation,
-  faStar,
-  faTv,
-  faVolumeHigh,
-  faVolumeXmark,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faStar, faTv, faVolumeHigh, faVolumeXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Store from 'electron-store';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import toast, { Toaster } from 'react-hot-toast';
+
 import { EPISODES_INFO_URL } from '../../../constants/utils';
+import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
+import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
 import { getUniversalEpisodeUrl } from '../../../modules/providers/api';
 import {
   capitalizeFirstLetter,
@@ -28,7 +24,9 @@ import {
   relationsToListAnimeData,
 } from '../../../modules/utils';
 import { ListAnimeData } from '../../../types/anilistAPITypes';
+import { MediaFormat, MediaTypes, RelationTypes } from '../../../types/anilistGraphQLTypes';
 import { EpisodeInfo } from '../../../types/types';
+import AnimeSections from '../AnimeSections';
 import { ButtonCircle } from '../Buttons';
 import VideoPlayer from '../player/VideoPlayer';
 import {
@@ -41,15 +39,6 @@ import {
 } from './AnimeModalElements';
 import EpisodesSection from './EpisodesSection';
 import { ModalPage, ModalPageShadow } from './Modal';
-import { ipcRenderer } from 'electron';
-import { getAnimeHistory, setAnimeHistory } from '../../../modules/history';
-import {
-  MediaFormat,
-  MediaTypes,
-  RelationTypes,
-} from '../../../types/anilistGraphQLTypes';
-import { getAnimeInfo } from '../../../modules/anilist/anilistApi';
-import AnimeSections from '../AnimeSections';
 
 const modalsRoot = document.getElementById('modals-root');
 const STORE = new Store();

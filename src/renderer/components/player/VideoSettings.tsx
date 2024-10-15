@@ -361,36 +361,6 @@ const VideoSettings = forwardRef<HTMLDivElement, SettingsProps>(
                 width={100}
               />
             </li>
-            {logged && (
-              <li className="update-progress">
-                <span>
-                  <FontAwesomeIcon className="i label" icon={faSpinner} />
-                  Update progress
-                </span>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={updateProgress}
-                    onChange={handleUpdateProgressChange}
-                  />
-                  <span className="slider round"></span>
-                </label>
-              </li>
-            )}
-            <li className="autoplay-next">
-              <span>
-                <FontAwesomeIcon className="i label" icon={faCirclePlay} />
-                Autoplay Next
-              </span>
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={autoplayNext}
-                  onChange={handleAutoplayNext}
-                />
-                <span className="slider round"></span>
-              </label>
-            </li>
             <li className="dub">
               <span>
                 <FontAwesomeIcon className="i label" icon={faHeadphones} />

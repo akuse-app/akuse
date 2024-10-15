@@ -137,6 +137,13 @@ const MEDIA_DATA: string = `
             episode
             airingAt
         }
+        airingSchedule {
+          edges {
+            node {
+              episode
+            }
+          }
+        }
         mediaListEntry {
             id
             mediaId

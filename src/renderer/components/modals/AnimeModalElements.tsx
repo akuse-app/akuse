@@ -47,7 +47,7 @@ import { ButtonCircle, ButtonMain } from '../Buttons';
 import { stat } from 'fs';
 import Store from 'electron-store';
 
-const store = new Store()
+const store = new Store();
 
 export const AnimeModalStatus: React.FC<{
   status: MediaStatus | undefined;
@@ -140,6 +140,11 @@ export const AnimeModalEpisodes: React.FC<{
   const duration = listAnimeData.media.duration;
   const status = getParsedStatus(listAnimeData.media.status);
   const availableEpisodes = getAvailableEpisodes(listAnimeData.media);
+  const episodes = getEpisodes(listAnimeData.media);
+
+  if (listAnimeData.media.id == 21) {
+    console.log(listAnimeData.media.airingSchedule?.edges);
+  }
 
   return (
     <li>
@@ -160,9 +165,7 @@ export const AnimeModalEpisodes: React.FC<{
             style={{ marginRight: 7 }}
           />
           {availableEpisodes || '?'}{' '}
-          {status === 'Releasing' &&
-            ` / ${listAnimeData.media.episodes || '?'}`}{' '}
-          Episodes
+          {status === 'Releasing' && ` / ${episodes || '?'}`} Episodes
         </>
       )}
     </li>
