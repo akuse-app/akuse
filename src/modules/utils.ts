@@ -1,6 +1,14 @@
 import { AnimeData, ListAnimeData } from '../types/anilistAPITypes';
-import { AiringSchedule, Media, MediaFormat, MediaStatus, MediaTypes, Relation, RelationType, RelationTypes } from '../types/anilistGraphQLTypes';
-import { getAnimeHistory, getEpisodeHistory, getLastWatchedEpisode } from './history';
+import {
+  AiringSchedule,
+  Media,
+  MediaFormat,
+  MediaStatus,
+  MediaTypes,
+  Relation,
+  RelationType,
+  RelationTypes,
+} from '../types/anilistGraphQLTypes';
 
 const MONTHS = {
   '1': 'January',
@@ -27,17 +35,17 @@ const MONTHS = {
 };
 
 const DISCORD_PHRASES: string[] = [
-  'Fighting Titans to protect humanity.',
+  'On a trip with the Survey Corps.',
   'Honing Nen abilities.',
   'Getting the Hunter License.',
   'Looking for the One Piece.',
   'Training to become the Hokage.',
-  'On a mission with the Hashira Pillars.',
-  'Enjoying some apples with Ryuk.',
+  'On a mission with the Hashiras.',
+  'Eating apples with Ryuk.',
   'Exploring The Abyss.',
   'Training with Saitama.',
-  'Rebuilding civilization after the Pietrification.',
-  'Playing poker with my Stand.',
+  'Rebuilding civilization.',
+  'Playing poker with in Egypt.',
   'Watching a movie with Makima.',
   'Attempting to summon Mahoraga.',
 ];
