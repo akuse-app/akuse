@@ -5,6 +5,10 @@ import { ListAnimeData, UserInfo } from '../../types/anilistAPITypes';
 import { AuthContext } from '../App';
 import AnimeSection from '../components/AnimeSection';
 import Slideshow from '../components/Slideshow';
+import Store from 'electron-store'
+import Heading from '../components/Heading';
+
+const STORE = new Store()
 
 interface Tab1Props {
   userInfo?: UserInfo
@@ -31,15 +35,12 @@ const Tab1: React.FC<Tab1Props> = ({
                           recommendedAnime[recommendedAnime.length - 1] || undefined;
   let recommendedTitle = recommendedFrom &&
                            getTitle(recommendedFrom.media);
-  // const logged = store.get('logged') as boolean;
 
   return (
     <div className="body-container  show-tab">
       <div className="main-container lifted">
         <main>
-          {/* {logged ? <Heading text={`Welcome back, ${userInfo?.name}`} /> : <Heading text={`Welcome back`} />} */}
-
-          {/* <UserNavbar avatar={userInfo?.avatar?.medium} /> */}
+          {STORE.get('light_mode') as boolean && <Heading text="Discover" />}
 
           <Slideshow listAnimeData={trendingAnime} />
 
