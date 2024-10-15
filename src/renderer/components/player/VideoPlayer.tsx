@@ -576,6 +576,7 @@ const VideoPlayer: React.FC<{
   const handleVideoPause = () => {
     setShowPauseInfo(false);
     setShowControls(true);
+    setShowCursor(true);
     debounce(
       'pauseInfo',
       () => {
@@ -586,7 +587,10 @@ const VideoPlayer: React.FC<{
     debounce(
       'pauseControl',
       () => {
-        !isDropdownOpen && setShowControls(false);
+        if (!isDropdownOpen) {
+          setShowControls(false);
+          setShowCursor(false);
+        }
       },
       2000,
     );
@@ -622,8 +626,10 @@ const VideoPlayer: React.FC<{
     debounce(
       'pauseControl',
       () => {
-        !isDropdownOpen && setShowControls(false);
-        !isDropdownOpen && setShowCursor(false);
+        if (!isDropdownOpen) {
+          setShowControls(false);
+          setShowCursor(false);
+        }
       },
       2000,
     );
