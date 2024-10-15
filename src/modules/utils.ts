@@ -53,31 +53,37 @@ const DISCORD_PHRASES: string[] = [
 export const getRandomDiscordPhrase = (): string =>
   DISCORD_PHRASES[Math.floor(Math.random() * DISCORD_PHRASES.length)];
 
+export const getCacheId = (
+  animeSearch: string,
+  episode: number,
+  dubbed: boolean,
+): string => `${animeSearch}-${episode}-${dubbed ? 'dub' : 'sub'}`;
+
 export const airingDataToListAnimeData = (
-  airingScheduleData: AiringSchedule[]
+  airingScheduleData: AiringSchedule[],
 ): ListAnimeData[] => {
   return airingScheduleData.map((value) => {
     return {
       id: null,
       mediaId: null,
       progress: null,
-      media: value.media as Media
+      media: value.media as Media,
     };
   });
 };
 
 export const relationsToListAnimeData = (
-  relations: Relation[]
+  relations: Relation[],
 ): ListAnimeData[] => {
   return relations.map((value) => {
     return {
       id: null,
       mediaId: null,
       progress: null,
-      media: value.node
-    }
-  })
-}
+      media: value.node,
+    };
+  });
+};
 
 export const animeDataToListAnimeData = (
   animeData: AnimeData,
@@ -158,14 +164,14 @@ export const getEpisodes = (animeEntry: Media): number | null =>
  */
 export const getSequel = (animeEntry: Media): Media | null => {
   const relations = animeEntry.relations;
-  if (!relations) return null
+  if (!relations) return null;
 
-  for(const relation of relations.edges) {
-    const sequel = relation.relationType === RelationTypes.Sequel &&
-                    relation.node.type === MediaTypes.Anime &&
-                    relation.node;
-    if (!sequel)
-      continue;
+  for (const relation of relations.edges) {
+    const sequel =
+      relation.relationType === RelationTypes.Sequel &&
+      relation.node.type === MediaTypes.Anime &&
+      relation.node;
+    if (!sequel) continue;
 
     return sequel;
   }
@@ -185,7 +191,7 @@ export const getSequel = (animeEntry: Media): Media | null => {
   //   return null
 
   // return sequel.node;
-}
+};
 
 /**
  * Gets the anime available episodes number from 'episodes' or 'nextAiringEpisode'
@@ -335,7 +341,9 @@ export const getParsedStatus = (status: MediaStatus | undefined) => {
  * @param {*} status
  * @returns
  */
-export const getParsedFormat = (format: MediaFormat | RelationType | undefined) => {
+export const getParsedFormat = (
+  format: MediaFormat | RelationType | undefined,
+) => {
   switch (format) {
     case 'TV':
       return 'TV Show';
@@ -432,7 +440,8 @@ export const getParsedAnimeTitles = (animeEntry: Media): string[] => {
       animeTitles.push(title.replace('Season ', '').replace('Part ', ''));
     if (title.includes('Part ')) animeTitles.push(title.replace('Part ', ''));
     if (title.includes(':')) animeTitles.push(title.replace(':', ''));
-    if (title.includes('(') && title.includes(')')) // hunter x hunter
+    if (title.includes('(') && title.includes(')'))
+      // hunter x hunter
       animeTitles.push(title.replace('(', '').replace(')', ''));
   });
 

@@ -2,6 +2,7 @@ import { IVideo } from '@consumet/extensions';
 import ProviderCache from './cache';
 import Zoro from '@consumet/extensions/dist/providers/anime/zoro';
 import axios from 'axios';
+import { getCacheId } from '../utils';
 
 const cache = new ProviderCache();
 const consumet = new Zoro();
@@ -47,7 +48,7 @@ async function searchEpisodeUrl(
   episode: number,
   dubbed: boolean,
 ): Promise<IVideo[] | null> {
-  const cacheId = `${animeSearch}-${episode}`;
+  const cacheId = getCacheId(animeSearch, episode, dubbed);
 
   if(cache.search[cacheId] !== undefined)
     return cache.search[cacheId];
@@ -77,7 +78,7 @@ async function searchEpisodeUrl(
           }) ?? null
         );
       } catch {
-        /* consumet fails to get raw servers so this needed. */
+        /* consumet fails to get raw servers so this needed. damn */
         const episodeId = animeEpisodeId.replace('$episode$', '?ep=').split('$')[0];
 
         const servers = (await axios.get(
