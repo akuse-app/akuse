@@ -24,8 +24,8 @@ export const LANGUAGE_OPTIONS: Option[] = [
   { value: 'INT', label: '🌍 Universal ' },
   { value: 'US', label: '🇺🇸 English' },
   { value: 'IT', label: '🇮🇹 Italian' },
-  { value: 'ES', label: '🇪🇸 Spanish' },
-  { value: 'HU', label: '🇭🇺 Hungarian' },
+  // { value: 'ES', label: '🇪🇸 Spanish' },
+  // { value: 'HU', label: '🇭🇺 Hungarian' },
 ];
 
 const Element: React.FC<ElementProps> = ({ label, children }) => {
