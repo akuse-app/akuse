@@ -297,12 +297,12 @@
 }
 
 .anime-page .episodes-section .episode-entry:hover {
-  transform: scale(1.027);
+  /* transform: scale(1.027); */
   background-color: var(--color-2);
 }
 
 .anime-page .episodes-section .episodes:hover> :not(:hover) {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .anime-page .episodes-section .episode-entry:active {

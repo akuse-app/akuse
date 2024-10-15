@@ -491,14 +491,25 @@ main .entries-container .anime-entry {
 
 .settings-page {
   position: relative;
-  width: 1000px;
-  height: 600px;
-  border-radius: var(--border-radius);
+  display: flex;
+  gap: 20px;
+  margin-left: -20px;
+  width: calc(100% + 40px);
+  height: 100%;
   background: var(--color-1);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  border-radius: var(--border-radius);
+}
+
+.settings-page .left {
   display: flex;
   flex-direction: column;
+  width: 300px;
+}
+
+.settings-page .right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .settings-page span.new-item {
@@ -506,78 +517,55 @@ main .entries-container .anime-entry {
   justify-content: center;
   align-items: center;
   margin-right: 8px;
+  font-weight: 600;
   padding: 3px 6px;
   color: var(--color-1);
   background-color: var(--color-important);
   border-radius: var(--border-radius);
 }
 
-.settings-page .content-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding: 30px;
-}
-
-.settings-page .content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
-
-.settings-page .content .left {
-  width: 20%;
-  height: 100%;
-  border-right: 2px solid var(--color-3);
-}
-
-.settings-page .content .left ul {
-  padding-left: 0px;
-  text-decoration: none;
-  padding-right: 30px;
-}
-
-.settings-page .content .left ul li {
-  list-style-type: none;
-  color: var(--font-3);
-  font-size: 1.1rem;
-  padding: 13px 20px;
-  margin-bottom: 10px;
-  /* cursor: pointer; */
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-}
-
-.settings-page .content .left ul li.active {
-  color: var(--font-1);
-  background-color: var(--color-3);
-}
-
-.settings-page .content .left ul li:hover {
-  color: var(--font-1);
-  background-color: var(--color-3);
-}
-
-.settings-page {
-  width: 100%;
-  height: 100%;
-}
-
-.settings-page .toggler {
+.settings-page .item {
   display: flex;
   align-items: center;
   /* padding: 10px 20px; */
   padding: 0 20px;
   min-height: 52px;
   color: var(--font-1);
+  margin-bottom: 12px;
   background-color: var(--color-3);
-  margin-bottom: 15px;
   border-radius: var(--border-radius);
 }
 
-.settings-page .toggler label {
+.settings-page .item.clickable {
+  cursor: pointer;
+}
+
+.settings-page .item.disabled {
+  color: var(--font-2);
+  background-color: transparent;
+}
+
+.settings-page .item.disabled:hover {
+  color: var(--font-1);
+  background-color: var(--color-2);
+}
+
+.settings-page .item.disabled:active {
+  color: var(--font-1);
+  filter: brightness(0.95);
+}
+
+.settings-page .item label {
   margin-left: auto;
+}
+
+.settings-page .version {
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 10px;
+  font-size: 0.85rem;
+  color: var(--font-3);
+  border-top: 1px solid var(--color-3);
 }
 
 .settings-page form {

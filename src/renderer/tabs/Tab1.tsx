@@ -53,12 +53,12 @@ const Tab1: React.FC<Tab1Props> = ({
             <AnimeSection title="Trending Now" animeData={trendingAnime} />
             {hasHistory && recommendedFrom && (
               <AnimeSection
-                title={`Recommendations From "${
+                title={`Because you watched ${
                   (recommendedTitle &&
                   recommendedTitle.length > 58) ?
                   recommendedTitle.substring(0, 58) + '...' :
                   recommendedTitle
-                }"`}
+                }`}
                 animeData={recommendedAnime?.slice(0, -1)}
               />
             )}

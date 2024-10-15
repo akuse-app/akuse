@@ -1,25 +1,19 @@
 import Store from 'electron-store';
+import * as os from 'os';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 import { getViewerInfo } from '../../modules/anilist/anilistApi';
 import { getOptions, makeRequest } from '../../modules/requests';
 import { AuthContext } from '../App';
 import Heading from '../components/Heading';
 import Select from '../components/Select';
-import { spawn } from 'node:child_process';
 
 const STORE = new Store();
 
 interface Option {
   value: any;
   label: string;
-}
-
-interface ElementProps {
-  label: string;
-  newItem?: boolean;
-  children: React.ReactNode;
 }
 
 export const LANGUAGE_OPTIONS: Option[] = [
@@ -30,18 +24,21 @@ export const LANGUAGE_OPTIONS: Option[] = [
   // { value: 'HU', label: '🇭🇺 Hungarian' },
 ];
 
-const Element: React.FC<ElementProps> = ({
-  label,
-  newItem = false,
-  children,
-}) => {
+const Element: React.FC<{
+  label: string;
+  newItem?: boolean;
+  disabled?: boolean;
+  children?: React.ReactNode;
+  onClick?: () => void;
+}> = ({ label, newItem = false, disabled = false, children, onClick }) => {
   return (
-    <div className="element">
-      <div className="toggler">
-        {newItem && <span className="new-item">New!</span>}
-        <p>{label}</p>
-        {children}
-      </div>
+    <div
+      className={`item${onClick ? ' clickable' : ''}${disabled ? ' disabled' : ''}`}
+      onClick={onClick}
+    >
+      {newItem && <span className="new-item">New!</span>}
+      <p>{label}</p>
+      {children}
     </div>
   );
 };
@@ -106,6 +103,20 @@ const SelectElement: React.FC<{
 
 const Tab4: React.FC<{ viewerId: number | null }> = ({ viewerId }) => {
   const logged = useContext(AuthContext);
+
+  useEffect(() => {
+    if (viewerId && !userFetched)
+      (async () => {
+        const viewerInfo = await getViewerInfo(viewerId);
+        const displayAdultContent = viewerInfo.options
+          .displayAdultContent as boolean;
+        STORE.set('adult_content', displayAdultContent);
+        setUserFetched(true);
+        setAdultContent(displayAdultContent);
+      })();
+  });
+
+  const [activeSection, setActiveSection] = useState<string>('General');
 
   const [updateProgress, setUpdateProgress] = useState<boolean>(
     STORE.get('update_progress') as boolean,
@@ -220,143 +231,181 @@ const Tab4: React.FC<{ viewerId: number | null }> = ({ viewerId }) => {
     setAutoplayNext(!autoplayNext);
   };
 
-  const episodesPerPageOptions: Option[] = [
-    { value: 5, label: '5' },
-    { value: 10, label: '10' },
-    { value: 20, label: '20' },
-    { value: 30, label: '30' },
-    { value: 40, label: '40' },
-    { value: 50, label: '50' },
-  ];
+  const getDetailedOSInfo = () => {
+    const platform = os.platform();
+    const arch = os.arch();
+    const release = os.release();
+    const osType = os.type();
 
-  const introSkipTimeOptions: Option[] = [
-    { value: 60, label: '60' },
-    { value: 65, label: '65' },
-    { value: 70, label: '70' },
-    { value: 75, label: '75' },
-    { value: 80, label: '80' },
-    { value: 85, label: '85' },
-    { value: 90, label: '90' },
-    { value: 95, label: '95' },
-  ];
+    return `${osType} ${arch} (${release})`;
+  };
 
-  const skipTimeOptions: Option[] = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 },
-  ];
+  const renderSectionsSwitch = () => {
+    switch (activeSection) {
+      case 'General':
+        return (
+          <div className="show">
+            <CheckboxElement
+              label="Light mode (disables some data fetching, which can help avoid issues for slow connections)."
+              checked={lightMode}
+              newItem
+              onChange={handleLightMode}
+            />
 
-  useEffect(() => {
-    if (viewerId && !userFetched)
-      (async () => {
-        const viewerInfo = await getViewerInfo(viewerId);
-        const displayAdultContent = viewerInfo.options
-          .displayAdultContent as boolean;
-        STORE.set('adult_content', displayAdultContent);
-        setUserFetched(true);
-        setAdultContent(displayAdultContent);
-      })();
-  });
+            <CheckboxElement
+              label="Show 18+ content"
+              checked={adultContent}
+              onChange={handleAdultContent}
+            />
+          </div>
+        );
+      case 'Player':
+        return (
+          <div className="show">
+            <SelectElement
+              label="Select the language in which you want to watch the episodes"
+              value={selectedLanguage}
+              options={LANGUAGE_OPTIONS}
+              zIndex={5}
+              onChange={handleLanguageChange}
+              width={145}
+            />
+
+            <CheckboxElement
+              label="Watch dubbed"
+              checked={watchDubbed}
+              onChange={handleWatchDubbedChange}
+            />
+
+            <CheckboxElement
+              label="Autoplay next episode"
+              checked={autoplayNext}
+              onChange={handleAutoplayNextChange}
+            />
+
+            <SelectElement
+              label="Select the duration of the default intro skip (in seconds)"
+              value={introSkipTime}
+              options={[
+                { value: 60, label: '60' },
+                { value: 65, label: '65' },
+                { value: 70, label: '70' },
+                { value: 75, label: '75' },
+                { value: 80, label: '80' },
+                { value: 85, label: '85' },
+                { value: 90, label: '90' },
+                { value: 95, label: '95' },
+              ]}
+              zIndex={4}
+              onChange={handleIntroSkipTimeChange}
+            />
+
+            <SelectElement
+              label="Select the amount you want to skip using the arrows (in seconds)"
+              value={skipTime}
+              options={[
+                { label: '1', value: 1 },
+                { label: '2', value: 2 },
+                { label: '3', value: 3 },
+                { label: '4', value: 4 },
+                { label: '5', value: 5 },
+              ]}
+              zIndex={3}
+              onChange={handleSkipTimeChange}
+            />
+          </div>
+        );
+
+      case 'Appearance':
+        return (
+          <div className="show">
+            <CheckboxElement
+              label="Display the video duration instead of the remaining time."
+              checked={showDuration}
+              onChange={handleShowDurationChange}
+            />
+
+            <SelectElement
+              label="Episodes Per Page"
+              value={episodesPerPage}
+              options={[
+                { value: 5, label: '5' },
+                { value: 10, label: '10' },
+                { value: 20, label: '20' },
+                { value: 30, label: '30' },
+                { value: 40, label: '40' },
+                { value: 50, label: '50' },
+              ]}
+              zIndex={1}
+              onChange={handleEpisodesPerPage}
+            />
+          </div>
+        );
+
+      case 'Sync & Storage':
+        return (
+          <div className="show">
+            {logged && (
+              <CheckboxElement
+                label="Update AniList progress and lists automatically"
+                checked={updateProgress}
+                onChange={handleUpdateProgressChange}
+              />
+            )}
+
+            <CheckboxElement
+              label="Clear local history"
+              checked={clearHistory}
+              onChange={handleClearHistory}
+            />
+          </div>
+        );
+    }
+  };
 
   return (
     <div className="body-container show-tab">
-      <div className="main-container lifted">
+      <div className="main-container">
+        <Heading text="Settings" />
+
         <div className="settings-page">
-          <Heading text="Settings" />
-
-          <h1>General</h1>
-
-          <CheckboxElement
-            label="Light mode (disables some data fetching, which can help avoid issues for slow connections)."
-            checked={lightMode}
-            newItem
-            onChange={handleLightMode}
-          />
-
-          <CheckboxElement
-            label="Show 18+ content"
-            checked={adultContent}
-            onChange={handleAdultContent}
-          />
-
-          <br />
-
-          <h1>Playback</h1>
-
-          <SelectElement
-            label="Select the language in which you want to watch the episodes"
-            value={selectedLanguage}
-            options={LANGUAGE_OPTIONS}
-            zIndex={5}
-            onChange={handleLanguageChange}
-            width={145}
-          />
-
-          <CheckboxElement
-            label="Autoplay next episode"
-            checked={autoplayNext}
-            onChange={handleAutoplayNextChange}
-          />
-
-          <SelectElement
-            label="Select the duration of the default intro skip (in seconds)"
-            value={introSkipTime}
-            options={introSkipTimeOptions}
-            zIndex={4}
-            onChange={handleIntroSkipTimeChange}
-          />
-
-          <SelectElement
-            label="Select the amount you want to skip using the arrows (in seconds)"
-            value={skipTime}
-            options={skipTimeOptions}
-            zIndex={3}
-            onChange={handleSkipTimeChange}
-          />
-
-          <CheckboxElement
-            label="Watch dubbed"
-            checked={watchDubbed}
-            onChange={handleWatchDubbedChange}
-          />
-
-          <br />
-
-          <h1>Appearance</h1>
-
-          <CheckboxElement
-            label="Display the video duration instead of the remaining time."
-            checked={showDuration}
-            onChange={handleShowDurationChange}
-          />
-
-          <SelectElement
-            label="Episodes Per Page"
-            value={episodesPerPage}
-            options={episodesPerPageOptions}
-            zIndex={1}
-            onChange={handleEpisodesPerPage}
-          />
-
-          <br />
-
-          <h1>Sync & Storage</h1>
-
-          {logged && (
-            <CheckboxElement
-              label="Update AniList progress and lists automatically"
-              checked={updateProgress}
-              onChange={handleUpdateProgressChange}
+          <div className="left">
+            <Element
+              label="General"
+              disabled={activeSection !== 'General'}
+              onClick={() => {
+                setActiveSection('General');
+              }}
             />
-          )}
+            <Element
+              label="Player"
+              disabled={activeSection !== 'Player'}
+              onClick={() => {
+                setActiveSection('Player');
+              }}
+            />
+            <Element
+              label="Appearance"
+              disabled={activeSection !== 'Appearance'}
+              onClick={() => {
+                setActiveSection('Appearance');
+              }}
+            />
+            <Element
+              label="Sync & Storage"
+              disabled={activeSection !== 'Sync & Storage'}
+              onClick={() => {
+                setActiveSection('Sync & Storage');
+              }}
+            />
 
-          <CheckboxElement
-            label="Clear local history"
-            checked={clearHistory}
-            onChange={handleClearHistory}
-          />
+            <div className="version">
+              <p>{`akuse v${require('../../../package.json').version}`}</p>
+              <p>{getDetailedOSInfo()}</p>
+            </div>
+          </div>
+
+          <div className="right">{renderSectionsSwitch()}</div>
         </div>
       </div>
       <Toaster />
