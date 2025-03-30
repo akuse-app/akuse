@@ -40,13 +40,13 @@ The languages where both the sub and dub don't work are implemented in the app, 
 
 | Source           | Languages           | Sub | Dub | Notes                                                      |
 | ---------------- | ------------------- | --- | --- | ---------------------------------------------------------- |
-| 🌍 Yuki          | English + many more | ✅  | ✅  | Recommended                                                |
+| 🌍 Yuki          | English + many more | ❌  | ❌  | Recommended                                                |
 | 🇮🇹 AnimeUnity    | Italian             | ✅  | ✅  | Italian recommended                                        |
-| 🇺🇸 Maze          | English             | ✅  | ✅  | Great alternative                                          |
-| 🇺🇸 Pahe          | English             | ✅  | ✅  | Great alternative                                          |
-| 🇺🇸 AnimeParadise | English + some more | ✅  | ❌  | Works for some anime, not always up-to-date                |
-| 🇺🇸 AnimeHeaven   | English             | ✅  | ❌  | Works for some anime, not always up-to-date                |
-| 🌍 HiAnime       | English + many more | ✅  | ❌  | Unreliable, slow, doesn't always provide all the languages |
+| 🇺🇸 Maze          | English             | ❌  | ❌  | Great alternative                                          |
+| 🇺🇸 Pahe          | English             | ❌  | ❌  | Great alternative                                          |
+| 🇺🇸 AnimeParadise | English + some more | ❌  | ❌  | Works for some anime, not always up-to-date                |
+| 🇺🇸 AnimeHeaven   | English             | ❌  | ❌  | Works for some anime, not always up-to-date                |
+| 🌍 HiAnime       | English + many more | ❌  | ❌  | Unreliable, slow, doesn't always provide all the languages |
 | 🇺🇸 Gogoanime     | English             | ❌  | ❌  | Broken                                                     |
 
 # Other info
