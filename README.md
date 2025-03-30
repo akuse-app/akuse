@@ -28,9 +28,10 @@
 
 # Why should you choose akuse?
 
-- **🚀 Fast:** Smooth and quick streaming with minimal buffering.
-- **🎨 Sleek UI:** User-friendly and eye-catching.
-- **🔄 Reliable:** Regular updates and fresh content.
+- **⚠️ You shouldn't:** The app is broken at the moment. Check the warning below there.
+- ~~**🚀 Fast:**~~ ~~Smooth and quick streaming with minimal buffering.~~
+- ~~**🎨 Sleek UI:**~~ ~~User-friendly and eye-catching.~~
+- ~~**🔄 Reliable:**~~ ~~Regular updates and fresh content.~~
 
 <br/>
 
