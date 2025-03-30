@@ -36,6 +36,9 @@
 
 # Languages
 
+> [!WARNING]  
+> Almost all sources are broken. The app will be rebuilt with a modular source system, but no ETA.
+
 The languages where both the sub and dub don't work are implemented in the app, but they aren't selectable.
 
 | Source           | Languages           | Sub | Dub | Notes                                                      |
