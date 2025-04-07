@@ -10,6 +10,9 @@ export default {
       }
     },
     extend: {
+      backgroundImage: {
+        dock: 'linear-gradient(to top, hsl(var(--card)) 20%, hsl(var(--muted)) 90%)',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

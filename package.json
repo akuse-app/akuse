@@ -28,9 +28,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "electron-updater": "^6.3.9",
+    "jotai": "^2.12.2",
     "lucide-react": "^0.486.0",
+    "next-themes": "^0.4.6",
+    "sonner": "^2.0.3",
     "tailwind-merge": "^3.1.0",
-    "tw-animate-css": "^1.2.5"
+    "tw-animate-css": "^1.2.5",
+    "wouter": "^3.6.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
