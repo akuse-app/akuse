@@ -59,6 +59,10 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-white;
   }
+}
+
+* {
+  font-size: 16px;
 }

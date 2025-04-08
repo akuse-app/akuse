@@ -13,28 +13,36 @@ const Dock = () => {
   const [location] = useLocation()
 
   return (
-    <div className="fixed bottom-5 left-[50%] -translate-x-2/4 p-1 bg-card backdrop-blur-md border-t rounded-2xl bg-dock">
+    <div className="fixed bottom-5 left-[50%] -translate-x-2/4 p-2 bg-card backdrop-blur-md border-t rounded-full bg-dock">
       <nav className="grid grid-cols-4">
-        {navigation.map((item) => (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={cn(
-              'relative border-solid inline-flex flex-col items-center justify-center px-3 py-2 text-white',
-              'hover:scale-[1.1]',
-              'active:scale-100',
-              location === item.href ? 'text-white' : 'opacity-50'
-            )}
-          >
-            {/* {location === item.href && (
-              <div className="absolute bottom-0 w-[18px] h-[4px] bg-red-500 rounded-full" />
-            )} */}
+        {navigation.map((item) => {
+          const active = location === item.href
 
-            <item.icon className={'text-lg h-5 w-5'} strokeWidth={2} />
-            
-            {/* <span className="mt-1 text-xs font-medium">{item.name}</span> */}
-          </Link>
-        ))}
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={cn(
+                'relative border-solid inline-flex flex-col items-center justify-center px-3 py-3 text-white',
+                'hover:scale-[1.1]',
+                'active:scale-100',
+                active ? 'text-white' : 'opacity-50'
+              )}
+            >
+              {/* {location === item.href && (
+            <div className="absolute bottom-0 w-[18px] h-[4px] bg-red-500 rounded-full" />
+          )} */}
+
+              <item.icon
+                className={'text-lg h-5 w-5'}
+                strokeWidth={2}
+                fill={active ? 'white' : 'transparent'}
+              />
+
+              {/* <span className="mt-1 text-xs font-medium">{item.name}</span> */}
+            </Link>
+          )
+        })}
       </nav>
     </div>
   )
