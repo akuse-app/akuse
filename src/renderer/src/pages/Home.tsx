@@ -1,3 +1,8 @@
+import HeroBanner from "@/components/media/HeroBanner";
+import { MEDIA_MOCK } from "@/constants/mocks";
+
 export default function Home() {
-  return <h1>Home Page</h1>
+  return <div>
+    <HeroBanner media={MEDIA_MOCK} />
+  </div>
 }
