@@ -17,12 +17,6 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/mojuru-app/mojuru">
-      <img src="https://i.imgur.com/hzAqTdy.jpeg"/>
-    </a>
-</p>
-
-<p align="center">
     <a href="https://ko-fi.com/aleganza">
       <img width="400px" src="https://cdn.prod.website-files.com/5c14e387dab576fe667689cf/64f1a9ddd0246590df69ea0b_kofi_long_button_red%402x.png"/>
     </a>
